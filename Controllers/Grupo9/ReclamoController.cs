@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.Entities.Grupo9;
+using Newtonsoft.Json;
 
 namespace vacanze_back.Controllers.Grupo9
 {
@@ -19,8 +20,9 @@ namespace vacanze_back.Controllers.Grupo9
         [HttpGet]
         public ActionResult<IEnumerable<Reclamo>> Get()
         {
+            Reclamo product= new Reclamo(1,2,"aja","sss","ss","aass"); 
             Console.WriteLine("Reclamo");
-            return Ok("elias es un crack , El pana Jorge!"); 
+            return Ok(JsonConvert.SerializeObject(product)); 
         }
 
         // GET api/values/5

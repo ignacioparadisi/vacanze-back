@@ -2,11 +2,11 @@ namespace vacanze_back.Entities.Grupo9
 {
     public class Reclamo: Entity
     {
-        private long documentId;
-        private string name;
-        private string lastname;
-        private string email;
-        private string password;
+        public long documentId;
+        public string name;
+        public string lastname;
+        public string email;
+        public string password;
 
         public Reclamo(long id, long documentId, string name, string lastname, string email, string password)
         {
