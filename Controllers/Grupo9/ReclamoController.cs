@@ -22,7 +22,10 @@ namespace vacanze_back.Controllers.Grupo9
         {
             Reclamo product= new Reclamo(1,2,"aja","sss","ss","aass"); 
             Console.WriteLine("Reclamo");
-            return Ok(JsonConvert.SerializeObject(product)); 
+            Coneccion conec= new Coneccion();
+            conec.conectarBd();
+            conec.ejecutarQuery("select nombre from reclamo");
+            return Ok(JsonConvert.SerializeObject(conec)); 
         }
 
         // GET api/values/5
