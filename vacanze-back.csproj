@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <Folder Include="LogicLayer\Grupo2" />
-    <Folder Include="Persistance\Grupo2" />
+    <Folder Include="Persistence\Grupo2" />
   </ItemGroup>
 
 </Project>
