@@ -25,7 +25,7 @@ namespace vacanze_back.Persistence.Grupo13
             room = (Room)e;
         }
 
-        public List<Entity> getHabitaciones()
+        public List<Entity> getRooms()
         {
             List<Entity> roomsList = new List<Entity>();
             try
@@ -60,7 +60,7 @@ namespace vacanze_back.Persistence.Grupo13
             return roomsList;
         }
 
-        public Entity findHabitacion(int id)
+        public Entity findRoom(int id)
         {
             room = new Room();
             try
@@ -93,7 +93,7 @@ namespace vacanze_back.Persistence.Grupo13
             return room;
         }
 
-        public void deleteHabitacion(Room room)
+        public void deleteRoom(Room room)
         {
             long id = room.getIt();
             try
@@ -120,7 +120,7 @@ namespace vacanze_back.Persistence.Grupo13
 
         }   
 
-        public void insertHabitacion(Room room)
+        public void insertRoom(Room room)
         {
             try
             {

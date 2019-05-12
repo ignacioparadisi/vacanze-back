@@ -19,7 +19,7 @@ namespace vacanze_back.Controllers.Grupo13
             try
             {
                 DAORoom daoRooms = new DAORoom();
-                List<Entity> result = daoRooms.getHabitaciones();
+                List<Entity> result = daoRooms.getRooms();
                 return Ok(result.ToList());
             }
             catch (System.Exception)
@@ -35,7 +35,7 @@ namespace vacanze_back.Controllers.Grupo13
             try
             {
                 DAORoom dAOHabitacion = new DAORoom();
-                Entity result = dAOHabitacion.findHabitacion(id);
+                Entity result = dAOHabitacion.findRoom(id);
                 return Ok(result);
             }
             catch (System.Exception)
