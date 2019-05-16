@@ -14,4 +14,9 @@
     <PackageReference Include="NLog" Version="4.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="LogicLayer\Grupo2" />
+    <Folder Include="Persistence\Grupo2" />
+  </ItemGroup>
+
 </Project>
