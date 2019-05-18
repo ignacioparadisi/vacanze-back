@@ -3,21 +3,21 @@ namespace vacanze_back.Entities.Grupo9
     public class Reclamo: Entity
     {
         public long documentId;
-        public string name;
+        public string titulo;
         public string lastname;
-        public string email;
-        public string password;
+        public string descripcion;
+        public string status;
 
-        public Reclamo(long id, long documentId, string name, string lastname, string email, string password)
+        public Reclamo(string titulo, string descripcion, string status)
         {
-            //setId(id);
-            this.documentId = documentId;
-            this.name = name;
-            this.lastname = lastname;
-            this.email = email;
-            this.password = password;
+            this.titulo = titulo;
+            this.descripcion = descripcion;
+            this.status = status;
         }
-
+        
+        public Reclamo()
+        {
+        }
         public long getDocumentId()
         {
             return documentId;
@@ -27,6 +27,8 @@ namespace vacanze_back.Entities.Grupo9
         {
             this.documentId = documentId;
         }
+
+        
         
     }
 }
