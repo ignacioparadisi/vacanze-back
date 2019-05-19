@@ -9,12 +9,14 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.0" />
     <PackageReference Include="NUnit" Version="3.11.0" />
     <PackageReference Include="NLog" Version="4.6.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Entities" />
+    <Folder Include="LogicLayer\Grupo2" />
+    <Folder Include="Persistence\Grupo2" />
   </ItemGroup>
 
 </Project>

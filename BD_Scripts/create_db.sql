@@ -1,4 +1,5 @@
 DROP USER IF EXISTS "vacanza";
+DROP USER IF EXISTS "vacanza";
 
 CREATE USER "vacanza" WITH
     LOGIN
@@ -18,30 +19,81 @@ CREATE DATABASE "vacanza"
     TABLESPACE = pg_default
     CONNECTION LIMIT = -1;
 
+----------------------------------grupo 9-------------------------------------------
 
-CREATE TABLE "Hotel" (
-  hot_id SERIAL,
-  hot_nombre VARCHAR(100) NOT NULL,
-  hot_hora_entrada TIME NOT NULL,
-  hot_hora_salida TIME NOT NULL,
-  hot_telefono VARCHAR(20) NOT NULL,
-  hot_sitio_web VARCHAR(100),
-  CONSTRAINT pk_hotel PRIMARY KEY (hot_id)
-  -- TODO: Atributos/relaciones por agregar
-  --       - Ubicacion
+CREATE SEQUENCE SEQ_RECLAMO
+  START WITH 1
+  INCREMENT BY 1
+  NO MINVALUE
+  NO MAXVALUE
+  CACHE 1;
+  
+CREATE TABLE RECLAMO(
+    rec_id integer,
+    rec_titulo varchar(30) NOT NULL,
+    rec_descr varchar(30) NOT NULL,
+    rec_status varchar(20) CHECK (rec_status ='ABIERTO' OR rec_status='CERRADO' OR rec_status='ESPERA'), 
+    CONSTRAINT pk_reclamo PRIMARY KEY(rec_id)
+    --CONSTRAINT pf_equipaje FOREIGN KEY (rec_equi_id) REFERENCES JUGADOR(equi_id) ON DELETE CASCADE ON UPDATE CASCADE, 
 );
 
-CREATE TABLE "Servicio" (
-  ser_id SERIAL,
-  ser_nombre VARCHAR(100) NOT NULL,
-  ser_descripcion VARCHAR(300),
-  CONSTRAINT pk_servicio PRIMARY KEY (ser_id)
-);
+-------------AGREGAR RECLAMO-----------------
 
-CREATE TABLE "Hotel_Servicio" (
-  hot_ser_fk_hot_id INTEGER NOT NULL,
-  hot_ser_fk_ser_id INTEGER NOT NULL,
-  hot_ser_destacado BOOLEAN NOT NULL DEFAULT FALSE,
-  CONSTRAINT fk_hotel_servicio_hotel FOREIGN KEY (hot_ser_fk_hot_id) REFERENCES "Hotel"(hot_id),
-  CONSTRAINT fk_hotel_servicio_servicio FOREIGN KEY (hot_ser_fk_ser_id) REFERENCES "Servicio"(ser_id)
-);
+CREATE OR REPLACE FUNCTION AgregarReclamo(
+    _titulo VARCHAR(20), 
+    _descripcion VARCHAR(30),
+    _status VARCHAR(30)
+    ) 
+RETURNS integer AS
+$$
+BEGIN
+
+   INSERT INTO RECLAMO(rec_id ,rec_titulo, rec_descr, rec_status) VALUES
+    (nextval('SEQ_RECLAMO'), _titulo, _descripcion, _status);
+   RETURN currval('SEQ_RECLAMO');
+END;
+$$ LANGUAGE plpgsql;
+
+---------MODIFICAR RECAMO-----------------
+CREATE OR REPLACE FUNCTION ModificarReclamoStatus( 
+    _idReclamo integer,
+    _status VARCHAR(35))
+RETURNS integer AS
+$$
+BEGIN
+
+   UPDATE RECLAMO SET rec_status= _status
+    WHERE (rec_id = _idReclamo);
+   RETURN _idReclamo;
+END;
+$$ LANGUAGE plpgsql;
+-------------------------------------ELIMAR RECLAMO-----------------------------
+CREATE OR REPLACE FUNCTION EliminarReclamo(_idReclamo integer)
+RETURNS void AS
+$$
+BEGIN
+
+    DELETE FROM RECLAMO 
+    WHERE (rec_id= _idReclamo);
+
+END;
+$$ LANGUAGE plpgsql;
+
+--------------------------CONSULTAR LOGROS CANTIDAD PENDIENTE--------------------
+CREATE OR REPLACE FUNCTION ConsultarUnReclamo(_idReclamo integer)
+RETURNS TABLE
+  (id integer,
+   Titulo VARCHAR(30),
+   Descripcion VARCHAR(30),
+   Status VARCHAR(30)
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT
+    rec_id, rec_titulo,rec_descr, rec_status
+    FROM RECLAMO WHERE rec_id = _idReclamo;
+END;
+$$ LANGUAGE plpgsql;
+
+------------------------------------fin de grupo 9---------------------------------
