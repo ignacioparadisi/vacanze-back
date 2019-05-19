@@ -18,7 +18,7 @@ namespace vacanze_back.DAO.Grupo9
         /// Metodo para agregar un reclamo
         /// </summary>
         /// <param name="reclamo"></param>
-        public void Agregar(Reclamo reclamo)
+        public void AgregarReclamo(Reclamo reclamo)
         {
 
             Conectar();
@@ -60,6 +60,23 @@ namespace vacanze_back.DAO.Grupo9
             }
             return ReclamoList;
         }
+
+        /// <summary>
+        /// Metodo para elimar un reclamo con su id
+        /// </summary>
+        /// <param name="reclamoID"></param>
+        public void EliminarReclamo(int reclamoID)
+        {
+
+            Conectar();
+
+            StoredProcedure("EliminarReclamo(@rec_id)");
+            AgregarParametro("rec_id", reclamoID);
+
+            EjecutarQuery();
+
+        }
+
     }
 }
  

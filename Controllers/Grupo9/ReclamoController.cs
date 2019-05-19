@@ -24,7 +24,7 @@ namespace vacanze_back.Controllers.Grupo9
 
             DAOReclamo conec= new DAOReclamo();
             Reclamo reclamo = new Reclamo("tituloo" , "elias y jorge" , "ABIERTO");
-            conec.Agregar(reclamo);
+            conec.AgregarReclamo(reclamo);
 
             List<Reclamo> reclamosList = conec.ObtenerReclamo(1);
 
@@ -56,11 +56,29 @@ namespace vacanze_back.Controllers.Grupo9
 
                 DAOReclamo conec= new DAOReclamo();
                 Reclamo reclamo = new Reclamo(reclamoAux.titulo, reclamoAux.descripcion, reclamoAux.status);
-                conec.Agregar(reclamo);
+                conec.AgregarReclamo(reclamo);
             }
             catch (Exception ex)
             {
             }
+        }
+
+        // DELETE api/Reclamo/5
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+            try{
+                Console.WriteLine("estoy aqui");
+                DAOReclamo conec= new DAOReclamo();
+                
+                Console.WriteLine("estoy aqui");
+                conec.EliminarReclamo(id);
+
+                Console.WriteLine("estoy aqui1");
+            }
+            catch (Exception ex)
+            {
+            } 
         }
 
 

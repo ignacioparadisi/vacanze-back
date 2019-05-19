@@ -73,7 +73,7 @@ $$
 BEGIN
 
     DELETE FROM RECLAMO 
-    WHERE (rec_id= _idReclamo);
+    WHERE (rec_id = _idReclamo);
 
 END;
 $$ LANGUAGE plpgsql;
