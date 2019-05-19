@@ -80,21 +80,23 @@ namespace vacanze_back.Controllers.Grupo9
             {
             } 
         }
-
-		[HttpPut("{id}")]
-		public void Put(int id,string status)
+		
+		//api/Reclamo/status/5
+		[HttpPut("status/{id}")]
+		public void Put(int id,[FromBody] Reclamito reclamoAux)
         {
             try{
                 DAOReclamo conec= new DAOReclamo();
-                //Console.WriteLine(status);
+				Reclamo reclamo = new Reclamo(reclamoAux.titulo, reclamoAux.descripcion,reclamoAux.status);
                 Console.WriteLine("estoy aqui");
 
-                conec.ModificarReclamoStatus(id, status);
+                conec.ModificarReclamoStatus(id, reclamo);
             }
             catch (Exception ex)
             {
             } 
         }
+
 
     }
 }
