@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using vacanze_back.Entities.Grupo9;
 using vacanze_back.DAO.Grupo9;
 using Newtonsoft.Json;
+using vacanze_back.Controllers.Grupo9;
+
 
 namespace vacanze_back.Controllers.Grupo9
 {
@@ -41,13 +43,19 @@ namespace vacanze_back.Controllers.Grupo9
 
         // Post api/Reclamo/
         [HttpPost]
-        public void Post([FromBody] string  titulo, string descripcion, string status)
-        {
-        Console.WriteLine("World!");
+        public void Post([FromBody] Reclamito reclamoAux)
+        {            
             try
             {
+                /*
+                Reclamo reclamos= new Reclamo();
+                var jsonFile = System.IO.File.ReadAllText("jsonFile.json");
+                var teams = JsonConvert.DeserializeObject<List<Reclamo>>(jsonFile);
+                teams.Add(reclamos);
+                System.IO.File.WriteAllText("jsonFile.json",JsonConvert.SerializeObject(reclamos));*/
+
                 DAOReclamo conec= new DAOReclamo();
-                Reclamo reclamo = new Reclamo(titulo, descripcion,status );
+                Reclamo reclamo = new Reclamo(reclamoAux.titulo, reclamoAux.descripcion, reclamoAux.status);
                 conec.Agregar(reclamo);
             }
             catch (Exception ex)
@@ -57,4 +65,10 @@ namespace vacanze_back.Controllers.Grupo9
 
 
     }
+}
+
+public class Reclamito {
+    public string titulo ;
+    public string descripcion;
+    public string status;
 }
