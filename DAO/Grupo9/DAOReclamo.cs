@@ -77,6 +77,19 @@ namespace vacanze_back.DAO.Grupo9
 
         }
 
+		 public void ModificarReclamoStatus(int reclamoID, string reclamoStatus)
+        {
+
+            Conectar();
+
+            StoredProcedure("ModificarReclamoStatus(@rec_id,@rec_status)");
+            AgregarParametro("rec_id", reclamoID);
+			AgregarParametro("rec_status",  reclamoStatus);
+
+            EjecutarQuery();
+
+        }
+
     }
 }
  

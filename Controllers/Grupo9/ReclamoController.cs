@@ -10,7 +10,7 @@ using vacanze_back.Controllers.Grupo9;
 
 namespace vacanze_back.Controllers.Grupo9
 {
-    
+    [Produces("application/json")] 
     [Route("api/[controller]")]
     [ApiController]
     public class ReclamoController : ControllerBase
@@ -62,7 +62,7 @@ namespace vacanze_back.Controllers.Grupo9
             {
             }
         }
-
+		
         // DELETE api/Reclamo/5
         [HttpDelete("{id}")]
         public void Delete(int id)
@@ -81,6 +81,20 @@ namespace vacanze_back.Controllers.Grupo9
             } 
         }
 
+		[HttpPut("{id}")]
+		public void Put(int id,string status)
+        {
+            try{
+                DAOReclamo conec= new DAOReclamo();
+                //Console.WriteLine(status);
+                Console.WriteLine("estoy aqui");
+
+                conec.ModificarReclamoStatus(id, status);
+            }
+            catch (Exception ex)
+            {
+            } 
+        }
 
     }
 }
@@ -89,4 +103,7 @@ public class Reclamito {
     public string titulo ;
     public string descripcion;
     public string status;
+	public string getStatus(){
+		return this.status;
+		}
 }
