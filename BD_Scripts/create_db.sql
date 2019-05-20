@@ -1,5 +1,4 @@
 DROP USER IF EXISTS "vacanza";
-DROP USER IF EXISTS "vacanza";
 
 CREATE USER "vacanza" WITH
     LOGIN
@@ -97,3 +96,24 @@ END;
 $$ LANGUAGE plpgsql;
 
 ------------------------------------fin de grupo 9---------------------------------
+
+CREATE TABLE Lugar (
+  l_id SERIAL,
+  l_tipo CHAR(1) NOT NULL,
+  l_nombre VARCHAR(100) NOT NULL,
+  fk_lugar INTEGER,
+  CONSTRAINT pk_lugar PRIMARY KEY (l_id),
+  CONSTRAINT check_tipo CHECK(l_tipo in ('P','C')) ---- P de pais y C de ciudad ------
+);
+
+
+CREATE TABLE Hotel (
+  hot_id SERIAL,
+  hot_nombre VARCHAR(100) NOT NULL,
+  hot_capHuesped INTEGER NOT NULL,
+  hot_statusActivo BOOLEAN NOT NULL DEFAULT TRUE,
+  hot_telefono VARCHAR(20) NOT NULL,
+  hot_sitio_web VARCHAR(100),
+  fk_lugar INTEGER,
+  CONSTRAINT pk_hotel PRIMARY KEY (hot_id)
+);
