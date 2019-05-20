@@ -6,7 +6,7 @@ using vacanze_back.Entities.Grupo9;
 using vacanze_back.DAO.Grupo9;
 using Newtonsoft.Json;
 using vacanze_back.Controllers.Grupo9;
-
+using System.Net;
 
 namespace vacanze_back.Controllers.Grupo9
 {
@@ -18,6 +18,7 @@ namespace vacanze_back.Controllers.Grupo9
         
 
         // GET api/values
+		//se usara para consultar por pasaporte
         [HttpGet]
         public ActionResult<IEnumerable<Reclamo>> Get()
         {
@@ -43,7 +44,7 @@ namespace vacanze_back.Controllers.Grupo9
 
         // Post api/Reclamo/
         [HttpPost]
-        public void Post([FromBody] Reclamito reclamoAux)
+        public ActionResult<string> Post([FromBody] Reclamito reclamoAux)
         {            
             try
             {
@@ -56,16 +57,18 @@ namespace vacanze_back.Controllers.Grupo9
 
                 DAOReclamo conec= new DAOReclamo();
                 Reclamo reclamo = new Reclamo(reclamoAux.titulo, reclamoAux.descripcion, reclamoAux.status);
-                conec.AgregarReclamo(reclamo);
+				conec.AgregarReclamo(reclamo);
+				return Ok("Se agrego correctamente");
             }
             catch (Exception ex)
-            {
+            { 
+				return StatusCode(500);
             }
         }
 		
         // DELETE api/Reclamo/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult<string> Delete(int id)
         {
             try{
                 Console.WriteLine("estoy aqui");
@@ -75,15 +78,17 @@ namespace vacanze_back.Controllers.Grupo9
                 conec.EliminarReclamo(id);
 
                 Console.WriteLine("estoy aqui1");
+				return Ok("Eliminado exitosamente");
             }
             catch (Exception ex)
             {
+				return StatusCode(500);
             } 
         }
 		
 		//api/Reclamo/status/5
 		[HttpPut("status/{id}")]
-		public void Put(int id,[FromBody] Reclamito reclamoAux)
+		public ActionResult<string> Put(int id,[FromBody] Reclamito reclamoAux)
         {
             try{
                 DAOReclamo conec= new DAOReclamo();
@@ -91,9 +96,11 @@ namespace vacanze_back.Controllers.Grupo9
                 Console.WriteLine("estoy aqui");
 
                 conec.ModificarReclamoStatus(id, reclamo);
+				return Ok("Modificado exitosamente");
             }
             catch (Exception ex)
             {
+				return StatusCode(500);
             } 
         }
 
