@@ -66,6 +66,19 @@ BEGIN
    RETURN _idReclamo;
 END;
 $$ LANGUAGE plpgsql;
+-- modificar el titulo del reclamo
+CREATE OR REPLACE FUNCTION ModificarReclamoTitulo( 
+	_idReclamo integer,
+    _titulo VARCHAR(35))
+RETURNS integer AS
+$$
+BEGIN
+
+   UPDATE RECLAMO SET rec_titulo= _titulo
+	WHERE (rec_id = _idReclamo);
+   RETURN _idReclamo;
+END;
+$$ LANGUAGE plpgsql;
 -------------------------------------ELIMAR RECLAMO-----------------------------
 CREATE OR REPLACE FUNCTION EliminarReclamo(_idReclamo integer)
 RETURNS void AS

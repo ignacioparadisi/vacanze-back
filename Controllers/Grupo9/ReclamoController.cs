@@ -7,11 +7,14 @@ using vacanze_back.DAO.Grupo9;
 using Newtonsoft.Json;
 using vacanze_back.Controllers.Grupo9;
 using System.Net;
+using System.Web.Http;
+using Microsoft.AspNetCore.Cors;
 
 namespace vacanze_back.Controllers.Grupo9
 {
     [Produces("application/json")] 
     [Route("api/[controller]")]
+	 [EnableCors("MyPolicy")]
     [ApiController]
     public class ReclamoController : ControllerBase
     {
@@ -43,12 +46,13 @@ namespace vacanze_back.Controllers.Grupo9
         }
 
         // Post api/Reclamo/
+	
         [HttpPost]
         public ActionResult<string> Post([FromBody] Reclamito reclamoAux)
         {            
             try
-            {
-                /*
+            { 
+				/*
                 Reclamo reclamos= new Reclamo();
                 var jsonFile = System.IO.File.ReadAllText("jsonFile.json");
                 var teams = JsonConvert.DeserializeObject<List<Reclamo>>(jsonFile);
@@ -87,15 +91,17 @@ namespace vacanze_back.Controllers.Grupo9
         }
 		
 		//api/Reclamo/status/5
-		[HttpPut("status/{id}")]
-		public ActionResult<string> Put(int id,[FromBody] Reclamito reclamoAux)
+		[HttpPut("{tipo}/{id}")]
+		public ActionResult<string> Put(string tipo,int id,[FromBody] Reclamito reclamoAux)
         {
             try{
                 DAOReclamo conec= new DAOReclamo();
 				Reclamo reclamo = new Reclamo(reclamoAux.titulo, reclamoAux.descripcion,reclamoAux.status);
                 Console.WriteLine("estoy aqui");
-
+				if(reclamoAux.status != null)
                 conec.ModificarReclamoStatus(id, reclamo);
+				else if(reclamoAux.titulo != null)
+					conec.ModificarReclamoTitulo(id,reclamo);
 				return Ok("Modificado exitosamente");
             }
             catch (Exception ex)

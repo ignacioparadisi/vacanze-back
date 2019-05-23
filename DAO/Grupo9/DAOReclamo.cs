@@ -95,7 +95,7 @@ namespace vacanze_back.DAO.Grupo9
             Conectar();
             StoredProcedure("ModificarReclamoTitulo(@rec_id,@rec_titulo)");
             AgregarParametro("rec_id", reclamoID);
-			AgregarParametro("rec_status",  reclamo.getTitulo());
+			AgregarParametro("rec_titulo",  reclamo.getTitulo());
 
             EjecutarQuery();
 
