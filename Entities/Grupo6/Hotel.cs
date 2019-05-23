@@ -2,6 +2,11 @@ namespace vacanze_back.Entities.Grupo6
 {
     public class Hotel : Entity
     {
+        private string Nombre { get; }
+        private int CantidadDeHabitaciones { get; }
+        private bool Activo { get; }
+        private string Telefono { get; }
+        private string SitioWeb { get; }
         // TODO: Cuando se cree la clase Lugar, implementar esta parte
         // private Lugar _direccion;
 
@@ -24,11 +29,5 @@ namespace vacanze_back.Entities.Grupo6
             Telefono = telefono;
             SitioWeb = sitioWeb;
         }
-
-        private string Nombre { get; }
-        private int CantidadDeHabitaciones { get; }
-        private bool Activo { get; }
-        private string Telefono { get; }
-        private string SitioWeb { get; }
     }
 }

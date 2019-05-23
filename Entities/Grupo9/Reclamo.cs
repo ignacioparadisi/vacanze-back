@@ -2,6 +2,10 @@ namespace vacanze_back.Entities.Grupo9
 {
     public class Reclamo : Entity
     {
+        public string _titulo { get; set; }
+        public string _descripcion { get; set; }
+        public string _status { get; set; }
+        
         public Reclamo(string titulo, string descripcion, string status) : base(0)
         {
             _titulo = titulo;
@@ -15,9 +19,5 @@ namespace vacanze_back.Entities.Grupo9
             _descripcion = descripcion;
             _status = status;
         }
-
-        public string _titulo { get; set; }
-        public string _descripcion { get; set; }
-        public string _status { get; set; }
     }
 }
