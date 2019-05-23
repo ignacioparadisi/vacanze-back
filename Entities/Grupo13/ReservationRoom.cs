@@ -2,46 +2,47 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using vacanze_back.Entities;
 
 namespace vacanze_back.Entities.Grupo13
 {
     public class ReservationRoom : Entity
     {
-        private bool status { get; set; }
-        private DateTime CheckIn { get; set; }
-        private DateTime CheckOut { get; set; }
+        public bool status { get; set; }
+        public DateTime CheckIn { get; set; }
+        public DateTime CheckOut { get; set; }
+        public int room_id { get; set; }
+        public Room room { get; set; }
+        //    public User user { get; set; }
 
-        /*
-        public void setEstatus(bool estatus)
+        public void setStatus(bool status)
         {
-            this.estatus = estatus;
+            this.status = status;
         }
 
-        public void setFechaCheckIn(DateTime fecha)
+        public void setCheckIn(DateTime CheckIn)
         {
-            this.fechaCheckIn = fecha;
+            this.CheckIn = CheckIn;
         }
-        public void setFechaCheckOut(DateTime fecha)
+        public void setFechaCheckOut(DateTime CheckOut)
         {
-            this.fechaCheckOut = fecha;
-        }
-
-        public bool getEstatus()
-        {
-            return this.estatus;
+            this.CheckOut = CheckOut;
         }
 
-        public DateTime getFechaCheckIn()
+        public bool getStatus()
         {
-            return this.fechaCheckIn;
+            return this.status;
         }
 
-        public DateTime getFechaCheckOut()
+        public DateTime getCheckIn()
         {
-            return this.fechaCheckOut;
+            return this.CheckIn;
         }
 
-    */
+        public DateTime getheckOut()
+        {
+            return this.CheckOut;
+        }
         public ReservationRoom()
         {
         }

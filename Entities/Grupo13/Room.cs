@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using vacanze_back.Entities;
 
 namespace vacanze_back.Entities.Grupo13
 {
@@ -10,47 +11,48 @@ namespace vacanze_back.Entities.Grupo13
         public int capacity { get; set; }
         public double price { get; set; }
         public bool status { get; set; }
+        // public Hotel hotel {get; set;}
 
-        /*
-        public void setCapacidad(int capacidad)
-        {
-            this.capacidad = capacidad;
-        }
-        public void setPrecio(float precio)
-        {
-            this.precio = precio;
-        }
 
-        public void setEstatus(bool estatus)
+        public void setCapacity(int capacity)
         {
-            this.estatus = estatus;
+            this.capacity = capacity;
+        }
+        public void setPrice(double price)
+        {
+            this.price = price;
         }
 
-        public int getCapacidad()
+        public void setStatus(bool status)
         {
-            return capacidad;
+            this.status = status;
         }
 
-        public float getPrecio()
+        public int getCapacity()
         {
-            return precio;
+            return capacity;
         }
 
-        public bool getEstatus()
+        public double getPrice()
         {
-            return estatus;
+            return price;
         }
-        */
+
+        public bool getStatus()
+        {
+            return status;
+        }
+
         public Room()
         {
         }
 
-        public Room(long id, int capacidad, double precio, bool estatus)
+        public Room(long id, int capacity, double price, bool status)
         {
             setId(id);
-            this.capacity = capacidad;
-            this.price = precio;
-            this.status = estatus;
+            this.capacity = capacity;
+            this.price = price;
+            this.status = status;
         }
     }
 }

@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using vacanze_back.Entities;
 
 namespace vacanze_back.Entities.Grupo13
 {
 
     public class ReservationAutomobile : Entity
     {
-        private bool status;
-        private DateTime CheckIn;
-        private DateTime CheckOut;
+        private bool status { get; set; }
+        private DateTime CheckIn { get; set; }
+        private DateTime CheckOut { get; set; }
+        //  private Automobile automobile { get; set; }
 
-        public void setStatus(bool estatus)
+        public void setStatus(bool status)
         {
-            this.status = estatus;
+            this.status = status;
         }
 
         public void setCheckIn(DateTime date)
