@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using vacanze_back.Entities;
 using vacanze_back.Entities.Grupo13;
 using vacanze_back.Persistence;
+using System.Text.RegularExpressions;
 namespace vacanze_back.Persistence.Grupo13
 {
     public class DAORoom : DAO
@@ -31,10 +32,10 @@ namespace vacanze_back.Persistence.Grupo13
             try
             {
                 Connect();
-                    StoredProcedure(SP_SELECT);
-                    ExecuteReader();
-                    for (int i = 0; i < rowNumber; i++)
-                    {
+                StoredProcedure(SP_SELECT);
+                ExecuteReader();
+                for (int i = 0; i < rowNumber; i++)
+                {
                     Room room = new Room();
                     room.setId(GetInt(i, 0));
                     room.price = GetDouble(i, 1);
@@ -42,7 +43,7 @@ namespace vacanze_back.Persistence.Grupo13
                     room.status = GetBool(i, 3);
 
                     roomsList.Add(room);
-                    }
+                }
                 return roomsList;
             }
             catch (NpgsqlException e)
@@ -66,16 +67,16 @@ namespace vacanze_back.Persistence.Grupo13
             try
             {
                 Connect();
-                    StoredProcedure(SP_FIND_ROOM);
-                    AddParameter("_id", id);
-                    ExecuteReader();
-                    for (int i = 0; i < rowNumber; i++)
-                    {
+                StoredProcedure(SP_FIND_ROOM);
+                AddParameter("_id", id);
+                ExecuteReader();
+                for (int i = 0; i < rowNumber; i++)
+                {
                     room.setId(GetInt(i, 0));
                     room.price = GetDouble(i, 1);
                     room.capacity = GetInt(i, 2);
                     room.status = GetBool(i, 3);
-                    }
+                }
                 return room;
             }
             catch (NpgsqlException e)
@@ -88,7 +89,7 @@ namespace vacanze_back.Persistence.Grupo13
             }
             finally
             {
-                Disconnect();  
+                Disconnect();
             }
             return room;
         }
@@ -118,7 +119,7 @@ namespace vacanze_back.Persistence.Grupo13
                 Disconnect();
             }
 
-        }   
+        }
 
         public void insertRoom(Room room)
         {
@@ -130,7 +131,7 @@ namespace vacanze_back.Persistence.Grupo13
                     AddParameter("_precio", room.price);
                     AddParameter("_capacidad", room.capacity);
                     AddParameter("_status", room.status);
-//    AddParameter("_capacidad", habitacion.capacidad); QUE VOY HACER AQUI ? 
+                    //    AddParameter("_capacidad", habitacion.capacidad); QUE VOY HACER AQUI ? 
                     ExecuteQuery();
                 }
             }

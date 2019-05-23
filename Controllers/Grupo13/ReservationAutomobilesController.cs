@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.Entities.Grupo13;
 using vacanze_back.Entities;
@@ -10,16 +11,17 @@ namespace vacanze_back.Controllers.Grupo13
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReservationRoomsController : ControllerBase
+    public class ReservationAutomobilesController : ControllerBase
     {
+        /*
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<Entity>> Get()
         {
             try
             {
-                DAOReservationRoom daoReservationRooms = new DAOReservationRoom();
-                List<Entity> result = daoReservationRooms.getRoomReservations();
+                DAOReservationAutomobile daoReservationAutomobiles = new DAOReservationAutomobile();
+                List<Entity> result = daoReservationAutomobiles.getRoomReservations();
                 return Ok(result.ToList());
             }
             catch (System.Exception)
@@ -28,14 +30,16 @@ namespace vacanze_back.Controllers.Grupo13
                 throw;
             }
         }
+        */
 
+        /*
         [HttpGet("{id}")]
-        public ActionResult<Entity> Find(int id)
+        public ActionResult<Entity> Get(int id)
         {
             try
             {
-                DAOReservationRoom daoReservationRooms = new DAOReservationRoom();
-                Entity result = daoReservationRooms.Find(id);
+                DAOReservationAutomobile daoReservationAutomobiles = new DAOReservationAutomobile();
+                Entity result = daoReservationAutomobiles.Find(id);
                 return Ok(result);
             }
             catch (System.Exception)
@@ -43,6 +47,7 @@ namespace vacanze_back.Controllers.Grupo13
 
                 throw;
             }
-        }
+        }*/
     }
+
 }

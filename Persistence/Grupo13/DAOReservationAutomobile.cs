@@ -11,7 +11,7 @@ using vacanze_back.Persistence;
 
 namespace vacanze_back.Persistence.Grupo13
 {
-    public class DAOReservationAutomobil : DAO
+    public class DAOReservationAutomobile : DAO
     { 
         const String SP_SELECT = "{CALL m13_getreservaautomoviles()}";
         /*
