@@ -19,7 +19,7 @@ namespace vacanze_back.Controllers.Grupo3
         {
             try
             {
-                AirplanesDAO adao = new AirplanesDAO(); 
+                DAOAirplanes adao = new DAOAirplanes(); 
                 List<Entity> result = adao.Get();
                 return Ok(result.ToList());
             }
@@ -35,7 +35,7 @@ namespace vacanze_back.Controllers.Grupo3
         {
             try
             {
-                AirplanesDAO adao = new AirplanesDAO(); 
+                DAOAirplanes adao = new DAOAirplanes(); 
                 Entity result = adao.Find(id);
                 return Ok(result);
             }

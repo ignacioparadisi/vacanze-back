@@ -31,7 +31,7 @@ namespace vacanze_back.Persistence
         /// </summary>
         private void CrearStringConexion()
         {
-			_cadena = "User ID=postgres;Password=12345678;Host=localhost;Database=vacanze;Port=5432";
+			_cadena = "User ID=vacanza;Password=vacanza;Host=localhost;Database=vacanza;Port=5432";
         }
 
         private bool IsConnected()

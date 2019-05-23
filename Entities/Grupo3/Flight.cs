@@ -1,22 +1,28 @@
+using System.Collections.Generic;
+
 namespace vacanze_back.Entities.Grupo3
 {
-    public class Flight: Entity
-    {   
-        public int airplane { get; set; }
-        public int route { get; set; }
-        public float price { get; set; }
+    public class Flight : Entity
+    {
 
-        public Flight(long id, int airplane, int route, float price) 
+        public int plane { get; set; }
+        public double price { get; set; }
+        public string departure { get; set; }
+        public string arrival { get; set; }
+        public List<Route> routes { get; set; }
+
+
+        public Flight()
         {
-            setId(id);
-            this.airplane = airplane;
-            this.route = route;
-            this.price = price;
-               
+
         }
 
-        public Flight(){
-
+        public Flight(double price, string departure, string arrival, List<Route> routes)
+        {
+            this.price = price;
+            this.departure = departure;
+            this.arrival = arrival;
+            this.routes = routes;
         }
     }
 }

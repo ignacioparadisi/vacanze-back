@@ -9,12 +9,12 @@ using Npgsql;
 
 namespace vacanze_back.Persistence.Grupo3
 {
-    public class AirplanesDAO : DAO
+    public class DAOAirplanes : DAO
     {
-        private const string GET_ALL_PLANES = "getallaviones()";
-        private const string FIND_PLANE = "findavion(@_id)";
+        private const string GET_ALL_PLANES = "getplanes()";
+        private const string FIND_PLANE = "findplane(@_id)";
         
-        public AirplanesDAO()
+        public DAOAirplanes()
         {
         }
 
@@ -32,10 +32,11 @@ namespace vacanze_back.Persistence.Grupo3
                     Airplane airplane = new Airplane();
 
                     airplane.setId(GetInt(i,0));
-                    airplane.model = GetString(i,1);
-                    airplane.seats = GetInt(i,2);
-                    airplane.loadCapacity = GetDouble(i,3);
-                    airplane.autonomy = GetDouble(i,4);
+                    airplane.autonomy = GetDouble(i,1);
+                    airplane.isActive = GetBool(i,2);
+                    airplane.seats = GetInt(i,3);
+                    airplane.loadCapacity = GetDouble(i,4);
+                    airplane.model = GetString(i,5);
 
                     airplanes.Add(airplane);
                 }
@@ -63,10 +64,11 @@ namespace vacanze_back.Persistence.Grupo3
                 for (int i = 0; i < rowNumber; i++)
                 {
                     airplane.setId(GetInt(i,0));
-                    airplane.model = GetString(i,1);
-                    airplane.seats = GetInt(i,2);
-                    airplane.loadCapacity = GetDouble(i,3);
-                    airplane.autonomy = GetDouble(i,4);
+                    airplane.autonomy = GetDouble(i,1);
+                    airplane.isActive = GetBool(i,2);
+                    airplane.seats = GetInt(i,3);
+                    airplane.loadCapacity = GetDouble(i,4);
+                    airplane.model = GetString(i,5);
                 }
 
                 return airplane;

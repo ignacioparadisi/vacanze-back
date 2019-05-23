@@ -8,17 +8,19 @@ namespace vacanze_back.Entities.Grupo3
         public double loadCapacity {get; set;}
         public int seats {get; set;}
         public double autonomy {get; set;}
+        public bool isActive { get; set; }
 
         public Airplane(){
             
         }
         
-        public Airplane(long id, string model, double load_capacity, int seats, double autonomy){
+        public Airplane(long id, string model, double load_capacity, int seats, double autonomy, bool isActive){
             this.model = model;
             setId(id);
             this.loadCapacity = load_capacity;
             this.autonomy = autonomy;
             this.seats = seats;
+            this.isActive = isActive;
         }
 
         public void setModel(string model){
