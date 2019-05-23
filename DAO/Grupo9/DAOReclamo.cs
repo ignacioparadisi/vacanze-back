@@ -19,9 +19,9 @@ namespace vacanze_back.DAO.Grupo9
         {
             Conectar();
             StoredProcedure("AgregarReclamo(@rec_titulo,@rec_descripcion,@rec_status)");
-            AgregarParametro("rec_titulo", reclamo.Titulo);
-            AgregarParametro("rec_descripcion", reclamo.Descripcion);
-            AgregarParametro("rec_status", reclamo.Status);
+            AgregarParametro("rec_titulo", reclamo._titulo);
+            AgregarParametro("rec_descripcion", reclamo._descripcion);
+            AgregarParametro("rec_status", reclamo._status);
 
             EjecutarQuery();
         }
@@ -58,12 +58,12 @@ namespace vacanze_back.DAO.Grupo9
         /// <summary>
         ///     Metodo para elimar un reclamo con su id
         /// </summary>
-        /// <param name="reclamoID"></param>
-        public void EliminarReclamo(int reclamoID)
+        /// <param name="reclamoId"></param>
+        public void EliminarReclamo(int reclamoId)
         {
             Conectar();
             StoredProcedure("EliminarReclamo(@rec_id)");
-            AgregarParametro("rec_id", reclamoID);
+            AgregarParametro("rec_id", reclamoId);
             EjecutarQuery();
         }
 
@@ -72,7 +72,7 @@ namespace vacanze_back.DAO.Grupo9
             Conectar();
             StoredProcedure("ModificarReclamoStatus(@rec_id,@rec_status)");
             AgregarParametro("rec_id", reclamoId);
-            AgregarParametro("rec_status", reclamo.Status);
+            AgregarParametro("rec_status", reclamo._status);
             EjecutarQuery();
         }
 
@@ -81,7 +81,7 @@ namespace vacanze_back.DAO.Grupo9
             Conectar();
             StoredProcedure("ModificarReclamoTitulo(@rec_id,@rec_titulo)");
             AgregarParametro("rec_id", reclamoId);
-            AgregarParametro("rec_titulo", reclamo.Titulo);
+            AgregarParametro("rec_titulo", reclamo._titulo);
             EjecutarQuery();
         }
     }
