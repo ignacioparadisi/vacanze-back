@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using vacanze_back.Entities.Grupo9;
 
-namespace vacanze_back.DAO.Grupo9
+namespace vacanze_back.Connection.Grupo9
 {
-    public class DAOReclamo : DAO
+    public class ReclamoConnection : Connection
     {
-        public DAOReclamo()
+        public ReclamoConnection()
         {
-            CrearStringConexion();
+            CreateStringConnection();
         }
 
         /// <summary>
@@ -17,11 +17,11 @@ namespace vacanze_back.DAO.Grupo9
         /// <param name="reclamo"></param>
         public void AgregarReclamo(Reclamo reclamo)
         {
-            Conectar();
+            Connect();
             StoredProcedure("AgregarReclamo(@rec_titulo,@rec_descripcion,@rec_status)");
-            AgregarParametro("rec_titulo", reclamo._titulo);
-            AgregarParametro("rec_descripcion", reclamo._descripcion);
-            AgregarParametro("rec_status", reclamo._status);
+            AddParametro("rec_titulo", reclamo._titulo);
+            AddParametro("rec_descripcion", reclamo._descripcion);
+            AddParametro("rec_status", reclamo._status);
 
             EjecutarQuery();
         }
@@ -37,9 +37,9 @@ namespace vacanze_back.DAO.Grupo9
         {
             var ReclamoList = new List<Reclamo>();
 
-            Conectar();
+            Connect();
             StoredProcedure("ConsultarUnReclamo(@idReclamo)");
-            AgregarParametro("idReclamo", numero);
+            AddParametro("idReclamo", numero);
             EjecutarReader();
 
             for (var i = 0; i < cantidadRegistros; i++)
@@ -61,27 +61,27 @@ namespace vacanze_back.DAO.Grupo9
         /// <param name="reclamoId"></param>
         public void EliminarReclamo(int reclamoId)
         {
-            Conectar();
+            Connect();
             StoredProcedure("EliminarReclamo(@rec_id)");
-            AgregarParametro("rec_id", reclamoId);
+            AddParametro("rec_id", reclamoId);
             EjecutarQuery();
         }
 
         public void ModificarReclamoStatus(long reclamoId, Reclamo reclamo)
         {
-            Conectar();
+            Connect();
             StoredProcedure("ModificarReclamoStatus(@rec_id,@rec_status)");
-            AgregarParametro("rec_id", reclamoId);
-            AgregarParametro("rec_status", reclamo._status);
+            AddParametro("rec_id", reclamoId);
+            AddParametro("rec_status", reclamo._status);
             EjecutarQuery();
         }
 
         public void ModificarReclamoTitulo(long reclamoId, Reclamo reclamo)
         {
-            Conectar();
+            Connect();
             StoredProcedure("ModificarReclamoTitulo(@rec_id,@rec_titulo)");
-            AgregarParametro("rec_id", reclamoId);
-            AgregarParametro("rec_titulo", reclamo._titulo);
+            AddParametro("rec_id", reclamoId);
+            AddParametro("rec_titulo", reclamo._titulo);
             EjecutarQuery();
         }
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.Entities.Grupo9;
-using vacanze_back.DAO.Grupo9;
+using vacanze_back.Connection.Grupo9;
 using Newtonsoft.Json;
 using vacanze_back.Controllers.Grupo9;
 using System.Net;
@@ -26,7 +26,7 @@ namespace vacanze_back.Controllers.Grupo9
         public ActionResult<IEnumerable<Reclamo>> Get()
         {
 
-            DAOReclamo conec= new DAOReclamo();
+            ReclamoConnection conec= new ReclamoConnection();
             Reclamo reclamo = new Reclamo("tituloo" , "elias y jorge" , "ABIERTO");
             conec.AgregarReclamo(reclamo);
 
@@ -39,7 +39,7 @@ namespace vacanze_back.Controllers.Grupo9
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
-            DAOReclamo conec= new DAOReclamo();
+            ReclamoConnection conec= new ReclamoConnection();
             List<Reclamo> reclamosList = conec.ObtenerReclamo(id);
 
             return Ok(JsonConvert.SerializeObject(reclamosList)); 
@@ -59,7 +59,7 @@ namespace vacanze_back.Controllers.Grupo9
                 teams.Add(reclamos);
                 System.IO.File.WriteAllText("jsonFile.json",JsonConvert.SerializeObject(reclamos));*/
 
-                DAOReclamo conec= new DAOReclamo();
+                ReclamoConnection conec= new ReclamoConnection();
                 Reclamo reclamo = new Reclamo(reclamoAux.titulo, reclamoAux.descripcion, reclamoAux.status);
 				conec.AgregarReclamo(reclamo);
 				return Ok("Se agrego correctamente");
@@ -76,7 +76,7 @@ namespace vacanze_back.Controllers.Grupo9
         {
             try{
                 Console.WriteLine("estoy aqui");
-                DAOReclamo conec= new DAOReclamo();
+            ReclamoConnection conec= new ReclamoConnection();
                 
                 Console.WriteLine("estoy aqui");
                 conec.EliminarReclamo(id);
@@ -95,7 +95,7 @@ namespace vacanze_back.Controllers.Grupo9
 		public ActionResult<string> Put(string tipo,int id,[FromBody] Reclamito reclamoAux)
         {
             try{
-                DAOReclamo conec= new DAOReclamo();
+            ReclamoConnection conec= new ReclamoConnection();
 				Reclamo reclamo = new Reclamo(reclamoAux.titulo, reclamoAux.descripcion,reclamoAux.status);
                 Console.WriteLine("estoy aqui");
 				if(reclamoAux.status != null)
