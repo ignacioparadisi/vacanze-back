@@ -2,16 +2,11 @@ namespace vacanze_back.Entities
 {
     public abstract class Entity
     {
-        private long _id;
-
-        public void setId(long id)
+        protected Entity(long id)
         {
-            this._id = id;
+            Id = id;
         }
 
-        public long getIt()
-        {
-            return this._id;
-        }
+        public long Id { get; }
     }
 }
