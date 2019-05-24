@@ -13,20 +13,20 @@ namespace vacanze_back.Persistence.Grupo13
 {
     public class DAORoom : DAO
     {
-        const String SP_SELECT = "m13_gethabitaciones()";
+        const String SP_SELECT = "m13_getRooms()";
         const String SP_FIND_ROOM = "m13_findByHabitacionId(@_id)";
         const String SP_DELETE = "{CALL m13_deleteHabitacion(_id)}";
-        const String SP_INSERT = "{CALL m13_addHabitacion(_precio,_capacidad,_status,_hot_fk)}";
+        const String SP_INSERT = "{CALL m13_addHabitacion(@_precio,@_capacidad,@_status,@_hot_fk)}";
         //voids: insert, delete, update
         //returns: getHabitaciones-list, getHabitacion-habitacion
         private Room room;
 
-        public void create(Entity e)
+        public void Create(Entity e)
         {
             room = (Room)e;
         }
 
-        public List<Entity> getRooms()
+        public List<Entity> GetRooms()
         {
             List<Entity> roomsList = new List<Entity>();
             try
@@ -36,11 +36,12 @@ namespace vacanze_back.Persistence.Grupo13
                 ExecuteReader();
                 for (int i = 0; i < rowNumber; i++)
                 {
-                    Room room = new Room();
-                    room.setId(GetInt(i, 0));
-                    room.price = GetDouble(i, 1);
-                    room.capacity = GetInt(i, 2);
-                    room.status = GetBool(i, 3);
+                                                //id, precio,      capacidad,        status
+                    Room room = new Room(GetInt(i,0), GetDouble(i, 1), GetInt(i, 2), GetBool(i, 3));
+                    //room.setId(GetInt(i, 0));
+                  //  room.price = GetDouble(i, 1);
+                  //  room.capacity = GetInt(i, 2);
+                   // room.status = GetBool(i, 3);
 
                     roomsList.Add(room);
                 }
@@ -61,9 +62,8 @@ namespace vacanze_back.Persistence.Grupo13
             return roomsList;
         }
 
-        public Entity findRoom(int id)
+        public Entity FindRoom(int id)
         {
-            room = new Room();
             try
             {
                 Connect();
@@ -72,10 +72,13 @@ namespace vacanze_back.Persistence.Grupo13
                 ExecuteReader();
                 for (int i = 0; i < rowNumber; i++)
                 {
+
+                 room = new Room(GetInt(i, 0), GetDouble(i, 1), GetInt(i, 2), GetBool(i, 3));
+                    /*
                     room.setId(GetInt(i, 0));
                     room.price = GetDouble(i, 1);
                     room.capacity = GetInt(i, 2);
-                    room.status = GetBool(i, 3);
+                    room.status = GetBool(i, 3);*/
                 }
                 return room;
             }
@@ -94,9 +97,9 @@ namespace vacanze_back.Persistence.Grupo13
             return room;
         }
 
-        public void deleteRoom(Room room)
+        public void DeleteRoom(Room room)
         {
-            long id = room.getIt();
+            long id = room.Id;
             try
             {
                 if (Connect())
@@ -121,19 +124,21 @@ namespace vacanze_back.Persistence.Grupo13
 
         }
 
-        public void insertRoom(Room room)
+        /*
+        public void InsertRoom(Room room)
         {
             try
             {
-                if (Connect())
-                {
                     StoredProcedure(SP_INSERT);
                     AddParameter("_precio", room.price);
                     AddParameter("_capacidad", room.capacity);
                     AddParameter("_status", room.status);
                     //    AddParameter("_capacidad", habitacion.capacidad); QUE VOY HACER AQUI ? 
-                    ExecuteQuery();
-                }
+                    ExecuteReader();
+                    if(rowNumber > 0)
+                    {
+                        room.Id=GetInt(0, 0);
+                    }
             }
             catch (NpgsqlException e)
             {
@@ -148,5 +153,6 @@ namespace vacanze_back.Persistence.Grupo13
                 Disconnect();
             }
         } //Incompleto
+        */
     }
 }

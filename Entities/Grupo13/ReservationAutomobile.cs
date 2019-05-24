@@ -43,14 +43,8 @@ namespace vacanze_back.Entities.Grupo13
             return this.CheckOut;
         }
 
-        public ReservationAutomobile()
+        public ReservationAutomobile(long id, bool status, DateTime CheckIn, DateTime CheckOut) : base(id)
         {
-
-        }
-
-        public ReservationAutomobile(long id, bool status, DateTime CheckIn, DateTime CheckOut)
-        {
-            setId(id);
             this.status = status;
             this.CheckIn = CheckIn;
             this.CheckOut = CheckOut;

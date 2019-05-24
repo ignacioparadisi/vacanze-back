@@ -13,7 +13,7 @@ namespace vacanze_back.Persistence.Grupo13
 {
     public class DAOReservationRoom : DAO
     {
-        const String SP_SELECT = "m13_getreservahabitaciones()";
+        const String SP_SELECT = "m13_getResRooms()";
         const String SP_FIND = "m13_findByReservaHabitacionId(@_id)";
         private ReservationRoom reservationRoom;
         private DAORoom dAORoom;
@@ -33,12 +33,13 @@ namespace vacanze_back.Persistence.Grupo13
                 ExecuteReader();
                 for (int i = 0; i < rowNumber; i++)
                 {
-                    ReservationRoom roomRes = new ReservationRoom();
-                    roomRes.setId(GetInt(i, 0));
+                    ReservationRoom roomRes = new ReservationRoom(GetInt(i, 0), GetBool(i, 1), GetDateTime(i, 2), GetDateTime(i, 3), GetInt(i, 4));
+
+                    /*roomRes.setId(GetInt(i, 0));
                     roomRes.status = GetBool(i, 1);
                     roomRes.CheckIn = GetDateTime(i, 2);
                     roomRes.CheckOut = GetDateTime(i, 3);
-                    roomRes.room_id = GetInt(i, 4);
+                    roomRes.room_id = GetInt(i, 4);*/
                    // roomRes.room = (Room) dAORoom.findRoom(GetInt(i,4)); NO ESTA CARGANDO EL OBJECT
                    // roomRes.room.setId(GetInt(i,4); NO ESTA CARGANDO EL OBJECT.
 
@@ -63,7 +64,6 @@ namespace vacanze_back.Persistence.Grupo13
 
         public Entity Find(int id)
         {
-            reservationRoom = new ReservationRoom();
             try
             {
                 Connect();
@@ -72,11 +72,13 @@ namespace vacanze_back.Persistence.Grupo13
                 ExecuteReader();
                 for (int i = 0; i < rowNumber; i++)
                 {
+                    reservationRoom = new ReservationRoom(GetInt(i, 0), GetBool(i, 1), GetDateTime(i, 2), GetDateTime(i, 3), GetInt(i, 4));
+                    /*
                     reservationRoom.setId(GetInt(i, 0));
                     reservationRoom.status = GetBool(i, 1);
                     reservationRoom.CheckIn = GetDateTime(i, 2);
                     reservationRoom.CheckOut = GetDateTime(i, 3);
-                    reservationRoom.room_id = GetInt(i, 4);
+                    reservationRoom.room_id = GetInt(i, 4);*/
                 }
                 return reservationRoom;
             }

@@ -19,7 +19,7 @@ namespace vacanze_back.Controllers.Grupo13
             try
             {
                 DAORoom daoRooms = new DAORoom();
-                List<Entity> result = daoRooms.getRooms();
+                List<Entity> result = daoRooms.GetRooms();
                 return Ok(result.ToList());
             }
             catch (System.Exception)
@@ -35,13 +35,30 @@ namespace vacanze_back.Controllers.Grupo13
             try
             {
                 DAORoom dAOHabitacion = new DAORoom();
-                Entity result = dAOHabitacion.findRoom(id);
+                Entity result = dAOHabitacion.FindRoom(id);
                 return Ok(result);
             }
             catch (System.Exception)
             {
 
                 throw;
+            }
+        }
+
+        [HttpPost]
+        public Room Post([FromBody] Room room)
+        {
+            try
+            {
+                ;
+                DAORoom dAORoom = new DAORoom();
+               // dAORoom.Add(room);
+                return room;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
             }
         }
     }
