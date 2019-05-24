@@ -49,7 +49,7 @@ namespace vacanze_back.Controllers.Grupo9
             { 
 				
                 ClaimConnection conec= new ClaimConnection();
-				Claim claim= new Claim(ClaimAux.titulo, ClaimAux.descripcion, ClaimAux.status);
+				Claim claim= new Claim(ClaimAux.title, ClaimAux.description, ClaimAux.status);
 				conec.AddClaim(claim);
 				return Ok("Agregado correctamente");
             }
@@ -59,7 +59,7 @@ namespace vacanze_back.Controllers.Grupo9
             }
         }
 		
-        // DELETE api/Claim/5
+        // DELETE api/Reclamo/5
         [HttpDelete("{id}")]
         public ActionResult<string> Delete(int id)
         {
@@ -79,20 +79,22 @@ namespace vacanze_back.Controllers.Grupo9
             } 
         }
 		
-		//api/Claim/status/5
-		[HttpPut("{tipo}/{id}")]
-		public ActionResult<string> Put(string tipo,int id,[FromBody] Reclamito ClaimAux)
+		//api/Clain/status/5
+		[HttpPut("{id}")]
+		public ActionResult<string> Put(int id,[FromBody] Reclamito ClaimAux)
         {
             try{
-            ClaimConnection conec= new ClaimConnection();
-				Claim claim = new Claim(ClaimAux.titulo, ClaimAux.descripcion,ClaimAux.status);
-                Console.WriteLine("estoy aqui");
-				if(ClaimAux.status != null)
-                conec.ModifyClaimStatus(id,claim);
-				else if(ClaimAux.titulo != null)
-					conec.ModifyClaimTitle(id,claim);
+				ClaimConnection conec = new ClaimConnection();
+				Claim claim = new Claim(ClaimAux.title, ClaimAux.description, ClaimAux.status);
+				Console.WriteLine("estoy aqui");
+				if (ClaimAux.status != null)
+					conec.ModifyClaimStatus(id, claim);
+				else if (ClaimAux.title != null)
+					conec.ModifyClaimTitle(id, claim);
 				return Ok("Modificado exitosamente");
-            }
+
+
+			}
             catch (Exception ex)
             {
 				return StatusCode(500);
@@ -104,8 +106,8 @@ namespace vacanze_back.Controllers.Grupo9
 }
 
 public class Reclamito {
-    public string titulo ;
-    public string descripcion;
+    public string title ;
+    public string description;
     public string status;
 	public string getStatus(){
 		return this.status;

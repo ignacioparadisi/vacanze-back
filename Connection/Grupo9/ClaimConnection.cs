@@ -70,7 +70,7 @@ namespace vacanze_back.Connection.Grupo9
         public void ModifyClaimStatus(long claimId, Claim claim)
         {
             Connect();
-            StoredProcedure("ModificarReclamoStatus(@rec_id,@rec_status)");
+            StoredProcedure("modificarreclamostatus(@rec_id,@rec_status)");
 			AddParameter("rec_id", claimId);
 			AddParameter("rec_status", claim._status);
             ExecuteQuery();
@@ -79,7 +79,7 @@ namespace vacanze_back.Connection.Grupo9
         public void ModifyClaimTitle(long claimId, Claim claim)
         {
             Connect();
-            StoredProcedure("ModificarReclamoTitulo(@rec_id,@rec_titulo)");
+            StoredProcedure("modificarreclamotitulo(@rec_id,@rec_titulo)");
 			AddParameter("rec_id", claimId);
 			AddParameter("rec_titulo", claim._title);
             ExecuteQuery();
