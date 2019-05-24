@@ -80,3 +80,28 @@ $BODY$;
 
 ALTER FUNCTION public.getplanes()
     OWNER TO vacanza;
+
+-- FUNCTION: public.findplane(integer)
+
+-- DROP FUNCTION public.findplane(integer);
+
+CREATE OR REPLACE FUNCTION public.findplane(
+	_id integer)
+    RETURNS TABLE(id integer, autonomy double precision, isactive boolean, capacity integer, loadingcap double precision, model character varying) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+	RETURN QUERY SELECT
+	pla_id, pla_autonomy, "pla_isActive", pla_capacity, "pla_loadingCap", pla_model
+	FROM public.Plane WHERE _id = pla_id;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.findplane(integer)
+    OWNER TO postgres;

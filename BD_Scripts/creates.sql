@@ -34,31 +34,6 @@ CREATE SEQUENCE public.sto_id_seq;
 
 ALTER SEQUENCE public.sto_id_seq
     OWNER TO vacanza;
-    
--- Table: public.flight
-
--- DROP TABLE public.flight;
-
-CREATE TABLE public.flight
-(
-    fli_pla_fk integer NOT NULL,
-    fli_price double precision NOT NULL,
-    fli_departuredate date NOT NULL,
-    fli_arrivaldate date NOT NULL,
-    fli_id integer NOT NULL DEFAULT nextval('fli_id_seq'::regclass),
-    CONSTRAINT "Flight_pkey" PRIMARY KEY (fli_id),
-    CONSTRAINT fk_plane FOREIGN KEY (fli_pla_fk)
-        REFERENCES public.plane (pla_id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-)
-WITH (
-    OIDS = FALSE
-)
-TABLESPACE pg_default;
-
-ALTER TABLE public.flight
-    OWNER to vacanza;
 
 -- Table: public.location
 
@@ -99,6 +74,31 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.plane
+    OWNER to vacanza;
+
+-- Table: public.flight
+
+-- DROP TABLE public.flight;
+
+CREATE TABLE public.flight
+(
+    fli_pla_fk integer NOT NULL,
+    fli_price double precision NOT NULL,
+    fli_departuredate date NOT NULL,
+    fli_arrivaldate date NOT NULL,
+    fli_id integer NOT NULL DEFAULT nextval('fli_id_seq'::regclass),
+    CONSTRAINT "Flight_pkey" PRIMARY KEY (fli_id),
+    CONSTRAINT fk_plane FOREIGN KEY (fli_pla_fk)
+        REFERENCES public.plane (pla_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.flight
     OWNER to vacanza;
 
 -- Table: public.stop
