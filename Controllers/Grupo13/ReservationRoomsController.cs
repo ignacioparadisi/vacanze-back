@@ -24,7 +24,7 @@ namespace vacanze_back.Controllers.Grupo13
             }
             catch (System.Exception)
             {
-
+                return null;
                 throw;
             }
         }
@@ -43,6 +43,24 @@ namespace vacanze_back.Controllers.Grupo13
 
                 throw;
             }
+        }
+
+        // POST api/values //CREAR UN RECURSO
+        [HttpPost]
+        public void Post([FromBody] string value)
+        {
+        }
+
+        // PUT api/values/5    //ACTUALIZAR UN RECURSO
+        [HttpPut("{id}")]
+        public void Put(int id, [FromBody] string value)
+        {
+        }
+
+        // DELETE api/values/5 //BORRAR
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
         }
     }
 }

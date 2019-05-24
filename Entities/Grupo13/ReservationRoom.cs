@@ -9,25 +9,31 @@ namespace vacanze_back.Entities.Grupo13
     public class ReservationRoom : Entity
     {
         public bool status { get; set; }
-        public DateTime CheckIn { get; set; }
-        public DateTime CheckOut { get; set; }
-        public int room_id { get; set; }
+        //Checkin: Initial date of the reservation
+        public DateTime checkIn { get; set; }
+        //Checkout: Last date of the reservation
+        public DateTime checkOut { get; set; }
+        //Room which the reservation is tied.
         public Room room { get; set; }
-        //    public User user { get; set; }
 
+        //public User user { get; set; }
+
+            /**
+             * Constructors of the class
+             */
         public ReservationRoom(long id, bool status, DateTime CheckIn, DateTime CheckOut) : base(id)
         {
             this.status = status;
-            this.CheckIn = CheckIn;
-            this.CheckOut = CheckOut;
+            this.checkIn = CheckIn;
+            this.checkOut = CheckOut;
         }
 
-        public ReservationRoom(long id, bool status, DateTime CheckIn, DateTime CheckOut, int room_id) : base(id)
+        public ReservationRoom(long id, bool status, DateTime CheckIn, DateTime CheckOut, Room room) : base(id)
         {
             this.status = status;
-            this.CheckIn = CheckIn;
-            this.CheckOut = CheckOut;
-            this.room_id = room_id;
+            this.checkIn = CheckIn;
+            this.checkOut = CheckOut;
+            this.room = room;
         }
     }
 }

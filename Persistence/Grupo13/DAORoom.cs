@@ -14,7 +14,7 @@ namespace vacanze_back.Persistence.Grupo13
     public class DAORoom : DAO
     {
         const String SP_SELECT = "m13_getRooms()";
-        const String SP_FIND_ROOM = "m13_findByHabitacionId(@_id)";
+        const String SP_FIND_ROOM = "m13_findByRoomId(@_id)";
         const String SP_DELETE = "{CALL m13_deleteHabitacion(_id)}";
         const String SP_INSERT = "{CALL m13_addHabitacion(@_precio,@_capacidad,@_status,@_hot_fk)}";
         //voids: insert, delete, update

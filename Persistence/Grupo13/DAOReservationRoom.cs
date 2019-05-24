@@ -15,6 +15,11 @@ namespace vacanze_back.Persistence.Grupo13
     {
         const String SP_SELECT = "m13_getResRooms()";
         const String SP_FIND = "m13_findByReservaHabitacionId(@_id)";
+        const String SP_AVAILABLE = "m13_getAvailableRooms(@_checkin, @_checkout)";
+        const String SP_ADD_RESERVATION = "m13_addRoomReservation (@_status, @_checkin, @_checkout,@_roo_fk,@_use_fk)";
+        const String SP_DELETE_RESERVATION ="";
+        const String SP_ADD_PAYMENT = "";
+
         private ReservationRoom reservationRoom;
         private DAORoom dAORoom;
 
@@ -23,17 +28,23 @@ namespace vacanze_back.Persistence.Grupo13
             reservationRoom = (ReservationRoom)e;
         }
 
+        /** Method GetRoomReservations()
+         * Returns all room reservation from the system.
+         */
         public List<Entity> getRoomReservations()
         {
-            List<Entity> roomReservationList = new List<Entity>();
             try
             {
+                List<Entity> roomReservationList = new List<Entity>();
+                DAORoom dAORoom = new DAORoom();
+
                 Connect();
                 StoredProcedure(SP_SELECT);
                 ExecuteReader();
                 for (int i = 0; i < rowNumber; i++)
                 {
-                    ReservationRoom roomRes = new ReservationRoom(GetInt(i, 0), GetBool(i, 1), GetDateTime(i, 2), GetDateTime(i, 3), GetInt(i, 4));
+                    ReservationRoom roomRes = new ReservationRoom(GetInt(i, 0), GetBool(i, 1), GetDateTime(i, 2), GetDateTime(i, 3));
+                    roomRes.room = (Room) dAORoom.FindRoom(GetInt(i, 4));
 
                     /*roomRes.setId(GetInt(i, 0));
                     roomRes.status = GetBool(i, 1);
@@ -50,18 +61,23 @@ namespace vacanze_back.Persistence.Grupo13
             catch (NpgsqlException e)
             {
                 e.ToString();
+                throw;
             }
             catch (Exception e)
             {
                 e.ToString();
+                throw;
             }
             finally
             {
                 Disconnect();
             }
-            return roomReservationList;
         }
 
+        /** Method Find(int id)
+         * @param id : int
+         * Returns the room reservation with the id that was passed.
+         */
         public Entity Find(int id)
         {
             try
@@ -72,7 +88,8 @@ namespace vacanze_back.Persistence.Grupo13
                 ExecuteReader();
                 for (int i = 0; i < rowNumber; i++)
                 {
-                    reservationRoom = new ReservationRoom(GetInt(i, 0), GetBool(i, 1), GetDateTime(i, 2), GetDateTime(i, 3), GetInt(i, 4));
+                    reservationRoom = new ReservationRoom(GetInt(i, 0), GetBool(i, 1), GetDateTime(i, 2), GetDateTime(i, 3));
+                    reservationRoom.room = (Room)dAORoom.FindRoom(GetInt(i, 4));
                     /*
                     reservationRoom.setId(GetInt(i, 0));
                     reservationRoom.status = GetBool(i, 1);
@@ -95,6 +112,87 @@ namespace vacanze_back.Persistence.Grupo13
                 Disconnect();
             }
             return reservationRoom;
+        }
+
+        /** Method GetAvailableRoomReservations()
+         * Returns all room reservations from the system which are available within the range of dates that were passed.
+         */
+        public List<Entity> GetAvailableRoomReservations(DateTime checkIn, DateTime checkOut)
+        {
+            List<Entity> roomReservationList = new List<Entity>();
+            try
+            {
+                Connect();
+                StoredProcedure(SP_AVAILABLE);
+                AddParameter("_checkin", checkIn);
+                AddParameter("_checkout", checkOut);
+                ExecuteReader();
+                for (int i = 0; i < rowNumber; i++)
+                {
+                    ReservationRoom roomRes = new ReservationRoom(GetInt(i, 0), GetBool(i, 1), GetDateTime(i, 2), GetDateTime(i, 3));
+                    roomRes.room = (Room)dAORoom.FindRoom(GetInt(i, 4));
+                    /*roomRes.setId(GetInt(i, 0));
+                    roomRes.status = GetBool(i, 1);
+                    roomRes.CheckIn = GetDateTime(i, 2);
+                    roomRes.CheckOut = GetDateTime(i, 3);
+                    roomRes.room_id = GetInt(i, 4);*/
+                    // roomRes.room = (Room) dAORoom.findRoom(GetInt(i,4)); NO ESTA CARGANDO EL OBJECT
+                    // roomRes.room.setId(GetInt(i,4); NO ESTA CARGANDO EL OBJECT.
+
+                    roomReservationList.Add(roomRes);
+                }
+                return roomReservationList;
+            }
+            catch (NpgsqlException e)
+            {
+                e.ToString();
+            }
+            catch (Exception e)
+            {
+                e.ToString();
+            }
+            finally
+            {
+                Disconnect();
+            }
+            return roomReservationList;
+        }
+
+        /** Method Add()
+         * Inserts in the DataBase the room reservation that was passed.
+         */
+        //Falta el user
+        public void Add(Entity entity)
+        {
+            try
+            {
+                ReservationRoom reservationRoom = (ReservationRoom)entity;
+                int res_id = 0;
+
+                Connect();
+                StoredProcedure(SP_ADD_RESERVATION);
+
+                AddParameter("_status", reservationRoom.status);
+                AddParameter("_checkin", reservationRoom.checkIn);
+                AddParameter("_checkout", reservationRoom.checkOut);
+                AddParameter("_roo_fk", reservationRoom.room.Id);
+            //    AddParameter("_use_fk",reservationRoom.user.Id);
+
+                ExecuteReader();
+
+                if (rowNumber > 0)
+                {
+                    res_id = GetInt(0, 0);
+                }
+                Disconnect();
+            }
+            catch (NpgsqlException e)
+            {
+
+                Console.WriteLine(e.ToString());
+                Disconnect();
+                throw new Exception();
+            }
         }
     }
 }

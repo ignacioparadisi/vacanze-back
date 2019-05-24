@@ -10,39 +10,16 @@ namespace vacanze_back.Entities.Grupo13
     public class ReservationAutomobile : Entity
     {
         private bool status { get; set; }
+        //Checkin: Initial date of the reservation
         private DateTime CheckIn { get; set; }
+        //Checkout: Last date of the reservation
         private DateTime CheckOut { get; set; }
-        //  private Automobile automobile { get; set; }
+        // private Automobile automobile { get; set; }
+        // private User user { get; set; }
 
-        public void setStatus(bool status)
-        {
-            this.status = status;
-        }
-
-        public void setCheckIn(DateTime date)
-        {
-            this.CheckIn = date;
-        }
-        public void setCheckOut(DateTime date)
-        {
-            this.CheckOut = date;
-        }
-
-        public bool getStatus()
-        {
-            return this.status;
-        }
-
-        public DateTime getCheckIn()
-        {
-            return this.CheckIn;
-        }
-
-        public DateTime getCheckOut()
-        {
-            return this.CheckOut;
-        }
-
+            /**
+             * Constructor of the class.
+             */
         public ReservationAutomobile(long id, bool status, DateTime CheckIn, DateTime CheckOut) : base(id)
         {
             this.status = status;
