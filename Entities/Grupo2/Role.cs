@@ -1,12 +1,11 @@
 namespace vacanze_back.Entities.Grupo2
 {
-    public class Role: Entity
+    public class Role : Entity
     {
         private string name;
 
-        public Role(long id, string name)
+        public Role(long id, string name) : base(id)
         {
-            setId(id);
             this.name = name;
         }
 

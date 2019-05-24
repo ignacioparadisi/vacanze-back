@@ -39,10 +39,10 @@ CREATE TABLE RECLAMO(
 -------------AGREGAR RECLAMO-----------------
 
 CREATE OR REPLACE FUNCTION AgregarReclamo(
-	_titulo VARCHAR(20), 
-	_descripcion VARCHAR(30),
- 	_status VARCHAR(30)
- 	) 
+    _titulo VARCHAR(20), 
+    _descripcion VARCHAR(30),
+    _status VARCHAR(30)
+    ) 
 RETURNS integer AS
 $$
 BEGIN
@@ -55,14 +55,14 @@ $$ LANGUAGE plpgsql;
 
 ---------MODIFICAR RECAMO-----------------
 CREATE OR REPLACE FUNCTION ModificarReclamoStatus( 
-	_idReclamo integer,
+    _idReclamo integer,
     _status VARCHAR(35))
 RETURNS integer AS
 $$
 BEGIN
 
    UPDATE RECLAMO SET rec_status= _status
-	WHERE (rec_id = _idReclamo);
+    WHERE (rec_id = _idReclamo);
    RETURN _idReclamo;
 END;
 $$ LANGUAGE plpgsql;
@@ -102,10 +102,31 @@ RETURNS TABLE
 AS
 $$
 BEGIN
-	RETURN QUERY SELECT
-	rec_id, rec_titulo,rec_descr, rec_status
-	FROM RECLAMO WHERE rec_id = _idReclamo;
+    RETURN QUERY SELECT
+    rec_id, rec_titulo,rec_descr, rec_status
+    FROM RECLAMO WHERE rec_id = _idReclamo;
 END;
 $$ LANGUAGE plpgsql;
 
 ------------------------------------fin de grupo 9---------------------------------
+
+CREATE TABLE Lugar (
+  l_id SERIAL,
+  l_tipo CHAR(1) NOT NULL,
+  l_nombre VARCHAR(100) NOT NULL,
+  fk_lugar INTEGER,
+  CONSTRAINT pk_lugar PRIMARY KEY (l_id),
+  CONSTRAINT check_tipo CHECK(l_tipo in ('P','C')) ---- P de pais y C de ciudad ------
+);
+
+CREATE TABLE Hotel (
+                       hot_id                SERIAL,
+                       hot_nombre            VARCHAR(100) NOT NULL,
+                       hot_cant_habitaciones INTEGER      NOT NULL,
+                       hot_activo            BOOLEAN      NOT NULL DEFAULT TRUE,
+                       hot_telefono          VARCHAR(20)  NOT NULL,
+                       hot_sitio_web         VARCHAR(100),
+                       hot_fk_lugar          INTEGER      NOT NULL,
+                       CONSTRAINT pk_hotel PRIMARY KEY (hot_id),
+                       CONSTRAINT fk_hotel_lugar FOREIGN KEY (hot_fk_lugar) REFERENCES Lugar (l_id)
+);
