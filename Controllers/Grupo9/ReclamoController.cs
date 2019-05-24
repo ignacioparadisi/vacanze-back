@@ -27,7 +27,7 @@ namespace vacanze_back.Controllers.Grupo9
         {
 
             DAOReclamo conec= new DAOReclamo();
-            Reclamo reclamo = new Reclamo("tituloo" , "elias y jorge" , "ABIERTO");
+            Reclamo reclamo = new Reclamo("Moscu" , "Viaje a Rusia" , "ABIERTO");
             conec.AgregarReclamo(reclamo);
 
             List<Reclamo> reclamosList = conec.ObtenerReclamo(1);
