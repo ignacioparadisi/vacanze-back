@@ -10,13 +10,16 @@ namespace vacanze_back.Entities.Grupo3
         public double autonomy {get; set;}
         public bool isActive { get; set; }
 
-        public Airplane(){
+        public Airplane():base(0){
+            
+        }
+
+        public Airplane(long id):base(id){
             
         }
         
-        public Airplane(long id, string model, double load_capacity, int seats, double autonomy, bool isActive){
+        public Airplane(long id, string model, double load_capacity, int seats, double autonomy, bool isActive):base(id){
             this.model = model;
-            setId(id);
             this.loadCapacity = load_capacity;
             this.autonomy = autonomy;
             this.seats = seats;

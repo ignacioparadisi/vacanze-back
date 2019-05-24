@@ -5,18 +5,65 @@ using System.Web;
 using vacanze_back.Entities;
 using vacanze_back.Entities.Grupo3;
 using vacanze_back.Persistence;
+using vacanze_back.Persistence.Grupo3;
 using Npgsql;
 
 namespace vacanze_back.Persistence.Grupo3
 {
     public class DAOFlight : DAO
     {
+        private string GET_ALL_FLIGHTS = "getflights()";
         private string ADD_FLIGHT = "addflight(@_plane, @_price, to_date(@_departure,'DD-MM-YY'), to_date(@_arrival,'DD-MM-YY'))";
         private string ADD_STOP = "addstop(@_flight,to_date(@_departure,'DD-MM-YY'), to_date(@_arrival,'DD-MM-YY'),@_loc_departure, @_loc_arrival)";
 
         public DAOFlight()
         {
             
+        }
+
+        public List<Entity> Get(){
+            try
+            {
+                List<Entity> flights = new List<Entity>();
+                DAOAirplanes daop = new DAOAirplanes();
+                DAORoutes daor = new DAORoutes();
+
+                Connect();
+                StoredProcedure(GET_ALL_FLIGHTS);
+                ExecuteReader();
+
+                for (int i = 0; i < rowNumber; i++)
+                {
+                    Flight flight = new Flight(GetInt(i,0));
+                    flight.plane = (Airplane) daop.Find( GetInt(i,1) );
+                    flight.price = GetDouble(i,2);
+                    flight.departure = GetString(i,3);
+                    flight.arrival = GetString(i,4);
+
+                    foreach (Entity item in daor.Get( GetInt(i,0) ))
+                    {
+                        
+                        flight.routes.Add( (Route) item );   
+                    }
+
+                    flights.Add(flight);
+                }
+
+                return flights;
+            }
+            catch (NpgsqlException ex)
+            {
+                ex.ToString();
+                throw;
+            }
+            catch (System.Exception ex)
+            {
+                ex.ToString();
+                throw;
+            }
+            finally{
+                Disconnect();
+            }
         }
 
         public void Add(Entity entity){

@@ -5,20 +5,26 @@ namespace vacanze_back.Entities.Grupo3
     public class Flight : Entity
     {
 
-        public int plane { get; set; }
+        public Airplane plane { get; set; }
         public double price { get; set; }
         public string departure { get; set; }
         public string arrival { get; set; }
         public List<Route> routes { get; set; }
 
 
-        public Flight()
+        public Flight(long id):base(id)
         {
-
+            this.routes = new List<Route>();
         }
 
-        public Flight(double price, string departure, string arrival, List<Route> routes)
+        public Flight():base(0)
         {
+            this.routes = new List<Route>();            
+        }
+
+        public Flight(Airplane plane, double price, string departure, string arrival, List<Route> routes):base(0)
+        {
+            this.plane = plane;
             this.price = price;
             this.departure = departure;
             this.arrival = arrival;

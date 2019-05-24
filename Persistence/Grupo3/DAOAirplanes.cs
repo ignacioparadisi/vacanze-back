@@ -29,9 +29,7 @@ namespace vacanze_back.Persistence.Grupo3
 
                 for (int i = 0; i < rowNumber; i++)
                 {
-                    Airplane airplane = new Airplane();
-
-                    airplane.setId(GetInt(i,0));
+                    Airplane airplane = new Airplane(GetInt(i,0));
                     airplane.autonomy = GetDouble(i,1);
                     airplane.isActive = GetBool(i,2);
                     airplane.seats = GetInt(i,3);
@@ -48,14 +46,17 @@ namespace vacanze_back.Persistence.Grupo3
             {
                 throw;
             }
+            finally{
+                Disconnect();
+            }
         }
 
         public Entity Find(int id){
             
             try
             {
-                Airplane airplane = new Airplane();
-
+                Airplane airplane = null;
+                
                 Connect();
                 StoredProcedure(FIND_PLANE);
                 AddParameter( "_id", id );
@@ -63,7 +64,7 @@ namespace vacanze_back.Persistence.Grupo3
 
                 for (int i = 0; i < rowNumber; i++)
                 {
-                    airplane.setId(GetInt(i,0));
+                    airplane = new Airplane(GetInt(i,0));
                     airplane.autonomy = GetDouble(i,1);
                     airplane.isActive = GetBool(i,2);
                     airplane.seats = GetInt(i,3);
@@ -79,6 +80,9 @@ namespace vacanze_back.Persistence.Grupo3
             {
                 
                 throw;
+            }
+            finally{
+                Disconnect();
             }
 
         }
