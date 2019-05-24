@@ -4,9 +4,9 @@ using vacanze_back.Entities.Grupo9;
 
 namespace vacanze_back.Connection.Grupo9
 {
-    public class ReclamoConnection : Connection
+    public class ClaimConnection : Connection
     {
-        public ReclamoConnection()
+        public ClaimConnection()
         {
             CreateStringConnection();
         }
@@ -14,16 +14,16 @@ namespace vacanze_back.Connection.Grupo9
         /// <summary>
         ///     Metodo para agregar un reclamo
         /// </summary>
-        /// <param name="reclamo"></param>
-        public void AgregarReclamo(Reclamo reclamo)
+        /// <param name="claim"></param>
+        public void AddClaim(Claim claim)
         {
             Connect();
             StoredProcedure("AgregarReclamo(@rec_titulo,@rec_descripcion,@rec_status)");
-            AddParametro("rec_titulo", reclamo._titulo);
-            AddParametro("rec_descripcion", reclamo._descripcion);
-            AddParametro("rec_status", reclamo._status);
+			AddParameter("rec_titulo", claim._title);
+			AddParameter("rec_descripcion", claim._description);
+			AddParameter("rec_status", claim._status);
 
-            EjecutarQuery();
+            ExecuteQuery();
         }
 
         /// <summary>
@@ -33,14 +33,14 @@ namespace vacanze_back.Connection.Grupo9
         /// que el logro no existe
         /// </exception>
         /// <returns></returns>
-        public List<Reclamo> ObtenerReclamo(int numero)
+        public List<Claim> GetClaim(int numero)
         {
-            var ReclamoList = new List<Reclamo>();
+            var ClaimList = new List<Claim>();
 
             Connect();
             StoredProcedure("ConsultarUnReclamo(@idReclamo)");
-            AddParametro("idReclamo", numero);
-            EjecutarReader();
+			AddParameter("idReclamo", numero);
+            ExecuteReader();
 
             for (var i = 0; i < cantidadRegistros; i++)
             {
@@ -48,41 +48,41 @@ namespace vacanze_back.Connection.Grupo9
                 var titulo = GetString(i, 1);
                 var descripcion = GetString(i, 2);
                 var status = GetString(i, 3);
-                var reclamo = new Reclamo(id, titulo, descripcion, status);
-                ReclamoList.Add(reclamo);
+                var claim = new Claim(id, titulo, descripcion, status);
+                ClaimList.Add(claim);
             }
 
-            return ReclamoList;
+            return ClaimList;
         }
 
         /// <summary>
         ///     Metodo para elimar un reclamo con su id
         /// </summary>
         /// <param name="reclamoId"></param>
-        public void EliminarReclamo(int reclamoId)
+        public void DeleteClaim(int claimId)
         {
             Connect();
             StoredProcedure("EliminarReclamo(@rec_id)");
-            AddParametro("rec_id", reclamoId);
-            EjecutarQuery();
+			AddParameter("rec_id", claimId);
+            ExecuteQuery();
         }
 
-        public void ModificarReclamoStatus(long reclamoId, Reclamo reclamo)
+        public void ModifyClaimStatus(long claimId, Claim claim)
         {
             Connect();
             StoredProcedure("ModificarReclamoStatus(@rec_id,@rec_status)");
-            AddParametro("rec_id", reclamoId);
-            AddParametro("rec_status", reclamo._status);
-            EjecutarQuery();
+			AddParameter("rec_id", claimId);
+			AddParameter("rec_status", claim._status);
+            ExecuteQuery();
         }
 
-        public void ModificarReclamoTitulo(long reclamoId, Reclamo reclamo)
+        public void ModifyClaimTitle(long claimId, Claim claim)
         {
             Connect();
             StoredProcedure("ModificarReclamoTitulo(@rec_id,@rec_titulo)");
-            AddParametro("rec_id", reclamoId);
-            AddParametro("rec_titulo", reclamo._titulo);
-            EjecutarQuery();
+			AddParameter("rec_id", claimId);
+			AddParameter("rec_titulo", claim._title);
+            ExecuteQuery();
         }
     }
 }

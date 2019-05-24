@@ -77,7 +77,7 @@ namespace vacanze_back.Connection
         /// <summary>
         /// Ejecutar el StoredProcedure con un valor de retorno (ResultSet), habilita el uso de las funciones "GetInt, GetString, etc" y devuelve un objeto DataTable.
         /// </summary>
-        public DataTable EjecutarReader()
+        public DataTable ExecuteReader()
         {
 
             try
@@ -111,7 +111,7 @@ namespace vacanze_back.Connection
         /// <summary>
         /// Ejecutar el StoredProcedure sin valor de retorno (ResultSet), devuelve el número de filas afectadas.
         /// </summary>
-        public int EjecutarQuery()
+        public int ExecuteQuery()
         {
             try
             {
@@ -155,7 +155,7 @@ namespace vacanze_back.Connection
         }
 
 
-        public void AddParametro(string nombre, object valor)
+        public void AddParameter(string nombre, object valor)
         {
             try
             {
