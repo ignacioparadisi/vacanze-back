@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.Entities.Grupo5;
-using vacanze_back.DAO.Grupo5;
+using vacanze_back.Connection.Grupo5;
 using Newtonsoft.Json;
 namespace vacanze_back.Controllers.Grupo5
 {
@@ -16,7 +16,7 @@ namespace vacanze_back.Controllers.Grupo5
         [HttpGet]
         public ActionResult<IEnumerable<String>> Get()
         {
-            DAOAuto conec= new DAOAuto();
+            ConnectAuto conec= new ConnectAuto();
             Auto auto = new Auto("hola","model",123,true,"licence",543);
             conec.Agregar(auto);
             return new string[] { "success"  }; 

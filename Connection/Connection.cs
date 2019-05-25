@@ -31,11 +31,11 @@ namespace vacanze_back.Connection
         /// </summary>
         protected void CreateStringConnection()
         {
-            _cadena = "Server=127.0.0.1;User Id=vacanza;" + 
+             _cadena = "Server=127.0.0.1;User Id=vacanza;" + 
                         "Password=vacanza;Database=vacanza;" ;
-            /*cadena  de prueba
+           /*  cadena  de prueba
             _cadena = "Server=localhost;Port=5433;User Id=postgres;" + 
-                    Password=admin;Database=vacanza;" ;*/
+            "Password=admin;Database=vacanza;" ;*/
 	
             //cadena de prueba
             /*
