@@ -88,8 +88,61 @@ $$
 BEGIN
     RETURN QUERY SELECT
     cla_id, cla_title,cla_descr, cla_status
+    FROM ClaimWHERE cla_id = _cla_id;
+END;
+$$ LANGUAGE plpgsql;
+
+--------------------------CONSULTAR Claim--------------------
+CREATE OR REPLACE FUNCTION GetClaimBaggage(_cla_id integer)
+RETURNS TABLE
+  (id integer,
+   title VARCHAR(30),
+   descr VARCHAR(30),
+   status VARCHAR(30)
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT
+    cla_id, cla_title,cla_descr, cla_status
     FROM Claim WHERE cla_id = _cla_id;
 END;
 $$ LANGUAGE plpgsql;
+
+--------------------------CONSULTAR Claim--------------------
+CREATE OR REPLACE FUNCTION GetClaimDocumentPasaport(_cla_id integer)
+RETURNS TABLE
+  (id integer,
+   title VARCHAR(30),
+   descr VARCHAR(30),
+   status VARCHAR(30)
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT
+    cla_id, cla_title,cla_descr, cla_status
+    FROM Claim WHERE cla_id = _cla_id;
+END;
+$$ LANGUAGE plpgsql;
+
+--------------------------CONSULTAR Claim--------------------
+CREATE OR REPLACE FUNCTION GetClaimDocumentCedula(_cla_id integer)
+RETURNS TABLE
+  (id integer,
+   title VARCHAR(30),
+   descr VARCHAR(30),
+   status VARCHAR(30)
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT
+    cla_id, cla_title,cla_descr, cla_status
+    FROM Claim WHERE cla_id = _cla_id;
+END;
+$$ LANGUAGE plpgsql;
+
+
 
 ------------------------------------fin de grupo 9---------------------------------

@@ -54,6 +54,74 @@ namespace vacanze_back.Connection.Grupo9
             return ClaimList;
         }
 
+        public List<Claim> GetClaimBaggage(int numero)
+        {
+            var ClaimList = new List<Claim>();
+
+            Connect();
+            StoredProcedure("GetClaimBaggage(@cla_id)");
+			AddParameter("cla_id", numero);
+            ExecuteReader();
+
+            for (var i = 0; i < cantidadRegistros; i++)
+            {
+                var id = Convert.ToInt32(GetString(i, 0));
+                var titulo = GetString(i, 1);
+                var descripcion = GetString(i, 2);
+                var status = GetString(i, 3);
+                var claim = new Claim(id, titulo, descripcion, status);
+                ClaimList.Add(claim);
+            }
+
+            return ClaimList;
+        }
+
+        public List<Claim> GetClaimDocumentPasaport(int numero)
+        {
+            var ClaimList = new List<Claim>();
+
+            Connect();
+            StoredProcedure("GetClaimDocumentPasaport(@cla_id)");
+			AddParameter("cla_id", numero);
+            ExecuteReader();
+
+            for (var i = 0; i < cantidadRegistros; i++)
+            {
+                var id = Convert.ToInt32(GetString(i, 0));
+                var titulo = GetString(i, 1);
+                var descripcion = GetString(i, 2);
+                var status = GetString(i, 3);
+                var claim = new Claim(id, titulo, descripcion, status);
+                ClaimList.Add(claim);
+            }
+
+            return ClaimList;
+        }
+
+        public List<Claim> GetClaimDocumentCedula(int numero)
+        {
+            var ClaimList = new List<Claim>();
+
+            Connect();
+            StoredProcedure("GetClaimDocumentCedula(@cla_id)");
+			AddParameter("cla_id", numero);
+            ExecuteReader();
+
+            for (var i = 0; i < cantidadRegistros; i++)
+            {
+                var id = Convert.ToInt32(GetString(i, 0));
+                var titulo = GetString(i, 1);
+                var descripcion = GetString(i, 2);
+                var status = GetString(i, 3);
+                var claim = new Claim(id, titulo, descripcion, status);
+                ClaimList.Add(claim);
+            }
+
+            return ClaimList;
+        }
+
+
+
         /// <summary>
         ///     Metodo para elimar un clalamo con su id
         /// </summary>

@@ -40,6 +40,30 @@ namespace vacanze_back.Controllers.Grupo9
             return Ok(claimList); 
         }
 
+        // GET api/values/5
+        // Get para la tabla equipaje
+        [HttpGet("{tipo}/{id}")]
+        public ActionResult<IEnumerable<Claim>> Get(string tipo, int id)
+        {
+            if(tipo == "Baggage"){
+                ClaimConnection conec= new ClaimConnection();
+                List<Claim> claimList = conec.GetClaimBaggage(id);
+                return Ok(claimList); 
+            }else{
+                if(tipo == "documentPasaport"){                   
+                    ClaimConnection conec= new ClaimConnection();
+                    List<Claim> claimList = conec.GetClaimDocumentPasaport(id);
+                    return Ok(claimList); 
+                }else{
+                    if(tipo == "documentCedula"){                   
+                        ClaimConnection conec= new ClaimConnection();
+                        List<Claim> claimList = conec.GetClaimDocumentCedula(id);
+                        return Ok(claimList); 
+                    }else                
+                    return StatusCode(404);
+                }                            
+            }
+        }
         // Post api/Claim/
 	
         [HttpPost]
