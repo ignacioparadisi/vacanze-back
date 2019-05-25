@@ -123,6 +123,7 @@ namespace vacanze_back.Connection
             }
             catch (NpgsqlException exc)
             {
+				Console.WriteLine(exc);
                 disconnect();
                 throw exc;
             }
