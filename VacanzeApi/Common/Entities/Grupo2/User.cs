@@ -2,7 +2,7 @@ namespace vacanze_back.Common.Entities.Grupo2
 {
     public class User : Entity
     {
-        private long _documentId;
+        private long _documentId { get; set; }
         private string _email;
         private string _lastname;
         private string _name;
@@ -18,16 +18,6 @@ namespace vacanze_back.Common.Entities.Grupo2
             _email = email;
             _password = password;
             _role = role;
-        }
-
-        public long getDocumentId()
-        {
-            return _documentId;
-        }
-
-        public void setDocumentId(long documentId)
-        {
-            _documentId = documentId;
         }
     }
 }
