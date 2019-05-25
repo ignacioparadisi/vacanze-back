@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using vacanze_back.Entities;
-using vacanze_back.Entities.Grupo3;
-using vacanze_back.Connection.Grupo3;
-using vacanze_back.Exceptions.Grupo3;
+using vacanze_back.Common.Entities;
+using vacanze_back.Common.Entities.Grupo3;
+using vacanze_back.Persistence.Connection.Grupo3;
+using vacanze_back.Common.Exceptions.Grupo3;
 using Newtonsoft.Json;
 
-namespace vacanze_back.Controllers.Grupo3
+namespace vacanze_back.Services.Controllers.Grupo3
 {
     [Route("api/[controller]")]
     [ApiController]

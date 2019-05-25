@@ -1,10 +1,10 @@
 using System;
-using vacanze_back.Entities.Grupo3;
-using vacanze_back.Entities;
-using vacanze_back.Exceptions.Grupo3;
-using vacanze_back.Connection.Grupo3;
+using vacanze_back.Common.Entities.Grupo3;
+using vacanze_back.Common.Entities;
+using vacanze_back.Common.Exceptions.Grupo3;
+using vacanze_back.Persistence.Connection.Grupo3;
 
-namespace vacanze_back.Controllers.Grupo3
+namespace vacanze_back.Services.Controllers.Grupo3
 {
     public class FlightValidator
     {

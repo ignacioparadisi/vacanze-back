@@ -1,6 +1,6 @@
 using System;
 
-namespace vacanze_back.Exceptions.Grupo3
+namespace vacanze_back.Common.Exceptions.Grupo3
 {
 
     public class DbErrorException : Exception

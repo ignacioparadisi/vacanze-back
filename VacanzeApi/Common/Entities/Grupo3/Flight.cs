@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace vacanze_back.Entities.Grupo3
+namespace vacanze_back.Common.Entities.Grupo3
 {
     public class Flight : Entity
     {

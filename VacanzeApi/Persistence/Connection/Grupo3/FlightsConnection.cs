@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using vacanze_back.Entities;
-using vacanze_back.Entities.Grupo3;
-using vacanze_back.Connection;
-using vacanze_back.Connection.Grupo3;
+using vacanze_back.Common.Entities;
+using vacanze_back.Common.Entities.Grupo3;
+using vacanze_back.Persistence.Connection;
+using vacanze_back.Persistence.Connection.Grupo3;
 using Npgsql;
-using vacanze_back.Exceptions.Grupo3;
+using vacanze_back.Common.Exceptions.Grupo3;
 
-namespace vacanze_back.Connection.Grupo3
+namespace vacanze_back.Persistence.Connection.Grupo3
 {
     public class FlightsConnection : Connection
     {
