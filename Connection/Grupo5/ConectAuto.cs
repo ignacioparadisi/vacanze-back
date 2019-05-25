@@ -26,5 +26,12 @@ namespace vacanze_back.Connection.Grupo5
 
 
         }
+
+        public void DeleteAuto ( int id){
+            Connect();
+            StoredProcedure("DeleteAuto (@aut_id)");
+            AddParameter("aut_id", id);
+           ExecuteQuery();
+        }
     }
 }

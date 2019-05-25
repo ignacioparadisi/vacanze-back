@@ -12,7 +12,7 @@ namespace vacanze_back.Controllers.Grupo5
     public class AutoController:ControllerBase
     {
         
-        // GET api/values
+        // GET api/grupo5
         [HttpGet]
         public ActionResult<IEnumerable<String>> Get()
         {
@@ -20,6 +20,15 @@ namespace vacanze_back.Controllers.Grupo5
             Auto auto = new Auto("hola","model",123,true,"licence",543);
             conec.Agregar(auto);
             return new string[] { "success"  }; 
+        }
+
+        // GET api/grupo5/5
+        [HttpDelete]
+                public void  DeleteAuto(int id)
+        {
+            ConnectAuto conec= new ConnectAuto();
+            conec.DeleteAuto(id);
+           
         }
 
     }
