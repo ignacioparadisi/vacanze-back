@@ -130,3 +130,43 @@ CREATE TABLE Hotel (
                        CONSTRAINT pk_hotel PRIMARY KEY (hot_id),
                        CONSTRAINT fk_hotel_lugar FOREIGN KEY (hot_fk_lugar) REFERENCES Lugar (l_id)
 );
+
+CREATE SEQUENCE SEQ_AUTOMOVIL
+  START WITH 1
+  INCREMENT BY 1
+  NO MINVALUE
+  NO MAXVALUE
+  CACHE 1;
+  
+CREATE TABLE AUTOMOVIL(
+    aut_id integer,
+    aut_make varchar(30) NOT NULL,
+    aut_model varchar(30) NOT NULL,
+    aut_capacity integer not null,
+    aut_isActive BOOLEAN,
+    aut_licence varchar(30) not null,
+    aut_price integer not null,
+
+    CONSTRAINT pk_automovil PRIMARY KEY(aut_id)
+
+);
+-------------AGREGAR AUTO-----------------
+
+CREATE OR REPLACE FUNCTION AgregarAutomovil(
+    _make VARCHAR(20), 
+    _model VARCHAR(30),
+    _capacity integer,
+    _status BOOLEAN,
+    _licence varchar(30),
+    _price integer
+    ) 
+RETURNS integer AS
+$$
+BEGIN
+
+   INSERT INTO AUTOMOVIL(aut_id,aut_make,aut_model,aut_capacity,aut_isActive,aut_licence,aut_price) VALUES
+    (nextval('SEQ_AUTOMOVIL'), _make, _model,_capacity,_status,_licence,_price);
+   RETURN currval('SEQ_AUTOMOVIL');
+END;
+$$ LANGUAGE plpgsql;
+-------------------------------------------------------------------------------------------
