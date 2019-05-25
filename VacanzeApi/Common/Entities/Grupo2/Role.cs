@@ -1,4 +1,4 @@
-namespace vacanze_back.Common.Entities.Grupo2
+namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
 {
     public class Role : Entity
     {

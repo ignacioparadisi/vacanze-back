@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Npgsql;
-using vacanze_back.Common.Entities.Grupo9;
-using vacanze_back.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
+using vacanze_back.VacanzeApi.Common.Exceptions;
 
-namespace vacanze_back.Persistence.Connection.Grupo9
+namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo9
 {
     public class ClaimConnection : Connection
     {
