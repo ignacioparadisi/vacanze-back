@@ -26,7 +26,7 @@ namespace vacanze_back.Controllers.Grupo9
         {
 
 			ClaimConnection conec= new ClaimConnection();
-            List<Claim> claimList= conec.GetClaim(57);
+            List<Claim> claimList= conec.GetClaim(2);
             return Ok(claimList); 
         }
 
@@ -43,7 +43,7 @@ namespace vacanze_back.Controllers.Grupo9
         // Post api/Claim/
 	
         [HttpPost]
-        public ActionResult<string> Post([FromBody] Reclamito ClaimAux)
+        public ActionResult<string> Post([FromBody] ClaimSecundary ClaimAux)
         {            
             try
             { 
@@ -59,7 +59,7 @@ namespace vacanze_back.Controllers.Grupo9
             }
         }
 		
-        // DELETE api/Reclamo/5
+        // DELETE api/Claim/5
         [HttpDelete("{id}")]
         public ActionResult<string> Delete(int id)
         {
@@ -81,7 +81,7 @@ namespace vacanze_back.Controllers.Grupo9
 		
 		//api/Clain/status/5
 		[HttpPut("{id}")]
-		public ActionResult<string> Put(int id,[FromBody] Reclamito ClaimAux)
+		public ActionResult<string> Put(int id,[FromBody] ClaimSecundary ClaimAux)
         {
             try{
 				ClaimConnection conec = new ClaimConnection();
@@ -89,7 +89,7 @@ namespace vacanze_back.Controllers.Grupo9
 				Console.WriteLine("estoy aqui");
 				if (ClaimAux.status != null)
 					conec.ModifyClaimStatus(id, claim);
-				else if (ClaimAux.title != null)
+				else if (ClaimAux.title != null && ClaimAux.description  != null)
 					conec.ModifyClaimTitle(id, claim);
 				return Ok("Modificado exitosamente");
 
@@ -105,7 +105,7 @@ namespace vacanze_back.Controllers.Grupo9
     }
 }
 
-public class Reclamito {
+public class ClaimSecundary {
     public string title ;
     public string description;
     public string status;

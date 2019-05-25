@@ -28,87 +28,14 @@ CREATE SEQUENCE SEQ_Claim
   CACHE 1;
   
 CREATE TABLE Claim(
-    rec_id integer,
-    rec_titulo varchar(30) NOT NULL,
-    rec_descr varchar(30) NOT NULL,
-    rec_status varchar(20) CHECK (rec_status ='ABIERTO' OR rec_status='CERRADO' OR rec_status='ESPERA'), 
-    CONSTRAINT pk_Claim PRIMARY KEY(rec_id)
-    --CONSTRAINT pf_equipaje FOREIGN KEY (rec_equi_id) REFERENCES JUGADOR(equi_id) ON DELETE CASCADE ON UPDATE CASCADE, 
+    cla_id integer  DEFAULT nextval('SEQ_Claim'),
+    cla_title varchar(30) NOT NULL,
+    cla_descr varchar(30) NOT NULL,
+    cla_status varchar(20) CHECK (cla_status ='ABIERTO' OR cla_status='CERRADO' OR cla_status='ESPERA'), 
+    CONSTRAINT pk_Claim PRIMARY KEY(cla_id)
+    --CONSTRAINT pf_equipaje FOREIGN KEY (cla_equi_id) REFERENCES JUGADOR(equi_id) ON DELETE CASCADE ON UPDATE CASCADE, 
 );
 
--------------AGREGAR Claim-----------------
-
-CREATE OR REPLACE FUNCTION AgregarClaim(
-    _titulo VARCHAR(20), 
-    _descripcion VARCHAR(30),
-    _status VARCHAR(30)
-    ) 
-RETURNS integer AS
-$$
-BEGIN
-
-   INSERT INTO Claim(rec_id ,rec_titulo, rec_descr, rec_status) VALUES
-    (nextval('SEQ_Claim'), _titulo, _descripcion, _status);
-   RETURN currval('SEQ_Claim');
-END;
-$$ LANGUAGE plpgsql;
-
----------MODIFICAR RECAMO-----------------
-CREATE OR REPLACE FUNCTION ModificarClaimStatus( 
-    _idClaim integer,
-    _status VARCHAR(35))
-RETURNS integer AS
-$$
-BEGIN
-
-   UPDATE Claim SET rec_status= _status
-    WHERE (rec_id = _idClaim);
-   RETURN _idClaim;
-END;
-$$ LANGUAGE plpgsql;
--- modificar el titulo del Claim
-CREATE OR REPLACE FUNCTION ModificarClaimTitulo( 
-	_idClaim integer,
-    _titulo VARCHAR(35))
-RETURNS integer AS
-$$
-BEGIN
-
-   UPDATE Claim SET rec_titulo= _titulo
-	WHERE (rec_id = _idClaim);
-   RETURN _idClaim;
-END;
-$$ LANGUAGE plpgsql;
--------------------------------------ELIMAR Claim-----------------------------
-CREATE OR REPLACE FUNCTION EliminarClaim(_idClaim integer)
-RETURNS void AS
-$$
-BEGIN
-
-    DELETE FROM Claim 
-    WHERE (rec_id = _idClaim);
-
-END;
-$$ LANGUAGE plpgsql;
-
---------------------------CONSULTAR LOGROS CANTIDAD PENDIENTE--------------------
-CREATE OR REPLACE FUNCTION ConsultarUnClaim(_idClaim integer)
-RETURNS TABLE
-  (id integer,
-   Titulo VARCHAR(30),
-   Descripcion VARCHAR(30),
-   Status VARCHAR(30)
-  )
-AS
-$$
-BEGIN
-    RETURN QUERY SELECT
-    rec_id, rec_titulo,rec_descr, rec_status
-    FROM Claim WHERE rec_id = _idClaim;
-END;
-$$ LANGUAGE plpgsql;
-
-------------------------------------fin de grupo 9---------------------------------
 
 CREATE TABLE Lugar (
   l_id SERIAL,

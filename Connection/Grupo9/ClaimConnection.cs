@@ -12,22 +12,21 @@ namespace vacanze_back.Connection.Grupo9
         }
 
         /// <summary>
-        ///     Metodo para agregar un reclamo
+        ///     Metodo para agregar un clalamo
         /// </summary>
         /// <param name="claim"></param>
         public void AddClaim(Claim claim)
         {
             Connect();
-            StoredProcedure("AgregarReclamo(@rec_titulo,@rec_descripcion,@rec_status)");
-			AddParameter("rec_titulo", claim._title);
-			AddParameter("rec_descripcion", claim._description);
-			AddParameter("rec_status", claim._status);
+            StoredProcedure("addclaim(@cla_title,@cla_descr)");
+			AddParameter("cla_title", claim._title);
+			AddParameter("cla_descr", claim._description);
 
             ExecuteQuery();
         }
 
         /// <summary>
-        ///     Metodo para obtener un reclamo segun su id
+        ///     Metodo para obtener un clalamo segun su id
         /// </summary>
         /// <param name="numero"></param>
         /// que el logro no existe
@@ -38,8 +37,8 @@ namespace vacanze_back.Connection.Grupo9
             var ClaimList = new List<Claim>();
 
             Connect();
-            StoredProcedure("ConsultarUnReclamo(@idReclamo)");
-			AddParameter("idReclamo", numero);
+            StoredProcedure("getclaim(@cla_id)");
+			AddParameter("cla_id", numero);
             ExecuteReader();
 
             for (var i = 0; i < cantidadRegistros; i++)
@@ -56,32 +55,33 @@ namespace vacanze_back.Connection.Grupo9
         }
 
         /// <summary>
-        ///     Metodo para elimar un reclamo con su id
+        ///     Metodo para elimar un clalamo con su id
         /// </summary>
-        /// <param name="reclamoId"></param>
+        /// <param name="clalamoId"></param>
         public void DeleteClaim(int claimId)
         {
             Connect();
-            StoredProcedure("EliminarReclamo(@rec_id)");
-			AddParameter("rec_id", claimId);
+            StoredProcedure("DeleteClaim(@cla_id)");
+			AddParameter("cla_id", claimId);
             ExecuteQuery();
         }
 
-        public void ModifyClaimStatus(long claimId, Claim claim)
+        public void ModifyClaimStatus(int claimId, Claim claim)
         {
             Connect();
-            StoredProcedure("modificarreclamostatus(@rec_id,@rec_status)");
-			AddParameter("rec_id", claimId);
-			AddParameter("rec_status", claim._status);
+            StoredProcedure("modifyclaimstatus(@cla_id,@cla_status)");
+			AddParameter("cla_id", claimId);
+			AddParameter("cla_status", claim._status);
             ExecuteQuery();
         }
 
-        public void ModifyClaimTitle(long claimId, Claim claim)
+        public void ModifyClaimTitle(int claimId, Claim claim)
         {
             Connect();
-            StoredProcedure("modificarreclamotitulo(@rec_id,@rec_titulo)");
-			AddParameter("rec_id", claimId);
-			AddParameter("rec_titulo", claim._title);
+            StoredProcedure("modifyclaimtitle(@cla_id,@cla_title, @cla_descr)");
+			AddParameter("cla_id", claimId);
+			AddParameter("cla_title", claim._title);
+			AddParameter("cla_descr",claim._description);
             ExecuteQuery();
         }
     }
