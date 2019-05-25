@@ -7,6 +7,6 @@ namespace vacanze_back.Entities
             Id = id;
         }
 
-        public long Id { get; }
+        public long Id { get; set; }
     }
 }

@@ -30,5 +30,14 @@ namespace vacanze_back.Entities.Grupo3
             this.arrival = arrival;
             this.routes = routes;
         }
+
+        public Flight(long id, Airplane plane, double price, string departure, string arrival, List<Route> routes):base(id)
+        {
+            this.plane = plane;
+            this.price = price;
+            this.departure = departure;
+            this.arrival = arrival;
+            this.routes = routes;
+        }
     }
 }

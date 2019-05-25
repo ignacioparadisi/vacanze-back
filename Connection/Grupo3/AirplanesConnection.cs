@@ -57,7 +57,7 @@ namespace vacanze_back.Connection.Grupo3
             }
         }
 
-        public Entity Find(int id){
+        public Entity Find(long id){
             
             try
             {
@@ -65,7 +65,7 @@ namespace vacanze_back.Connection.Grupo3
                 
                 Connect();
                 StoredProcedure(FIND_PLANE);
-                AddParameter( "_id", id );
+                AddParameter( "_id", (int)id );
                 ExecuteReader();
 
                 for (int i = 0; i < cantidadRegistros; i++)

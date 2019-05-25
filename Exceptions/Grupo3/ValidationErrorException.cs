@@ -1,6 +1,6 @@
 using System;
 
-namespace vacanze_back.Exceptions
+namespace vacanze_back.Exceptions.Grupo3
 {
     public class ValidationErrorException : Exception
     {

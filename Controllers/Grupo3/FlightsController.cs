@@ -37,10 +37,16 @@ namespace vacanze_back.Controllers.Grupo3
         public ActionResult<Entity> Post([FromBody] Flight flight)
         {
             try
-            {;
+            {
+                FlightValidator validator = new FlightValidator(flight);
+                validator.Validate();
                 FlightsConnection flighscon= new FlightsConnection();
                 flighscon.Add(flight);
                 return Ok("¡Vuelo agregado con éxito!");
+            }
+            catch (ValidationErrorException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (DbErrorException ex)
             {

@@ -76,7 +76,7 @@ namespace vacanze_back.Connection.Grupo3
                 Connect();
                 StoredProcedure(ADD_FLIGHT);
 
-                AddParameter("_plane", flight.plane);
+                AddParameter("_plane", (int)flight.plane.Id);
                 AddParameter("_price", flight.price);
                 AddParameter("_departure", flight.departure);
                 AddParameter("_arrival", flight.arrival);
