@@ -77,23 +77,5 @@ CREATE TABLE AUTOMOVIL(
     CONSTRAINT pk_automovil PRIMARY KEY(aut_id)
 
 );
--------------AGREGAR AUTO-----------------
 
-CREATE OR REPLACE FUNCTION AgregarAutomovil(
-    _make VARCHAR(20), 
-    _model VARCHAR(30),
-    _capacity integer,
-    _status BOOLEAN,
-    _licence varchar(30),
-    _price integer
-    ) 
-RETURNS integer AS
-$$
-BEGIN
-
-   INSERT INTO AUTOMOVIL(aut_id,aut_make,aut_model,aut_capacity,aut_isActive,aut_licence,aut_price) VALUES
-    (nextval('SEQ_AUTOMOVIL'), _make, _model,_capacity,_status,_licence,_price);
-   RETURN currval('SEQ_AUTOMOVIL');
-END;
-$$ LANGUAGE plpgsql;
 -------------------------------------------------------------------------------------------
