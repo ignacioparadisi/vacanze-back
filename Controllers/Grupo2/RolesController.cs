@@ -19,7 +19,7 @@ namespace vacanze_back.Controllers.Grupo2
             roles.Add(new Role(0, "Cliente"));
             roles.Add(new Role(1, "Administrador"));
             roles.Add(new Role(2, "Checkin"));
-            roles.Add(new Role(3, "Reclamo"));
+            roles.Add(new Role(3, "Claim"));
             roles.Add(new Role(4, "Cargador"));
             return Ok(roles.ToList());
         }
