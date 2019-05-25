@@ -1,3 +1,17 @@
+------- grupo 2 ----------
+CREATE OR REPLACE FUNCTION GetRoles()
+RETURNS TABLE
+  (id integer,
+   nombre VARCHAR(50)
+  )
+AS
+$$
+BEGIN
+  RETURN QUERY SELECT *
+  FROM Role;
+END;
+$$ LANGUAGE plpgsql;
+
 ------- grupo 6 ----------
 CREATE OR REPLACE FUNCTION ConsultarHoteles()
 RETURNS TABLE
