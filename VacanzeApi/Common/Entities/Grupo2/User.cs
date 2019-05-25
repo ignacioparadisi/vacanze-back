@@ -1,4 +1,4 @@
-namespace vacanze_back.Entities.Grupo2
+namespace vacanze_back.Common.Entities.Grupo2
 {
     public class User : Entity
     {

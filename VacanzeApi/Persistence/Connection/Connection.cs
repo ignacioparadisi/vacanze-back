@@ -1,12 +1,8 @@
-﻿using Npgsql;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using System;
 using System.Data;
-using System.Linq;
-using System.Web;
+using Npgsql;
 
-namespace vacanze_back.Connection
+namespace vacanze_back.Persistence.Connection
 {
     public abstract class Connection
     {
