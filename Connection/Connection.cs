@@ -1,4 +1,4 @@
-using Npgsql;
+﻿using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -14,16 +14,16 @@ namespace vacanze_back.Connection
         private NpgsqlCommand _command;
         private DataTable _dataTable;
         private string _cadena;
-        private int _rowNumber;
+        private int _cantidadRegistros;
 
         public Connection()
         {
             CreateStringConnection();
         }
 
-        public int rowNumber
+        public int cantidadRegistros
         {
-            get { return _rowNumber; }
+            get { return _cantidadRegistros; }
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace vacanze_back.Connection
 
                 disconnect();
 
-                _rowNumber = _dataTable.Rows.Count;
+                _cantidadRegistros = _dataTable.Rows.Count;
 
             }
             catch (NpgsqlException exc)

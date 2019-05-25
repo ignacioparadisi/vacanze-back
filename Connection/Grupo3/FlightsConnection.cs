@@ -33,7 +33,7 @@ namespace vacanze_back.Connection.Grupo3
                 StoredProcedure(GET_ALL_FLIGHTS);
                 ExecuteReader();
 
-                for (int i = 0; i < rowNumber; i++)
+                for (int i = 0; i < cantidadRegistros; i++)
                 {
                     Flight flight = new Flight(GetInt(i,0));
                     flight.plane = (Airplane) aircon.Find( GetInt(i,1) );
@@ -83,7 +83,7 @@ namespace vacanze_back.Connection.Grupo3
 
                 ExecuteReader();
 
-                if( rowNumber > 0){
+                if( cantidadRegistros > 0){
                     flight_id = GetInt(0,0);
                 }
                 disconnect();

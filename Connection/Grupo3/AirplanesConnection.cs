@@ -28,7 +28,7 @@ namespace vacanze_back.Connection.Grupo3
                 StoredProcedure(GET_ALL_PLANES);
                 ExecuteReader();
 
-                for (int i = 0; i < rowNumber; i++)
+                for (int i = 0; i < cantidadRegistros; i++)
                 {
                     Airplane airplane = new Airplane(GetInt(i,0));
                     airplane.autonomy = GetDouble(i,1);
@@ -68,7 +68,7 @@ namespace vacanze_back.Connection.Grupo3
                 AddParameter( "_id", id );
                 ExecuteReader();
 
-                for (int i = 0; i < rowNumber; i++)
+                for (int i = 0; i < cantidadRegistros; i++)
                 {
                     airplane = new Airplane(GetInt(i,0));
                     airplane.autonomy = GetDouble(i,1);

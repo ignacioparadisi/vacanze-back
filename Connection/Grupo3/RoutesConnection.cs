@@ -29,7 +29,7 @@ namespace vacanze_back.Connection.Grupo3
                 AddParameter("_id", id);
                 ExecuteReader();
 
-                for (int i = 0; i < rowNumber; i++)
+                for (int i = 0; i < cantidadRegistros; i++)
                 {
                     Route route = new Route(GetInt(i,0));
                     route.locDeparture = GetInt(i,1);
