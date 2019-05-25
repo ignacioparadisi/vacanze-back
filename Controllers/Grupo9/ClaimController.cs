@@ -26,7 +26,7 @@ namespace vacanze_back.Controllers.Grupo9
         {
 
 			ClaimConnection conec= new ClaimConnection();
-            List<Claim> claimList= conec.GetClaim(57);
+            List<Claim> claimList= conec.GetClaim(79);
             return Ok(claimList); 
         }
 
