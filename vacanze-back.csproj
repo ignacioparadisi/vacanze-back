@@ -16,8 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="LogicLayer\Grupo2" />
-    <Folder Include="Persistence\Grupo2" />
+    <Folder Include="VacanzeApiTest" />
   </ItemGroup>
 
 </Project>

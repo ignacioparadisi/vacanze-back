@@ -1,4 +1,4 @@
-namespace vacanze_back.Entities
+namespace vacanze_back.Common.Entities
 {
     public abstract class Entity
     {

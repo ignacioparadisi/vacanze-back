@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
-namespace vacanze_back.Controllers.Grupo2
+namespace vacanze_back.Services.Controllers.Grupo2
 {
     [Route("api/[controller]")]
     [ApiController]
