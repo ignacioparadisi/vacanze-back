@@ -1,6 +1,10 @@
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using vacanze_back.Entities.Grupo9;
+using System.Net;
+using System.Web.Http;
+using vacanze_back.Exceptions;
 
 namespace vacanze_back.Connection.Grupo9
 {
@@ -17,12 +21,21 @@ namespace vacanze_back.Connection.Grupo9
         /// <param name="claim"></param>
         public void AddClaim(Claim claim)
         {
-            Connect();
-            StoredProcedure("addclaim(@cla_title,@cla_descr)");
-			AddParameter("cla_title", claim._title);
-			AddParameter("cla_descr", claim._description);
-
-            ExecuteQuery();
+            try{   
+                Connect();
+                StoredProcedure("addclaim(@cla_title,@cla_descr)");
+                AddParameter("cla_title", claim._title);
+                AddParameter("cla_descr", claim._description);
+                ExecuteQuery();   
+            }
+            catch (NpgsqlException )
+            {
+                throw new DatabaseException("error al agregar");
+            }
+            catch (Exception e) 
+            {
+                throw new GeneralException( e,DateTime.Now);
+            }
         }
 
         /// <summary>
@@ -34,123 +47,182 @@ namespace vacanze_back.Connection.Grupo9
         /// <returns></returns>
         public List<Claim> GetClaim(int numero)
         {
-            var ClaimList = new List<Claim>();
+            try{            
+                var ClaimList = new List<Claim>();
 
-            Connect();
-            StoredProcedure("getclaim(@cla_id)");
-			AddParameter("cla_id", numero);
-            ExecuteReader();
+                Connect();
+                StoredProcedure("getclaim(@cla_id)");
+                AddParameter("cla_id", numero);
+                ExecuteReader();
 
-            for (var i = 0; i < cantidadRegistros; i++)
+                for (var i = 0; i < cantidadRegistros; i++)
+                {
+                    var id = Convert.ToInt32(GetString(i, 0));
+                    var titulo = GetString(i, 1);
+                    var descripcion = GetString(i, 2);
+                    var status = GetString(i, 3);
+                    var claim = new Claim(id, titulo, descripcion, status);
+                    ClaimList.Add(claim);
+                }
+
+                return ClaimList;
+            }catch (NpgsqlException)
             {
-                var id = Convert.ToInt32(GetString(i, 0));
-                var titulo = GetString(i, 1);
-                var descripcion = GetString(i, 2);
-                var status = GetString(i, 3);
-                var claim = new Claim(id, titulo, descripcion, status);
-                ClaimList.Add(claim);
+                throw new DatabaseException("error al consultar");
             }
-
-            return ClaimList;
+            catch (Exception e )
+            {
+                throw new GeneralException( e,DateTime.Now);
+            }
         }
 
         public List<Claim> GetClaimBaggage(int numero)
         {
-            var ClaimList = new List<Claim>();
+            try{
+                
+                var ClaimList = new List<Claim>();
+                Connect();
+                StoredProcedure("GetClaimBaggage(@cla_id)");
+                AddParameter("cla_id", numero);
+                ExecuteReader();
 
-            Connect();
-            StoredProcedure("GetClaimBaggage(@cla_id)");
-			AddParameter("cla_id", numero);
-            ExecuteReader();
+                for (var i = 0; i < cantidadRegistros; i++)
+                {
+                    var id = Convert.ToInt32(GetString(i, 0));
+                    var titulo = GetString(i, 1);
+                    var descripcion = GetString(i, 2);
+                    var status = GetString(i, 3);
+                    var claim = new Claim(id, titulo, descripcion, status);
+                    ClaimList.Add(claim);
+                }
 
-            for (var i = 0; i < cantidadRegistros; i++)
+                return ClaimList;
+            }catch (NpgsqlException )
             {
-                var id = Convert.ToInt32(GetString(i, 0));
-                var titulo = GetString(i, 1);
-                var descripcion = GetString(i, 2);
-                var status = GetString(i, 3);
-                var claim = new Claim(id, titulo, descripcion, status);
-                ClaimList.Add(claim);
+                throw new DatabaseException("error al consultar");
+            }
+            catch (Exception e)
+            {
+                throw new GeneralException( e,DateTime.Now);
             }
 
-            return ClaimList;
+            
         }
 
         public List<Claim> GetClaimDocumentPasaport(int numero)
         {
-            var ClaimList = new List<Claim>();
+            try{
+                var ClaimList = new List<Claim>();
 
-            Connect();
-            StoredProcedure("GetClaimDocumentPasaport(@cla_id)");
-			AddParameter("cla_id", numero);
-            ExecuteReader();
+                Connect();
+                StoredProcedure("GetClaimDocumentPasaport(@cla_id)");
+                AddParameter("cla_id", numero);
+                ExecuteReader();
 
-            for (var i = 0; i < cantidadRegistros; i++)
+                for (var i = 0; i < cantidadRegistros; i++)
+                {
+                    var id = Convert.ToInt32(GetString(i, 0));
+                    var titulo = GetString(i, 1);
+                    var descripcion = GetString(i, 2);
+                    var status = GetString(i, 3);
+                    var claim = new Claim(id, titulo, descripcion, status);
+                    ClaimList.Add(claim);
+                }
+
+                return ClaimList;
+            }catch (NpgsqlException )
             {
-                var id = Convert.ToInt32(GetString(i, 0));
-                var titulo = GetString(i, 1);
-                var descripcion = GetString(i, 2);
-                var status = GetString(i, 3);
-                var claim = new Claim(id, titulo, descripcion, status);
-                ClaimList.Add(claim);
+                throw new DatabaseException("error al consultar");
             }
-
-            return ClaimList;
+            catch (Exception e )
+            {
+                throw new GeneralException( e,DateTime.Now);
+            }
         }
 
         public List<Claim> GetClaimDocumentCedula(int numero)
         {
-            var ClaimList = new List<Claim>();
+            
+            try{
+                var ClaimList = new List<Claim>();
 
-            Connect();
-            StoredProcedure("GetClaimDocumentCedula(@cla_id)");
-			AddParameter("cla_id", numero);
-            ExecuteReader();
+                Connect();
+                StoredProcedure("GetClaimDocumentCedula(@cla_id)");
+                AddParameter("cla_id", numero);
+                ExecuteReader();
 
-            for (var i = 0; i < cantidadRegistros; i++)
+                for (var i = 0; i < cantidadRegistros; i++)
+                {
+                    var id = Convert.ToInt32(GetString(i, 0));
+                    var titulo = GetString(i, 1);
+                    var descripcion = GetString(i, 2);
+                    var status = GetString(i, 3);
+                    var claim = new Claim(id, titulo, descripcion, status);
+                    ClaimList.Add(claim);
+                }
+                return ClaimList;
+            }catch (NpgsqlException )
             {
-                var id = Convert.ToInt32(GetString(i, 0));
-                var titulo = GetString(i, 1);
-                var descripcion = GetString(i, 2);
-                var status = GetString(i, 3);
-                var claim = new Claim(id, titulo, descripcion, status);
-                ClaimList.Add(claim);
+                throw new DatabaseException("error al consultar");
             }
-
-            return ClaimList;
+            catch (Exception e )
+            {
+                throw new GeneralException( e,DateTime.Now);
+            }
         }
 
-
-
-        /// <summary>
-        ///     Metodo para elimar un clalamo con su id
-        /// </summary>
-        /// <param name="clalamoId"></param>
         public void DeleteClaim(int claimId)
         {
-            Connect();
-            StoredProcedure("DeleteClaim(@cla_id)");
-			AddParameter("cla_id", claimId);
-            ExecuteQuery();
+            try{           
+                Connect();
+                StoredProcedure("DeleteClaim(@cla_id)");
+                AddParameter("cla_id", claimId);
+                ExecuteQuery();
+            }catch (NpgsqlException)
+            {
+                throw new DatabaseException("error al eliminar");
+            }
+            catch (Exception e)
+            {
+                throw new GeneralException( e,DateTime.Now);
+            }
         }
 
         public void ModifyClaimStatus(int claimId, Claim claim)
         {
-            Connect();
-            StoredProcedure("modifyclaimstatus(@cla_id,@cla_status)");
-			AddParameter("cla_id", claimId);
-			AddParameter("cla_status", claim._status);
-            ExecuteQuery();
+            try{               
+                Connect();
+                StoredProcedure("modifyclaimstatus(@cla_id,@cla_status)");
+                AddParameter("cla_id", claimId);
+                AddParameter("cla_status", claim._status);
+                ExecuteQuery();
+            }catch (NpgsqlException )
+            {
+                throw new DatabaseException("error al modificar");
+            }
+            catch (Exception e)
+            {
+                throw new GeneralException( e,DateTime.Now);
+            }
         }
 
         public void ModifyClaimTitle(int claimId, Claim claim)
         {
-            Connect();
-            StoredProcedure("modifyclaimtitle(@cla_id,@cla_title, @cla_descr)");
-			AddParameter("cla_id", claimId);
-			AddParameter("cla_title", claim._title);
-			AddParameter("cla_descr",claim._description);
-            ExecuteQuery();
+            try{
+                Connect();
+                StoredProcedure("modifyclaimtitle(@cla_id,@cla_title, @cla_descr)");
+                AddParameter("cla_id", claimId);
+                AddParameter("cla_title", claim._title);
+                AddParameter("cla_descr",claim._description);
+                ExecuteQuery();
+            }catch (NpgsqlException )
+            {
+                throw new DatabaseException("error al modificar");
+            }
+            catch (Exception e )
+            {
+                throw new GeneralException( e,DateTime.Now);
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.Entities.Grupo9;
 using vacanze_back.Connection.Grupo9;
+using vacanze_back.Exceptions;
 using vacanze_back.Controllers.Grupo9;
 using System.Net;
 using System.Web.Http;
@@ -24,20 +25,37 @@ namespace vacanze_back.Controllers.Grupo9
         [HttpGet]
         public ActionResult<IEnumerable<Claim>> Get()
         {
-
-			ClaimConnection conec= new ClaimConnection();
-            List<Claim> claimList= conec.GetClaim(2);
-            return Ok(claimList); 
+            try{ 
+			    ClaimConnection conec= new ClaimConnection();
+                List<Claim> claimList= conec.GetClaim(2);
+                return Ok(claimList); 
+            }catch (DatabaseException )
+            {            
+				return StatusCode(500);
+            }
+            catch (GeneralException )
+            {
+				return StatusCode(500);
+            }
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<Claim>> Get(int id)
         {
-           ClaimConnection conec= new ClaimConnection();
-            List<Claim> claimList = conec.GetClaim(id);
+            try{
+                ClaimConnection conec= new ClaimConnection();
+                List<Claim> claimList = conec.GetClaim(id);
 
-            return Ok(claimList); 
+                return Ok(claimList); 
+            }catch (DatabaseException )
+            {            
+				return StatusCode(500);
+            }
+            catch (GeneralException )
+            {
+				return StatusCode(500);
+            }
         }
 
         // GET api/values/5
@@ -45,23 +63,32 @@ namespace vacanze_back.Controllers.Grupo9
         [HttpGet("{tipo}/{id}")]
         public ActionResult<IEnumerable<Claim>> Get(string tipo, int id)
         {
-            if(tipo == "Baggage"){
-                ClaimConnection conec= new ClaimConnection();
-                List<Claim> claimList = conec.GetClaimBaggage(id);
-                return Ok(claimList); 
-            }else{
-                if(tipo == "documentPasaport"){                   
+            try{
+                if(tipo == "Baggage"){
                     ClaimConnection conec= new ClaimConnection();
-                    List<Claim> claimList = conec.GetClaimDocumentPasaport(id);
+                    List<Claim> claimList = conec.GetClaimBaggage(id);
                     return Ok(claimList); 
                 }else{
-                    if(tipo == "documentCedula"){                   
+                    if(tipo == "documentPasaport"){                   
                         ClaimConnection conec= new ClaimConnection();
-                        List<Claim> claimList = conec.GetClaimDocumentCedula(id);
+                        List<Claim> claimList = conec.GetClaimDocumentPasaport(id);
                         return Ok(claimList); 
-                    }else                
-                    return StatusCode(404);
-                }                            
+                    }else{
+                        if(tipo == "documentCedula"){                   
+                            ClaimConnection conec= new ClaimConnection();
+                            List<Claim> claimList = conec.GetClaimDocumentCedula(id);
+                            return Ok(claimList); 
+                        }else                
+                        return StatusCode(404);
+                    }                            
+                }
+            }catch (DatabaseException )
+            {            
+				return StatusCode(500);
+            }
+            catch (GeneralException )
+            {
+				return StatusCode(500);
             }
         }
         // Post api/Claim/
@@ -70,17 +97,20 @@ namespace vacanze_back.Controllers.Grupo9
         public ActionResult<string> Post([FromBody] ClaimSecundary ClaimAux)
         {            
             try
-            { 
-				
+            { 				
                 ClaimConnection conec= new ClaimConnection();
 				Claim claim= new Claim(ClaimAux.title, ClaimAux.description, ClaimAux.status);
 				conec.AddClaim(claim);
 				return Ok("Agregado correctamente");
-            }
-            catch (Exception ex)
-            { 
+            }catch (DatabaseException )
+            {            
 				return StatusCode(500);
             }
+            catch (GeneralException )
+            {
+				return StatusCode(500);
+            }
+
         }
 		
         // DELETE api/Claim/5
@@ -88,19 +118,18 @@ namespace vacanze_back.Controllers.Grupo9
         public ActionResult<string> Delete(int id)
         {
             try{
-                Console.WriteLine("estoy aqui");
-            ClaimConnection conec= new ClaimConnection();
-                
-                Console.WriteLine("estoy aqui");
+                ClaimConnection conec= new ClaimConnection();  
                 conec.DeleteClaim(id);
-
-                Console.WriteLine("estoy aqui1");
 				return Ok("Eliminado exitosamente");
+            }catch (DatabaseException )
+            {            
+				return StatusCode(500);
             }
-            catch (Exception ex)
+            catch (GeneralException )
             {
 				return StatusCode(500);
-            } 
+            }
+
         }
 		
 		//api/Clain/status/5
@@ -116,10 +145,11 @@ namespace vacanze_back.Controllers.Grupo9
 				else if (ClaimAux.title != null && ClaimAux.description  != null)
 					conec.ModifyClaimTitle(id, claim);
 				return Ok("Modificado exitosamente");
-
-
-			}
-            catch (Exception ex)
+            }catch (DatabaseException )
+            {            
+				return StatusCode(500);
+            }
+            catch (GeneralException )
             {
 				return StatusCode(500);
             } 
