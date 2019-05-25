@@ -88,7 +88,7 @@ $$
 BEGIN
     RETURN QUERY SELECT
     cla_id, cla_title,cla_descr, cla_status
-    FROM ClaimWHERE cla_id = _cla_id;
+    FROM ClaimWHERE WHERE cla_id = _cla_id;
 END;
 $$ LANGUAGE plpgsql;
 
