@@ -6,9 +6,9 @@ using System.Data;
 using System.Linq;
 using System.Web;
 
-namespace vacanze_back.Persistence
+namespace vacanze_back.Connection
 {
-    public abstract class DAO
+    public abstract class Connection
     {
         private NpgsqlConnection _con;
         private NpgsqlCommand _command;
@@ -16,9 +16,9 @@ namespace vacanze_back.Persistence
         private string _cadena;
         private int _rowNumber;
 
-        public DAO()
+        public Connection()
         {
-            CrearStringConexion();
+            CreateStringConnection();
         }
 
         public int rowNumber
@@ -27,11 +27,16 @@ namespace vacanze_back.Persistence
         }
 
         /// <summary>
-        ///  Busca el string de conexión a la base de datos en el archivo web.config, dicho string se llama "postgrestring"
+        /// hay que optimizar la cadena porque hasta ahora la hacemos local
         /// </summary>
-        private void CrearStringConexion()
+        protected void CreateStringConnection()
         {
-			_cadena = "User ID=vacanza;Password=vacanza;Host=localhost;Database=vacanza;Port=5432";
+			_cadena = "Server=127.0.0.1;User Id=vacanza;" + 
+                        "Password=vacanza;Database=vacanza;" ;
+            //cadena de prueba
+            /*
+			_cadena = "Server=127.0.0.1;User Id=postgres;" + 
+                        "Password=jorge;Database=postgres;" ;*/
         }
 
         private bool IsConnected()
@@ -63,7 +68,7 @@ namespace vacanze_back.Persistence
             }
         }
 
-        public void Disconnect()
+        public void disconnect()
         {
             if (_con != null && IsConnected())
                 _con.Close();
@@ -82,19 +87,19 @@ namespace vacanze_back.Persistence
 
                 _dataTable.Load(_command.ExecuteReader());
 
-                Disconnect();
+                disconnect();
 
                 _rowNumber = _dataTable.Rows.Count;
 
             }
             catch (NpgsqlException exc)
             {
-                Disconnect();
+                disconnect();
                 throw exc;
             }
             catch (Exception exc)
             {
-                Disconnect();
+                disconnect();
                 throw exc;
             }
 
@@ -112,18 +117,19 @@ namespace vacanze_back.Persistence
             {
                 int filasAfectadas = _command.ExecuteNonQuery();
 
-                Disconnect();
+                disconnect();
 
                 return filasAfectadas;
             }
             catch (NpgsqlException exc)
             {
-                Disconnect();
+				Console.WriteLine(exc);
+                disconnect();
                 throw exc;
             }
             catch (Exception exc) 
             {
-                Disconnect();
+                disconnect();
                 throw exc;
             }
         }
@@ -169,7 +175,6 @@ namespace vacanze_back.Persistence
                 throw exc;
             }
         }
-        
         public int GetInt(int fila, int columna)
         {
             try

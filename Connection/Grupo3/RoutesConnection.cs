@@ -4,16 +4,17 @@ using System.Linq;
 using System.Web;
 using vacanze_back.Entities;
 using vacanze_back.Entities.Grupo3;
-using vacanze_back.Persistence;
+using vacanze_back.Connection;
 using Npgsql;
+using vacanze_back.Exceptions.Grupo3;
 
-namespace vacanze_back.Persistence.Grupo3
+namespace vacanze_back.Connection.Grupo3
 {
-    public class DAORoutes: DAO
+    public class RoutesConnection: Connection
     {
         private const string GET_ROUTE_BY_FLIGHT = "getroutebyflight(@_id)";
 
-        public DAORoutes()
+        public RoutesConnection()
         {
 
         }
@@ -42,17 +43,17 @@ namespace vacanze_back.Persistence.Grupo3
                 return routes;
 
             }
-            catch (NpgsqlException e)
+            catch (NpgsqlException ex)
             {
-                Console.WriteLine(e.ToString());
-                throw;
+                Console.WriteLine(ex.ToString());
+                throw new DbErrorException("Ups, a ocurrido un error al conectarse a la base de datos", ex);
             }
             catch (System.Exception)
             {
                 throw;
             }
             finally{
-                Disconnect();
+                disconnect();
             }
         }
     }

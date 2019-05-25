@@ -4,19 +4,20 @@ using System.Linq;
 using System.Web;
 using vacanze_back.Entities;
 using vacanze_back.Entities.Grupo3;
-using vacanze_back.Persistence;
-using vacanze_back.Persistence.Grupo3;
+using vacanze_back.Connection;
+using vacanze_back.Connection.Grupo3;
 using Npgsql;
+using vacanze_back.Exceptions.Grupo3;
 
-namespace vacanze_back.Persistence.Grupo3
+namespace vacanze_back.Connection.Grupo3
 {
-    public class DAOFlight : DAO
+    public class FlightsConnection : Connection
     {
         private string GET_ALL_FLIGHTS = "getflights()";
         private string ADD_FLIGHT = "addflight(@_plane, @_price, to_date(@_departure,'DD-MM-YY'), to_date(@_arrival,'DD-MM-YY'))";
         private string ADD_STOP = "addstop(@_flight,to_date(@_departure,'DD-MM-YY'), to_date(@_arrival,'DD-MM-YY'),@_loc_departure, @_loc_arrival)";
 
-        public DAOFlight()
+        public FlightsConnection()
         {
             
         }
@@ -25,8 +26,8 @@ namespace vacanze_back.Persistence.Grupo3
             try
             {
                 List<Entity> flights = new List<Entity>();
-                DAOAirplanes daop = new DAOAirplanes();
-                DAORoutes daor = new DAORoutes();
+                AirplanesConnection aircon = new AirplanesConnection();
+                RoutesConnection routecon = new RoutesConnection();
 
                 Connect();
                 StoredProcedure(GET_ALL_FLIGHTS);
@@ -35,12 +36,12 @@ namespace vacanze_back.Persistence.Grupo3
                 for (int i = 0; i < rowNumber; i++)
                 {
                     Flight flight = new Flight(GetInt(i,0));
-                    flight.plane = (Airplane) daop.Find( GetInt(i,1) );
+                    flight.plane = (Airplane) aircon.Find( GetInt(i,1) );
                     flight.price = GetDouble(i,2);
                     flight.departure = GetString(i,3);
                     flight.arrival = GetString(i,4);
 
-                    foreach (Entity item in daor.Get( GetInt(i,0) ))
+                    foreach (Entity item in routecon.Get( GetInt(i,0) ))
                     {
                         
                         flight.routes.Add( (Route) item );   
@@ -53,16 +54,16 @@ namespace vacanze_back.Persistence.Grupo3
             }
             catch (NpgsqlException ex)
             {
-                ex.ToString();
-                throw;
+                Console.WriteLine(ex.ToString());
+                throw new DbErrorException("Ups, a ocurrido un error al conectarse a la base de datos", ex);
             }
             catch (System.Exception ex)
             {
-                ex.ToString();
+                Console.WriteLine(ex.ToString());
                 throw;
             }
             finally{
-                Disconnect();
+                disconnect();
             }
         }
 
@@ -85,7 +86,7 @@ namespace vacanze_back.Persistence.Grupo3
                 if( rowNumber > 0){
                     flight_id = GetInt(0,0);
                 }
-                Disconnect();
+                disconnect();
 
                 foreach (Route route in flight.routes)
                 {
@@ -101,12 +102,14 @@ namespace vacanze_back.Persistence.Grupo3
                     ExecuteReader();
                 }
             }
-            catch (NpgsqlException e)
+            catch (NpgsqlException ex)
             {
                 
-                Console.WriteLine(e.ToString());
-                Disconnect();
-                throw new Exception();
+                Console.WriteLine(ex.ToString());
+                throw new DbErrorException("Ups, a ocurrido un error al conectarse a la base de datos", ex);
+            }
+            finally{
+                disconnect();
             }
         }
 

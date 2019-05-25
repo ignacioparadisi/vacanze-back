@@ -4,7 +4,8 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.Entities.Grupo3;
 using vacanze_back.Entities;
-using vacanze_back.Persistence.Grupo3;
+using vacanze_back.Connection.Grupo3;
+using vacanze_back.Exceptions.Grupo3;
 
 
 namespace vacanze_back.Controllers.Grupo3
@@ -19,14 +20,18 @@ namespace vacanze_back.Controllers.Grupo3
         {
             try
             {
-                DAOAirplanes adao = new DAOAirplanes(); 
-                List<Entity> result = adao.Get();
+                AirplanesConnection aircon = new AirplanesConnection(); 
+                List<Entity> result = aircon.Get();
                 return Ok(result.ToList());
+            }
+            catch (DbErrorException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (System.Exception)
             {
                 
-                throw;
+                return null;
             }
         }
 
@@ -35,14 +40,18 @@ namespace vacanze_back.Controllers.Grupo3
         {
             try
             {
-                DAOAirplanes adao = new DAOAirplanes(); 
-                Entity result = adao.Find(id);
+                AirplanesConnection aircon = new AirplanesConnection(); 
+                Entity result = aircon.Find(id);
                 return Ok(result);
+            }
+            catch (DbErrorException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (System.Exception)
             {
                 
-                throw;
+                return null;
             }
         }
     }

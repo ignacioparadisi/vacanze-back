@@ -4,7 +4,8 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.Entities;
 using vacanze_back.Entities.Grupo3;
-using vacanze_back.Persistence.Grupo3;
+using vacanze_back.Connection.Grupo3;
+using vacanze_back.Exceptions.Grupo3;
 using Newtonsoft.Json;
 
 namespace vacanze_back.Controllers.Grupo3
@@ -18,9 +19,13 @@ namespace vacanze_back.Controllers.Grupo3
         {
             try
             {
-                DAOFlight daof = new DAOFlight(); 
-                List<Entity> result = daof.Get();
+                FlightsConnection flighscon = new FlightsConnection(); 
+                List<Entity> result = flighscon.Get();
                 return Ok(result.ToList());
+            }
+            catch (DbErrorException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (System.Exception)
             {
@@ -33,9 +38,13 @@ namespace vacanze_back.Controllers.Grupo3
         {
             try
             {;
-                DAOFlight daof= new DAOFlight();
-                daof.Add(flight);
+                FlightsConnection flighscon= new FlightsConnection();
+                flighscon.Add(flight);
                 return Ok("¡Vuelo agregado con éxito!");
+            }
+            catch (DbErrorException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
