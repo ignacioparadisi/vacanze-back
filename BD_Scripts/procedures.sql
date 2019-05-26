@@ -1,3 +1,17 @@
+------- grupo 2 ----------
+CREATE OR REPLACE FUNCTION GetRoles()
+RETURNS TABLE
+  (id integer,
+   nombre VARCHAR(50)
+  )
+AS
+$$
+BEGIN
+  RETURN QUERY SELECT *
+  FROM Role;
+END;
+$$ LANGUAGE plpgsql;
+
 ------- grupo 6 ----------
 CREATE OR REPLACE FUNCTION ConsultarHoteles()
 RETURNS TABLE
@@ -88,7 +102,7 @@ $$
 BEGIN
     RETURN QUERY SELECT
     cla_id, cla_title,cla_descr, cla_status
-    FROM ClaimWHERE cla_id = _cla_id;
+    FROM ClaimWHERE WHERE cla_id = _cla_id;
 END;
 $$ LANGUAGE plpgsql;
 

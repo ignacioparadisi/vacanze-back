@@ -20,7 +20,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             roles.Add(new Role(2, "Checkin"));
             roles.Add(new Role(3, "Claim"));
             roles.Add(new Role(4, "Cargador"));
-            return Ok(roles.ToList());
+            return Ok(roles);
         }
 
         // GET api/values/5

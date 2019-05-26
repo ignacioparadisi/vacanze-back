@@ -2,21 +2,11 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
 {
     public class Role : Entity
     {
-        private string name;
+        private string Name { get; set; }
 
         public Role(long id, string name) : base(id)
         {
-            this.name = name;
-        }
-
-        public string getName()
-        {
-            return name;
-        }
-
-        public void setName(string name)
-        {
-            this.name = name;
+            Name = name;
         }
     }
 }
