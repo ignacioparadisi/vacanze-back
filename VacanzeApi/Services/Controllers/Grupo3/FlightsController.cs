@@ -36,6 +36,25 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
             }
         }
 
+        [HttpGet("{begin}/{end}")]
+        public ActionResult<IEnumerable<Entity>> GetByDate(string begin, String end)
+        {
+            try
+            {
+                FlightsConnection flighscon = new FlightsConnection(); 
+                List<Entity> result = flighscon.GetByDate(begin,end);
+                return Ok(result.ToList());
+            }
+            catch (DbErrorException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (System.Exception)
+            {
+                return null;
+            }
+        }
+
         [HttpPost]
         public ActionResult<Entity> Post([FromBody] Flight flight)
         {

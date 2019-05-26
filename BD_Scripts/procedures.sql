@@ -1,7 +1,7 @@
 -------------------------------Grupo 3---------------------------------
--- FUNCTION: public.addflight(integer, double precision, date, date, integer, integer)
+-- FUNCTION: public.addflight(integer, double precision, timestamp without time zone, timestamp without time zone, integer, integer)
 
--- DROP FUNCTION public.addflight(integer, double precision, date, date, integer, integer);
+-- DROP FUNCTION public.addflight(integer, double precision, timestamp without time zone, timestamp without time zone, integer, integer);
 
 CREATE OR REPLACE FUNCTION public.addflight(
 	_plane integer,
@@ -105,6 +105,33 @@ $BODY$;
 
 ALTER FUNCTION public.getflights()
     OWNER TO postgres;
+
+-- FUNCTION: public.getflightsbydate(timestamp without time zone, timestamp without time zone)
+
+-- DROP FUNCTION public.getflightsbydate(timestamp without time zone, timestamp without time zone);
+
+CREATE OR REPLACE FUNCTION public.getflightsbydate(
+	_begin timestamp without time zone,
+	_end timestamp without time zone)
+    RETURNS TABLE(id integer, plane integer, price numeric, departuredate timestamp without time zone, arrivaldate timestamp without time zone, locdeparture integer, locarrival integer) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+	RETURN QUERY SELECT
+	fli_id, fli_pla_fk, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, fli_loc_arrival
+	FROM public.Flight WHERE fli_departuredate BETWEEN _begin AND _end + '1 days'::interval;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.getflightsbydate(timestamp without time zone, timestamp without time zone)
+    OWNER TO postgres;
+
 
 ------- grupo 2 ----------
 CREATE OR REPLACE FUNCTION GetRoles()

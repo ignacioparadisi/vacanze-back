@@ -15,7 +15,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo3
     {
         private string GET_ALL_FLIGHTS = "getflights()";
         private string ADD_FLIGHT = 
-        "addflight(@_plane, @_price, TO_DATE( @_departure ,'MM-DD-YYYY HH:MI:SS'), TO_DATE( @_arrival ,'MM-DD-YYYY HH:MI:SS'), @_loc_departure, @_loc_arrival)";
+        "addflight(@_plane, @_price, TO_TIMESTAMP( @_departure ,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone, TO_TIMESTAMP( @_arrival ,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone, @_loc_departure, @_loc_arrival)";
+        private string GET_FLIGTS_BY_DATE = "getflightsbydate(@_begin::timestamp without time zone, @_end::timestamp without time zone)";
 
         public FlightsConnection()
         {
@@ -85,6 +86,48 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo3
                 
                 Console.WriteLine(ex.ToString());
                 throw new DbErrorException("Ups, a ocurrido un error al conectarse a la base de datos", ex);
+            }
+            finally{
+                Disconnect();
+            }
+        }
+
+        public List<Entity> GetByDate(string begin, string end){
+            try
+            {
+                List<Entity> flights = new List<Entity>();
+                AirplanesConnection aircon = new AirplanesConnection();
+
+                Connect();
+                StoredProcedure(GET_FLIGTS_BY_DATE);
+                AddParameter("_begin",begin);
+                AddParameter("_end",end);
+                ExecuteReader();
+
+                for (int i = 0; i < numberRecords; i++)
+                {
+                    Flight flight = new Flight(GetInt(i,0));
+                    flight.plane = (Airplane) aircon.Find( GetInt(i,1) );
+                    flight.price = GetDouble(i,2);
+                    flight.departure = GetString(i,3);
+                    flight.arrival = GetString(i,4);
+                    flight.loc_departure = GetInt(i,5);
+                    flight.loc_arrival = GetInt(i,6);
+
+                    flights.Add(flight);
+                }
+
+                return flights;
+            }
+            catch (NpgsqlException ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw new DbErrorException("Ups, a ocurrido un error al conectarse a la base de datos", ex);
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
             }
             finally{
                 Disconnect();
