@@ -24,7 +24,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             }
             catch (DatabaseException e)
             {
-                return Ok(e.Message);
+                return BadRequest("Error al Obtener Roles");
             }
 
             return roles;
