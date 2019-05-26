@@ -1,17 +1,17 @@
-namespace vacanze_back.Entities.Grupo2
+namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
 {
     public class User : Entity
     {
         private long _documentId;
-        private string _name;
-        private string _lastname;
         private string _email;
+        private string _lastname;
+        private string _name;
         private string _password;
         private Role _role;
 
-        public User(long id, long documentId, string name, string lastname, string email, string password, Role role)
+        public User(long id, long documentId, string name, string lastname, string email,
+            string password, Role role) : base(id)
         {
-            setId(id);
             _documentId = documentId;
             _name = name;
             _lastname = lastname;

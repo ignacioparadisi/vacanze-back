@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using vacanze_back.Entities.Grupo2;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 
-namespace vacanze_back.Controllers.Grupo2
+namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
 {
     
     [Route("api/[controller]")]
@@ -19,7 +18,7 @@ namespace vacanze_back.Controllers.Grupo2
             roles.Add(new Role(0, "Cliente"));
             roles.Add(new Role(1, "Administrador"));
             roles.Add(new Role(2, "Checkin"));
-            roles.Add(new Role(3, "Reclamo"));
+            roles.Add(new Role(3, "Claim"));
             roles.Add(new Role(4, "Cargador"));
             return Ok(roles.ToList());
         }

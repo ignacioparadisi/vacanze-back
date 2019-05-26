@@ -1,14 +1,10 @@
-﻿using Npgsql;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using System;
 using System.Data;
-using System.Linq;
-using System.Web;
+using Npgsql;
 
-namespace vacanze_back.DAO
+namespace vacanze_back.VacanzeApi.Persistence.Connection
 {
-    public abstract class DAO
+    public abstract class Connection
     {
         private NpgsqlConnection _con;
         private NpgsqlCommand _command;
@@ -16,9 +12,9 @@ namespace vacanze_back.DAO
         private string _cadena;
         private int _cantidadRegistros;
 
-        public DAO()
+        public Connection()
         {
-            CrearStringConexion();
+            CreateStringConnection();
         }
 
         public int cantidadRegistros
@@ -29,7 +25,7 @@ namespace vacanze_back.DAO
         /// <summary>
         /// hay que optimizar la cadena porque hasta ahora la hacemos local
         /// </summary>
-        protected void CrearStringConexion()
+        protected void CreateStringConnection()
         {
 			_cadena = "Server=127.0.0.1;User Id=vacanza;" + 
                         "Password=vacanza;Database=vacanza;" ;
@@ -50,7 +46,7 @@ namespace vacanze_back.DAO
             return false;
         }
 
-        public bool Conectar()
+        public bool Connect()
         {
             try
             {
@@ -68,7 +64,7 @@ namespace vacanze_back.DAO
             }
         }
 
-        public void Desconectar()
+        public void disconnect()
         {
             if (_con != null && IsConnected())
                 _con.Close();
@@ -77,7 +73,7 @@ namespace vacanze_back.DAO
         /// <summary>
         /// Ejecutar el StoredProcedure con un valor de retorno (ResultSet), habilita el uso de las funciones "GetInt, GetString, etc" y devuelve un objeto DataTable.
         /// </summary>
-        public DataTable EjecutarReader()
+        public DataTable ExecuteReader()
         {
 
             try
@@ -87,19 +83,19 @@ namespace vacanze_back.DAO
 
                 _dataTable.Load(_command.ExecuteReader());
 
-                Desconectar();
+                disconnect();
 
                 _cantidadRegistros = _dataTable.Rows.Count;
 
             }
             catch (NpgsqlException exc)
             {
-                Desconectar();
+                disconnect();
                 throw exc;
             }
             catch (Exception exc)
             {
-                Desconectar();
+                disconnect();
                 throw exc;
             }
 
@@ -111,24 +107,25 @@ namespace vacanze_back.DAO
         /// <summary>
         /// Ejecutar el StoredProcedure sin valor de retorno (ResultSet), devuelve el número de filas afectadas.
         /// </summary>
-        public int EjecutarQuery()
+        public int ExecuteQuery()
         {
             try
             {
                 int filasAfectadas = _command.ExecuteNonQuery();
 
-                Desconectar();
+                disconnect();
 
                 return filasAfectadas;
             }
             catch (NpgsqlException exc)
             {
-                Desconectar();
+				Console.WriteLine(exc);
+                disconnect();
                 throw exc;
             }
             catch (Exception exc) 
             {
-                Desconectar();
+                disconnect();
                 throw exc;
             }
         }
@@ -155,7 +152,7 @@ namespace vacanze_back.DAO
         }
 
 
-        public void AgregarParametro(string nombre, object valor)
+        public void AddParameter(string nombre, object valor)
         {
             try
             {
