@@ -29,12 +29,5 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
 
             return roles;
         }
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
     }
 }
