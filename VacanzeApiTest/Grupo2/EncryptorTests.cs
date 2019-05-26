@@ -17,9 +17,15 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         }
 
         [Test]
-        public void VerifyTest()
+        public void VerifyTrueTest()
         {
             Assert.True(Encryptor.Verify(TextToBeEncrypted, ExpectedResult));
+        }
+
+        [Test]
+        public void VerifyFalseTest()
+        {
+            Assert.False(Encryptor.Verify(TextToBeEncrypted, TextToBeEncrypted));
         }
     }
 }
