@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 using vacanze_back.Common.Entities;
 using vacanze_back.Common.Entities.Grupo3;
 using vacanze_back.Persistence.Connection.Grupo3;
@@ -12,6 +13,7 @@ namespace vacanze_back.Services.Controllers.Grupo3
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("MyPolicy")]
     public class FlightsController : ControllerBase
     {
         [HttpGet]
