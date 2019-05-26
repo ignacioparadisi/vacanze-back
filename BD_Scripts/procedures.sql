@@ -12,6 +12,34 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION GetRolesForUser(user_id integer)
+    RETURNS TABLE
+            (id integer,
+             nombre VARCHAR(50)
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT role.* FROM Role AS role, User_Role 
+    WHERE usr_rol_id = role.rol_id AND usr_use_id = user_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION GetEmployees()
+RETURNS TABLE
+    (id integer, 
+    documentId VARCHAR(50),
+    name VARCHAR(50), 
+    lastname VARCHAR(50), 
+    email VARCHAR(50))
+AS
+$$
+    BEGIN
+        RETURN QUERY SELECT DISTINCT use_id, use_document_id, use_name, use_last_name, use_email 
+        FROM Users, User_Role WHERE use_id = usr_use_id AND usr_rol_id <> 1;
+    END;
+$$ LANGUAGE plpgsql;
+
 ------- grupo 6 ----------
 CREATE OR REPLACE FUNCTION ConsultarHoteles()
 RETURNS TABLE

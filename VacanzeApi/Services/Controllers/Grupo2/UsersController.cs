@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
+using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Persistence.Connection.Grupo2;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
 {
@@ -11,9 +14,19 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
     {
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult<IEnumerable<User>> GetEmployees()
         {
-            return new string[] { "value1", "value2" };
+            var connection = new UserConnection();
+            var users = new List<User>();
+            try
+            {
+                users = connection.GetEmployees();
+            }
+            catch (DatabaseException)
+            {
+                return BadRequest("Error obteniendo los empleados");
+            }
+            return Ok(users);
         }
 
         // GET api/values/5

@@ -21,5 +21,13 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
             Password = password;
             Roles = roles;
         }
+
+        public User(long id, long documentId, string name, string lastname, string email) : base(id)
+        {
+            DocumentId = documentId;
+            Name = name;
+            Lastname = lastname;
+            Email = email;
+        }
     }
 }
