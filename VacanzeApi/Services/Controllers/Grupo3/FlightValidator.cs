@@ -23,16 +23,16 @@ namespace vacanze_back.Services.Controllers.Grupo3
                 throw new ValidationErrorException("Debe llenar todos los campos");
             }
 
-            DateTime arrivalDate= DateTime.ParseExact(flight.arrival, "dd-mm-yy",null);
-            DateTime departureDate= DateTime.ParseExact(flight.departure, "dd-mm-yy",null);;
+            // DateTime arrivalDate= DateTime.ParseExact(flight.arrival, "dd-MM-yy hh:mm:ss",null);
+            // DateTime departureDate= DateTime.ParseExact(flight.departure, "dd-MM-yy hh:mm:ss",null);
 
             if(plane == null){
                 throw new ValidationErrorException("El seleccionado avión no existe");
             }
 
-            if( DateTime.Compare(departureDate, arrivalDate) > 0 ){
-                throw new ValidationErrorException("La fecha de salida no puede ser mayor a la de llegada");
-            }
+            // if( DateTime.Compare(departureDate, arrivalDate) > 0 ){
+            //     throw new ValidationErrorException("La fecha de salida no puede ser mayor a la de llegada");
+            // }
 
             
 
