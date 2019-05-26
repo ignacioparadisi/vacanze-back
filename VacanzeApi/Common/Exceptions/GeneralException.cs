@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
-namespace vacanze_back.Exceptions
+namespace vacanze_back.VacanzeApi.Common.Exceptions
 {
     public class GeneralException :Exception
     {

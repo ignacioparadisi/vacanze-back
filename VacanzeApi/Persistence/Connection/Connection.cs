@@ -1,12 +1,8 @@
-﻿using Npgsql;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using System;
 using System.Data;
-using System.Linq;
-using System.Web;
+using Npgsql;
 
-namespace vacanze_back.Connection
+namespace vacanze_back.VacanzeApi.Persistence.Connection
 {
     public abstract class Connection
     {
@@ -14,16 +10,16 @@ namespace vacanze_back.Connection
         private NpgsqlCommand _command;
         private DataTable _dataTable;
         private string _cadena;
-        private int _cantidadRegistros;
+        private int _numberRecords;
 
         public Connection()
         {
             CreateStringConnection();
         }
 
-        public int cantidadRegistros
+        public int numberRecords
         {
-            get { return _cantidadRegistros; }
+            get { return _numberRecords; }
         }
 
         /// <summary>
@@ -89,7 +85,7 @@ namespace vacanze_back.Connection
 
                 disconnect();
 
-                _cantidadRegistros = _dataTable.Rows.Count;
+                _numberRecords = _dataTable.Rows.Count;
 
             }
             catch (NpgsqlException exc)
