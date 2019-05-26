@@ -192,13 +192,16 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo9
             }
         }
 
-        public void DeleteClaim(int claimId)
+        public int DeleteClaim(int claimId)
         {
-            try{           
+            try{          
+                GetClaim(claimId); 
+                if(numberRecords < 1) throw new NullClaimException("no existe esa id");
                 Connect();
                 StoredProcedure("DeleteClaim(@cla_id)");
                 AddParameter("cla_id", claimId);
                 ExecuteQuery();
+                return numberRecords;
             }catch (NpgsqlException)
             {
                 throw new DatabaseException("error al eliminar");
@@ -209,14 +212,18 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo9
             }
         }
 
-        public void ModifyClaimStatus(int claimId, Claim claim)
+        public int ModifyClaimStatus(int claimId, Claim claim)
         {
-            try{               
+            try{ 
+                
+                GetClaim(claimId); 
+                if(numberRecords < 1) throw new NullClaimException("no existe esa id");              
                 Connect();
                 StoredProcedure("modifyclaimstatus(@cla_id,@cla_status)");
                 AddParameter("cla_id", claimId);
-                AddParameter("cla_status", claim._status);
+                AddParameter("cla_status", claim._status);              
                 ExecuteQuery();
+                return numberRecords;
             }catch (NpgsqlException )
             {
                 throw new DatabaseException("error al modificar");
@@ -227,15 +234,19 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo9
             }
         }
 
-        public void ModifyClaimTitle(int claimId, Claim claim)
+        public int ModifyClaimTitle(int claimId, Claim claim)
         {
             try{
+                
+                GetClaim(claimId); 
+                if(numberRecords < 1) throw new NullClaimException("no existe esa id");
                 Connect();
                 StoredProcedure("modifyclaimtitle(@cla_id,@cla_title, @cla_descr)");
                 AddParameter("cla_id", claimId);
                 AddParameter("cla_title", claim._title);
                 AddParameter("cla_descr",claim._description);
                 ExecuteQuery();
+                return numberRecords;
             }catch (NpgsqlException )
             {
                 throw new DatabaseException("error al modificar");

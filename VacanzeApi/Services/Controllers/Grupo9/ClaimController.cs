@@ -115,8 +115,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 		{
 			try{
 				ClaimConnection conec= new ClaimConnection();  
-				conec.DeleteClaim(id);
-				return Ok("Eliminado exitosamente");
+				int rows = conec.DeleteClaim(id);
+				if(rows < 1 ) throw new NullClaimException("no existe ese elemento");				 
+				return Ok("eliminado exitosamente");
 			}catch (DatabaseException )
 			{            
 				return StatusCode(500);
@@ -136,10 +137,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 				ClaimConnection conec = new ClaimConnection();
 				Claim claim = new Claim(ClaimAux.title, ClaimAux.description, ClaimAux.status);
 				Console.WriteLine("estoy aqui");
+				int rows= 0;
 				if (ClaimAux.status != null)
-					conec.ModifyClaimStatus(id, claim);
+					rows = conec.ModifyClaimStatus(id, claim);
 				else if (ClaimAux.title != null && ClaimAux.description  != null)
-					conec.ModifyClaimTitle(id, claim);
+					rows = conec.ModifyClaimTitle(id, claim);					
+				if(rows <1 ) throw new NullClaimException("no existe ese elemento");	
 				return Ok("Modificado exitosamente");
 			}catch (DatabaseException )
 			{            
