@@ -12,6 +12,19 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION GetRolesForUser(user_id integer)
+    RETURNS TABLE
+            (id integer,
+             nombre VARCHAR(50)
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT role.* FROM Role AS role, User_Role 
+    WHERE usr_rol_id = role.rol_id AND usr_use_id = user_id;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION GetEmployees()
 RETURNS TABLE
     (id integer, 

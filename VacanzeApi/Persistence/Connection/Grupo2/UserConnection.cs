@@ -20,6 +20,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo2
         public List<User> GetEmployees()
         {
             var users = new List<User>();
+            var roleConnection = new RoleConnection();
             try
             {
                 Connect();
@@ -33,6 +34,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo2
                     var lastname = GetString(i, 3);
                     var email = GetString(i, 4);
                     var user = new User(id, documentId, name, lastname, email);
+
+                    var roles = roleConnection.GetRolesForUser(id);
+                    user.Roles = roles;
                     users.Add(user);
                 }
             }

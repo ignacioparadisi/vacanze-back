@@ -43,5 +43,33 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo2
                 throw new GeneralException( e,DateTime.Now);
             }
         }
+        
+        public List<Role> GetRolesForUser(long userId)
+        {
+            var roles = new List<Role>();
+            try
+            {
+                Connect();
+                StoredProcedure("GetRolesForUser(" + userId + ")");
+                ExecuteReader();
+                for (int i = 0; i < numberRecords; i++)
+                {
+                    var id = Convert.ToInt64(GetString(i, 0));
+                    var name = GetString(i, 1);
+                    var role = new Role(id, name);
+                    roles.Add(role);
+                }
+
+                return roles;
+            }
+            catch (NpgsqlException )
+            {
+                throw new DatabaseException("Rrror al buscar roles para el usuario " + userId);
+            }
+            catch (Exception e) 
+            {
+                throw new GeneralException( e,DateTime.Now);
+            }
+        }
     }
 }
