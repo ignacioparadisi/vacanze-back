@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Exceptions;
@@ -15,7 +16,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
     {
         // GET api/hotels/[?location={location_id}]
         [HttpGet]
-        public ActionResult<IEnumerable<Hotel>> GetHotels([FromQuery] long location = -1)
+        public ActionResult<IEnumerable<Hotel>> Get([FromQuery] long location = -1)
         {
             var dbConnection = new HotelConnection();
             try
@@ -30,6 +31,19 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
                 //       un error 500 o algo
                 return Ok(e.Message);
             }
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<Hotel> Create([FromBody] Hotel hotel)
+        {
+            var dbConnection = new HotelConnection();
+            var receivedId = dbConnection.AddHotel(hotel);
+            var savedHotel = new Hotel(receivedId, hotel.Name, hotel.AmountOfRooms, hotel.IsActive,
+                hotel.Phone,
+                hotel.Website);
+            return CreatedAtAction("Get", "hotels", savedHotel);
         }
     }
 }

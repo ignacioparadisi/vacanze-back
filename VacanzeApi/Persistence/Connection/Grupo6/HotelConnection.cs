@@ -8,18 +8,17 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo6
 {
     public class HotelConnection : Connection
     {
-        public HotelConnection() {
+        public HotelConnection()
+        {
             CreateStringConnection();
         }
 
-
-
         /// <summary>
-        ///   Obtener todos los hoteles
+        ///     Obtener todos los hoteles
         /// </summary>
-        public List<Hotel> GetHotels() {
-
-            var HotelList = new List<Hotel>();
+        public List<Hotel> GetHotels()
+        {
+            var hotelList = new List<Hotel>();
             try
             {
                 Connect();
@@ -35,10 +34,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo6
                     var phone = GetString(i, 4);
                     var web = GetString(i, 5);
                     var hotel = new Hotel(id, name, capacity, status, phone, web);
-                    HotelList.Add(hotel);
-                }                
+                    hotelList.Add(hotel);
+                }
 
-                return HotelList;
+                return hotelList;
             }
             catch (NpgsqlException)
             {
@@ -48,6 +47,22 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo6
             {
                 throw new GeneralException(e, DateTime.Now);
             }
+        }
+
+        public long AddHotel(Hotel hotel)
+        {
+            Connect();
+            StoredProcedure(
+                "addhotel(@name, @amountOfRooms, @active, @phone, @website, @location)");
+            AddParameter("name", hotel.Name);
+            AddParameter("amountOfRooms", hotel.AmountOfRooms);
+            AddParameter("active", hotel.IsActive);
+            AddParameter("phone", hotel.Phone);
+            AddParameter("website", hotel.Website);
+            AddParameter("location", 1); // TODO: Usar id de una ubicacion recibida!!
+            ExecuteReader();
+            var savedId = GetInt(0, 0);
+            return savedId;
         }
     }
 }
