@@ -22,7 +22,7 @@ RETURNS TABLE
 AS
 $$
     BEGIN
-        RETURN QUERY SELECT use_id, use_document_id, use_name, use_last_name, use_email 
+        RETURN QUERY SELECT DISTINCT use_id, use_document_id, use_name, use_last_name, use_email 
         FROM Users, User_Role WHERE use_id = usr_use_id AND usr_rol_id <> 1;
     END;
 $$ LANGUAGE plpgsql;
