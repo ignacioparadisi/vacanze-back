@@ -26,7 +26,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             {
                 return BadRequest("Error obteniendo los empleados");
             }
-            return Ok(users);
+            return users;
         }
 
         // GET api/values/5
