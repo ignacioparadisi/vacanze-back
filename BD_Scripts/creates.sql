@@ -1,174 +1,68 @@
--------------------------------Grupo 3---------------------------------------------
--- SEQUENCE: public.fli_id_seq
+CREATE TABLE Lugar (
+                     l_id SERIAL,
+                     l_tipo CHAR(1) NOT NULL,
+                     l_nombre VARCHAR(100) NOT NULL,
+                     fk_lugar INTEGER,
+                     CONSTRAINT pk_lugar PRIMARY KEY (l_id),
+                     CONSTRAINT check_tipo CHECK(l_tipo in ('P','C')) ---- P de pais y C de ciudad ------
+);
 
--- DROP SEQUENCE public.fli_id_seq;
+----------------------------------grupo 2-------------------------------------------
+CREATE TABLE Role (
+                    rol_id               SERIAL,
+                    rol_name             VARCHAR(20) NOT NULL,
+                    CONSTRAINT pk_role PRIMARY KEY (rol_id)
+                  
+);
 
-CREATE SEQUENCE public.fli_id_seq;
+CREATE TABLE Users (
+                     use_id               SERIAL,
+                     use_document_id      VARCHAR(50) NOT NULL,
+                     use_email            VARCHAR(50) NOT NULL,
+                     use_last_name        VARCHAR(50) NOT NULL,
+                     use_name             VARCHAR(50) NOT NULL,
+                     use_password         VARCHAR(50) NOT NULL,
+                     CONSTRAINT pk_users PRIMARY KEY (use_id)
+);
 
-ALTER SEQUENCE public.fli_id_seq
-    OWNER TO vacanza;
+CREATE TABLE User_Role (
+                         usr_id          SERIAL,
+                         usr_rol_id     INTEGER,
+                         usr_use_id     INTEGER,
+                         CONSTRAINT pk_user_role PRIMARY KEY (usr_id, usr_rol_id, usr_use_id),
+                         CONSTRAINT fk_role FOREIGN KEY (usr_rol_id) REFERENCES Role(rol_id),
+                         CONSTRAINT fk_user FOREIGN KEY (usr_use_id) REFERENCES Users(use_id)
+);
 
--- SEQUENCE: public.loc_id_seq
 
--- DROP SEQUENCE public.loc_id_seq;
+----------------------------------grupo 6-------------------------------------------
 
-CREATE SEQUENCE public.loc_id_seq;
+CREATE TABLE Hotel (
+                     hot_id                SERIAL,
+                     hot_nombre            VARCHAR(100) NOT NULL,
+                     hot_cant_habitaciones INTEGER      NOT NULL,
+                     hot_activo            BOOLEAN      NOT NULL DEFAULT TRUE,
+                     hot_telefono          VARCHAR(20)  NOT NULL,
+                     hot_sitio_web         VARCHAR(100),
+                     hot_fk_lugar          INTEGER      NOT NULL,
+                     CONSTRAINT pk_hotel PRIMARY KEY (hot_id),
+                     CONSTRAINT fk_hotel_lugar FOREIGN KEY (hot_fk_lugar) REFERENCES Lugar (l_id)
+);
 
-ALTER SEQUENCE public.loc_id_seq
-    OWNER TO vacanza;
+----------------------------------grupo 9-------------------------------------------
 
--- SEQUENCE: public.pla_id_seq
-
--- DROP SEQUENCE public.pla_id_seq;
-
-CREATE SEQUENCE public.pla_id_seq;
-
-ALTER SEQUENCE public.pla_id_seq
-    OWNER TO vacanza;
-
--- SEQUENCE: public.sto_id_seq
-
--- DROP SEQUENCE public.sto_id_seq;
-
-CREATE SEQUENCE public.sto_id_seq;
-
-ALTER SEQUENCE public.sto_id_seq
-    OWNER TO vacanza;
-
--- Table: public.location
-
--- DROP TABLE public.location;
-
-CREATE TABLE public.location
-(
-    loc_id integer NOT NULL DEFAULT nextval('loc_id_seq'::regclass),
-    loc_city character varying(180) COLLATE pg_catalog."default" NOT NULL,
-    loc_country character varying(180) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT "Location_pkey" PRIMARY KEY (loc_id)
-)
-WITH (
-    OIDS = FALSE
-)
-TABLESPACE pg_default;
-
-ALTER TABLE public.location
-    OWNER to vacanza;
-
--- Table: public.plane
-
--- DROP TABLE public.plane;
-
-CREATE TABLE public.plane
-(
-    pla_id integer NOT NULL DEFAULT nextval('pla_id_seq'::regclass),
-    pla_autonomy double precision NOT NULL,
-    "pla_isActive" boolean NOT NULL,
-    pla_capacity integer NOT NULL,
-    "pla_loadingCap" double precision NOT NULL,
-    pla_model character varying(180) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT plane_pkey PRIMARY KEY (pla_id)
-)
-WITH (
-    OIDS = FALSE
-)
-TABLESPACE pg_default;
-
-ALTER TABLE public.plane
-    OWNER to vacanza;
-
--- Table: public.flight
-
--- DROP TABLE public.flight;
-
-CREATE TABLE public.flight
-(
-    fli_pla_fk integer NOT NULL,
-    fli_price double precision NOT NULL,
-    fli_departuredate date NOT NULL,
-    fli_arrivaldate date NOT NULL,
-    fli_id integer NOT NULL DEFAULT nextval('fli_id_seq'::regclass),
-    CONSTRAINT "Flight_pkey" PRIMARY KEY (fli_id),
-    CONSTRAINT fk_plane FOREIGN KEY (fli_pla_fk)
-        REFERENCES public.plane (pla_id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-)
-WITH (
-    OIDS = FALSE
-)
-TABLESPACE pg_default;
-
-ALTER TABLE public.flight
-    OWNER to vacanza;
-
--- Table: public.stop
-
--- DROP TABLE public.stop;
-
-CREATE TABLE public.stop
-(
-    sto_id integer NOT NULL DEFAULT nextval('sto_id_seq'::regclass),
-    sto_fli_fk integer,
-    sto_departuredate date NOT NULL,
-    sto_arrivaldate date NOT NULL,
-    sto_locdeparture integer NOT NULL,
-    sto_locarrival integer NOT NULL,
-    sto_cru_fk integer,
-    CONSTRAINT "Stop_pkey" PRIMARY KEY (sto_id),
-    CONSTRAINT fk_fli FOREIGN KEY (sto_fli_fk)
-        REFERENCES public.flight (fli_id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT loc_arrival_fk FOREIGN KEY (sto_locarrival)
-        REFERENCES public.location (loc_id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT loc_departure_fk FOREIGN KEY (sto_locdeparture)
-        REFERENCES public.location (loc_id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-)
-WITH (
-    OIDS = FALSE
-)
-TABLESPACE pg_default;
-
-ALTER TABLE public.stop
-    OWNER to vacanza;
-
--- Index: fki_fk_fli
-
--- DROP INDEX public.fki_fk_fli;
-
-CREATE INDEX fki_fk_fli
-    ON public.stop USING btree
-    (sto_fli_fk)
-    TABLESPACE pg_default;
-
--- Index: fki_loc_arrival_fk
-
--- DROP INDEX public.fki_loc_arrival_fk;
-
-CREATE INDEX fki_loc_arrival_fk
-    ON public.stop USING btree
-    (sto_locarrival)
-    TABLESPACE pg_default;
-
--- Index: fki_loc_departure_fk
-
--- DROP INDEX public.fki_loc_departure_fk;
-
-CREATE INDEX fki_loc_departure_fk
-    ON public.stop USING btree
-    (sto_locdeparture)
-    TABLESPACE pg_default;
-
--- Index: fki_fk_plane
-
--- DROP INDEX public.fki_fk_plane;
-
-CREATE INDEX fki_fk_plane
-    ON public.flight USING btree
-    (fli_pla_fk)
-    TABLESPACE pg_default;
-
+CREATE SEQUENCE SEQ_Claim
+  START WITH 1
+  INCREMENT BY 1
+  NO MINVALUE
+  NO MAXVALUE
+  CACHE 1;
+  
+CREATE TABLE Claim(
+    cla_id integer  DEFAULT nextval('SEQ_Claim'),
+    cla_title varchar(30) NOT NULL,
+    cla_descr varchar(30) NOT NULL,
+    cla_status varchar(20) CHECK (cla_status ='ABIERTO' OR cla_status='CERRADO' OR cla_status='ESPERA'), 
+    CONSTRAINT pk_Claim PRIMARY KEY(cla_id)
+    --CONSTRAINT pf_equipaje FOREIGN KEY (cla_equi_id) REFERENCES JUGADOR(equi_id) ON DELETE CASCADE ON UPDATE CASCADE, 
+);

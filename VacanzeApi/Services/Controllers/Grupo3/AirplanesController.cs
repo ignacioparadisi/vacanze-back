@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Cors;
-using vacanze_back.Common.Entities.Grupo3;
-using vacanze_back.Common.Entities;
-using vacanze_back.Persistence.Connection.Grupo3;
-using vacanze_back.Common.Exceptions.Grupo3;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo3;
+using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.Persistence.Connection.Grupo3;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo3;
 
 
-namespace vacanze_back.Services.Controllers.Grupo3
+namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
 {
     [Route("api/[controller]")]
     [ApiController]

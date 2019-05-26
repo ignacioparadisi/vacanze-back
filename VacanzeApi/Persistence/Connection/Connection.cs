@@ -2,7 +2,7 @@
 using System.Data;
 using Npgsql;
 
-namespace vacanze_back.Persistence.Connection
+namespace vacanze_back.VacanzeApi.Persistence.Connection
 {
     public abstract class Connection
     {
@@ -10,16 +10,16 @@ namespace vacanze_back.Persistence.Connection
         private NpgsqlCommand _command;
         private DataTable _dataTable;
         private string _cadena;
-        private int _cantidadRegistros;
+        private int _numberRecords;
 
         public Connection()
         {
             CreateStringConnection();
         }
 
-        public int cantidadRegistros
+        public int numberRecords
         {
-            get { return _cantidadRegistros; }
+            get { return _numberRecords; }
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace vacanze_back.Persistence.Connection
             }
         }
 
-        public void disconnect()
+        public void Disconnect()
         {
             if (_con != null && IsConnected())
                 _con.Close();
@@ -83,19 +83,19 @@ namespace vacanze_back.Persistence.Connection
 
                 _dataTable.Load(_command.ExecuteReader());
 
-                disconnect();
+                Disconnect();
 
-                _cantidadRegistros = _dataTable.Rows.Count;
+                _numberRecords = _dataTable.Rows.Count;
 
             }
             catch (NpgsqlException exc)
             {
-                disconnect();
+                Disconnect();
                 throw exc;
             }
             catch (Exception exc)
             {
-                disconnect();
+                Disconnect();
                 throw exc;
             }
 
@@ -113,19 +113,19 @@ namespace vacanze_back.Persistence.Connection
             {
                 int filasAfectadas = _command.ExecuteNonQuery();
 
-                disconnect();
+                Disconnect();
 
                 return filasAfectadas;
             }
             catch (NpgsqlException exc)
             {
 				Console.WriteLine(exc);
-                disconnect();
+                Disconnect();
                 throw exc;
             }
             catch (Exception exc) 
             {
-                disconnect();
+                Disconnect();
                 throw exc;
             }
         }

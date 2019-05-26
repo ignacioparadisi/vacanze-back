@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using vacanze_back.Common.Entities;
-using vacanze_back.Common.Entities.Grupo3;
-using vacanze_back.Persistence.Connection;
-using vacanze_back.Persistence.Connection.Grupo3;
+using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo3;
+using vacanze_back.VacanzeApi.Persistence.Connection;
+using vacanze_back.VacanzeApi.Persistence.Connection.Grupo3;
 using Npgsql;
-using vacanze_back.Common.Exceptions.Grupo3;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo3;
 
-namespace vacanze_back.Persistence.Connection.Grupo3
+namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo3
 {
     public class FlightsConnection : Connection
     {
@@ -27,13 +27,12 @@ namespace vacanze_back.Persistence.Connection.Grupo3
             {
                 List<Entity> flights = new List<Entity>();
                 AirplanesConnection aircon = new AirplanesConnection();
-                RoutesConnection routecon = new RoutesConnection();
 
                 Connect();
                 StoredProcedure(GET_ALL_FLIGHTS);
                 ExecuteReader();
 
-                for (int i = 0; i < cantidadRegistros; i++)
+                for (int i = 0; i < numberRecords; i++)
                 {
                     Flight flight = new Flight(GetInt(i,0));
                     flight.plane = (Airplane) aircon.Find( GetInt(i,1) );
@@ -59,7 +58,7 @@ namespace vacanze_back.Persistence.Connection.Grupo3
                 throw;
             }
             finally{
-                disconnect();
+                Disconnect();
             }
         }
 
@@ -88,7 +87,7 @@ namespace vacanze_back.Persistence.Connection.Grupo3
                 throw new DbErrorException("Ups, a ocurrido un error al conectarse a la base de datos", ex);
             }
             finally{
-                disconnect();
+                Disconnect();
             }
         }
 

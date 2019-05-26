@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using vacanze_back.Common.Entities;
-using vacanze_back.Common.Entities.Grupo3;
-using vacanze_back.Persistence.Connection;
+using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo3;
+using vacanze_back.VacanzeApi.Persistence.Connection;
 using Npgsql;
-using vacanze_back.Common.Exceptions.Grupo3;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo3;
 
-namespace vacanze_back.Persistence.Connection.Grupo3
+namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo3
 {
     public class RoutesConnection: Connection
     {
@@ -29,7 +29,7 @@ namespace vacanze_back.Persistence.Connection.Grupo3
                 AddParameter("_id", id);
                 ExecuteReader();
 
-                for (int i = 0; i < cantidadRegistros; i++)
+                for (int i = 0; i < numberRecords; i++)
                 {
                     Route route = new Route(GetInt(i,0));
                     route.locDeparture = GetInt(i,1);
@@ -53,7 +53,7 @@ namespace vacanze_back.Persistence.Connection.Grupo3
                 throw;
             }
             finally{
-                disconnect();
+                Disconnect();
             }
         }
     }

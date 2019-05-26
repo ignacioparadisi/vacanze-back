@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Npgsql;
-using vacanze_back.Common.Entities.Grupo9;
-using vacanze_back.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
+using vacanze_back.VacanzeApi.Common.Exceptions;
 
-namespace vacanze_back.Persistence.Connection.Grupo9
+namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo9
 {
     public class ClaimConnection : Connection
     {
@@ -53,7 +53,7 @@ namespace vacanze_back.Persistence.Connection.Grupo9
                 AddParameter("cla_id", numero);
                 ExecuteReader();
 
-                for (var i = 0; i < cantidadRegistros; i++)
+                for (var i = 0; i < numberRecords; i++)
                 {
                     var id = Convert.ToInt32(GetString(i, 0));
                     var titulo = GetString(i, 1);
@@ -84,7 +84,7 @@ namespace vacanze_back.Persistence.Connection.Grupo9
                 AddParameter("cla_id", numero);
                 ExecuteReader();
 
-                for (var i = 0; i < cantidadRegistros; i++)
+                for (var i = 0; i < numberRecords; i++)
                 {
                     var id = Convert.ToInt32(GetString(i, 0));
                     var titulo = GetString(i, 1);
@@ -117,7 +117,7 @@ namespace vacanze_back.Persistence.Connection.Grupo9
                 AddParameter("cla_id", numero);
                 ExecuteReader();
 
-                for (var i = 0; i < cantidadRegistros; i++)
+                for (var i = 0; i < numberRecords; i++)
                 {
                     var id = Convert.ToInt32(GetString(i, 0));
                     var titulo = GetString(i, 1);
@@ -149,7 +149,7 @@ namespace vacanze_back.Persistence.Connection.Grupo9
                 AddParameter("cla_id", numero);
                 ExecuteReader();
 
-                for (var i = 0; i < cantidadRegistros; i++)
+                for (var i = 0; i < numberRecords; i++)
                 {
                     var id = Convert.ToInt32(GetString(i, 0));
                     var titulo = GetString(i, 1);

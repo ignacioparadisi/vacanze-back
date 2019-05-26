@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using vacanze_back.Common.Entities;
-using vacanze_back.Common.Entities.Grupo3;
-using vacanze_back.Persistence.Connection;
+using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo3;
+using vacanze_back.VacanzeApi.Persistence.Connection;
 using Npgsql;
-using vacanze_back.Common.Exceptions.Grupo3;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo3;
 
-namespace vacanze_back.Persistence.Connection.Grupo3
+namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo3
 {
     public class AirplanesConnection : Connection
     {
@@ -28,7 +28,7 @@ namespace vacanze_back.Persistence.Connection.Grupo3
                 StoredProcedure(GET_ALL_PLANES);
                 ExecuteReader();
 
-                for (int i = 0; i < cantidadRegistros; i++)
+                for (int i = 0; i < numberRecords; i++)
                 {
                     Airplane airplane = new Airplane(GetInt(i,0));
                     airplane.autonomy = GetInt(i,1);
@@ -53,7 +53,7 @@ namespace vacanze_back.Persistence.Connection.Grupo3
                 throw;
             }
             finally{
-                disconnect();
+                Disconnect();
             }
         }
 
@@ -68,7 +68,7 @@ namespace vacanze_back.Persistence.Connection.Grupo3
                 AddParameter( "_id", (int)id );
                 ExecuteReader();
 
-                for (int i = 0; i < cantidadRegistros; i++)
+                for (int i = 0; i < numberRecords; i++)
                 {
                     airplane = new Airplane(GetInt(i,0));
                     airplane.autonomy = GetInt(i,1);
@@ -93,7 +93,7 @@ namespace vacanze_back.Persistence.Connection.Grupo3
                 throw;
             }
             finally{
-                disconnect();
+                Disconnect();
             }
 
         }

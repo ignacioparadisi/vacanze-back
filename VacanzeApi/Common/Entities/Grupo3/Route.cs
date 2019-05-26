@@ -1,4 +1,4 @@
-namespace vacanze_back.Common.Entities.Grupo3
+namespace vacanze_back.VacanzeApi.Common.Entities.Grupo3
 {
     public class Route: Entity
     {
