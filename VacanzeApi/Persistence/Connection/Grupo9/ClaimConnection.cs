@@ -205,6 +205,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo9
             }catch (NpgsqlException)
             {
                 throw new DatabaseException("error al eliminar");
+            }catch (NullClaimException )
+            {
+                throw new NullClaimException("no existe esa id"); 
             }
             catch (Exception e)
             {
@@ -228,6 +231,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo9
             {
                 throw new DatabaseException("error al modificar");
             }
+            catch (NullClaimException )
+            {
+                throw new NullClaimException("no existe esa id"); 
+            }
             catch (Exception e)
             {
                 throw new GeneralException( e,DateTime.Now);
@@ -250,6 +257,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo9
             }catch (NpgsqlException )
             {
                 throw new DatabaseException("error al modificar");
+            }catch (NullClaimException )
+            {
+                throw new NullClaimException("no existe esa id"); 
             }
             catch (Exception e )
             {

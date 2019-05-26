@@ -125,6 +125,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 			catch (GeneralException )
 			{
 				return StatusCode(500);
+			}catch (NullClaimException )
+			{
+				return StatusCode(500);
 			}
 
 		}
@@ -151,7 +154,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 			catch (GeneralException )
 			{
 				return StatusCode(500);
-			} 
+			}catch (NullClaimException )
+			{
+				return StatusCode(500);
+			}
 		}
 
 
