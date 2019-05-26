@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
@@ -40,6 +42,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
         [HttpPost]
         public ActionResult<User> Post([FromBody] User user)
         {
+            var errorMessage = user.GetErrorMessageIfNotValid();
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                return BadRequest(errorMessage);
+            }
             return user;
         }
 

@@ -12,7 +12,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
     public class UsersTests
     {
         [Test]
-        public void GetEmployeesFromDBTest()
+        public void GetEmployeesFromDbTest()
         {
             var connection = new UserConnection();
             List<User> users = connection.GetEmployees();
