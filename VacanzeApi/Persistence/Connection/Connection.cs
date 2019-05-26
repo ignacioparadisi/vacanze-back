@@ -10,16 +10,16 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection
         private NpgsqlCommand _command;
         private DataTable _dataTable;
         private string _cadena;
-        private int _cantidadRegistros;
+        private int _numberRecords;
 
         public Connection()
         {
             CreateStringConnection();
         }
 
-        public int cantidadRegistros
+        public int numberRecords
         {
-            get { return _cantidadRegistros; }
+            get { return _numberRecords; }
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection
 
                 disconnect();
 
-                _cantidadRegistros = _dataTable.Rows.Count;
+                _numberRecords = _dataTable.Rows.Count;
 
             }
             catch (NpgsqlException exc)

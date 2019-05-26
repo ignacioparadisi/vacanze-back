@@ -12,8 +12,7 @@ namespace vacanze_back.VacanzeApi
         {
             Configuration = configuration;
         }
-
-        private readonly string AllowedOrigins = "_myAllowSpecificOrigins";
+        
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -26,7 +25,6 @@ namespace vacanze_back.VacanzeApi
                     .AllowAnyHeader();
             }));
 
-                
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
