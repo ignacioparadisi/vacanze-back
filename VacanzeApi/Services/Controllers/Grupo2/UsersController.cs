@@ -42,11 +42,15 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
         [HttpPost]
         public ActionResult<User> Post([FromBody] User user)
         {
-            var errorMessage = user.GetErrorMessageIfNotValid();
-            if (!string.IsNullOrEmpty(errorMessage))
+            try
             {
-                return BadRequest(errorMessage);
+                user.Validate();
             }
+            catch (Exception e)
+            {
+                BadRequest(e.Message);
+            }
+            
             return user;
         }
 
