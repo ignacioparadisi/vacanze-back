@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 
 namespace vacanze_back.Services.Controllers.Grupo3
 {
+    [Produces("application/json")] 
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("MyPolicy")]
@@ -44,15 +45,15 @@ namespace vacanze_back.Services.Controllers.Grupo3
                 validator.Validate();
                 FlightsConnection flighscon= new FlightsConnection();
                 flighscon.Add(flight);
-                return Ok("¡Vuelo agregado con éxito!");
+                return Ok( new {Message = "¡Vuelo agregado con éxito!"});
             }
             catch (ValidationErrorException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new {Message = ex.Message});
             }
             catch (DbErrorException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new {Message = ex.Message});
             }
             catch (Exception ex)
             {

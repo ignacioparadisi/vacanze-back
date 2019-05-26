@@ -28,7 +28,7 @@ namespace vacanze_back.Services.Controllers.Grupo3
             }
             catch (DbErrorException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new {Message = ex.Message});
             }
             catch (System.Exception)
             {
@@ -48,7 +48,7 @@ namespace vacanze_back.Services.Controllers.Grupo3
             }
             catch (DbErrorException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new {Message = ex.Message});
             }
             catch (System.Exception)
             {
