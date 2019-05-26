@@ -24,7 +24,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 			try{ 
 				ClaimConnection conec= new ClaimConnection();
 				List<Claim> claimList= conec.GetClaim(2);
-				return Ok(claimList); 
+				return claimList; 
 			}catch (DatabaseException )
 			{            
 				return StatusCode(500);
@@ -43,7 +43,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 				ClaimConnection conec= new ClaimConnection();
 				List<Claim> claimList = conec.GetClaim(id);
 
-				return Ok(claimList); 
+				return claimList; 
 			}catch (DatabaseException )
 			{            
 				return StatusCode(500);
@@ -155,9 +155,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 	}
 
 	public class ClaimSecundary {
-		public string title ;
-		public string description;
-		public string status;
+		public string title {get; set;} 
+		public string description{get; set;}
+		public string status{get; set;}
 		public string getStatus(){
 			return this.status;
 		}
