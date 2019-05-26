@@ -345,3 +345,61 @@ $$ LANGUAGE plpgsql;
 
 
 ------------------------------------fin de grupo 9---------------------------------
+
+-- grupo 11 -----------------------------------------
+
+
+
+--Obtener datos de pago segun reserva suministrada 
+-- _tipo 1 para vehiculos
+CREATE OR REPLACE FUNCTION Get_Info_Payment (_id integer, _tipo integer)
+
+RETURNS TABLE
+(  ID            INTEGER,
+   DESCRIP       VARCHAR(100),
+   IMAGE         VARCHAR,
+   BRAND         VARCHAR(100),
+   QTY           INTEGER,
+   PRICE         DECIMAL,
+   PRICE_TOTAL   DECIMAL
+
+)
+
+AS $$
+BEGIN
+	IF _tipo = 0 
+	THEN
+
+	 RETURN QUERY
+		SELECT 
+		RA_ID AS ID,
+		AUT_PICTURE AS IMAGE,
+		AUT_MAKE AS DESCRIP,
+		AUT_MODEL AS BRAND,
+		DATE_PART('day',RA_RETURNDATE - RA_PICKUPDATE) AS QTY,
+		AUT_PRICE AS PRICE,
+		AUT_PRICE * DATE_PART('day',RA_RETURNDATE - RA_PICKUPDATE) AS PRICE_TOTAL
+		FROM RES_AUT 
+		INNER JOIN AUTOMOBILE ON RA_AUT_FK = AUT_ID
+		WHERE RA_ID = _id;
+		
+	ELSIF _tipo = 1 
+	THEN
+	
+	 RETURN QUERY
+		SELECT 
+		RA_ID AS ID,
+		AUT_PICTURE AS IMAGE,
+		AUT_MAKE AS DESCRIP,
+		AUT_MODEL AS BRAND,
+		DATE_PART('day',RA_RETURNDATE - RA_PICKUPDATE) AS QTY,
+		AUT_PRICE AS PRICE,
+		AUT_PRICE * DATE_PART('day',RA_RETURNDATE - RA_PICKUPDATE) AS PRICE_TOTAL
+		FROM RES_AUT 
+		INNER JOIN AUTOMOBILE ON RA_AUT_FK = AUT_ID
+		WHERE RA_ID = _id;
+
+	END IF;
+END
+$$ LANGUAGE plpgsql;
+------------------------------------fin de grupo 11---------------------------------
