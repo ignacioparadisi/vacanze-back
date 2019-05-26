@@ -8,6 +8,16 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         {
             Name = name;
         }
+
+        public string GetErrorMessageIfNotValid()
+        {
+            if (Id <= 0)
+            {
+                return "El " + Id + " rol es inválido";
+            }
+
+            return null;
+        }
         
         
     }

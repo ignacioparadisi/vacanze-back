@@ -54,6 +54,11 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         /// <returns>Mensaje de error que se envia al frontend en caso de que haya algun error</returns>
         public string GetErrorMessageIfNotValid()
         {
+            if (DocumentId <= 0)
+            {
+                return "La cédula de identidad no es válida";
+            }
+            
             if (string.IsNullOrEmpty(Name))
             {
                 return "El nombre es requerido";
@@ -80,9 +85,13 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
                 return "Al menos un rol es requerido";
             }
 
-            if (DocumentId <= 0)
+            foreach (var role in Roles)
             {
-                return "La cédula de identidad no es válida";
+                var roleErrorMessage = role.GetErrorMessageIfNotValid();
+                if (!string.IsNullOrEmpty(roleErrorMessage))
+                {
+                    return roleErrorMessage;
+                }
             }
 
             return null;
