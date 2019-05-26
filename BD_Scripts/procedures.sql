@@ -352,7 +352,7 @@ $$ LANGUAGE plpgsql;
 
 --Obtener datos de pago segun reserva suministrada 
 -- _tipo 1 para vehiculos
-CREATE OR REPLACE FUNCTION Get_Info_Payment (_id integer, _tipo integer)
+CREATE OR REPLACE FUNCTION Get_Info_Order (_id integer, _tipo integer)
 
 RETURNS TABLE
 (  ID            INTEGER,
