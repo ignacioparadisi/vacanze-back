@@ -1,33 +1,25 @@
+using System.Collections.Generic;
+
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
 {
     public class User : Entity
     {
-        private long _documentId;
-        private string _email;
-        private string _lastname;
-        private string _name;
-        private string _password;
-        private Role _role;
+        public long DocumentId { get; set; }
+        public string Email;
+        public string Lastname;
+        public string Name;
+        public string Password;
+        public List<Role> Roles;
 
         public User(long id, long documentId, string name, string lastname, string email,
-            string password, Role role) : base(id)
+            string password, List<Role> roles) : base(id)
         {
-            _documentId = documentId;
-            _name = name;
-            _lastname = lastname;
-            _email = email;
-            _password = password;
-            _role = role;
-        }
-
-        public long getDocumentId()
-        {
-            return _documentId;
-        }
-
-        public void setDocumentId(long documentId)
-        {
-            _documentId = documentId;
+            DocumentId = documentId;
+            Name = name;
+            Lastname = lastname;
+            Email = email;
+            Password = password;
+            Roles = roles;
         }
     }
 }
