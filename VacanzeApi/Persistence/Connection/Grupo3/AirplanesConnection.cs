@@ -31,10 +31,10 @@ namespace vacanze_back.Persistence.Connection.Grupo3
                 for (int i = 0; i < cantidadRegistros; i++)
                 {
                     Airplane airplane = new Airplane(GetInt(i,0));
-                    airplane.autonomy = GetDouble(i,1);
+                    airplane.autonomy = GetInt(i,1);
                     airplane.isActive = GetBool(i,2);
                     airplane.seats = GetInt(i,3);
-                    airplane.loadCapacity = GetDouble(i,4);
+                    airplane.loadCapacity = GetInt(i,4);
                     airplane.model = GetString(i,5);
 
                     airplanes.Add(airplane);
@@ -71,10 +71,10 @@ namespace vacanze_back.Persistence.Connection.Grupo3
                 for (int i = 0; i < cantidadRegistros; i++)
                 {
                     airplane = new Airplane(GetInt(i,0));
-                    airplane.autonomy = GetDouble(i,1);
+                    airplane.autonomy = GetInt(i,1);
                     airplane.isActive = GetBool(i,2);
                     airplane.seats = GetInt(i,3);
-                    airplane.loadCapacity = GetDouble(i,4);
+                    airplane.loadCapacity = GetInt(i,4);
                     airplane.model = GetString(i,5);
                 }
 

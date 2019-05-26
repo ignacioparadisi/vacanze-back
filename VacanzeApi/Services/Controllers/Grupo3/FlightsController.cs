@@ -41,6 +41,7 @@ namespace vacanze_back.Services.Controllers.Grupo3
         {
             try
             {
+                
                 FlightValidator validator = new FlightValidator(flight);
                 validator.Validate();
                 FlightsConnection flighscon= new FlightsConnection();

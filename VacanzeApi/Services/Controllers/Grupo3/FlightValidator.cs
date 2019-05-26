@@ -18,8 +18,8 @@ namespace vacanze_back.Services.Controllers.Grupo3
             AirplanesConnection aircon = new AirplanesConnection();
             Airplane plane = (Airplane) aircon.Find(flight.plane.Id);
 
-            if(flight.plane == null || flight.arrival == null || flight.departure == null || flight.price == null
-            || flight.routes == null || flight.routes[0].locArrival == null || flight.routes[0].locDeparture == null){
+            if(flight.plane == null || flight.arrival == null || flight.departure == null || flight.price == null 
+            || flight.loc_arrival == null || flight.loc_departure == null){
                 throw new ValidationErrorException("Debe llenar todos los campos");
             }
 
