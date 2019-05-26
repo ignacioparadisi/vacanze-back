@@ -14,19 +14,19 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
     {
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<User>> Get()
+        public ActionResult<IEnumerable<User>> GetEmployees()
         {
             var connection = new UserConnection();
             var users = new List<User>();
             try
             {
                 users = connection.GetEmployees();
-                return Ok(users);
             }
             catch (DatabaseException)
             {
                 return BadRequest("Error obteniendo los empleados");
             }
+            return Ok(users);
         }
 
         // GET api/values/5

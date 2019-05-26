@@ -64,7 +64,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo2
             }
             catch (NpgsqlException )
             {
-                throw new DatabaseException("Rrror al buscar roles para el usuario " + userId);
+                throw new DatabaseException("Error al buscar roles para el usuario " + userId);
             }
             catch (Exception e) 
             {
