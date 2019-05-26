@@ -27,8 +27,8 @@ AS
 $$
 BEGIN
     RETURN QUERY SELECT
-    H.hot_id, H.hot_nombre,H.hot_capHuesped, H.hot_statusActivo,H.hot_telefono,H.hot_sitio_web, L.l_nombre
-    FROM Hotel AS H, Lugar AS L WHERE L.l_id = H.fk_lugar;
+    H.hot_id, H.hot_nombre, H.hot_cant_habitaciones , H.hot_activo ,H.hot_telefono,H.hot_sitio_web, L.l_nombre
+    FROM Hotel AS H, Lugar AS L WHERE L.l_id = H.hot_fk_lugar;
 END;
 $$ LANGUAGE plpgsql;
 
