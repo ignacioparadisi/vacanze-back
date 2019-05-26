@@ -123,150 +123,48 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 --------Modificar Ship-------------------
-CREATE OR REPLACE FUNCTION ModifyShipIsActive( 
+CREATE OR REPLACE FUNCTION ModifyShip( 
     _shi_id integer,
-    _shi_isactive boolean)
+    _shi_isactive boolean,
+    _shi_name VARCHAR(20),
+    _shi_capacity integer,
+    _shi_loadingcap integer,
+    _shi_model varchar(20),
+    _shi_line varchar(30),
+    _shi_picture varchar)
 RETURNS integer AS
 $$
 BEGIN
 
-   UPDATE Ship SET shi_isactive= _shi_isactive
+   UPDATE Ship SET shi_isactive = _shi_isactive,
+    shi_name = _shi_name, shi_capacity = _shi_capacity,
+    shi_loadingcap = _shi_loadingcap, shi_model = _shi_model,
+    shi_line = _shi_line, shi_picture = _shi_picture
     WHERE (shi_id = _shi_id);
    RETURN _shi_id;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION ModifyShipName( 
-    _shi_id integer,
-    _shi_name VARCHAR(20))
-RETURNS integer AS
-$$
-BEGIN
-
-   UPDATE Ship SET shi_name= _shi_name
-    WHERE (shi_id = _shi_id);
-   RETURN _shi_id;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION ModifyShipCapacity( 
-    _shi_id integer,
-    _shi_capacity integer)
-RETURNS integer AS
-$$
-BEGIN
-
-   UPDATE Ship SET shi_capacity= _shi_capacity
-    WHERE (shi_id = _shi_id);
-   RETURN _shi_id;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION ModifyShipLoadingcap( 
-    _shi_id integer,
-    _shi_loadingcap integer)
-RETURNS integer AS
-$$
-BEGIN
-
-   UPDATE Ship SET shi_loadingcap= _shi_loadingcap
-    WHERE (shi_id = _shi_id);
-   RETURN _shi_id;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION ModifyShipModel( 
-    _shi_id integer,
-    _shi_model VARCHAR(20))
-RETURNS integer AS
-$$
-BEGIN
-
-   UPDATE Ship SET shi_model= _shi_model
-    WHERE (shi_id = _shi_id);
-   RETURN _shi_id;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION ModifyShipLine( 
-    _shi_id integer,
-    _shi_line VARCHAR(30))
-RETURNS integer AS
-$$
-BEGIN
-
-   UPDATE Ship SET shi_line= _shi_line
-    WHERE (shi_id = _shi_id);
-   RETURN _shi_id;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION ModifyShipPicture( 
-    _shi_id integer,
-    _shi_picture VARCHAR)
-RETURNS integer AS
-$$
-BEGIN
-
-   UPDATE Ship SET shi_picture= _shi_picture
-    WHERE (shi_id = _shi_id);
-   RETURN _shi_id;
-END;
-$$ LANGUAGE plpgsql;
 
 --------Modificar Cruise-----------------
 
 CREATE OR REPLACE FUNCTION ModifyCruiseDepartureDate( 
     _cru_id integer,
-    _cru_departuredate TIMESTAMP)
+    _cru_departuredate TIMESTAMP,
+    _cru_arivaldate TIMESTAMP,
+    _cru_price DECIMAL
+    )
 RETURNS integer AS
 $$
 BEGIN
 
-   UPDATE Cruise SET cru_departuredate= _cru_departuredate
+   UPDATE Cruise SET cru_departuredate= _cru_departuredate,
+   cru_arrivaldate = _cru_arivaldate, cru_price = _cru_price
     WHERE (cru_id = _cru_id);
    RETURN _cru_id;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION ModifyCruiseArrivalDate( 
-    _cru_id integer,
-    _cru_arrivaldate TIMESTAMP)
-RETURNS integer AS
-$$
-BEGIN
-
-   UPDATE Cruise SET cru_arrivaldate= _cru_arrivaldate
-    WHERE (cru_id = _cru_id);
-   RETURN _cru_id;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION ModifyCruisePrice( 
-    _cru_id integer,
-    _cru_price DECIMAL)
-RETURNS integer AS
-$$
-BEGIN
-
-   UPDATE Cruise SET cru_price= _cru_price
-    WHERE (cru_id = _cru_id);
-   RETURN _cru_id;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION ModifyCruiseShip( 
-    _cru_id integer,
-    _cru_shi_fk integer)
-RETURNS integer AS
-$$
-BEGIN
-
-   UPDATE Cruise SET cru_shi_fk= _cru_shi_fk
-    WHERE (cru_id = _cru_id);
-   RETURN _cru_id;
-END;
-$$ LANGUAGE plpgsql;
 
 --------Consultar Ship-------------------
 CREATE OR REPLACE FUNCTION GetShip(_shi_id integer)
