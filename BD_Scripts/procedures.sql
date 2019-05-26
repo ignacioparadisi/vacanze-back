@@ -40,6 +40,29 @@ $$
     END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION AddUser(_doc_id VARCHAR(20), 
+                                   _name VARCHAR(30), 
+                                   _lastname VARCHAR(30), 
+                                   _email VARCHAR(30),
+                                   _password VARCHAR(50)) 
+RETURNS VOID AS
+$$
+BEGIN
+    INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
+    VALUES (_doc_id, _name, _lastname, _email, _password);
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION AddUser_Role(_rol_id INTEGER,
+                                        _use_id INTEGER)
+RETURNS VOID AS
+$$
+BEGIN
+  INSERT INTO User_Role(usr_rol_id, usr_use_id)
+  VALUES (_rol_id, _use_id);
+END;
+$$ LANGUAGE plpgsql;
+
 ------- grupo 6 ----------
 CREATE OR REPLACE FUNCTION ConsultarHoteles()
 RETURNS TABLE
