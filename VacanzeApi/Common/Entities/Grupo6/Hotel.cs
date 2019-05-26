@@ -2,11 +2,11 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
 {
     public class Hotel : Entity
     {
-        private string Nombre { get; }
-        private int CantidadDeHabitaciones { get; }
-        private bool Activo { get; }
-        private string Telefono { get; }
-        private string SitioWeb { get; }
+        public string Nombre { get; }
+        public int CantidadDeHabitaciones { get; }
+        public bool Activo { get; }
+        public string Telefono { get; }
+        public string SitioWeb { get; }
         // TODO: Cuando se cree la clase Lugar, implementar esta parte
         // private Lugar _direccion;
 
