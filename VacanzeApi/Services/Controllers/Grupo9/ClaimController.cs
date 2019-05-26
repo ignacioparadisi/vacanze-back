@@ -17,21 +17,21 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
         
 
 		// GET api/values
-		//se usara para consultar por pasaporte
+		//se usara para consultar la cantidad de reclamos
 		[HttpGet]
-		public ActionResult<IEnumerable<Claim>> Get()
+		public int Get()
 		{
 			try{ 
 				ClaimConnection conec= new ClaimConnection();
-				List<Claim> claimList= conec.GetClaim(2);
-				return claimList; 
+				int rows= conec.GetClaim();
+				return rows; 
 			}catch (DatabaseException )
 			{            
-				return StatusCode(500);
+				return -1;
 			}
 			catch (GeneralException )
 			{
-				return StatusCode(500);
+				return -1;
 			}
 		}
 

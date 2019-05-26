@@ -25,14 +25,13 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 		public void GetClaimsTest()
 		{
 
-			claim = controller.Get();
-			 response = claim.Value.Count();
-			Assert.AreEqual(1, response);
+			int rows = controller.Get();
+			Assert.True(0 <= rows);
 		}
 
 		[Test]
 		public void GetClaimEspecificTest() {
-			claim = controller.Get(5);
+			claim = controller.Get(2);
 			response = claim.Value.Count();
 			Assert.AreEqual(1, response);
 		}
@@ -43,9 +42,10 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 			cs.title = "Probando";
 			cs.description = "Esta es mi descripcion";
 			cs.status = "ABIERTO";
-			//controller.Post(ca);
-			//falta un get que cuente todos los registros
-			Assert.Pass();
+			
+			int rows= controller.Get();
+			controller.Post(cs);
+			Assert.AreEqual( rows + 1 , controller.Get());
 		}
 
 		[Test]

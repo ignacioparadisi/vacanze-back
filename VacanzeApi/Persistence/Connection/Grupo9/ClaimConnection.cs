@@ -35,6 +35,25 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo9
                 throw new GeneralException( e,DateTime.Now);
             }
         }
+       /// <summary>
+        ///     Metodo para obtener los numero de reclamos en la tabla reclamo
+        /// </summary>
+        public int GetClaim()
+        {
+            try{            
+                Connect();
+                StoredProcedure("claim");
+                ExecuteReader();
+                return numberRecords;
+            }catch (NpgsqlException)
+            {
+                throw new DatabaseException("error al consultar");
+            }
+            catch (Exception e )
+            {
+                throw new GeneralException( e,DateTime.Now);
+            }
+        }
 
         /// <summary>
         ///     Metodo para obtener un clalamo segun su id
@@ -49,8 +68,12 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo9
                 var ClaimList = new List<Claim>();
 
                 Connect();
-                StoredProcedure("getclaim(@cla_id)");
-                AddParameter("cla_id", numero);
+                if(numero == 0)
+                    StoredProcedure("claim");
+                else{
+                    StoredProcedure("getclaim(@cla_id)");
+                    AddParameter("cla_id", numero);
+                }
                 ExecuteReader();
 
                 for (var i = 0; i < numberRecords; i++)
