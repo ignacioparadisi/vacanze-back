@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
-using vacanze_back.Entities.Grupo8;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 
 namespace vacanze_back.Controllers.Grupo8
 {
@@ -21,7 +21,7 @@ namespace vacanze_back.Controllers.Grupo8
         [HttpGet("{id}")]
         public String GetCruiser(int id)
         {
-            Cruiser c = new Cruiser("concordia", 5,5 );
+            Cruiser c = new Cruiser(1,"concordia", 5,5 );
             
             return JsonConvert.SerializeObject(c);
         }

@@ -1,21 +1,16 @@
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Newtonsoft.Json;
-
-namespace vacanze_back.Entities.Grupo8
+namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
 {
-    [JsonObject(MemberSerialization.OptIn)] 
     public class Cruiser : Entity
     {
-        [JsonProperty] private string name;
-        [JsonProperty] private int roms;
-        [JsonProperty] private int capacity;
+            private string Name { get; }
+            private int Roms { get; }
+            private int Capacity { get; }
 
-        public Cruiser
-            (string name, int roms, int capacity )
-        {
-            this.name = name;
-            this.roms = roms;
-            this.capacity = capacity;
+            public Cruiser(long id,string name, int roms, int capacity ) : base(id)
+            {
+                Name = name;
+                Roms = roms;
+                Capacity = capacity;
+            }
         }
-    }
 }
