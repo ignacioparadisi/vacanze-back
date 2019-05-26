@@ -1,3 +1,5 @@
+using vacanze_back.VacanzeApi.Common.Exceptions;
+
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
 {
     public class Role : Entity
@@ -9,14 +11,12 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
             Name = name;
         }
 
-        public string GetErrorMessageIfNotValid()
+        public void Validate()
         {
             if (Id <= 0)
             {
-                return "El " + Id + " rol es inválido";
+                throw new NotValidIdException("El " + Id + " rol es inválido");
             }
-
-            return null;
         }
         
         

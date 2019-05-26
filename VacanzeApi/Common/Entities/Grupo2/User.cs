@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore.Internal;
 using Newtonsoft.Json;
+using vacanze_back.VacanzeApi.Common.Exceptions;
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
 {
@@ -35,6 +36,14 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
             Email = email;
         }
 
+        /// <summary>
+        /// Constructor que se utiliza al momento de crear un usuario para convertir de JSON a User
+        /// </summary>
+        /// <param name="documentId">Cédula de identidad</param>
+        /// <param name="name">Nombre del usuario</param>
+        /// <param name="lastname">Apellido del usuario</param>
+        /// <param name="email">Correo electrónico del usuario</param>
+        /// <param name="password">Contraseña del usuario</param>
         [JsonConstructor]
         public User(long documentId, string name, string lastname, string email, string password) : base(0)
         {
@@ -52,49 +61,43 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         /// Verifica todos los atributos del usuario para verificar que sean válidos
         /// </summary>
         /// <returns>Mensaje de error que se envia al frontend en caso de que haya algun error</returns>
-        public string GetErrorMessageIfNotValid()
+        public void Validate()
         {
             if (DocumentId <= 0)
             {
-                return "La cédula de identidad no es válida";
+                throw new NotValidDocumentIdException("La cédula de identidad no es válida");
             }
             
             if (string.IsNullOrEmpty(Name))
             {
-                return "El nombre es requerido";
+                throw new NameRequiredException("El nombre es requerido"); 
             }
 
             if (string.IsNullOrEmpty(Lastname))
             {
-                return "El apellido es requerido";
+                throw new LastnameRequiredException("El apellido es requerido");
             }
 
             if (string.IsNullOrEmpty(Email))
             {
-                return "El correo electrónico es requerido";
+                throw new EmailRequiredException("El correo electrónico es requerido");
             }
 
             var emailAddressAttribute = new EmailAddressAttribute();
             if (!emailAddressAttribute.IsValid(Email))
             {
-                return "El formato del correo electrónico es inválido";
+                throw new NotValidEmailException("El formato del correo electrónico es inválido");
             }
 
-            if (!Roles.Any())
+            if (Roles == null || !Roles.Any())
             {
-                return "Al menos un rol es requerido";
+                throw new RoleRequiredException("Al menos un rol es requerido");
             }
 
             foreach (var role in Roles)
             {
-                var roleErrorMessage = role.GetErrorMessageIfNotValid();
-                if (!string.IsNullOrEmpty(roleErrorMessage))
-                {
-                    return roleErrorMessage;
-                }
+                role.Validate();
             }
-
-            return null;
         }
     }
 }
