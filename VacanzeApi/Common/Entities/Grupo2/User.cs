@@ -4,22 +4,22 @@ namespace vacanze_back.Common.Entities.Grupo2
 {
     public class User : Entity
     {
-        private long _documentId { get; set; }
-        private string _email;
-        private string _lastname;
-        private string _name;
-        private string _password;
-        private List<Role> _roles;
+        public long DocumentId { get; set; }
+        public string Email;
+        public string Lastname;
+        public string Name;
+        public string Password;
+        public List<Role> Roles;
 
         public User(long id, long documentId, string name, string lastname, string email,
             string password, List<Role> roles) : base(id)
         {
-            _documentId = documentId;
-            _name = name;
-            _lastname = lastname;
-            _email = email;
-            _password = password;
-            _roles = roles;
+            DocumentId = documentId;
+            Name = name;
+            Lastname = lastname;
+            Email = email;
+            Password = password;
+            Roles = roles;
         }
     }
 }
