@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Folder Include="VacanzeApiTest" />
+    <Folder Include="VacanzeApi\LogicLayer" />
   </ItemGroup>
 
 </Project>

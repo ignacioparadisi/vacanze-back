@@ -1,4 +1,4 @@
-namespace vacanze_back.Common.Entities.Grupo6
+namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
 {
     public class Hotel : Entity
     {

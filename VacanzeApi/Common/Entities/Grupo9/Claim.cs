@@ -1,4 +1,4 @@
-namespace vacanze_back.Common.Entities.Grupo9
+namespace vacanze_back.VacanzeApi.Common.Entities.Grupo9
 {
     public class Claim : Entity
     {

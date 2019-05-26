@@ -2,7 +2,7 @@
 using System.Data;
 using Npgsql;
 
-namespace vacanze_back.Persistence.Connection
+namespace vacanze_back.VacanzeApi.Persistence.Connection
 {
     public abstract class Connection
     {
