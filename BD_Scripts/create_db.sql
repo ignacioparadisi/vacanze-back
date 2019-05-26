@@ -63,10 +63,6 @@ CREATE TABLE PAYMENT (
                        pay_id              SERIAL,
                        pay_method          VARCHAR(100) NOT NULL,
                        pay_total           INTEGER      NOT NULL,
-                       pay_date_time       DATE      NOT NULL DEFAULT CURRENT_DATE,
-                       pay_fk_roo          INTEGER      NOT NULL,
-                       pay_fk_aut          INTEGER      NOT NULL,
-                       pay_fk_cru          INTEGER      NOT NULL,
-                       pay_fk_fli          INTEGER      NOT NULL,
+                       pay_timestamp       TIMESTAMP  NOT NULL default current_timestamp,
                        CONSTRAINT  PRIMARY KEY (pay_id)
 );
