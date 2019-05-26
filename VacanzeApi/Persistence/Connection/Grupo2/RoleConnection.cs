@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Npgsql;
-using vacanze_back.Common.Entities.Grupo2;
-using vacanze_back.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
+using vacanze_back.VacanzeApi.Common.Exceptions;
 
-namespace vacanze_back.Persistence.Connection.Grupo2
+namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo2
 {
     public class RoleConnection : Connection
     {
