@@ -38,8 +38,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult<User> Post([FromBody] User user)
         {
+            return user;
         }
 
         // PUT api/values/5
