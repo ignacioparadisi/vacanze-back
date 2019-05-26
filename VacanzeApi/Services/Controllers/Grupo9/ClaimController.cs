@@ -5,11 +5,11 @@ using System.Net;
 using System.Web.Http;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using vacanze_back.Common.Entities.Grupo9;
-using vacanze_back.Common.Exceptions;
-using vacanze_back.Persistence.Connection.Grupo9;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
+using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Persistence.Connection.Grupo9;
 
-namespace vacanze_back.Services.Controllers.Grupo9
+namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 {
 	[Produces("application/json")] 
 	[Route("api/[controller]")]
