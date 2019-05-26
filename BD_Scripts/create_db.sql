@@ -57,3 +57,16 @@ CREATE TABLE Hotel (
                        CONSTRAINT pk_hotel PRIMARY KEY (hot_id),
                        CONSTRAINT fk_hotel_lugar FOREIGN KEY (hot_fk_lugar) REFERENCES Lugar (l_id)
 );
+
+
+CREATE TABLE PAYMENT (
+                       pay_id              SERIAL,
+                       pay_method          VARCHAR(100) NOT NULL,
+                       pay_total           INTEGER      NOT NULL,
+                       pay_timestamp       BOOLEAN      NOT NULL DEFAULT TRUE,
+                       pay_fk_roo          INTEGER      NOT NULL,
+                       pay_fk_aut          INTEGER      NOT NULL,
+                       pay_fk_cru          INTEGER      NOT NULL,
+                       pay_fk_fli          INTEGER      NOT NULL,
+                       CONSTRAINT  PRIMARY KEY (pay_id)
+);
