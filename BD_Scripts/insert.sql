@@ -895,20 +895,20 @@ INSERT INTO LOCATION (LOC_ID,LOC_CITY, LOC_COUNTRY) VALUES
 (894,'Hakodate','Japan');
 ------- grupo 2 ----------
 
--- INSERT INTO Role (rol_name)
--- VALUES ('Cliente');
+INSERT INTO Role (rol_name)
+VALUES ('Cliente');
 
--- INSERT INTO Role (rol_name)
--- VALUES ('Administrador');
+INSERT INTO Role (rol_name)
+VALUES ('Administrador');
 
--- INSERT INTO Role (rol_name)
--- VALUES ('Checkin');
+INSERT INTO Role (rol_name)
+VALUES ('Checkin');
 
--- INSERT INTO Role (rol_name)
--- VALUES ('Reclamo');
+INSERT INTO Role (rol_name)
+VALUES ('Reclamo');
 
--- INSERT INTO Role (rol_name)
--- VALUES ('Cargador');
+INSERT INTO Role (rol_name)
+VALUES ('Cargador');
 
 INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
 VALUES ('9784673', 'admin@vacanze.com', 'Virtuoso', 'Francisco', MD5('admin123'));
