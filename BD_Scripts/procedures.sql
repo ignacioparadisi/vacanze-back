@@ -332,9 +332,9 @@ CREATE OR REPLACE FUNCTION GetShip(_shi_id integer)
 RETURNS TABLE
   (id integer,
    name VARCHAR(30),
-   status VARCHAR(30),
-   capacity_people VARCHAR(30),
-   capacity_tonnes VARCHAR(30),
+   status boolean,
+   capacity_people integer,
+   capacity_tonnes integer,
    model VARCHAR(30),
    cruise_line VARCHAR(30)
   )
