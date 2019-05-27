@@ -51,5 +51,33 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo2
 
             return users;
         }
+
+        /// <summary>
+        /// Método para Registrar un Usuario Cliente
+        /// </summary>
+        /// <returns>El mismo usuario</returns>
+        public User AddClient(User user)
+        {
+            try
+            {
+                Connect();
+                StoredProcedure("AddUser(@_doc_id, @_name, @_lastname, @_email, @_password)");
+                AddParameter("_doc_id", user.DocumentId);
+                AddParameter("_name", user.Name);
+                AddParameter("_lastname", user.Lastname);
+                AddParameter("_email", user.Email);
+                AddParameter("_password", user.Password);
+                ExecuteQuery();
+            }
+            catch (NpgsqlException)
+            {
+                throw new NotValidEmailException("Email ya existe en base de datos");
+            }
+            catch (Exception e) 
+            {
+                throw new GeneralException( e,DateTime.Now);
+            }
+            return user;
+        }
     }
 }
