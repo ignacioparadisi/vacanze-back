@@ -175,11 +175,26 @@ $$
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION AddUser(_doc_id VARCHAR(20), 
-                                   _name VARCHAR(30), 
-                                   _lastname VARCHAR(30), 
-                                   _email VARCHAR(30),
-                                   _password VARCHAR(50)) 
+CREATE OR REPLACE FUNCTION GetUserByEmail(email VARCHAR(30))
+RETURNS TABLE
+          (id integer,
+           documentId VARCHAR(50),
+           name VARCHAR(50),
+           lastname VARCHAR(50),
+           email VARCHAR(50))
+AS
+$$
+BEGIN
+  RETURN QUERY SELECT use_id, use_document_id, use_name, use_last_name, use_email
+               FROM Users WHERE use_email = email;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION AddUser(doc_id VARCHAR(20), 
+                                   name VARCHAR(30), 
+                                   lastname VARCHAR(30), 
+                                   email VARCHAR(30),
+                                   password VARCHAR(50)) 
 RETURNS VOID AS
 $$
 BEGIN
@@ -188,8 +203,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION AddUser_Role(_rol_id INTEGER,
-                                        _use_id INTEGER)
+CREATE OR REPLACE FUNCTION AddUser_Role(rol_id INTEGER,
+                                        use_id INTEGER)
 RETURNS VOID AS
 $$
 BEGIN
