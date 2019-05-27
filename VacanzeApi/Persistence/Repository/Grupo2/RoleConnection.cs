@@ -4,7 +4,7 @@ using Npgsql;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 
-namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo2
+namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
 {
     public class RoleConnection : Connection
     {
@@ -12,7 +12,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo2
         {
             CreateStringConnection();
         }
-        
+
         /// <summary>
         ///     Metodo para consultar todos los roles
         /// </summary>
@@ -24,7 +24,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo2
                 Connect();
                 StoredProcedure("GetRoles()");
                 ExecuteReader();
-                for (int i = 0; i < numberRecords; i++)
+                for (var i = 0; i < numberRecords; i++)
                 {
                     var id = Convert.ToInt32(GetString(i, 0));
                     var name = GetString(i, 1);
@@ -34,16 +34,16 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo2
 
                 return roles;
             }
-            catch (NpgsqlException )
+            catch (NpgsqlException)
             {
                 throw new DatabaseException("error al buscar roles");
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
-                throw new GeneralException( e,DateTime.Now);
+                throw new GeneralException(e, DateTime.Now);
             }
         }
-        
+
         public List<Role> GetRolesForUser(long userId)
         {
             var roles = new List<Role>();
@@ -52,7 +52,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo2
                 Connect();
                 StoredProcedure("GetRolesForUser(" + userId + ")");
                 ExecuteReader();
-                for (int i = 0; i < numberRecords; i++)
+                for (var i = 0; i < numberRecords; i++)
                 {
                     var id = Convert.ToInt64(GetString(i, 0));
                     var name = GetString(i, 1);
@@ -62,13 +62,13 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo2
 
                 return roles;
             }
-            catch (NpgsqlException )
+            catch (NpgsqlException)
             {
                 throw new DatabaseException("Error al buscar roles para el usuario " + userId);
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
-                throw new GeneralException( e,DateTime.Now);
+                throw new GeneralException(e, DateTime.Now);
             }
         }
     }

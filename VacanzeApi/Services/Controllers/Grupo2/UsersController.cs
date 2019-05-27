@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Exceptions;
-using vacanze_back.VacanzeApi.Persistence.Connection.Grupo2;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo2;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
 {
@@ -26,6 +26,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             {
                 return BadRequest("Error obteniendo los empleados");
             }
+
             return Ok(users);
         }
 
