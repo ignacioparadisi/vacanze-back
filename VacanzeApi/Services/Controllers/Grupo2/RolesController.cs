@@ -7,24 +7,24 @@ using vacanze_back.VacanzeApi.Persistence.Repository.Grupo2;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
 {
+    [Produces("application/json")] 
     [Route("api/[controller]")]
-    [ApiController]
     [EnableCors("MyPolicy")]
+    [ApiController]
     public class RolesController : ControllerBase
     {
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<Role>> GetRoles()
         {
-            var con = new RoleConnection();
             var roles = new List<Role>();
             try
             {
-                roles = con.GetRoles();
+                roles = RoleRepository.GetRoles();
             }
             catch (DatabaseException e)
             {
-                return Ok(e.Message);
+                return BadRequest("Error al Obtener Roles");
             }
 
             return roles;
