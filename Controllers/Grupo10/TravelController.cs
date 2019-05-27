@@ -5,20 +5,20 @@ namespace vacanze_back.Controllers.Grupo2
 {   
     [Route("api/[controller]")]
     [ApiController]
-    public class VacationController : ControllerBase
+    public class TravelController : ControllerBase
     {
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> GetVacations()
+        public ActionResult<IEnumerable<string>> GetTravels()
         {
-            return new string[] { "Vacation1", "Vacation2" };
+            return new string[] { "Travel1", "Travel2" };
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> GetVacation(int id)
+        public ActionResult<string> GetTravel(int id)
         {
-            return "Vacation";
+            return "Travel";
         }
             
     }
