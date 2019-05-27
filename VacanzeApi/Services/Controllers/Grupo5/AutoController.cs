@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
-using vacanze_back.VacanzeApi.Persistence.Connection.Grupo5;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo5;
 using Newtonsoft.Json;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
