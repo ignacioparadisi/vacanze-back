@@ -16,6 +16,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo3
         private string ADD_FLIGHT = 
         "addflight(@_plane, @_price, TO_TIMESTAMP( @_departure ,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone, TO_TIMESTAMP( @_arrival ,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone, @_loc_departure, @_loc_arrival)";
         private string GET_FLIGTS_BY_DATE = "getflightsbydate(@_begin::timestamp without time zone, @_end::timestamp without time zone)";
+
         private string FIND_FLIGHT = "findflight(@_id)";
         private string UPDATE_FLIGHT = 
         "updateflight(@_id, @_plane, @_price, TO_DATE( @_departure ,'MM-DD-YYYY HH:MI:SS'), TO_DATE( @_arrival ,'MM-DD-YYYY HH:MI:SS'), @_loc_departure, @_loc_arrival)";
@@ -95,6 +96,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo3
             }
         }
 
+
         public void Update(Entity entity){
             try
             {
@@ -152,6 +154,23 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo3
 
                 return flight;
 
+
+            }
+            catch (NpgsqlException ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw new DbErrorException("Ups, a ocurrido un error al conectarse a la base de datos", ex);
+            }
+            catch (System.Exception)
+            {
+                
+                throw;
+            }
+            finally{
+                Disconnect();
+            }
+
+        }
 
         public List<Entity> GetByDate(string begin, string end){
             try
