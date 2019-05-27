@@ -213,6 +213,14 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION DeleteUserByEmail(email_id VARCHAR(30))
+  RETURNS VOID AS
+$$
+BEGIN
+  DELETE FROM Users WHERE use_email = email_id;
+END;
+$$ LANGUAGE plpgsql;
+
 ------- grupo 6 ----------
 CREATE OR REPLACE FUNCTION AddHotel(name VARCHAR(100),
                                     amountOfRooms INTEGER,
