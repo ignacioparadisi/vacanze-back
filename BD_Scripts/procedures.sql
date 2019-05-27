@@ -172,11 +172,10 @@ RETURNS TABLE
   (id integer,
    name VARCHAR(30),
    status VARCHAR(30),
-   capacity(people) VARCHAR(30),
-   capacity(tonnes) VARCHAR(30),
+   capacity_people VARCHAR(30),
+   capacity_tonnes VARCHAR(30),
    model VARCHAR(30),
    cruise_line VARCHAR(30)
-
   )
 AS
 $$
@@ -188,15 +187,13 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION GetShipPic(_shi_id integer)
-RETURNS VARCHAR
+RETURNS varchar language sql
 AS
 $$
-BEGIN
-    RETURN QUERY SELECT
+    SELECT
     shi_picture
     FROM Ship WHERE shi_id = _shi_id;
-END;
-$$ LANGUAGE plpgsql;
+$$;
 --------Consultar Cruise-----------------
 
 CREATE OR REPLACE FUNCTION GetCruise(_cru_id integer)
@@ -206,7 +203,6 @@ RETURNS TABLE
    departure_date VARCHAR(30),
    arrival_date VARCHAR(30),
    price VARCHAR(30)
-
   )
 AS
 $$
