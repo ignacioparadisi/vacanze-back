@@ -147,7 +147,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION GetRolesForUser(user_id integer)
+CREATE OR REPLACE FUNCTION GetRolesForUser(user_id bigint)
     RETURNS TABLE
             (id integer,
              nombre VARCHAR(50)
@@ -173,6 +173,29 @@ $$
         RETURN QUERY SELECT DISTINCT use_id, use_document_id, use_name, use_last_name, use_email 
         FROM Users, User_Role WHERE use_id = usr_use_id AND usr_rol_id <> 1;
     END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION AddUser(_doc_id VARCHAR(20), 
+                                   _name VARCHAR(30), 
+                                   _lastname VARCHAR(30), 
+                                   _email VARCHAR(30),
+                                   _password VARCHAR(50)) 
+RETURNS VOID AS
+$$
+BEGIN
+    INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
+    VALUES (_doc_id, _name, _lastname, _email, _password);
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION AddUser_Role(_rol_id INTEGER,
+                                        _use_id INTEGER)
+RETURNS VOID AS
+$$
+BEGIN
+  INSERT INTO User_Role(usr_rol_id, usr_use_id)
+  VALUES (_rol_id, _use_id);
+END;
 $$ LANGUAGE plpgsql;
 
 ------- grupo 6 ----------
