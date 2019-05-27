@@ -18,11 +18,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         [HttpGet]
         public ActionResult<IEnumerable<Hotel>> Get([FromQuery] long location = -1)
         {
-            var dbConnection = new HotelConnection();
             try
             {
                 if (location == -1)
-                    return dbConnection.GetHotels();
+                    return HotelRepository.GetHotels();
                 return Ok($"No implementado todavia. Recibi location: {location}");
             }
             catch (DatabaseException e)
