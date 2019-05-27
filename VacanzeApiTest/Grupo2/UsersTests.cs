@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Exceptions;
-using vacanze_back.VacanzeApi.Persistence.Connection.Grupo2;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo2;
 using vacanze_back.VacanzeApi.Services.Controllers.Grupo2;
 
 namespace vacanze_back.VacanzeApiTest.Grupo2
@@ -15,8 +15,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         [Test]
         public void GetEmployeesFromDbTest()
         {
-            var connection = new UserConnection();
-            List<User> users = connection.GetEmployees();
+            List<User> users = UserRepository.GetEmployees();
             Assert.AreNotEqual(0, users.Count());
         }
 
