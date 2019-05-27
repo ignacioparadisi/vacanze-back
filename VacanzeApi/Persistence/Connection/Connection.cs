@@ -64,7 +64,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection
             }
         }
 
-        public void disconnect()
+        public void Disconnect()
         {
             if (_con != null && IsConnected())
                 _con.Close();
@@ -83,19 +83,19 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection
 
                 _dataTable.Load(_command.ExecuteReader());
 
-                disconnect();
+                Disconnect();
 
                 _numberRecords = _dataTable.Rows.Count;
 
             }
             catch (NpgsqlException exc)
             {
-                disconnect();
+                Disconnect();
                 throw exc;
             }
             catch (Exception exc)
             {
-                disconnect();
+                Disconnect();
                 throw exc;
             }
 
@@ -113,19 +113,19 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection
             {
                 int filasAfectadas = _command.ExecuteNonQuery();
 
-                disconnect();
+                Disconnect();
 
                 return filasAfectadas;
             }
             catch (NpgsqlException exc)
             {
 				Console.WriteLine(exc);
-                disconnect();
+                Disconnect();
                 throw exc;
             }
             catch (Exception exc) 
             {
-                disconnect();
+                Disconnect();
                 throw exc;
             }
         }
