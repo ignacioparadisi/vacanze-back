@@ -4,7 +4,7 @@ using Npgsql;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 
-namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo6
+namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
 {
     public class HotelConnection : Connection
     {

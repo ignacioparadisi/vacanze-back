@@ -1,7 +1,7 @@
 using System;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 
-namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo6
+namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
 {
     public static class HotelRepository
     {

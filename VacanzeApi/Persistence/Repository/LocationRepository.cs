@@ -4,32 +4,21 @@ using Npgsql;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 
-namespace vacanze_back.VacanzeApi.Persistence.Connection
+namespace vacanze_back.VacanzeApi.Persistence.Repository
 {
-    public class LocationConnection : Connection
+    public static class LocationRepository
     {
-        public LocationConnection()
-        {
-            CreateStringConnection();
-        }
-
-        /// <summary>
-        ///     Obtener todos los registros
-        /// </summary>
-        public List<Location> GetLocations()
+        public static List<Location> GetLocations()
         {
             var locationList = new List<Location>();
             try
             {
-                Connect();
-                StoredProcedure("GetLocations()");
-                ExecuteReader();
-
-                for (var i = 0; i < numberRecords; i++)
+                var results = PgConnection.Instance.ExecuteFunction("GetLocations()");
+                for (var i = 0; i < results.Rows.Count; i++)
                 {
-                    var id = Convert.ToInt32(GetString(i, 0));
-                    var city = GetString(i, 1);
-                    var country = GetString(i, 2);
+                    var id = Convert.ToInt64(results.Rows[i][0]);
+                    var city = results.Rows[i][1].ToString();
+                    var country = results.Rows[i][2].ToString();
                     var location = new Location(id, city, country);
                     locationList.Add(location);
                 }
@@ -45,6 +34,5 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection
                 throw new GeneralException(e, DateTime.Now);
             }
         }
-
     }
 }

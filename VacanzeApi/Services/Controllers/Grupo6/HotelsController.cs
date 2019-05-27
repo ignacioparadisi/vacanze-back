@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Exceptions;
-using vacanze_back.VacanzeApi.Persistence.Connection.Grupo6;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo6;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
 {

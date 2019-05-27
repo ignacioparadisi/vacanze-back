@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo3;
-using vacanze_back.VacanzeApi.Persistence.Connection.Grupo3;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo3;
-using Newtonsoft.Json;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo3;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
 {
-    [Produces("application/json")] 
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("MyPolicy")]
@@ -22,34 +21,34 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
         {
             try
             {
-                FlightsConnection flighscon = new FlightsConnection(); 
-                List<Entity> result = flighscon.Get();
+                var flighscon = new FlightsConnection();
+                var result = flighscon.Get();
                 return Ok(result.ToList());
             }
             catch (DbErrorException ex)
             {
                 return BadRequest(ex.Message);
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 return null;
             }
         }
 
         [HttpGet("{begin}/{end}")]
-        public ActionResult<IEnumerable<Entity>> GetByDate(string begin, String end)
+        public ActionResult<IEnumerable<Entity>> GetByDate(string begin, string end)
         {
             try
             {
-                FlightsConnection flighscon = new FlightsConnection(); 
-                List<Entity> result = flighscon.GetByDate(begin,end);
+                var flighscon = new FlightsConnection();
+                var result = flighscon.GetByDate(begin, end);
                 return Ok(result.ToList());
             }
             catch (DbErrorException ex)
             {
                 return BadRequest(ex.Message);
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 return null;
             }
@@ -60,20 +59,19 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
         {
             try
             {
-                
-                FlightValidator validator = new FlightValidator(flight);
+                var validator = new FlightValidator(flight);
                 validator.Validate();
-                FlightsConnection flighscon= new FlightsConnection();
+                var flighscon = new FlightsConnection();
                 flighscon.Add(flight);
-                return Ok( new {Message = "¡Vuelo agregado con éxito!"});
+                return Ok(new {Message = "¡Vuelo agregado con éxito!"});
             }
             catch (ValidationErrorException ex)
             {
-                return BadRequest(new {Message = ex.Message});
+                return BadRequest(new {ex.Message});
             }
             catch (DbErrorException ex)
             {
-                return BadRequest(new {Message = ex.Message});
+                return BadRequest(new {ex.Message});
             }
             catch (Exception ex)
             {

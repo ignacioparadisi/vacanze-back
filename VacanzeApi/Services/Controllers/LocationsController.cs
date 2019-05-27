@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Exceptions;
-using vacanze_back.VacanzeApi.Persistence.Connection;
+using vacanze_back.VacanzeApi.Persistence.Repository;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers
 {
@@ -12,16 +11,15 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
     [Route("api/[controller]")]
     [EnableCors("MyPolicy")]
     [ApiController]
-    public class LocationsControllers : ControllerBase
+    public class LocationsController : ControllerBase
     {
         // GET api/location/
         [HttpGet]
         public ActionResult<IEnumerable<Location>> Get()
         {
-            var dbConnection = new LocationConnection();
             try
             {
-                return dbConnection.GetLocations();
+                return LocationRepository.GetLocations();
             }
             catch (DatabaseException e)
             {
@@ -30,6 +28,5 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
                 return Ok(e.Message);
             }
         }
-
     }
 }

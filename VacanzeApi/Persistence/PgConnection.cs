@@ -3,7 +3,7 @@ using System.Data;
 using Npgsql;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 
-namespace vacanze_back.VacanzeApi.Persistence.Connection
+namespace vacanze_back.VacanzeApi.Persistence.Repository
 {
     public class PgConnection
     {

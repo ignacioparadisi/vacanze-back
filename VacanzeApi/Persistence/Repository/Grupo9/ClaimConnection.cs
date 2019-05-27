@@ -4,7 +4,7 @@ using Npgsql;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 
-namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo9
+namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
 {
     public class ClaimConnection : Connection
     {
@@ -19,20 +19,21 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo9
         /// <param name="claim"></param>
         public void AddClaim(Claim claim)
         {
-            try{   
+            try
+            {
                 Connect();
                 StoredProcedure("addclaim(@cla_title,@cla_descr)");
                 AddParameter("cla_title", claim._title);
                 AddParameter("cla_descr", claim._description);
-                ExecuteQuery();   
+                ExecuteQuery();
             }
-            catch (NpgsqlException )
+            catch (NpgsqlException)
             {
                 throw new DatabaseException("error al agregar");
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
-                throw new GeneralException( e,DateTime.Now);
+                throw new GeneralException(e, DateTime.Now);
             }
         }
 
@@ -45,7 +46,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo9
         /// <returns></returns>
         public List<Claim> GetClaim(int numero)
         {
-            try{            
+            try
+            {
                 var ClaimList = new List<Claim>();
 
                 Connect();
@@ -64,20 +66,21 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo9
                 }
 
                 return ClaimList;
-            }catch (NpgsqlException)
+            }
+            catch (NpgsqlException)
             {
                 throw new DatabaseException("error al consultar");
             }
-            catch (Exception e )
+            catch (Exception e)
             {
-                throw new GeneralException( e,DateTime.Now);
+                throw new GeneralException(e, DateTime.Now);
             }
         }
 
         public List<Claim> GetClaimBaggage(int numero)
         {
-            try{
-                
+            try
+            {
                 var ClaimList = new List<Claim>();
                 Connect();
                 StoredProcedure("GetClaimBaggage(@cla_id)");
@@ -95,21 +98,21 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo9
                 }
 
                 return ClaimList;
-            }catch (NpgsqlException )
+            }
+            catch (NpgsqlException)
             {
                 throw new DatabaseException("error al consultar");
             }
             catch (Exception e)
             {
-                throw new GeneralException( e,DateTime.Now);
+                throw new GeneralException(e, DateTime.Now);
             }
-
-            
         }
 
         public List<Claim> GetClaimDocumentPasaport(int numero)
         {
-            try{
+            try
+            {
                 var ClaimList = new List<Claim>();
 
                 Connect();
@@ -128,20 +131,21 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo9
                 }
 
                 return ClaimList;
-            }catch (NpgsqlException )
+            }
+            catch (NpgsqlException)
             {
                 throw new DatabaseException("error al consultar");
             }
-            catch (Exception e )
+            catch (Exception e)
             {
-                throw new GeneralException( e,DateTime.Now);
+                throw new GeneralException(e, DateTime.Now);
             }
         }
 
         public List<Claim> GetClaimDocumentCedula(int numero)
         {
-            
-            try{
+            try
+            {
                 var ClaimList = new List<Claim>();
 
                 Connect();
@@ -158,68 +162,76 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo9
                     var claim = new Claim(id, titulo, descripcion, status);
                     ClaimList.Add(claim);
                 }
+
                 return ClaimList;
-            }catch (NpgsqlException )
+            }
+            catch (NpgsqlException)
             {
                 throw new DatabaseException("error al consultar");
             }
-            catch (Exception e )
+            catch (Exception e)
             {
-                throw new GeneralException( e,DateTime.Now);
+                throw new GeneralException(e, DateTime.Now);
             }
         }
 
         public void DeleteClaim(int claimId)
         {
-            try{           
+            try
+            {
                 Connect();
                 StoredProcedure("DeleteClaim(@cla_id)");
                 AddParameter("cla_id", claimId);
                 ExecuteQuery();
-            }catch (NpgsqlException)
+            }
+            catch (NpgsqlException)
             {
                 throw new DatabaseException("error al eliminar");
             }
             catch (Exception e)
             {
-                throw new GeneralException( e,DateTime.Now);
+                throw new GeneralException(e, DateTime.Now);
             }
         }
 
         public void ModifyClaimStatus(int claimId, Claim claim)
         {
-            try{               
+            try
+            {
                 Connect();
                 StoredProcedure("modifyclaimstatus(@cla_id,@cla_status)");
                 AddParameter("cla_id", claimId);
                 AddParameter("cla_status", claim._status);
                 ExecuteQuery();
-            }catch (NpgsqlException )
+            }
+            catch (NpgsqlException)
             {
                 throw new DatabaseException("error al modificar");
             }
             catch (Exception e)
             {
-                throw new GeneralException( e,DateTime.Now);
+                throw new GeneralException(e, DateTime.Now);
             }
         }
 
         public void ModifyClaimTitle(int claimId, Claim claim)
         {
-            try{
+            try
+            {
                 Connect();
                 StoredProcedure("modifyclaimtitle(@cla_id,@cla_title, @cla_descr)");
                 AddParameter("cla_id", claimId);
                 AddParameter("cla_title", claim._title);
-                AddParameter("cla_descr",claim._description);
+                AddParameter("cla_descr", claim._description);
                 ExecuteQuery();
-            }catch (NpgsqlException )
+            }
+            catch (NpgsqlException)
             {
                 throw new DatabaseException("error al modificar");
             }
-            catch (Exception e )
+            catch (Exception e)
             {
-                throw new GeneralException( e,DateTime.Now);
+                throw new GeneralException(e, DateTime.Now);
             }
         }
     }
