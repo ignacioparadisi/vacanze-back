@@ -175,8 +175,8 @@ $$
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION GetUserByEmail(email VARCHAR(30))
-RETURNS TABLE
+CREATE OR REPLACE FUNCTION GetUserByEmail(email_id VARCHAR(30))
+  RETURNS TABLE
           (id integer,
            documentId VARCHAR(50),
            name VARCHAR(50),
@@ -186,30 +186,30 @@ AS
 $$
 BEGIN
   RETURN QUERY SELECT use_id, use_document_id, use_name, use_last_name, use_email
-               FROM Users WHERE use_email = email;
+               FROM Users WHERE use_email = email_id;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION AddUser(doc_id VARCHAR(20), 
-                                   name VARCHAR(30), 
-                                   lastname VARCHAR(30), 
-                                   email VARCHAR(30),
-                                   password VARCHAR(50)) 
-RETURNS VOID AS
+CREATE OR REPLACE FUNCTION AddUser(doc_id VARCHAR(20),
+                                        name VARCHAR(30),
+                                        lastname VARCHAR(30),
+                                        email VARCHAR(30),
+                                        password VARCHAR(50))
+  RETURNS VOID AS
 $$
 BEGIN
-    INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
-    VALUES (_doc_id, _name, _lastname, _email, _password);
+  INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
+  VALUES (doc_id, name, lastname, email, password);
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION AddUser_Role(rol_id INTEGER,
-                                        use_id INTEGER)
-RETURNS VOID AS
+                                             use_id INTEGER)
+  RETURNS VOID AS
 $$
 BEGIN
   INSERT INTO User_Role(usr_rol_id, usr_use_id)
-  VALUES (_rol_id, _use_id);
+  VALUES (rol_id, use_id);
 END;
 $$ LANGUAGE plpgsql;
 
