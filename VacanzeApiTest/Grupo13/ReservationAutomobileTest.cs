@@ -12,5 +12,11 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
     [TestFixture]
     public class ReservationAutomobileTest
     {
+        ReservationAutomobileConnection _connection;
+        [SetUp]
+        public void SetUp()
+        {
+            _connection = new ReservationAutomobileConnection();
+        }
     }
 }

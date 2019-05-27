@@ -22,7 +22,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         [Test]
         public void GetReservationsRoomTest()
         {
-            List<Entity> reservations = reservationRoomConnection.getRoomReservations();
+            List<Entity> reservations = reservationRoomConnection.GetRoomReservations();
             Assert.AreNotEqual(0, reservations.Count());
         }
 

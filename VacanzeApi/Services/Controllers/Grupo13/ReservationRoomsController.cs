@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.Connection.Grupo13;
@@ -10,6 +11,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("MyPolicy")]
     public class ReservationRoomsController : ControllerBase
     {
         // GET api/values
@@ -19,7 +21,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             try
             {
                 ReservationRoomConnection reservationRoomConnection = new ReservationRoomConnection();
-                List<Entity> result = reservationRoomConnection.getRoomReservations();
+                List<Entity> result = reservationRoomConnection.GetRoomReservations();
                 return Ok(result.ToList());
             }
             catch (System.Exception)

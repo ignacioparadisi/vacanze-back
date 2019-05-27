@@ -38,11 +38,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo13
                 {
                                                 //id, precio,      capacidad,        status
                     Room room = new Room(GetInt(i,0), GetDouble(i, 1), GetInt(i, 2), GetBool(i, 3));
-                    //room.setId(GetInt(i, 0));
-                  //  room.price = GetDouble(i, 1);
-                  //  room.capacity = GetInt(i, 2);
-                   // room.status = GetBool(i, 3);
-
                     roomsList.Add(room);
                 }
                 return roomsList;

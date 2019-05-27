@@ -1,35 +1,37 @@
 ﻿using System;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
 {
     public class ReservationRoom : Entity
     {
-        public bool status { get; set; }
         //Checkin: Initial date of the reservation
-        public DateTime checkIn { get; set; }
+        public DateTime CheckIn { get; set; }
         //Checkout: Last date of the reservation
-        public DateTime checkOut { get; set; }
+        public DateTime CheckOut { get; set; }
         //Room which the reservation is tied.
-        public Room room { get; set; }
+        public Room Room { get; set; }
+        private User User { get; set; }
 
         //public User user { get; set; }
 
-            /**
-             * Constructors of the class
-             */
+        /**
+         * Constructors of the class
+         */
+        public ReservationRoom(long id) : base(id)
+        {
+        }
         public ReservationRoom(long id, bool status, DateTime CheckIn, DateTime CheckOut) : base(id)
         {
-            this.status = status;
-            this.checkIn = CheckIn;
-            this.checkOut = CheckOut;
+            this.CheckIn = CheckIn;
+            this.CheckOut = CheckOut;
         }
 
         public ReservationRoom(long id, bool status, DateTime CheckIn, DateTime CheckOut, Room room) : base(id)
         {
-            this.status = status;
-            this.checkIn = CheckIn;
-            this.checkOut = CheckOut;
-            this.room = room;
+            this.CheckIn = CheckIn;
+            this.CheckOut = CheckOut;
+            this.Room = room;
         }
     }
 }

@@ -20,23 +20,23 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo13
         const String SP_DELETE_RESERVATION ="";
         const String SP_ADD_PAYMENT = "";
 
-        private ReservationRoom reservationRoom;
-        private RoomConnection dAORoom;
+        private ReservationRoom _reservationRoom;
+        private RoomConnection _roomConnection;
 
         public void create(Entity e)
         {
-            reservationRoom = (ReservationRoom)e;
+            _reservationRoom = (ReservationRoom)e;
         }
 
         /** Method GetRoomReservations()
          * Returns all room reservation from the system.
          */
-        public List<Entity> getRoomReservations()
+        public List<Entity> GetRoomReservations()
         {
             try
             {
                 List<Entity> roomReservationList = new List<Entity>();
-                RoomConnection dAORoom = new RoomConnection();
+                RoomConnection _roomConnection = new RoomConnection();
 
                 Connect();
                 StoredProcedure(SP_SELECT);
@@ -44,7 +44,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo13
                 for (int i = 0; i < numberRecords; i++)
                 {
                     ReservationRoom roomRes = new ReservationRoom(GetInt(i, 0), GetBool(i, 1), GetDateTime(i, 2), GetDateTime(i, 3));
-                    roomRes.room = (Room) dAORoom.FindRoom(GetInt(i, 4));
+                    roomRes.Room = (Room) _roomConnection.FindRoom(GetInt(i, 4));
 
                     roomReservationList.Add(roomRes);
                 }
@@ -80,16 +80,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo13
                 ExecuteReader();
                 for (int i = 0; i < numberRecords; i++)
                 {
-                    reservationRoom = new ReservationRoom(GetInt(i, 0), GetBool(i, 1), GetDateTime(i, 2), GetDateTime(i, 3));
-                    reservationRoom.room = (Room)dAORoom.FindRoom(GetInt(i, 4));
-                    /*
-                    reservationRoom.setId(GetInt(i, 0));
-                    reservationRoom.status = GetBool(i, 1);
-                    reservationRoom.CheckIn = GetDateTime(i, 2);
-                    reservationRoom.CheckOut = GetDateTime(i, 3);
-                    reservationRoom.room_id = GetInt(i, 4);*/
+                    _reservationRoom = new ReservationRoom(GetInt(i, 0), GetBool(i, 1), GetDateTime(i, 2), GetDateTime(i, 3));
+                    _reservationRoom.Room = (Room)_roomConnection.FindRoom(GetInt(i, 4));
                 }
-                return reservationRoom;
+                return _reservationRoom;
             }
             catch (NpgsqlException e)
             {
@@ -103,7 +97,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo13
             {
                 Disconnect();
             }
-            return reservationRoom;
+            return _reservationRoom;
         }
 
         /** Method GetAvailableRoomReservations()
@@ -122,7 +116,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo13
                 for (int i = 0; i < numberRecords; i++)
                 {
                     ReservationRoom roomRes = new ReservationRoom(GetInt(i, 0), GetBool(i, 1), GetDateTime(i, 2), GetDateTime(i, 3));
-                    roomRes.room = (Room)dAORoom.FindRoom(GetInt(i, 4));
+                    roomRes.Room = (Room)_roomConnection.FindRoom(GetInt(i, 4));
 
                     roomReservationList.Add(roomRes);
                 }
@@ -157,10 +151,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo13
                 Connect();
                 StoredProcedure(SP_ADD_RESERVATION);
 
-                AddParameter("_status", reservationRoom.status);
-                AddParameter("_checkin", reservationRoom.checkIn);
-                AddParameter("_checkout", reservationRoom.checkOut);
-                AddParameter("_roo_fk", reservationRoom.room.Id);
+                AddParameter("_status", reservationRoom.Status);
+                AddParameter("_checkin", reservationRoom.CheckIn);
+                AddParameter("_checkout", reservationRoom.CheckOut);
+                AddParameter("_roo_fk", reservationRoom.Room.Id);
             //    AddParameter("_use_fk",reservationRoom.user.Id);
 
                 ExecuteReader();

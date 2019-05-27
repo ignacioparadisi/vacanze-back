@@ -6,35 +6,32 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using vacanze_back.VacanzeApi.Persistence.Connection;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
+using vacanze_back.VacanzeApi.Common.Entities;
 
 namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo13
 {
     public class ReservationAutomobileConnection : Connection
     { 
-        const String SP_SELECT = "{CALL m13_getreservaautomoviles()}";
-        /*
-                private Automovil automovil;
+        const String SP_SELECT = "m13_getResAutos()";
+        private Automobile _automobile;
+        private ReservationAutomobileConnection _reservation;
 
-                public List<Entity> getAutomoviles()
+                public List<Entity> GetAutomobileReservations()
                 {
-                    List<Entity> automovilList = new List<Entity>();
+                    List<Entity> reservationAutomobileList = new List<Entity>();
+                    ReservationAutomobileConnection reservationAutomobileConnection = new ReservationAutomobileConnection();
                     try
                     {
                         if (Connect())
                         {
                             StoredProcedure(SP_SELECT);
                             ExecuteReader();
-                            for (int i = 0; i < rowNumber; i++)
+                            for (int i = 0; i < numberRecords; i++)
                             {
-                                Automovil automovil = new Automovil();
-                                //(hab_id integer, hab_precio float, hab_capacidad integer, hab_tipo character varying,fk_hot_id integer)
-                                // id, estatus, capacidad, precio, fk_hotel. 
-                                automovil.setId(GetInt(i, 0));
-                                automovil.precio = GetDouble(i, 1);
-                                automovil.capacidad = GetInt(i, 2);
-                                automovil.estatus = GetBool(i, 3);
+                            ReservationAutomobile reservationAutomobile = new ReservationAutomobile(GetInt(i,0),GetDateTime(i,1),GetDateTime(i,2));
 
-                                automovilList.Add(automovil);
+                            reservationAutomobileList.Add(reservationAutomobile);
                             }
                         }
                     }
@@ -50,8 +47,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo13
                     {
                         Disconnect();
                     }
-                    return habitacionList;
-                }*/
+                    return reservationAutomobileList;
+                }
     }
 
 }
