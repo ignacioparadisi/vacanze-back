@@ -32,7 +32,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection
                         
            /*  cadena  de prueba*/
             _cadena = "Server=localhost;Port=5433;User Id=postgres;" + 
-                      "Password=admin;Database=vacanza;" ;
+                      "Password=122324;Database=vacanza;" ;
             //cadena de prueba
             /*
 			_cadena = "Server=127.0.0.1;User Id=postgres;" + 

@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using Npgsql;      
-using vacanze_back.Entities.Grupo5;
-namespace vacanze_back.Connection.Grupo5
+using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
+
+namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo5
 {
-    public class ConnectAuto:Connection
+    public class ConnectAuto : Connection
     {
         public ConnectAuto()
         {
@@ -55,8 +56,8 @@ namespace vacanze_back.Connection.Grupo5
             StoredProcedure("consultforidauto (@AUT_ID)");
             AddParameter("AUT_ID", id);
             ExecuteReader();
-            Console.WriteLine("la madre " + cantidadRegistros);
-            for (var i = 0; i < cantidadRegistros; i++)
+            Console.WriteLine("la madre " + numberRecords);
+            for (var i = 0; i < numberRecords; i++)
                 {
                      Console.WriteLine("entro");
                     var ids = Convert.ToInt32(GetString(i, 0));

@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using vacanze_back.Entities.Grupo5;
-using vacanze_back.Connection.Grupo5;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
+using vacanze_back.VacanzeApi.Persistence.Connection.Grupo5;
 using Newtonsoft.Json;
-namespace vacanze_back.Controllers.Grupo5
+
+namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
 {
     [Route("api/[controller]")]
     [ApiController]

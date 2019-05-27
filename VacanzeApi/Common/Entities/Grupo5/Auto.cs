@@ -1,4 +1,4 @@
-namespace vacanze_back.Entities.Grupo5
+namespace vacanze_back.VacanzeApi.Common.Entities.Grupo5
 {
     public class Auto
     {
