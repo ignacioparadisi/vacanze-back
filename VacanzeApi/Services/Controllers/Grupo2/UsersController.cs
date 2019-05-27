@@ -9,9 +9,10 @@ using vacanze_back.VacanzeApi.Persistence.Connection.Grupo2;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
 {
+    [Produces("application/json")] 
     [Route("api/[controller]")]
-    [ApiController]
     [EnableCors("MyPolicy")]
+    [ApiController]
     public class UsersController : ControllerBase
     {
         // GET api/users
