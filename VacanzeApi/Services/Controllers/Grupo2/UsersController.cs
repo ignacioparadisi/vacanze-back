@@ -1,32 +1,33 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Exceptions;
-using vacanze_back.VacanzeApi.Persistence.Connection.Grupo2;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo2;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
 {
+    [Produces("application/json")] 
     [Route("api/[controller]")]
-    [ApiController]
     [EnableCors("MyPolicy")]
+    [ApiController]
     public class UsersController : ControllerBase
     {
         // GET api/users
         [HttpGet]
         public ActionResult<IEnumerable<User>> GetEmployees()
         {
-            var connection = new UserConnection();
             var users = new List<User>();
             try
             {
-                users = connection.GetEmployees();
+                users = UserRepository.GetEmployees();
             }
             catch (DatabaseException)
             {
                 return BadRequest("Error obteniendo los empleados");
             }
-            return Ok(users);
+            return users;
         }
 
         // GET api/values/5
@@ -40,6 +41,15 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
         [HttpPost]
         public ActionResult<User> Post([FromBody] User user)
         {
+            try
+            {
+                user.Validate();
+            }
+            catch (Exception e)
+            {
+                BadRequest(e.Message);
+            }
+            
             return user;
         }
 

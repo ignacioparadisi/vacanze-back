@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Cors;
-using vacanze_back.VacanzeApi.Common.Entities.Grupo3;
+using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities;
-using vacanze_back.VacanzeApi.Persistence.Connection.Grupo3;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo3;
-
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo3;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
 {
@@ -22,17 +20,16 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
         {
             try
             {
-                AirplanesConnection aircon = new AirplanesConnection(); 
-                List<Entity> result = aircon.Get();
+                var aircon = new AirplanesConnection();
+                var result = aircon.Get();
                 return Ok(result.ToList());
             }
             catch (DbErrorException ex)
             {
-                return BadRequest(new {Message = ex.Message});
+                return BadRequest(new {ex.Message});
             }
-            catch (System.Exception)
+            catch (Exception)
             {
-                
                 return null;
             }
         }
@@ -42,17 +39,16 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
         {
             try
             {
-                AirplanesConnection aircon = new AirplanesConnection(); 
-                Entity result = aircon.Find(id);
+                var aircon = new AirplanesConnection();
+                var result = aircon.Find(id);
                 return Ok(result);
             }
             catch (DbErrorException ex)
             {
-                return BadRequest(new {Message = ex.Message});
+                return BadRequest(new {ex.Message});
             }
-            catch (System.Exception)
+            catch (Exception)
             {
-                
                 return null;
             }
         }

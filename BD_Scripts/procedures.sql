@@ -147,7 +147,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION GetRolesForUser(user_id integer)
+CREATE OR REPLACE FUNCTION GetRolesForUser(user_id bigint)
     RETURNS TABLE
             (id integer,
              nombre VARCHAR(50)
@@ -175,7 +175,48 @@ $$
     END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION AddUser(_doc_id VARCHAR(20), 
+                                   _name VARCHAR(30), 
+                                   _lastname VARCHAR(30), 
+                                   _email VARCHAR(30),
+                                   _password VARCHAR(50)) 
+RETURNS VOID AS
+$$
+BEGIN
+    INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
+    VALUES (_doc_id, _name, _lastname, _email, _password);
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION AddUser_Role(_rol_id INTEGER,
+                                        _use_id INTEGER)
+RETURNS VOID AS
+$$
+BEGIN
+  INSERT INTO User_Role(usr_rol_id, usr_use_id)
+  VALUES (_rol_id, _use_id);
+END;
+$$ LANGUAGE plpgsql;
+
 ------- grupo 6 ----------
+CREATE OR REPLACE FUNCTION AddHotel(name VARCHAR(100),
+                                    amountOfRooms INTEGER,
+                                    active BOOLEAN,
+                                    phone VARCHAR(30),
+                                    website VARCHAR(30),
+                                    location INTEGER)
+    RETURNS integer AS
+$$
+DECLARE
+    dest_id INTEGER;
+BEGIN
+    INSERT INTO hotel (hot_nombre, hot_cant_habitaciones, hot_activo, hot_telefono, hot_sitio_web,
+                       hot_fk_lugar)
+    VALUES (name, amountOfRooms, active, phone, website, location) RETURNING hot_id INTO dest_id;
+    RETURN dest_id;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION ConsultarHoteles()
 RETURNS TABLE
   (id integer,
@@ -190,8 +231,8 @@ AS
 $$
 BEGIN
     RETURN QUERY SELECT
-    H.hot_id, H.hot_nombre,H.hot_capHuesped, H.hot_statusActivo,H.hot_telefono,H.hot_sitio_web, L.l_nombre
-    FROM Hotel AS H, Lugar AS L WHERE L.l_id = H.fk_lugar;
+    H.hot_id, H.hot_nombre, H.hot_cant_habitaciones , H.hot_activo ,H.hot_telefono,H.hot_sitio_web, L.l_nombre
+    FROM Hotel AS H, Lugar AS L WHERE L.l_id = H.hot_fk_lugar;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -210,9 +251,9 @@ RETURNS integer AS
 $$
 BEGIN
 
-   INSERT INTO Ship(shi_name, shi_capacity ,shi_loadingcap, shi_model,
+   INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,
                     shi_line, shi_picture ) VALUES
-    ( _shi_name, _shi_capacity, _shi_loadingcap, _shi_model, _shi_line, _shi_picture );
+    (nextval('seq_ship'), _shi_name, _shi_capacity, _shi_loadingcap, _shi_model, _shi_line, _shi_picture );
    RETURN currval('SEQ_SHIP');
 END;
 $$ LANGUAGE plpgsql;
@@ -223,15 +264,18 @@ CREATE OR REPLACE FUNCTION AddCruise(
   _cru_shi_fk INTEGER,
   _cru_departuredate TIMESTAMP,
   _cru_arrivaldate TIMESTAMP,
-  _cru_price DECIMAL
+  _cru_price DECIMAL,
+  _cru_loc_arrival INTEGER,
+  _cru_loc_departure INTEGER
   ) 
 RETURNS integer AS
 $$
 BEGIN
 
-   INSERT INTO Cruise(cru_shi_fk, cru_departuredate, cru_arrivaldate, cru_price ) VALUES
-    ( _cru_shi_fk, _cru_departuredate, _cru_arrivaldate, _cru_price );
-   RETURN currval('SEQ_CRU');
+   INSERT INTO Cruise(cru_id, cru_shi_fk, cru_departuredate, cru_arrivaldate, cru_price,
+                       cru_loc_arrival, cru_loc_departure ) VALUES
+    (nextval('seq_cruise'), _cru_shi_fk, _cru_departuredate, _cru_arrivaldate, _cru_price, _cru_loc_arrival, _cru_loc_departure );
+   RETURN currval('SEQ_CRUISE');
 END;
 $$ LANGUAGE plpgsql;
 
@@ -307,11 +351,10 @@ RETURNS TABLE
   (id integer,
    name VARCHAR(30),
    status VARCHAR(30),
-   capacity(people) VARCHAR(30),
-   capacity(tonnes) VARCHAR(30),
+   capacity_people VARCHAR(30),
+   capacity_tonnes VARCHAR(30),
    model VARCHAR(30),
    cruise_line VARCHAR(30)
-
   )
 AS
 $$
@@ -323,15 +366,13 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION GetShipPic(_shi_id integer)
-RETURNS VARCHAR
+RETURNS varchar language sql
 AS
 $$
-BEGIN
-    RETURN QUERY SELECT
+    SELECT
     shi_picture
     FROM Ship WHERE shi_id = _shi_id;
-END;
-$$ LANGUAGE plpgsql;
+$$;
 --------Consultar Cruise-----------------
 
 CREATE OR REPLACE FUNCTION GetCruise(_cru_id integer)
@@ -341,7 +382,6 @@ RETURNS TABLE
    departure_date VARCHAR(30),
    arrival_date VARCHAR(30),
    price VARCHAR(30)
-
   )
 AS
 $$
@@ -480,6 +520,20 @@ $$ LANGUAGE plpgsql;
 
 
 ------------------------------------fin de grupo 9---------------------------------
+------ Consulta de los lugares ------
+CREATE OR REPLACE FUNCTION GetLocations()
+RETURNS TABLE
+  (id integer,
+   city VARCHAR(30),
+   country VARCHAR(30))
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT
+    LOC_ID, LOC_CITY, LOC_COUNTRY
+    FROM LOCATION;
+END;
+$$ LANGUAGE plpgsql;
 
 ------------------------------------inicio de grupo 7---------------------------------
 
