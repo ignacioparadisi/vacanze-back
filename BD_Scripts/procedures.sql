@@ -483,6 +483,8 @@ $$ LANGUAGE plpgsql;
 
 ------------------------------------inicio de grupo 7---------------------------------
 
+--------------------------CONSULTAR Restaurant--------------------
+
 CREATE OR REPLACE FUNCTION GetRestaurants()
 RETURNS TABLE
   (id integer,
@@ -507,27 +509,34 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION AddRestaurant(name VARCHAR(100),
-                                    capacity INTEGER,
-                                    isActive BOOLEAN,
-                                    specialty VARCHAR(30),
-                                    price DECIMAL,
-									businessName VARCHAR(30),
-									picture VARCHAR,
-									description VARCHAR(30),
-									phone VARCHAR(30),
-                                    location INTEGER,
-									address VARCHAR(30))
-    RETURNS integer AS
+--------------------------Agregar Restaurant--------------------
+
+select * from AddRestaurant('name',1,TRUE,'specialty',12,'sddfasf','picture','description','phon',1,'asdasd');
+
+INSERT INTO restaurant
+    VALUES ((select count(*)+1 from restaurant),'name',1,false,'specialty',13,'businessName',
+			'picture','description','phone',1,'address');
+
+CREATE OR REPLACE FUNCTION AddRestaurant2( 
+name VARCHAR(100),
+capacity INTEGER,
+isActive BOOLEAN,
+specialty VARCHAR(30),
+price DECIMAL,
+businessName VARCHAR(30),
+picture VARCHAR,
+description VARCHAR(30),
+phone VARCHAR(30),
+location INTEGER,
+address VARCHAR(30)) 
+RETURNS integer AS
 $$
-DECLARE
-    DEST_ID INTEGER;
 BEGIN
-	Select count(*)+1 from restaurant as NEW_ID;
-    INSERT INTO restaurant
-    VALUES (NEW_ID,name,capacity,isActive,specialty,price,businessName,
-			picture,description,phone,location,address) RETURNING RES_ID INTO DEST_ID;
-    RETURN DEST_ID;
+
+   INSERT INTO Ship VALUES
+    (name,capacity,isActive,specialty,price,businessName,
+			picture,description,phone,location,address );
+   RETURN currval('SEQ_RESTAURANT');
 END;
 $$ LANGUAGE plpgsql;
 

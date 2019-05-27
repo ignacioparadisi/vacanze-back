@@ -59,7 +59,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo7
         {
             Connect();
             StoredProcedure(
-                "addrestaurant2(@name,@capacity,@isActive,@specialty,@price,@businessName,@picture,@description,@phone,@location,@address)");
+                "addrestaurant(@name,@capacity,@isActive,@specialty,@price,@businessName,@picture,@description,@phone,@location,@address)");
             AddParameter("name", restaurant.Name);
             AddParameter("capacity", restaurant.Capacity);
             AddParameter("isActive", restaurant.IsActive);
@@ -69,7 +69,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo7
             AddParameter("picture", restaurant.Picture);
             AddParameter("description", restaurant.Description);
             AddParameter("phone", restaurant.Phone);
-            AddParameter("location", 1); // TODO: Usar id de una ubicacion recibida!!
+            AddParameter("location", restaurant.Location); // TODO: Usar id de una ubicacion recibida!!
             AddParameter("address", restaurant.Address);
             ExecuteReader();
             var savedId = GetInt(0, 0);
