@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 
-namespace vacanze_back.Entities.Grupo2
+namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10   
 {
     public class Travel : Entity{
 
@@ -28,6 +29,7 @@ namespace vacanze_back.Entities.Grupo2
         private List<Entity> _flightReservations;
 
         public Travel(long id, string _name, string _description, User _user) :base(id){
+            this.Id = id;
             this._name = _name;
             this._description = _description;
             this._user = _user;
@@ -36,6 +38,12 @@ namespace vacanze_back.Entities.Grupo2
             _hotelReservations = new List<Entity>();
             _restaurantReservations = new List<Entity>();
             _flightReservations = new List<Entity>();
+        }
+
+        public Travel(long id, string _name, string _description) :base(id){
+            this.Id = id;
+            this._name = _name;
+            this._description = _description;
         }
 
         public void AddCar(Entity car){
