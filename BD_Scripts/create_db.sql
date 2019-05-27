@@ -58,24 +58,25 @@ CREATE TABLE Hotel (
                        CONSTRAINT fk_hotel_lugar FOREIGN KEY (hot_fk_lugar) REFERENCES Lugar (l_id)
 );
 
-CREATE SEQUENCE SEQ_AUTOMOVIL
+CREATE SEQUENCE SEQ_AUTOMOBILE
   START WITH 1
   INCREMENT BY 1
   NO MINVALUE
   NO MAXVALUE
   CACHE 1;
   
-CREATE TABLE AUTOMOVIL(
-    aut_id integer,
-    aut_make varchar(30) NOT NULL,
-    aut_model varchar(30) NOT NULL,
-    aut_capacity integer not null,
-    aut_isActive BOOLEAN,
-    aut_licence varchar(30) not null,
-    aut_price integer not null,
-
-    CONSTRAINT pk_automovil PRIMARY KEY(aut_id)
-
+CREATE TABLE AUTOMOBILE(
+  AUT_ID INTEGER NOT NULL,
+  AUT_MAKE VARCHAR(30) NOT NULL,
+  AUT_MODEL VARCHAR(30) NOT NULL,
+  AUT_CAPACITY INTEGER NOT NULL,
+  AUT_ISACTIVE BOOLEAN DEFAULT TRUE NOT NULL,
+  AUT_PRICE DECIMAL NOT NULL,
+  AUT_LICENSE VARCHAR(10) NOT NULL,
+  AUT_PICTURE VARCHAR,
+  AUT_LOC_FK INTEGER NOT NULL,
+  CONSTRAINT PRIMARY_AUTOMOBILE PRIMARY KEY (AUT_ID),
+  CONSTRAINT FOREIGN_AUT_LOCATION FOREIGN KEY (AUT_LOC_FK) REFERENCES LOCATION(LOC_ID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -------------------------------------------------------------------------------------------
