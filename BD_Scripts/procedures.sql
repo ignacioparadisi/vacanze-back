@@ -483,9 +483,10 @@ $$ LANGUAGE plpgsql;
 
 ------------------------------------inicio de grupo 7---------------------------------
 
-CREATE OR REPLACE FUNCTION ConsultarRestaurants()
+CREATE OR REPLACE FUNCTION GetRestaurants()
 RETURNS TABLE
-  (name VARCHAR(100),
+  (id integer,
+   name VARCHAR(100),
    capacity INTEGER,
    isActive BOOLEAN,
    specialty VARCHAR(30),
@@ -501,11 +502,10 @@ AS
 $$
 BEGIN
     RETURN QUERY SELECT
-    R.res_name, R.res_capacity , R.res_isactive ,R.res_specialty,R.res_price, R.res_businessname, R.res_picture, R.res_descr, R.res_tlf, R.res_loc_fk, R.res_address_specs
+    R.res_id, R.res_name, R.res_capacity , R.res_isactive ,R.res_specialty,R.res_price, R.res_businessname, R.res_picture, R.res_descr, R.res_tlf, R.res_loc_fk, R.res_address_specs
     FROM Restaurant AS R;
 END;
 $$ LANGUAGE plpgsql;
-
 
 CREATE OR REPLACE FUNCTION AddRestaurant(name VARCHAR(100),
                                     capacity INTEGER,

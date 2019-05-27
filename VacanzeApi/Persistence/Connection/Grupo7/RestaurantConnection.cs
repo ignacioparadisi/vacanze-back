@@ -22,7 +22,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo7
             try
             {
                 Connect();
-                StoredProcedure("ConsultarRestaurants();");
+                StoredProcedure("getrestaurants()");
                 ExecuteReader();
 
                 for (var i = 0; i < numberRecords; i++)

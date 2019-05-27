@@ -10,7 +10,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo7
         [JsonConstructor]
         public Restaurant(long id, string name, int capacity,bool isActive, string specialty, 
                           long price, string businessName, string picture, 
-                          string description, string phone, long location, string address) : base(id)
+                          string description, string phone, int location, string address) : base(id)
         {
             Name = name;
             Capacity = capacity;
@@ -28,7 +28,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo7
         
         public Restaurant(string name, int capacity,bool isActive, string specialty, 
                           long price, string businessName, string picture, 
-                          string description, string phone, long location, string address) : base(0)
+                          string description, string phone, int location, string address) : base(0)
         {
             Name = name;
             Capacity = capacity;
@@ -52,7 +52,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo7
         public string Picture { get; }
         public string Description { get; }
         public string Phone { get; }
-        public long Location { get; }
+        public int Location { get; }
         public string Address { get; }
 
     }
