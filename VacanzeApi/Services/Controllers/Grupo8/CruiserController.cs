@@ -1,29 +1,38 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo8;
 
 namespace vacanze_back.Controllers.Grupo8
 {
     [Route("api/[controller]")]
+    [EnableCors("MyPolicy")]
     [ApiController]
     public class CruiserController : Controller
     {
         // GET/Cruisers
         [HttpGet]
-        public String[] GetCruisers()
-        {
-            return new [] {"Cruiser1", "Cruiser2"};
-        }
+//        public String[] GetCruisers()
+//        {
+//            return new [] {"Cruiser1", "Cruiser2"};
+//        }
         // GET/Cruiser
         [HttpGet("{id}")]
-        public String GetCruiser(int id)
+        public IActionResult GetCruiser(int id)
         {
-            Cruiser c = new Cruiser(1,"concordia", 5,5 );
-            
-            return JsonConvert.SerializeObject(c);
+            try
+            {
+                 Cruiser cruiser=  CruiserConnection.GetCruiser(id);
+                 return Ok(JsonConvert.SerializeObject(cruiser));
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return StatusCode(500,"El Crusero no fue encontrado");
+            }
         }
 
 //        [HttpPost]
