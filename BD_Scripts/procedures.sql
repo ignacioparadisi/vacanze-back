@@ -176,6 +176,24 @@ $$
 $$ LANGUAGE plpgsql;
 
 ------- grupo 6 ----------
+CREATE OR REPLACE FUNCTION AddHotel(name VARCHAR(100),
+                                    amountOfRooms INTEGER,
+                                    active BOOLEAN,
+                                    phone VARCHAR(30),
+                                    website VARCHAR(30),
+                                    location INTEGER)
+    RETURNS integer AS
+$$
+DECLARE
+    dest_id INTEGER;
+BEGIN
+    INSERT INTO hotel (hot_nombre, hot_cant_habitaciones, hot_activo, hot_telefono, hot_sitio_web,
+                       hot_fk_lugar)
+    VALUES (name, amountOfRooms, active, phone, website, location) RETURNING hot_id INTO dest_id;
+    RETURN dest_id;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION ConsultarHoteles()
 RETURNS TABLE
   (id integer,
@@ -190,8 +208,8 @@ AS
 $$
 BEGIN
     RETURN QUERY SELECT
-    H.hot_id, H.hot_nombre,H.hot_capHuesped, H.hot_statusActivo,H.hot_telefono,H.hot_sitio_web, L.l_nombre
-    FROM Hotel AS H, Lugar AS L WHERE L.l_id = H.fk_lugar;
+    H.hot_id, H.hot_nombre, H.hot_cant_habitaciones , H.hot_activo ,H.hot_telefono,H.hot_sitio_web, L.l_nombre
+    FROM Hotel AS H, Lugar AS L WHERE L.l_id = H.hot_fk_lugar;
 END;
 $$ LANGUAGE plpgsql;
 
