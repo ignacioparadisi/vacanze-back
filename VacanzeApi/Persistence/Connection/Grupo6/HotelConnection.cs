@@ -48,21 +48,5 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo6
                 throw new GeneralException(e, DateTime.Now);
             }
         }
-
-        public long AddHotel(Hotel hotel)
-        {
-            Connect();
-            StoredProcedure(
-                "addhotel(@name, @amountOfRooms, @active, @phone, @website, @location)");
-            AddParameter("name", hotel.Name);
-            AddParameter("amountOfRooms", hotel.AmountOfRooms);
-            AddParameter("active", hotel.IsActive);
-            AddParameter("phone", hotel.Phone);
-            AddParameter("website", hotel.Website);
-            AddParameter("location", 1); // TODO: Usar id de una ubicacion recibida!!
-            ExecuteReader();
-            var savedId = GetInt(0, 0);
-            return savedId;
-        }
     }
 }

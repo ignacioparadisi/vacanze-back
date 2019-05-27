@@ -38,8 +38,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Hotel> Create([FromBody] Hotel hotel)
         {
-            var dbConnection = new HotelConnection();
-            var receivedId = dbConnection.AddHotel(hotel);
+            var receivedId = HotelRepository.AddHotel(hotel);
             var savedHotel = new Hotel(receivedId, hotel.Name, hotel.AmountOfRooms, hotel.IsActive,
                 hotel.Phone,
                 hotel.Website);
