@@ -164,21 +164,25 @@ $$ LANGUAGE plpgsql;
 -----------------------------------Grupo 5 ------------------------------------------------
 -------------AGREGAR AUTO-----------------
 
-CREATE OR REPLACE FUNCTION AgregarAutomovil(
+CREATE OR REPLACE FUNCTION 
+ADDAUTOMOBILE(
     _make VARCHAR(20), 
     _model VARCHAR(30),
     _capacity integer,
     _status BOOLEAN,
     _licence varchar(30),
-    _price integer
+    _price integer,
+    _picture varchar,
+    _place integer
     ) 
 RETURNS integer AS
 $$
 BEGIN
 
-   INSERT INTO AUTOMOVIL(aut_id,aut_make,aut_model,aut_capacity,aut_isActive,aut_licence,aut_price) VALUES
-    (nextval('SEQ_AUTOMOVIL'), _make, _model,_capacity,_status,_licence,_price);
-   RETURN currval('SEQ_AUTOMOVIL');
+
+   INSERT INTO AUTOMOBILE(AUT_ID,AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_LICENSE,AUT_PRICE,AUT_PICTURE,AUT_LOC_FK) VALUES
+    (nextval('SEQ_AUTOMOBILE'), _make, _model,_capacity,_status,_licence,_price,_picture,_place);
+   RETURN currval('SEQ_AUTOMOBILE');
 END;
 $$ LANGUAGE plpgsql;
 
@@ -190,9 +194,53 @@ RETURNS void AS
 $$
 BEGIN
 
-    DELETE FROM Claim 
-    WHERE (aut_id = _id);
+    DELETE FROM AUTOMOBILE
+    WHERE (AUT_ID = _id);
 
 END;
 $$ LANGUAGE plpgsql;
 ------------------------------------------------
+CREATE OR REPLACE FUNCTION ConsultforIdAuto(codigo integer)
+RETURNS TABLE
+  (id integer,
+   make varchar(30),
+   model varchar(30),
+   capacity integer,
+   isactive BOOLEAN, 
+   price integer , 
+   license varchar(30), 
+   picture varchar (30), 
+   loc_fk integer
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY  select * 
+    FROM AUTOMOBILE  WHERE aut_id = codigo;
+END;
+$$ LANGUAGE plpgsql;
+
+--------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION 
+MODIFYAUTOMOBILE(
+	_id integer,
+    _make VARCHAR(20), 
+    _model VARCHAR(30),
+    _capacity integer,
+    _status BOOLEAN,
+    _license varchar(30),
+    _price integer,
+    _picture varchar,
+    _place integer
+    ) 
+RETURNS integer AS
+$$
+BEGIN
+UPDATE automobile
+	SET  aut_make=_make, aut_model=_model,
+	aut_capacity=_capacity, aut_isactive=_status, aut_price=_price,
+	aut_license=_license, aut_picture=_picture, aut_loc_fk=_place
+	WHERE aut_id =_id;
+	RETURN _id;
+END;
+$$ LANGUAGE plpgsql;
