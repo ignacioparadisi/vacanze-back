@@ -29,11 +29,11 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo6
                 {
                     var id = Convert.ToInt32(GetString(i, 0));
                     var name = GetString(i, 1);
-                    var capacity = Convert.ToInt32(GetString(i, 2));
-                    var status = Convert.ToBoolean(GetString(i, 3));
+                    var amountOfRooms = Convert.ToInt32(GetString(i, 2));
+                    var isActive = Convert.ToBoolean(GetString(i, 3));
                     var phone = GetString(i, 4);
-                    var web = GetString(i, 5);
-                    var hotel = new Hotel(id, name, capacity, status, phone, web);
+                    var website = GetString(i, 5);
+                    var hotel = new Hotel(id, name, amountOfRooms, isActive, phone, website);
                     hotelList.Add(hotel);
                 }
 
