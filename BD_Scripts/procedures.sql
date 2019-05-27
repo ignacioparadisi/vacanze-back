@@ -30,6 +30,43 @@ $BODY$;
 ALTER FUNCTION public.addflight(integer, double precision, timestamp without time zone, timestamp without time zone, integer, integer)
     OWNER TO vacanza;
 
+
+-- FUNCTION: public.updateflight(integer, integer, double precision, date, date, integer, integer)
+
+-- DROP FUNCTION public.updateflight(integer, integer, double precision, date, date, integer, integer);
+CREATE OR REPLACE FUNCTION public.updateflight( 
+    _id integer,
+    _plane integer,
+	_price double precision,
+	_departure timestamp without time zone,
+	_arrival timestamp without time zone,
+    _loc_departure integer,
+	_loc_arrival integer)
+    RETURNS integer
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+AS $BODY$
+
+BEGIN
+
+    UPDATE Flight SET 
+    fli_pla_fk = _plane,
+    fli_price = _price,
+    fli_departuredate = _departure,
+    fli_arrivaldate = _arrival,
+    fli_loc_departure = _loc_departure,
+    fli_loc_arrival = _loc_arrival
+    WHERE (fli_id = _id);
+   RETURN _id;
+END;
+$BODY$; 
+
+ALTER FUNCTION public.updateflight(integer, integer, double precision, timestamp without time zone, timestamp without time zone, integer, integer)
+    OWNER TO vacanza;
+
+
 -- FUNCTION: public.getplanes()
 
 -- DROP FUNCTION public.getplanes();
@@ -80,6 +117,33 @@ $BODY$;
 
 ALTER FUNCTION public.findplane(integer)
     OWNER TO postgres;
+
+
+-- FUNCTION: public.findflight(integer)
+
+-- DROP FUNCTION public.findflight(integer);
+
+CREATE OR REPLACE FUNCTION public.findflight(
+	_id integer)
+    RETURNS TABLE(id integer, price numeric, departuredate timestamp, arrivaldate timestamp, loc_arrival integer, loc_departure integer, pla_fk integer) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+	RETURN QUERY SELECT
+	fli_id, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_arrival, fli_loc_departure, fli_pla_fk
+	FROM public.Flight WHERE _id = fli_id;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.findflight(integer)
+    OWNER TO vacanza;
+
 
 -- FUNCTION: public.getflights()
 

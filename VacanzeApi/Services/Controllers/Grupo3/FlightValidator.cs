@@ -34,9 +34,23 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
             //     throw new ValidationErrorException("La fecha de salida no puede ser mayor a la de llegada");
             // }
 
-            
-
         }
+
+
+        /*
+        * Revisa si existe el vuelo
+        * @param int id: id del vuelo
+        */
+        /* public void CheckIfExist(long id){
+
+            FlightsConnection flightcon = new FlightsConnection();
+            Flight flight = (Flight) flightcon.Find(id);
+
+            if(flight == null){
+                throw new ValidationErrorException("El vuelo a editar no existe");
+            }
+
+        }*/
 
     }
 }

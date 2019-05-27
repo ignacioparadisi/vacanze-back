@@ -62,5 +62,49 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
                 return null;
             }
         }
+
+        [HttpPut]
+        public ActionResult<Entity> Put([FromBody] Flight flight)
+        {
+           try
+            {
+                //return Ok( new {Message = flight.id});
+                FlightsConnection flightcon = new FlightsConnection();
+                Flight f = (Flight) flightcon.Find(flight.id);
+
+                if(f == null){
+                    throw new ValidationErrorException("El vuelo a editar no existe");
+                }
+ 
+                FlightValidator validator = new FlightValidator(f);
+
+
+                validator.Validate();
+                flightcon.Update(flight);
+                
+                return Ok( new {Message = "¡Vuelo editado con éxito!"});
+            }
+            catch (ValidationErrorException ex)
+            {
+                return BadRequest(new {Message = ex.Message});
+            }
+            catch (DbErrorException ex)
+            {
+                return BadRequest(new {Message = ex.Message});
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+        }
+
+
+        [HttpDelete("{id}")]    
+        public ActionResult<Entity> Delete(int id)    
+        {    
+            return Ok(id);
+        }
+
     }
 }
