@@ -14,7 +14,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 	[ApiController]
 	public class ClaimController : ControllerBase
 	{
-        
+        ResponseError mensaje;
 
 		// GET api/values
 		//se usara para consultar la cantidad de reclamos
@@ -126,7 +126,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 				return StatusCode(500);
 			}catch (NullClaimException )
 			{
-				return StatusCode(500);
+				mensaje= new ResponseError();
+				mensaje.error="No existe el elemento que quiere Eliminar";
+				return StatusCode(500,mensaje);
 			}
 
 		}
@@ -154,13 +156,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 				return StatusCode(500);
 			}catch (NullClaimException )
 			{
-				return StatusCode(500);
+				mensaje= new ResponseError();
+				mensaje.error="No existe el elemento que quiere Modificar";
+				return StatusCode(500,mensaje);
 			}
 		}
 
 
 	}
-
+public class ResponseError {
+	public string error{get; set;}
+	
+	}
 	public class ClaimSecundary {
 		public string title {get; set;} 
 		public string description{get; set;}
