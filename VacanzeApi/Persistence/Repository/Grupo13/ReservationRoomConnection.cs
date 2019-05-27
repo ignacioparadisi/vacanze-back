@@ -7,9 +7,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
-using vacanze_back.VacanzeApi.Persistence.Connection;
 
-namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo13
+namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
 {
     public class ReservationRoomConnection : Connection
     {
@@ -151,7 +150,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo13
                 Connect();
                 StoredProcedure(SP_ADD_RESERVATION);
 
-                AddParameter("_status", reservationRoom.Status);
                 AddParameter("_checkin", reservationRoom.CheckIn);
                 AddParameter("_checkout", reservationRoom.CheckOut);
                 AddParameter("_roo_fk", reservationRoom.Room.Id);

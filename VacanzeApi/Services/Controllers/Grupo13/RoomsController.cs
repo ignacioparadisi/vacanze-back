@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
-using vacanze_back.VacanzeApi.Persistence.Connection.Grupo13;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo13;
 
 namespace vacanze_back.Controllers.Grupo13
 {

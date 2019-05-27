@@ -5,10 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Cors;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
-using vacanze_back.VacanzeApi.Persistence.Connection.Grupo13;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo13;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("MyPolicy")]
@@ -49,8 +50,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 
         // POST api/values //CREAR UN RECURSO
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult<Entity> Post([FromBody] Entity entity)
         {
+            return entity;
         }
 
         // PUT api/values/5    //ACTUALIZAR UN RECURSO

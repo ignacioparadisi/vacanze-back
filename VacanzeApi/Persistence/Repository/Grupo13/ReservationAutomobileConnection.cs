@@ -5,11 +5,10 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using vacanze_back.VacanzeApi.Persistence.Connection;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities;
 
-namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo13
+namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
 {
     public class ReservationAutomobileConnection : Connection
     { 
@@ -23,8 +22,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo13
                     ReservationAutomobileConnection reservationAutomobileConnection = new ReservationAutomobileConnection();
                     try
                     {
-                        if (Connect())
-                        {
+                            Connect();
                             StoredProcedure(SP_SELECT);
                             ExecuteReader();
                             for (int i = 0; i < numberRecords; i++)
@@ -33,7 +31,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo13
 
                             reservationAutomobileList.Add(reservationAutomobile);
                             }
-                        }
                     }
                     catch (NpgsqlException e)
                     {

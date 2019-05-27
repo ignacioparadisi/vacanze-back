@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using System.Text.RegularExpressions;
-using vacanze_back.VacanzeApi.Persistence.Connection;
-namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo13
+namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
 {
     public class RoomConnection : Connection
     {
