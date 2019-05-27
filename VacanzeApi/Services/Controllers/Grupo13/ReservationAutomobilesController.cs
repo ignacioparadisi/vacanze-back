@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using vacanze_back.Entities.Grupo13;
-using vacanze_back.Entities;
-using vacanze_back.Persistence.Grupo13;
+using vacanze_back.VacanzeApi.Persistence.Connection.Grupo13;
 
-namespace vacanze_back.Controllers.Grupo13
+namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 {
     [Route("api/[controller]")]
     [ApiController]

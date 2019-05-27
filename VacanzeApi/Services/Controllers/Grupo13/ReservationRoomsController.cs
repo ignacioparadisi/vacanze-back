@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using vacanze_back.Entities.Grupo13;
-using vacanze_back.Entities;
-using vacanze_back.Persistence.Grupo13;
+using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
+using vacanze_back.VacanzeApi.Persistence.Connection.Grupo13;
 
-namespace vacanze_back.Controllers.Grupo13
+namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -18,8 +18,8 @@ namespace vacanze_back.Controllers.Grupo13
         {
             try
             {
-                DAOReservationRoom daoReservationRooms = new DAOReservationRoom();
-                List<Entity> result = daoReservationRooms.getRoomReservations();
+                ReservationRoomConnection reservationRoomConnection = new ReservationRoomConnection();
+                List<Entity> result = reservationRoomConnection.getRoomReservations();
                 return Ok(result.ToList());
             }
             catch (System.Exception)
@@ -34,8 +34,8 @@ namespace vacanze_back.Controllers.Grupo13
         {
             try
             {
-                DAOReservationRoom daoReservationRooms = new DAOReservationRoom();
-                Entity result = daoReservationRooms.Find(id);
+                ReservationRoomConnection reservationRoomConnection = new ReservationRoomConnection();
+                Entity result = reservationRoomConnection.Find(id);
                 return Ok(result);
             }
             catch (System.Exception)

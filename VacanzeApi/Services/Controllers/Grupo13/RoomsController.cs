@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using vacanze_back.Entities.Grupo13;
-using vacanze_back.Entities;
-using vacanze_back.Persistence.Grupo13;
+using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
+using vacanze_back.VacanzeApi.Persistence.Connection.Grupo13;
 
 namespace vacanze_back.Controllers.Grupo13
 {
@@ -18,8 +18,8 @@ namespace vacanze_back.Controllers.Grupo13
         {
             try
             {
-                DAORoom daoRooms = new DAORoom();
-                List<Entity> result = daoRooms.GetRooms();
+                RoomConnection roomConnection = new RoomConnection();
+                List<Entity> result = roomConnection.GetRooms();
                 return Ok(result.ToList());
             }
             catch (System.Exception)
@@ -34,8 +34,8 @@ namespace vacanze_back.Controllers.Grupo13
         {
             try
             {
-                DAORoom dAOHabitacion = new DAORoom();
-                Entity result = dAOHabitacion.FindRoom(id);
+                RoomConnection roomConnection = new RoomConnection();
+                Entity result = roomConnection.FindRoom(id);
                 return Ok(result);
             }
             catch (System.Exception)
@@ -51,7 +51,7 @@ namespace vacanze_back.Controllers.Grupo13
             try
             {
                 ;
-                DAORoom dAORoom = new DAORoom();
+                RoomConnection roomConnection = new RoomConnection();
                // dAORoom.Add(room);
                 return room;
             }

@@ -5,13 +5,11 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using vacanze_back.Entities;
-using vacanze_back.Entities.Grupo13;
-using vacanze_back.Persistence;
+using vacanze_back.VacanzeApi.Persistence.Connection;
 
-namespace vacanze_back.Persistence.Grupo13
+namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo13
 {
-    public class DAOReservationAutomobile : DAO
+    public class ReservationAutomobileConnection : Connection
     { 
         const String SP_SELECT = "{CALL m13_getreservaautomoviles()}";
         /*

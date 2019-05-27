@@ -27,8 +27,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection
         /// </summary>
         protected void CreateStringConnection()
         {
-			_cadena = "Server=127.0.0.1;User Id=vacanza;" + 
-                        "Password=vacanza;Database=vacanza;" ;
+			_cadena = "Server=127.0.0.1;User Id=postgres;" + 
+                        "Password=1234;Database=vacanza;" ;
             //cadena de prueba
             /*
 			_cadena = "Server=127.0.0.1;User Id=postgres;" + 

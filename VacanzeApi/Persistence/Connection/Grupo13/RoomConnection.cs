@@ -5,13 +5,13 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using vacanze_back.Entities;
-using vacanze_back.Entities.Grupo13;
-using vacanze_back.Persistence;
+using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using System.Text.RegularExpressions;
-namespace vacanze_back.Persistence.Grupo13
+using vacanze_back.VacanzeApi.Persistence.Connection;
+namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo13
 {
-    public class DAORoom : DAO
+    public class RoomConnection : Connection
     {
         const String SP_SELECT = "m13_getRooms()";
         const String SP_FIND_ROOM = "m13_findByRoomId(@_id)";
@@ -34,7 +34,7 @@ namespace vacanze_back.Persistence.Grupo13
                 Connect();
                 StoredProcedure(SP_SELECT);
                 ExecuteReader();
-                for (int i = 0; i < rowNumber; i++)
+                for (int i = 0; i < numberRecords; i++)
                 {
                                                 //id, precio,      capacidad,        status
                     Room room = new Room(GetInt(i,0), GetDouble(i, 1), GetInt(i, 2), GetBool(i, 3));
@@ -70,7 +70,7 @@ namespace vacanze_back.Persistence.Grupo13
                 StoredProcedure(SP_FIND_ROOM);
                 AddParameter("_id", id);
                 ExecuteReader();
-                for (int i = 0; i < rowNumber; i++)
+                for (int i = 0; i < numberRecords; i++)
                 {
 
                  room = new Room(GetInt(i, 0), GetDouble(i, 1), GetInt(i, 2), GetBool(i, 3));

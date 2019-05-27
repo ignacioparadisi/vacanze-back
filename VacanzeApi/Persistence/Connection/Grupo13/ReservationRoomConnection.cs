@@ -5,13 +5,13 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using vacanze_back.Entities;
-using vacanze_back.Entities.Grupo13;
-using vacanze_back.Persistence;
+using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
+using vacanze_back.VacanzeApi.Persistence.Connection;
 
-namespace vacanze_back.Persistence.Grupo13
+namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo13
 {
-    public class DAOReservationRoom : DAO
+    public class ReservationRoomConnection : Connection
     {
         const String SP_SELECT = "m13_getResRooms()";
         const String SP_FIND = "m13_findByReservaHabitacionId(@_id)";
@@ -21,7 +21,7 @@ namespace vacanze_back.Persistence.Grupo13
         const String SP_ADD_PAYMENT = "";
 
         private ReservationRoom reservationRoom;
-        private DAORoom dAORoom;
+        private RoomConnection dAORoom;
 
         public void create(Entity e)
         {
@@ -36,23 +36,15 @@ namespace vacanze_back.Persistence.Grupo13
             try
             {
                 List<Entity> roomReservationList = new List<Entity>();
-                DAORoom dAORoom = new DAORoom();
+                RoomConnection dAORoom = new RoomConnection();
 
                 Connect();
                 StoredProcedure(SP_SELECT);
                 ExecuteReader();
-                for (int i = 0; i < rowNumber; i++)
+                for (int i = 0; i < numberRecords; i++)
                 {
                     ReservationRoom roomRes = new ReservationRoom(GetInt(i, 0), GetBool(i, 1), GetDateTime(i, 2), GetDateTime(i, 3));
                     roomRes.room = (Room) dAORoom.FindRoom(GetInt(i, 4));
-
-                    /*roomRes.setId(GetInt(i, 0));
-                    roomRes.status = GetBool(i, 1);
-                    roomRes.CheckIn = GetDateTime(i, 2);
-                    roomRes.CheckOut = GetDateTime(i, 3);
-                    roomRes.room_id = GetInt(i, 4);*/
-                   // roomRes.room = (Room) dAORoom.findRoom(GetInt(i,4)); NO ESTA CARGANDO EL OBJECT
-                   // roomRes.room.setId(GetInt(i,4); NO ESTA CARGANDO EL OBJECT.
 
                     roomReservationList.Add(roomRes);
                 }
@@ -86,7 +78,7 @@ namespace vacanze_back.Persistence.Grupo13
                 StoredProcedure(SP_FIND);
                 AddParameter("_id", id);
                 ExecuteReader();
-                for (int i = 0; i < rowNumber; i++)
+                for (int i = 0; i < numberRecords; i++)
                 {
                     reservationRoom = new ReservationRoom(GetInt(i, 0), GetBool(i, 1), GetDateTime(i, 2), GetDateTime(i, 3));
                     reservationRoom.room = (Room)dAORoom.FindRoom(GetInt(i, 4));
@@ -127,17 +119,10 @@ namespace vacanze_back.Persistence.Grupo13
                 AddParameter("_checkin", checkIn);
                 AddParameter("_checkout", checkOut);
                 ExecuteReader();
-                for (int i = 0; i < rowNumber; i++)
+                for (int i = 0; i < numberRecords; i++)
                 {
                     ReservationRoom roomRes = new ReservationRoom(GetInt(i, 0), GetBool(i, 1), GetDateTime(i, 2), GetDateTime(i, 3));
                     roomRes.room = (Room)dAORoom.FindRoom(GetInt(i, 4));
-                    /*roomRes.setId(GetInt(i, 0));
-                    roomRes.status = GetBool(i, 1);
-                    roomRes.CheckIn = GetDateTime(i, 2);
-                    roomRes.CheckOut = GetDateTime(i, 3);
-                    roomRes.room_id = GetInt(i, 4);*/
-                    // roomRes.room = (Room) dAORoom.findRoom(GetInt(i,4)); NO ESTA CARGANDO EL OBJECT
-                    // roomRes.room.setId(GetInt(i,4); NO ESTA CARGANDO EL OBJECT.
 
                     roomReservationList.Add(roomRes);
                 }
@@ -180,7 +165,7 @@ namespace vacanze_back.Persistence.Grupo13
 
                 ExecuteReader();
 
-                if (rowNumber > 0)
+                if (numberRecords > 0)
                 {
                     res_id = GetInt(0, 0);
                 }

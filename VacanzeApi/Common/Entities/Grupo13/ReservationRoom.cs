@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using vacanze_back.Entities;
 
-namespace vacanze_back.Entities.Grupo13
+namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
 {
     public class ReservationRoom : Entity
     {

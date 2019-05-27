@@ -23,6 +23,8 @@
 
   <ItemGroup>
 
+    <Folder Include="Controllers\" />
+
     <Folder Include="Entities\NewFolder\" />
     <Folder Include="LogicLayer\Grupo2" />
     <Folder Include="Persistence\Grupo2" />
