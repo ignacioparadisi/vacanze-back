@@ -26,13 +26,13 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
             _cadena = "Server=127.0.0.1;User Id=vacanza;" + 
                       "Password=vacanza;Database=vacanza;" ;
                         
-           /*  cadena  de prueba
+           /*  cadena  de prueba----------grupo 5--------------------
             _cadena = "Server=localhost;Port=5433;User Id=postgres;" + 
                       "Password=122324;Database=vacanza;" ;
-            //cadena de prueba*/
-            _cadena = "Server=192.168.99.100;User Id=postgres;" +
+            //cadena de prueba--------------------------------------*/
+            /* _cadena = "Server=192.168.99.100;User Id=postgres;" +
                       "Password=docker;Database=postgres;";
-            //cadena de prueba
+            //cadena de prueba*/
             /*
 			_cadena = "Server=127.0.0.1;User Id=postgres;" + 
                         "Password=jorge;Database=postgres;" ;*/

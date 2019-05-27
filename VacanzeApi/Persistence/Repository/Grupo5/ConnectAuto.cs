@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Npgsql;      
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 
-namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo5
+namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo5
 {
     public class ConnectAuto : Connection
     {
