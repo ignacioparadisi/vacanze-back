@@ -37,7 +37,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
         }
 
         [HttpGet("{begin}/{end}")]
-        public ActionResult<IEnumerable<Entity>> GetByDate(string begin, String end)
+        public ActionResult<IEnumerable<Entity>> GetByDate(string begin, String  end)
         {
             try
             {
@@ -100,7 +100,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
 
                 validator.Validate();
                 flightcon.Update(flight);
-                
+
                 return Ok( new {Message = "¡Vuelo editado con éxito!"});
             }
             catch (ValidationErrorException ex)
@@ -117,7 +117,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
                 return null;
             }
         }
-
 
         [HttpDelete("{id}")]    
         public ActionResult<Entity> Delete(int id)    
