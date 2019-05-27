@@ -12,7 +12,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
     [EnableCors("MyPolicy")]
     public class UsersController : ControllerBase
     {
-        // GET api/values
+        // GET api/users
         [HttpGet]
         public ActionResult<IEnumerable<User>> GetEmployees()
         {
@@ -30,28 +30,29 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
+//        [HttpGet("{id}")]
+//        public ActionResult<string> Get(int id)
+//        {
+//            return "value";
+//        }
 
-        // POST api/values
+        // POST api/users
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult<User> Post([FromBody] User user)
         {
+            return user;
         }
 
         // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+//        [HttpPut("{id}")]
+//        public void Put(int id, [FromBody] string value)
+//        {
+//        }
+//
+//        // DELETE api/values/5
+//        [HttpDelete("{id}")]
+//        public void Delete(int id)
+//        {
+//        }
     }
 }
