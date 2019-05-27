@@ -480,3 +480,55 @@ $$ LANGUAGE plpgsql;
 
 
 ------------------------------------fin de grupo 9---------------------------------
+
+------------------------------------inicio de grupo 7---------------------------------
+
+CREATE OR REPLACE FUNCTION ConsultarRestaurants()
+RETURNS TABLE
+  (name VARCHAR(100),
+   capacity INTEGER,
+   isActive BOOLEAN,
+   specialty VARCHAR(30),
+   price DECIMAL,
+   businessName VARCHAR(30),
+   picture VARCHAR,
+   description VARCHAR(30),
+   phone VARCHAR(30),
+   location INTEGER,
+   address VARCHAR(30)
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT
+    R.res_name, R.res_capacity , R.res_isactive ,R.res_specialty,R.res_price, R.res_businessname, R.res_picture, R.res_descr, R.res_tlf, R.res_loc_fk, R.res_address_specs
+    FROM Restaurant AS R;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION AddRestaurant(name VARCHAR(100),
+                                    capacity INTEGER,
+                                    isActive BOOLEAN,
+                                    specialty VARCHAR(30),
+                                    price DECIMAL,
+									businessName VARCHAR(30),
+									picture VARCHAR,
+									description VARCHAR(30),
+									phone VARCHAR(30),
+                                    location INTEGER,
+									address VARCHAR(30))
+    RETURNS integer AS
+$$
+DECLARE
+    DEST_ID INTEGER;
+BEGIN
+	Select count(*)+1 from restaurant as NEW_ID;
+    INSERT INTO restaurant
+    VALUES (NEW_ID,name,capacity,isActive,specialty,price,businessName,
+			picture,description,phone,location,address) RETURNING RES_ID INTO DEST_ID;
+    RETURN DEST_ID;
+END;
+$$ LANGUAGE plpgsql;
+
+------------------------------------fin de grupo 7---------------------------------

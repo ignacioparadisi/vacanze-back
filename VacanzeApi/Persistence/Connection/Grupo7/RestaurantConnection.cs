@@ -22,7 +22,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo7
             try
             {
                 Connect();
-                StoredProcedure("consultarRestaurant()");
+                StoredProcedure("ConsultarRestaurants();");
                 ExecuteReader();
 
                 for (var i = 0; i < numberRecords; i++)
@@ -59,7 +59,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo7
         {
             Connect();
             StoredProcedure(
-                "addrestaurant(@name,@capacity,@isActive,@specialty,@price,@businessName,@picture,@description,@phone,@location,@address)");
+                "addrestaurant2(@name,@capacity,@isActive,@specialty,@price,@businessName,@picture,@description,@phone,@location,@address)");
             AddParameter("name", restaurant.Name);
             AddParameter("capacity", restaurant.Capacity);
             AddParameter("isActive", restaurant.IsActive);

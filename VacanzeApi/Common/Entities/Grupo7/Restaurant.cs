@@ -25,6 +25,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo7
             Address = address;
         }
 
+        
         public Restaurant(string name, int capacity,bool isActive, string specialty, 
                           long price, string businessName, string picture, 
                           string description, string phone, long location, string address) : base(0)

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.Connection.Grupo7;
@@ -40,9 +41,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         {
             var dbConnection = new RestaurantConnection();
             var receivedId = dbConnection.AddRestaurant(restaurant);
+            Console.Write(receivedId.GetType());
             var savedRestaurant = new Restaurant(receivedId, restaurant.Name, restaurant.Capacity, restaurant.IsActive,
                                                  restaurant.Specialty, restaurant.Price, restaurant.BusinessName, 
-                                                 restaurant.Picture, restaurant.Description, restaurant.Phone, restaurant.Address);
+                                                 restaurant.Picture, restaurant.Description, restaurant.Phone,
+                                                 restaurant.Location,
+                                                  restaurant.Address);
             return CreatedAtAction("Get", "restaurants", savedRestaurant);
         }
     }
