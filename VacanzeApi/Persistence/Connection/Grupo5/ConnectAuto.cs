@@ -65,7 +65,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection.Grupo5
                     var model = GetString(i, 2);
                     var capacity =Convert.ToInt32(GetString(i, 3));
                     var status = GetBool(i, 4);
-                    var price =Convert.ToInt32(GetString(i, 5));
+                    var price = Convert.ToInt32(GetString(i, 5));
                     var licence =GetString(i, 6);
                     var picture =GetString(i, 7);
                     var place =Convert.ToInt32(GetString(i, 3));

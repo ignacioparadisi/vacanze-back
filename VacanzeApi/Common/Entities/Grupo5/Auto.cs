@@ -8,11 +8,11 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo5
         private int _capacity;
         private bool _isActive;
         private string _licence;
-        private int _price;
+        private float _price;
         private int _place;
         private string _picture;
         
-        public Auto (string make , string model , int capacity, bool isactive ,string licence , int price , string picture, int place)
+        public Auto (string make , string model , int capacity, bool isactive ,string licence , float price , string picture, int place)
         {
             this._id= 0;
             this._make =make;
@@ -51,10 +51,10 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo5
         public void setcapPasajero(int capacity){
             this._capacity=capacity;
         }
-        public int getprice(){
+        public float getprice(){
             return _price;
         }
-        public void setprice(int price){
+        public void setprice(float price){
             this._price=price;
         }
         public bool getisActive(){

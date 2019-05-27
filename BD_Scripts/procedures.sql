@@ -171,7 +171,7 @@ ADDAUTOMOBILE(
     _capacity integer,
     _status BOOLEAN,
     _licence varchar(30),
-    _price integer,
+    _price real,
     _picture varchar,
     _place integer
     ) 
@@ -207,7 +207,7 @@ RETURNS TABLE
    model varchar(30),
    capacity integer,
    isactive BOOLEAN, 
-   price integer , 
+   price real , 
    license varchar(30), 
    picture varchar (30), 
    loc_fk integer
@@ -229,7 +229,7 @@ MODIFYAUTOMOBILE(
     _capacity integer,
     _status BOOLEAN,
     _license varchar(30),
-    _price integer,
+    _price real,
     _picture varchar,
     _place integer
     ) 
