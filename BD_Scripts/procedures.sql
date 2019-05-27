@@ -502,3 +502,17 @@ $$ LANGUAGE plpgsql;
 
 
 ------------------------------------fin de grupo 9---------------------------------
+------ Consulta de los lugares ------
+CREATE OR REPLACE FUNCTION GetLocations()
+RETURNS TABLE
+  (id integer,
+   city VARCHAR(30),
+   country VARCHAR(30))
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT
+    LOC_ID, LOC_CITY, LOC_COUNTRY
+    FROM LOCATION;
+END;
+$$ LANGUAGE plpgsql;

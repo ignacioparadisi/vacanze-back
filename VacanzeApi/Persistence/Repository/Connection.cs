@@ -2,33 +2,29 @@
 using System.Data;
 using Npgsql;
 
-namespace vacanze_back.VacanzeApi.Persistence.Connection
+namespace vacanze_back.VacanzeApi.Persistence.Repository
 {
     public abstract class Connection
     {
-        private NpgsqlConnection _con;
-        private NpgsqlCommand _command;
-        private DataTable _dataTable;
         private string _cadena;
-        private int _numberRecords;
+        private NpgsqlCommand _command;
+        private NpgsqlConnection _con;
+        private DataTable _dataTable;
 
         public Connection()
         {
             CreateStringConnection();
         }
 
-        public int numberRecords
-        {
-            get { return _numberRecords; }
-        }
+        public int numberRecords { get; private set; }
 
         /// <summary>
-        /// hay que optimizar la cadena porque hasta ahora la hacemos local
+        ///     hay que optimizar la cadena porque hasta ahora la hacemos local
         /// </summary>
         protected void CreateStringConnection()
         {
-			_cadena = "Server=127.0.0.1;User Id=vacanza;" + 
-                        "Password=vacanza;Database=vacanza;" ;
+            _cadena = "Server=192.168.99.100;User Id=postgres;" +
+                      "Password=docker;Database=postgres;";
             //cadena de prueba
             /*
 			_cadena = "Server=127.0.0.1;User Id=postgres;" + 
@@ -40,7 +36,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection
             if (_con == null)
                 return false;
 
-            if (_con.State == System.Data.ConnectionState.Open)
+            if (_con.State == ConnectionState.Open)
                 return true;
 
             return false;
@@ -71,22 +67,20 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection
         }
 
         /// <summary>
-        /// Ejecutar el StoredProcedure con un valor de retorno (ResultSet), habilita el uso de las funciones "GetInt, GetString, etc" y devuelve un objeto DataTable.
+        ///     Ejecutar el StoredProcedure con un valor de retorno (ResultSet), habilita el uso de las
+        ///     funciones "GetInt, GetString, etc" y devuelve un objeto DataTable.
         /// </summary>
         public DataTable ExecuteReader()
         {
-
             try
             {
-
                 _dataTable = new DataTable();
 
                 _dataTable.Load(_command.ExecuteReader());
 
                 Disconnect();
 
-                _numberRecords = _dataTable.Rows.Count;
-
+                numberRecords = _dataTable.Rows.Count;
             }
             catch (NpgsqlException exc)
             {
@@ -100,18 +94,18 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection
             }
 
             return _dataTable;
-
         }
 
 
         /// <summary>
-        /// Ejecutar el StoredProcedure sin valor de retorno (ResultSet), devuelve el número de filas afectadas.
+        ///     Ejecutar el StoredProcedure sin valor de retorno (ResultSet), devuelve el número de filas
+        ///     afectadas.
         /// </summary>
         public int ExecuteQuery()
         {
             try
             {
-                int filasAfectadas = _command.ExecuteNonQuery();
+                var filasAfectadas = _command.ExecuteNonQuery();
 
                 Disconnect();
 
@@ -119,11 +113,11 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection
             }
             catch (NpgsqlException exc)
             {
-				Console.WriteLine(exc);
+                Console.WriteLine(exc);
                 Disconnect();
                 throw exc;
             }
-            catch (Exception exc) 
+            catch (Exception exc)
             {
                 Disconnect();
                 throw exc;
@@ -131,7 +125,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection
         }
 
         /// <summary>
-        /// Crea el comando para ejecutar el StoredProcedure, Ejemplo: StoredProcedure("nombreSP(@param)")
+        ///     Crea el comando para ejecutar el StoredProcedure, Ejemplo: StoredProcedure("nombreSP(@param)")
         /// </summary>
         public NpgsqlCommand StoredProcedure(string sp)
         {
@@ -171,11 +165,12 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection
                 throw exc;
             }
         }
+
         public int GetInt(int fila, int columna)
         {
             try
             {
-                int intItem = Convert.ToInt32(_dataTable.Rows[fila][columna]);
+                var intItem = Convert.ToInt32(_dataTable.Rows[fila][columna]);
 
                 return intItem;
             }
@@ -205,7 +200,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection
         {
             try
             {
-                char charItem = Convert.ToChar(_dataTable.Rows[fila][columna]);
+                var charItem = Convert.ToChar(_dataTable.Rows[fila][columna]);
 
                 return charItem;
             }
@@ -235,7 +230,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection
         {
             try
             {
-                string stringItem = Convert.ToString(_dataTable.Rows[fila][columna]);
+                var stringItem = Convert.ToString(_dataTable.Rows[fila][columna]);
 
                 return stringItem;
             }
@@ -265,7 +260,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection
         {
             try
             {
-                double doubleItem = Convert.ToDouble(_dataTable.Rows[fila][columna]);
+                var doubleItem = Convert.ToDouble(_dataTable.Rows[fila][columna]);
 
                 return doubleItem;
             }
@@ -295,7 +290,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection
         {
             try
             {
-                decimal decimalItem = Convert.ToDecimal(_dataTable.Rows[fila][columna]);
+                var decimalItem = Convert.ToDecimal(_dataTable.Rows[fila][columna]);
 
                 return decimalItem;
             }
@@ -325,7 +320,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection
         {
             try
             {
-                bool boolItem = Convert.ToBoolean(_dataTable.Rows[fila][columna]);
+                var boolItem = Convert.ToBoolean(_dataTable.Rows[fila][columna]);
 
                 return boolItem;
             }
@@ -351,7 +346,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection
         {
             try
             {
-                DateTime dateItem = Convert.ToDateTime(_dataTable.Rows[fila][columna]);
+                var dateItem = Convert.ToDateTime(_dataTable.Rows[fila][columna]);
 
                 return dateItem;
             }
@@ -372,31 +367,31 @@ namespace vacanze_back.VacanzeApi.Persistence.Connection
                 throw e;
             }
         }
-		public byte[] GetByte(int fila, int columna)
-		{
-			try
-			{
-				byte[] dateItem = (byte[])_dataTable.Rows[fila][columna];
 
-				return dateItem;
-			}
-			catch (IndexOutOfRangeException e)
-			{
-                throw e;
-			}
-			catch (FormatException e)
-			{
-				throw e;
-			}
-			catch (NullReferenceException e)
-			{
-                throw e;
-			}
-			catch (Exception e)
-			{
-                throw e;
-			}
-		}
+        public byte[] GetByte(int fila, int columna)
+        {
+            try
+            {
+                var dateItem = (byte[]) _dataTable.Rows[fila][columna];
 
-	}
+                return dateItem;
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                throw e;
+            }
+            catch (FormatException e)
+            {
+                throw e;
+            }
+            catch (NullReferenceException e)
+            {
+                throw e;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+    }
 }
