@@ -226,12 +226,14 @@ CREATE OR REPLACE FUNCTION AddShip(
   ) 
 RETURNS integer AS
 $$
+DECLARE
+ ret_id INTEGER;
 BEGIN
-
-   INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,
+	INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,
                     shi_line, shi_picture ) VALUES
-    (nextval('seq_ship'), _shi_name, _shi_capacity, _shi_loadingcap, _shi_model, _shi_line, _shi_picture );
-   RETURN currval('SEQ_SHIP');
+    (default, _shi_name, _shi_capacity, _shi_loadingcap, _shi_model, _shi_line, _shi_picture ) 
+	RETURNING shi_id INTO ret_id;
+ RETURN ret_id;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -247,12 +249,15 @@ CREATE OR REPLACE FUNCTION AddCruise(
   ) 
 RETURNS integer AS
 $$
+DECLARE
+  ret_id INTEGER;
 BEGIN
 
    INSERT INTO Cruise(cru_id, cru_shi_fk, cru_departuredate, cru_arrivaldate, cru_price,
                        cru_loc_arrival, cru_loc_departure ) VALUES
-    (nextval('seq_cruise'), _cru_shi_fk, _cru_departuredate, _cru_arrivaldate, _cru_price, _cru_loc_arrival, _cru_loc_departure );
-   RETURN currval('SEQ_CRUISE');
+    (default, _cru_shi_fk, _cru_departuredate, _cru_arrivaldate, _cru_price, _cru_loc_arrival, _cru_loc_departure )
+    RETURNING cru_id INTO ret_id;
+   RETURN ret_id;
 END;
 $$ LANGUAGE plpgsql;
 
