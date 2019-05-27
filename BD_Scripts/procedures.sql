@@ -1,3 +1,138 @@
+-------------------------------Grupo 3---------------------------------
+-- FUNCTION: public.addflight(integer, double precision, timestamp without time zone, timestamp without time zone, integer, integer)
+
+-- DROP FUNCTION public.addflight(integer, double precision, timestamp without time zone, timestamp without time zone, integer, integer);
+
+CREATE OR REPLACE FUNCTION public.addflight(
+	_plane integer,
+	_price double precision,
+	_departure timestamp without time zone,
+	_arrival timestamp without time zone,
+	_loc_arrival integer,
+	_loc_departure integer)
+    RETURNS integer
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+AS $BODY$
+
+BEGIN
+
+   INSERT INTO Flight(fli_id,fli_price ,fli_departureDate, fli_arrivalDate, fli_pla_fk, fli_loc_arrival,
+					 fli_loc_departure) VALUES
+    (nextval('seq_flight'),_price, _departure, _arrival, _plane, _loc_arrival, _loc_departure);
+   RETURN currval('seq_flight');
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.addflight(integer, double precision, timestamp without time zone, timestamp without time zone, integer, integer)
+    OWNER TO vacanza;
+
+-- FUNCTION: public.getplanes()
+
+-- DROP FUNCTION public.getplanes();
+
+CREATE OR REPLACE FUNCTION public.getplanes(
+	)
+    RETURNS TABLE(id integer, autonomy integer, isactive boolean, capacity integer, loadingcap integer, model character varying) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+	RETURN QUERY SELECT
+	pla_id, pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model
+	FROM public.Plane;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.getplanes()
+    OWNER TO vacanza;
+
+
+-- FUNCTION: public.findplane(integer)
+
+-- DROP FUNCTION public.findplane(integer);
+
+CREATE OR REPLACE FUNCTION public.findplane(
+	_id integer)
+    RETURNS TABLE(id integer, autonomy integer, isactive boolean, capacity integer, loadingcap integer, model character varying) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+	RETURN QUERY SELECT
+	pla_id, pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model
+	FROM public.Plane WHERE _id = pla_id;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.findplane(integer)
+    OWNER TO postgres;
+
+-- FUNCTION: public.getflights()
+
+-- DROP FUNCTION public.getflights();
+
+CREATE OR REPLACE FUNCTION public.getflights(
+	)
+    RETURNS TABLE(id integer, plane integer, price numeric, departuredate timestamp without time zone, arrivaldate timestamp without time zone, locdeparture integer, locarrival integer) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+	RETURN QUERY SELECT
+	fli_id, fli_pla_fk, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, fli_loc_arrival
+	FROM public.Flight;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.getflights()
+    OWNER TO postgres;
+
+-- FUNCTION: public.getflightsbydate(timestamp without time zone, timestamp without time zone)
+
+-- DROP FUNCTION public.getflightsbydate(timestamp without time zone, timestamp without time zone);
+
+CREATE OR REPLACE FUNCTION public.getflightsbydate(
+	_begin timestamp without time zone,
+	_end timestamp without time zone)
+    RETURNS TABLE(id integer, plane integer, price numeric, departuredate timestamp without time zone, arrivaldate timestamp without time zone, locdeparture integer, locarrival integer) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+	RETURN QUERY SELECT
+	fli_id, fli_pla_fk, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, fli_loc_arrival
+	FROM public.Flight WHERE fli_departuredate BETWEEN _begin AND _end + '1 days'::interval;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.getflightsbydate(timestamp without time zone, timestamp without time zone)
+    OWNER TO postgres;
+
+
 ------- grupo 2 ----------
 CREATE OR REPLACE FUNCTION GetRoles()
 RETURNS TABLE
@@ -41,6 +176,24 @@ $$
 $$ LANGUAGE plpgsql;
 
 ------- grupo 6 ----------
+CREATE OR REPLACE FUNCTION AddHotel(name VARCHAR(100),
+                                    amountOfRooms INTEGER,
+                                    active BOOLEAN,
+                                    phone VARCHAR(30),
+                                    website VARCHAR(30),
+                                    location INTEGER)
+    RETURNS integer AS
+$$
+DECLARE
+    dest_id INTEGER;
+BEGIN
+    INSERT INTO hotel (hot_nombre, hot_cant_habitaciones, hot_activo, hot_telefono, hot_sitio_web,
+                       hot_fk_lugar)
+    VALUES (name, amountOfRooms, active, phone, website, location) RETURNING hot_id INTO dest_id;
+    RETURN dest_id;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION ConsultarHoteles()
 RETURNS TABLE
   (id integer,
@@ -55,8 +208,8 @@ AS
 $$
 BEGIN
     RETURN QUERY SELECT
-    H.hot_id, H.hot_nombre,H.hot_capHuesped, H.hot_statusActivo,H.hot_telefono,H.hot_sitio_web, L.l_nombre
-    FROM Hotel AS H, Lugar AS L WHERE L.l_id = H.fk_lugar;
+    H.hot_id, H.hot_nombre, H.hot_cant_habitaciones , H.hot_activo ,H.hot_telefono,H.hot_sitio_web, L.l_nombre
+    FROM Hotel AS H, Lugar AS L WHERE L.l_id = H.hot_fk_lugar;
 END;
 $$ LANGUAGE plpgsql;
 
