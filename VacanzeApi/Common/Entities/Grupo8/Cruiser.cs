@@ -1,16 +1,35 @@
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json;
+
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
 {
     public class Cruiser : Entity
     {
-            private string Name { get; }
-            private int Roms { get; }
-            private int Capacity { get; }
+            public string Name { get; }
+            public bool Status { get; }
+            public int Capacity { get; }
+            public int LoadingShipCap { get; }
+            public string Model { get; }
+            public string Line { get; }
 
-            public Cruiser(long id,string name, int roms, int capacity ) : base(id)
+            [JsonConstructor]
+            public Cruiser( long id , string name , bool status , int capacity , int loadingShipCap , string model , string line) : base(id)
             {
                 Name = name;
-                Roms = roms;
+                Status = status;
                 Capacity = capacity;
+                LoadingShipCap = loadingShipCap;
+                Model = model;
+                Line = line;
+            }
+            public Cruiser(string name , bool status , int capacity , int loadingShipCap , string model , string line) : base(0)
+            {
+                Name = name;
+                Status = status;
+                Capacity = capacity;
+                LoadingShipCap = loadingShipCap;
+                Model = model;
+                Line = line;
             }
         }
 }
