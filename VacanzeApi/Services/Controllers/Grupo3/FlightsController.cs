@@ -134,8 +134,37 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
 
         [HttpDelete("{id}")]    
         public ActionResult<Entity> Delete(int id)    
-        {    
-            return Ok(id);
+        {
+            try
+            {
+
+                Flight f = (Flight)FlightRepository.Find((int)id);
+
+                if (f == null)
+                {
+                    throw new ValidationErrorException("El vuelo a eliminar no existe");
+                }
+
+                FlightValidator validator = new FlightValidator(f);
+
+                FlightRepository.Delete(f);
+
+                return Ok(new { Message = "¡Vuelo elimindado con éxito!" });
+            }
+            catch (ValidationErrorException ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+            catch (DbErrorException ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+            //return Ok(id);
         }
 
     }

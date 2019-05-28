@@ -15,6 +15,7 @@ CREATE OR REPLACE FUNCTION public.addflight(
 
     COST 100
     VOLATILE 
+    
 AS $BODY$
 
 BEGIN
@@ -67,6 +68,28 @@ $BODY$;
 ALTER FUNCTION public.updateflight(integer, integer, double precision, character varying, character varying, integer, integer)
     OWNER TO vacanza;
 
+
+-- FUNCTION: public.deleteflight()
+
+-- DROP FUNCTION public.deleteflight();
+CREATE OR REPLACE FUNCTION public.deleteflight
+(_id integer)
+RETURNS integer
+LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+AS $BODY$
+BEGIN
+
+    DELETE FROM Flight 
+    WHERE (fli_id = _id);
+    return _id;
+END;
+$BODY$;
+
+ALTER FUNCTION public.deleteflight(integer)
+    OWNER TO vacanza;
 
 -- FUNCTION: public.getplanes()
 

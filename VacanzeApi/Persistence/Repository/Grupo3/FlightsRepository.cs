@@ -18,6 +18,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
         static string FIND_FLIGHT = "findflight(@_id)";
         static string UPDATE_FLIGHT = 
         "updateflight(@_id, @_plane, @_price, @_departure, @_arrival, @_loc_departure, @_loc_arrival)";
+        static string DELETE_FLIGHT = "deleteflight(@_id)";
 
 
         public static List<Entity> Get(){
@@ -95,6 +96,30 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
                 throw new DbErrorException("Ups, a ocurrido un error al conectarse a la base de datos", ex);
             }
             finally{
+            }
+        }
+
+        public static void Delete(Entity entity)
+        {
+            try
+            {
+                Flight flight = (Flight)entity;
+
+                 var table = PgConnection.Instance.ExecuteFunction(
+                    DELETE_FLIGHT,
+                    (int)flight.Id
+                );
+                
+               // throw new DbErrorException(flight.Id.ToString());
+            }
+            catch (DatabaseException ex)
+            {
+
+                Console.WriteLine(ex.ToString());
+                throw new DbErrorException("Ups, a ocurrido un error al conectarse a la base de datos", ex);
+            }
+            finally
+            {
             }
         }
 
