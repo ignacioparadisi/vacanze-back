@@ -14,10 +14,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
         static string ADD_FLIGHT =
         "addflight( @_plane, @_price, @_departure,@_arrival, @_loc_arrival, @_loc_departure )";
         static string GET_FLIGTS_BY_DATE = "getflightsbydate(@_begin, @_end)";
-
         static string FIND_FLIGHT = "findflight(@_id)";
         static string UPDATE_FLIGHT =
         "updateflight(@_id, @_plane, @_price, @_departure, @_arrival, @_loc_departure, @_loc_arrival)";
+        static string DELETE_FLIGHT = "deleteflight(@_id)";
 
 
         /// <summary>Devuelve lista de vuelos de la DB</summary>
