@@ -1,33 +1,37 @@
+using Newtonsoft.Json;
+
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
 {
     public class Hotel : Entity
     {
-        private string Nombre { get; }
-        private int CantidadDeHabitaciones { get; }
-        private bool Activo { get; }
-        private string Telefono { get; }
-        private string SitioWeb { get; }
         // TODO: Cuando se cree la clase Lugar, implementar esta parte
         // private Lugar _direccion;
 
-        public Hotel(long id, string nombre, int cantidadDeHabitaciones, bool activo,
-            string telefono, string sitioWeb) : base(id)
+        [JsonConstructor]
+        public Hotel(long id, string name, int amountOfRooms, bool isActive,
+            string phone, string website) : base(id)
         {
-            Nombre = nombre;
-            CantidadDeHabitaciones = cantidadDeHabitaciones;
-            Activo = activo;
-            Telefono = telefono;
-            SitioWeb = sitioWeb;
+            Name = name;
+            AmountOfRooms = amountOfRooms;
+            IsActive = isActive;
+            Phone = phone;
+            Website = website;
         }
 
-        public Hotel(string nombre, int cantidadDeHabitaciones, bool activo,
-            string telefono, string sitioWeb) : base(0)
+        public Hotel(string name, int amountOfRooms, bool isActive,
+            string phone, string website) : base(0)
         {
-            Nombre = nombre;
-            CantidadDeHabitaciones = cantidadDeHabitaciones;
-            Activo = activo;
-            Telefono = telefono;
-            SitioWeb = sitioWeb;
+            Name = name;
+            AmountOfRooms = amountOfRooms;
+            IsActive = isActive;
+            Phone = phone;
+            Website = website;
         }
+
+        public string Name { get; }
+        public int AmountOfRooms { get; }
+        public bool IsActive { get; }
+        public string Phone { get; }
+        public string Website { get; }
     }
 }
