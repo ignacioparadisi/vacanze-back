@@ -62,9 +62,16 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
         }
         public static int DeleteCruiser(int id)
         {
-            var table = PgConnection.Instance.ExecuteFunction("DeleteShip(@id)",id);
-            var deletedid = Convert.ToInt32(table.Rows[0][0]);
-            return deletedid;
+            try
+            {
+                var table = PgConnection.Instance.ExecuteFunction("DeleteShip(@id)",id);
+                var deletedid = Convert.ToInt32(table.Rows[0][0]);
+                return deletedid;
+            }
+            catch (InvalidCastException)
+            {
+                return -1;
+            }
         }
     }
 }

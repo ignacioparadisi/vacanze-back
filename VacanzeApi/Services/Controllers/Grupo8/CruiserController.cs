@@ -68,7 +68,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         public ActionResult<int> DeleteCruiser(int id)
         {
             var deletedid = CruiserConnection.DeleteCruiser(id);
-            return StatusCode(200, id);
+            if (deletedid.Equals(-1))
+            {
+                return StatusCode(500, "El crucero no existe");
+            }
+            return StatusCode(200, "Eliminado satisfactoriamente");
         }
     }
 }
