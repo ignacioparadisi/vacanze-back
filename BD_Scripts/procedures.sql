@@ -207,6 +207,7 @@ CREATE OR REPLACE FUNCTION AddHotel(name VARCHAR(100),
                                     specs VARCHAR(200),
                                     price DECIMAL,
                                     picture VARCHAR,
+                                    estrellas INTEGER,
                                     location INTEGER)
     RETURNS integer AS
 $$
@@ -214,8 +215,8 @@ DECLARE
     dest_id INTEGER;
 BEGIN
     INSERT INTO HOTEL (HOT_NAME, HOT_CAPACITY, HOT_ISACTIVE, HOT_TLF, HOT_WEBSITE,HOT_ADDRESS_SPECS, HOT_PRICE, HOT_PICTURE,
-                       HOT_LOC_FK)
-    VALUES (name, amountOfRooms, active, phone, website,specs,price,picture, location) RETURNING HOT_ID INTO dest_id;
+                       HOT_CANT_STARS,HOT_LOC_FK)
+    VALUES (name, amountOfRooms, active, phone, website,specs,price,picture,estrellas, location) RETURNING HOT_ID INTO dest_id;
     RETURN dest_id;
 END;
 $$ LANGUAGE plpgsql;
@@ -231,13 +232,14 @@ RETURNS TABLE
    especificaciones VARCHAR(200),
    precio DECIMAL,
    foto VARCHAR,
+   estrellas INTEGER,
    ciudad VARCHAR(100)
   )
 AS
 $$
 BEGIN
     RETURN QUERY SELECT
-    H.HOT_ID, H.HOT_NAME, H.HOT_CAPACITY, H.HOT_ISACTIVE, H.HOT_TLF, H.HOT_WEBSITE,H.HOT_ADDRESS_SPECS, H.HOT_PRICE, H.HOT_PICTURE, L.LOC_CITY
+    H.HOT_ID, H.HOT_NAME, H.HOT_CAPACITY, H.HOT_ISACTIVE, H.HOT_TLF, H.HOT_WEBSITE,H.HOT_ADDRESS_SPECS, H.HOT_PRICE, H.HOT_PICTURE, H.HOT_CANT_STARS, L.LOC_CITY
     FROM Hotel AS H, LOCATION AS L WHERE L.LOC_ID = H.HOT_LOC_FK;
 END;
 $$ LANGUAGE plpgsql;
