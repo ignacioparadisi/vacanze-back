@@ -38,10 +38,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         public ActionResult<Hotel> Create([FromBody] Hotel hotel)
         {
             var receivedId = HotelRepository.AddHotel(hotel);
-            var savedHotel = new Hotel(receivedId, hotel.Name, hotel.AmountOfRooms, hotel.IsActive,
-                hotel.Phone,
-                hotel.Website);
-            return CreatedAtAction("Get", "hotels", savedHotel);
+            hotel.Id = receivedId;
+            return CreatedAtAction("Get", "hotels", hotel);
         }
     }
 }
