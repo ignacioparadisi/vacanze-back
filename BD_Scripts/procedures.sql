@@ -552,6 +552,88 @@ $$ LANGUAGE plpgsql;
 
 
 ------------------------------------fin de grupo 9---------------------------------
+
+-----------------------------------Grupo 5 ------------------------------------------------
+-------------AGREGAR AUTO-----------------
+
+CREATE OR REPLACE FUNCTION 
+ADDAUTOMOBILE(
+    _make VARCHAR(20), 
+    _model VARCHAR(30),
+    _capacity integer,
+    _status BOOLEAN,
+    _licence varchar(30),
+    _price real,
+    _picture varchar,
+    _place integer
+    ) 
+RETURNS integer AS
+$$
+BEGIN
+
+
+   INSERT INTO AUTOMOBILE(AUT_ID,AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_LICENSE,AUT_PRICE,AUT_PICTURE,AUT_LOC_FK) VALUES
+    (nextval('SEQ_AUTOMOBILE'), _make, _model,_capacity,_status,_licence,_price,_picture,_place);
+   RETURN currval('SEQ_AUTOMOBILE');
+END;
+$$ LANGUAGE plpgsql;
+
+-----------------------------------------------------------------------------------------
+----------------eliminar auto-------------------------------
+
+CREATE OR REPLACE FUNCTION DeleteAuto(_id integer)
+RETURNS void AS
+$$
+BEGIN
+
+    DELETE FROM AUTOMOBILE
+    WHERE (AUT_ID = _id);
+
+END;
+$$ LANGUAGE plpgsql;
+------------------------------------------------
+CREATE OR REPLACE FUNCTION ConsultforIdAuto(codigo integer)
+RETURNS TABLE
+  (id integer,
+   make varchar(30),
+   model varchar(30),
+   capacity integer,
+   isactive BOOLEAN, 
+   price real , 
+   license varchar(30), 
+   picture varchar (30), 
+   loc_fk integer
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY  select * 
+    FROM AUTOMOBILE  WHERE aut_id = codigo;
+END;
+$$ LANGUAGE plpgsql;
+
+--------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION 
+MODIFYAUTOMOBILE(
+	_id integer,
+    _make VARCHAR(20), 
+    _model VARCHAR(30),
+    _capacity integer,
+    _status BOOLEAN,
+    _license varchar(30),
+    _price real,
+    _picture varchar,
+    _place integer
+    ) 
+RETURNS integer AS
+$$
+BEGIN
+UPDATE automobile
+	SET  aut_make=_make, aut_model=_model,
+	aut_capacity=_capacity, aut_isactive=_status, aut_price=_price,
+	aut_license=_license, aut_picture=_picture, aut_loc_fk=_place
+	WHERE aut_id =_id;
+	RETURN _id;
 ------ Consulta de los lugares ------
 CREATE OR REPLACE FUNCTION GetLocations()
 RETURNS TABLE
@@ -566,3 +648,58 @@ BEGIN
     FROM LOCATION;
 END;
 $$ LANGUAGE plpgsql;
+
+------------------------------------inicio de grupo 7---------------------------------
+
+--------------------------CONSULTAR Restaurant--------------------
+
+CREATE OR REPLACE FUNCTION GetRestaurants()
+RETURNS TABLE
+  (id integer,
+   name VARCHAR(100),
+   capacity INTEGER,
+   isActive BOOLEAN,
+   specialty VARCHAR(30),
+   price DECIMAL,
+   businessName VARCHAR(30),
+   picture VARCHAR,
+   description VARCHAR(30),
+   phone VARCHAR(30),
+   location INTEGER,
+   address VARCHAR(30)
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT
+    R.res_id, R.res_name, R.res_capacity , R.res_isactive ,R.res_specialty,R.res_price, R.res_businessname, R.res_picture, R.res_descr, R.res_tlf, R.res_loc_fk, R.res_address_specs
+    FROM Restaurant AS R;
+END;
+$$ LANGUAGE plpgsql;
+
+--------------------------Agregar Restaurant--------------------
+
+CREATE OR REPLACE FUNCTION AddRestaurant(name VARCHAR(100),
+                                    capacity INTEGER,
+                                    isActive BOOLEAN,
+                                    specialty VARCHAR(30),
+                                    price DECIMAL,
+									businessName VARCHAR(30),
+									picture VARCHAR,
+									description VARCHAR(30),
+									phone VARCHAR(30),
+                                    location INTEGER,
+									address VARCHAR(30))
+    RETURNS integer AS
+$$
+DECLARE
+    DEST_ID INTEGER;
+BEGIN
+    INSERT INTO restaurant
+    VALUES ((select count(*)+1 from restaurant),name,capacity,isActive,specialty,price,businessName,
+			picture,description,phone,location,address) RETURNING RES_ID INTO DEST_ID;
+    RETURN DEST_ID;
+END;
+$$ LANGUAGE plpgsql;
+
+------------------------------------fin de grupo 7---------------------------------
