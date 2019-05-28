@@ -671,3 +671,93 @@ END;
 $$ LANGUAGE plpgsql;
 
 ------------------------------------fin de grupo 7---------------------------------
+
+
+------------------------------------inicio de grupo 11---------------------------------
+
+
+------------------------------------Consulta de detalles para pago----------------------
+CREATE OR REPLACE FUNCTION Get_Info_Order (_id integer, _tipo integer)
+
+RETURNS TABLE
+(  ID            INTEGER,
+   DESCRIP       VARCHAR(100),
+   IMAGE         VARCHAR,
+   BRAND         VARCHAR(100),
+   QTY           Double Precision,
+   PRICE         NUMERIC,
+   PRICE_TOTAL   Double Precision
+
+)
+
+AS $$
+BEGIN
+	IF _tipo = 0 
+	THEN
+
+	 RETURN QUERY
+		SELECT 
+		RA_ID AS ID,
+		AUT_PICTURE AS IMAGE,
+		AUT_MAKE AS DESCRIP,
+		AUT_MODEL AS BRAND,
+		DATE_PART('day',RA_RETURNDATE - RA_PICKUPDATE) AS QTY,
+		AUT_PRICE AS PRICE,
+		AUT_PRICE * DATE_PART('day',RA_RETURNDATE - RA_PICKUPDATE) AS PRICE_TOTAL
+		FROM RES_AUT 
+		INNER JOIN AUTOMOBILE ON RA_AUT_FK = AUT_ID
+		WHERE RA_ID = _id;
+		
+	ELSIF _tipo = 1 
+	THEN
+	
+	 RETURN QUERY
+		SELECT 
+		RC_ID AS ID,
+		SHI_PICTURE AS IMAGE,
+		SHI_NAME AS DESCRIP,
+		SHI_MODEL AS BRAND,
+		DATE_PART('day',CRU_ARRIVALDATE - CRU_DEPARTUREDATE) AS QTY,
+		CRU_PRICE AS PRICE,
+		CRU_PRICE * DATE_PART('day',CRU_ARRIVALDATE - CRU_DEPARTUREDATE) AS PRICE_TOTAL
+		FROM RES_CRU 
+		INNER JOIN CRUISE ON CRU_ID = RC_CRU_FK
+		INNER JOIN SHIP ON CRU_SHI_FK = CRU_ID
+		WHERE RC_ID = _id;
+
+		ELSIF _tipo = 2
+	THEN
+	
+	 RETURN QUERY
+		SELECT 
+		RA_ID AS ID,
+		AUT_PICTURE AS IMAGE,
+		AUT_MAKE AS DESCRIP,
+		AUT_MODEL AS BRAND,
+		DATE_PART('day',RA_RETURNDATE - RA_PICKUPDATE) AS QTY,
+		AUT_PRICE AS PRICE,
+		AUT_PRICE * DATE_PART('day',RA_RETURNDATE - RA_PICKUPDATE) AS PRICE_TOTAL
+		FROM RES_AUT 
+		INNER JOIN AUTOMOBILE ON RA_AUT_FK = AUT_ID
+		WHERE RA_ID = _id;
+
+		ELSIF _tipo = 3
+	THEN
+	
+	 RETURN QUERY
+		SELECT 
+		RR_ID 		 AS ID,
+		RES_PICTURE 	 AS IMAGE,
+		RES_NAME    	 AS DESCRIP,
+		RES_BUSINESSNAME AS BRAND,
+		cast('1' as double precision)  		 AS QTY,
+		RES_PRICE AS PRICE,
+		RES_PRICE AS PRICE_TOTAL
+		FROM RES_REST 
+		INNER JOIN RESTAURANT ON RR_RES_FK = RES_ID
+		WHERE RA_ID = _id;
+
+	END IF;
+END
+$$ LANGUAGE plpgsql;
+------------------------------------fin de grupo 11---------------------------------
