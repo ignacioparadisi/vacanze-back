@@ -125,8 +125,6 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         public void RepeatedEmailTest()
         {
             var user = UserRepository.AddUser(UserTest);
-            var roles = new List<Role>();
-            roles.Add(new Role(1,"Cliente"));
             Assert.Throws<RepeatedEmailException>(() => UserRepository.VerifyEmail("cliente1@vacanze.com"));
         }
         
