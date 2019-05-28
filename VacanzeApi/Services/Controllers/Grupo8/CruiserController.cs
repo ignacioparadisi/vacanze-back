@@ -1,47 +1,78 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
+using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo8;
 
-namespace vacanze_back.Controllers.Grupo8
+namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
+    [EnableCors("MyPolicy")]
     [ApiController]
     public class CruiserController : Controller
     {
         // GET/Cruisers
         [HttpGet]
-        public String[] GetCruisers()
+        public ActionResult<IEnumerable<Cruiser>> GetCruisers(int id)
         {
-            return new [] {"Cruiser1", "Cruiser2"};
+            try
+            {
+                var CruiserList=  CruiserConnection.GetCruisers();
+                return Ok(JsonConvert.SerializeObject(CruiserList));
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return StatusCode(500,"No hay cruceros registrados");
+            }
         }
-        // GET/Cruiser
+        // GET/Cruiser/{id}
         [HttpGet("{id}")]
-        public String GetCruiser(int id)
+        public IActionResult GetCruiser(int id)
         {
-            Cruiser c = new Cruiser(1,"concordia", 5,5 );
-            
-            return JsonConvert.SerializeObject(c);
+            try
+            {
+                 Cruiser cruiser=  CruiserConnection.GetCruiser(id);
+                 return Ok(JsonConvert.SerializeObject(cruiser));
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return StatusCode(500,"El Crusero no fue encontrado");
+            }
         }
 
-//        [HttpPost]
-//        public Cruiser PostCruiser(Cruiser cruiser)
-//        {
+
+        [HttpPost]
+        public ActionResult<Cruiser> PostCruiser([FromBody] Cruiser cruiser)
+        {
+            Console.WriteLine(cruiser);
+            var id = CruiserConnection.AddCruiser(cruiser);
+            var savedCruiser = new Cruiser(id,cruiser.Name,cruiser.Status,cruiser.Capacity,cruiser.LoadingShipCap,cruiser.Model,cruiser.Line);
+            return StatusCode(200,savedCruiser);
+        }
+        
 //    
-//                
 //        }
 //        [HttpPut]
 //        public Cruiser PutCruiser(Cruiser cruiser)
 //        {
-//            
-////        }
-//        [HttpDelete]
-//        public Cruiser DeleteCruiser(int id)
-//        {
-//            
-//        }
-        
+//         
+////      }
+/// 
+        [HttpDelete("{id}")]
+        public ActionResult<int> DeleteCruiser(int id)
+        {
+            var deletedid = CruiserConnection.DeleteCruiser(id);
+            if (deletedid.Equals(-1))
+            {
+                return StatusCode(500, "El crucero no existe");
+            }
+            return StatusCode(200, "Eliminado satisfactoriamente");
+        }
     }
 }
