@@ -12,6 +12,17 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
     [TestFixture]
     public class UsersTests
     {
+        private User UserTest;
+
+        [SetUp]
+        public void CreateUserTest()
+        {
+            var roles = new List<Role>();
+            roles.Add(new Role(1,"Cliente"));
+            UserTest = new User(0, 23456789, "Pedro", "Perez", 
+                "cliente1@vacanze.com", "12345678", roles);
+        }
+        
         [Test]
         public void GetEmployeesFromDbTest()
         {
@@ -94,5 +105,35 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
                 "usuario@vacanza.com", "12345678", roles);
             Assert.Throws<NotValidIdException>(() => { user.Validate(); });
         }
+
+        [Test]
+        public void AddUserDbTest()
+        {
+            var user = UserRepository.AddUser(UserTest);
+            Assert.True(user.Id > 0);
+        }
+
+        [Test]
+        public void AddUserResponseTest()
+        {
+            var controller = new UsersController();
+            ActionResult<User> user = controller.Post(UserTest);
+            Assert.True(user.Value.Id > 0);
+        }
+
+        [Test]
+        public void RepeatedEmailTest()
+        {
+            var user = UserRepository.AddUser(UserTest);
+            Assert.Throws<RepeatedEmailException>(() => UserRepository.VerifyEmail("cliente1@vacanze.com"));
+        }
+        
+
+        [TearDown]
+        public void DeleteUserTest()
+        {
+            UserRepository.DeleteUserByEmail("cliente1@vacanze.com");
+        }
+        
     }
 }
