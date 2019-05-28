@@ -925,11 +925,19 @@ VALUES ('8654826', 'cargador@vacanze.com', 'Salazar', 'Marcos', MD5('cargador123
 INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
 VALUES ('20766589', 'cliente@vacanze.com', 'Martinez', 'Carlos', MD5('cliente123'));
 
+INSERT INTO USERS (use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES ('23613704', 'larry.page@vacanze.com', 'Page', 'Larry', 'google');
+
+INSERT INTO USERS (use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES ('23613704', 'reggaebob@vacanze.com', 'Marley', 'Bob', 'jah');
+
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (2, 1);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (3, 2);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (4, 3);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (5, 4);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (1, 5);
+INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (1, 6);
+INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (1, 7);
 
 
 ------- grupo 6 ----------
@@ -962,3 +970,14 @@ INSERT INTO public.Plane(
 --------------Grupo 8 ---------------------------------
 INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'concordia', 100, 1000, 'Modelo1','Linea1', '1.jpg' );
 INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'Lmao', 500, 2000, 'Modelo2','Linea2', '3.jpg' );
+
+------- grupo 10 ----------
+
+INSERT INTO Travel(tra_name, tra_descr, tra_use_fk)
+VALUES ('Surf Trip', 'Surf trip arroud Vnzla', 5);
+
+INSERT INTO Travel(tra_name, tra_descr, tra_use_fk)
+VALUES ('Family', 'Summer Vacation', 5);
+
+INSERT INTO Travel(tra_name, tra_descr, tra_use_fk)
+VALUES ('Business Trip', 'About businnes, I am busy', 6);

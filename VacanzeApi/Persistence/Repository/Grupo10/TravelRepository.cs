@@ -8,7 +8,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
     public class TravelRepository{
 
         ///<sumary>
-        /// Receive the user's id and retor their travels
+        /// Receive the user's id and return their travels
         ///</sumary>
         ///<returns>
         /// User's travels
