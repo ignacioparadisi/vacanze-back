@@ -147,7 +147,8 @@ namespace vacanze_back.Controllers.Grupo9
 				else if (ClaimAux.title != null && ClaimAux.description  != null)
 					conec.ModifyClaimTitle(id, claim);
 				return Ok("Modificado exitosamente");
-            }catch (DatabaseException )
+            }
+            catch (DatabaseException )
             {            
 				return StatusCode(500);
             }
@@ -156,8 +157,6 @@ namespace vacanze_back.Controllers.Grupo9
 				return StatusCode(500);
             } 
         }
-
-
     }
 }
 

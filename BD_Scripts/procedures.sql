@@ -58,7 +58,7 @@ RETURNS integer AS
 $$
 BEGIN
 
-   UPDATE Claim SET cla_title= _cla_title and cla_descr= _cla_descr
+   UPDATE Claim SET cla_title= _cla_title, cla_descr= _cla_descr
 	WHERE (cla_id = _cla_id);
    RETURN _cla_id;
 END;
