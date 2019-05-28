@@ -107,7 +107,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
 
         public int DeleteClaim(int claimId)
         {
-            var table= PgConnection.Instance.ExecuteFunction("claim");    
+            var table= PgConnection.Instance.ExecuteFunction("claim(@cla_id)",claimId);    
             if(table.Rows.Count < 1) throw new NullClaimException("no existe esa id");
             PgConnection.Instance.ExecuteFunction("DeleteClaim(@cla_id)",claimId );
             return claimId;
@@ -115,7 +115,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
 
         public int ModifyClaimStatus(int claimId, Claim claim)
         {               
-            var table= PgConnection.Instance.ExecuteFunction("claim");    
+            var table= PgConnection.Instance.ExecuteFunction("claim(@cla_id)",claimId);    
             if(table.Rows.Count < 1) throw new NullClaimException("no existe esa id");                           
             PgConnection.Instance.ExecuteFunction("modifyclaimstatus(@cla_id,@cla_status)",claimId ,claim._status);
             return claimId;
@@ -123,7 +123,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
 
         public int ModifyClaimTitle(int claimId, Claim claim)
         {
-            var table= PgConnection.Instance.ExecuteFunction("claim");    
+            var table= PgConnection.Instance.ExecuteFunction("claim(@cla_id)",claimId);    
             if(table.Rows.Count < 1) throw new NullClaimException("no existe esa id");                           
             PgConnection.Instance.ExecuteFunction("modifyclaimtitle(@cla_id,@cla_descr)",claimId ,claim._description);
             return claimId;  
