@@ -34,6 +34,24 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
             }
         }
 
+        [HttpGet("{id}")]
+        public ActionResult<Entity> Find(int id)
+        {
+            try
+            {
+                var result = FlightRepository.Find(id);
+                return Ok(result);
+            }
+            catch (DbErrorException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         [HttpGet("{begin}/{end}")]
         public ActionResult<IEnumerable<Entity>> GetByDate(string begin, string end)
         {

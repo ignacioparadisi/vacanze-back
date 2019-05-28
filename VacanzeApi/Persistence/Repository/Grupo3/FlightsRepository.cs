@@ -109,12 +109,12 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
                 {
                     flight = new Flight(Convert.ToInt32(table.Rows[0][0]));
                     flight.Id = Convert.ToInt32(table.Rows[0][0]);
-                    flight.plane = (Airplane) AirplanesRepository.Find( Convert.ToInt32(table.Rows[0][1]) );
-                    flight.price = Convert.ToDouble(table.Rows[0][2]);
-                    flight.departure = table.Rows[0][3].ToString();
-                    flight.arrival = table.Rows[0][4].ToString();
-                    flight.loc_arrival = Convert.ToInt32(table.Rows[0][5]);
-                    flight.loc_departure = Convert.ToInt32(table.Rows[0][6]);
+                    flight.price = Convert.ToDouble(table.Rows[0][1]);
+                    flight.departure = table.Rows[0][2].ToString();
+                    flight.arrival = table.Rows[0][3].ToString();
+                    flight.loc_arrival = Convert.ToInt32(table.Rows[0][4]);
+                    flight.loc_departure = Convert.ToInt32(table.Rows[0][5]);
+                    flight.plane = (Airplane) AirplanesRepository.Find( Convert.ToInt32(table.Rows[0][6]) );
                 }
 
                 return flight;
