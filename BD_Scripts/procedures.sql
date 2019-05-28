@@ -195,29 +195,38 @@ CREATE OR REPLACE FUNCTION AddUser(doc_id VARCHAR(20),
                                         lastname VARCHAR(30),
                                         email VARCHAR(30),
                                         password VARCHAR(50))
-  RETURNS VOID AS
+  RETURNS INTEGER AS
 $$
+DECLARE
+  id INTEGER;
 BEGIN
   INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
-  VALUES (doc_id, name, lastname, email, password);
+  VALUES (doc_id, name, lastname, email, password) RETURNING use_id INTO id;
+  RETURN id;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION AddUser_Role(rol_id INTEGER,
                                              use_id INTEGER)
-  RETURNS VOID AS
+  RETURNS INTEGER AS
 $$
+DECLARE
+  id INTEGER;
 BEGIN
   INSERT INTO User_Role(usr_rol_id, usr_use_id)
-  VALUES (rol_id, use_id);
+  VALUES (rol_id, use_id) RETURNING usr_id INTO id;
+  RETURN id;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION DeleteUserByEmail(email_id VARCHAR(30))
-  RETURNS VOID AS
+  RETURNS INTEGER AS
 $$
+DECLARE
+  id INTEGER;
 BEGIN
-  DELETE FROM Users WHERE use_email = email_id;
+  DELETE FROM Users WHERE use_email = email_id RETURNING use_id INTO id;
+  RETURN id;
 END;
 $$ LANGUAGE plpgsql;
 
