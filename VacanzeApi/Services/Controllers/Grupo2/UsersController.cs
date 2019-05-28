@@ -64,10 +64,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
 //        {
 //        }
 //
-//        // DELETE api/values/5
-//        [HttpDelete("{id}")]
-//        public void Delete(int id)
-//        {
-//        }
+        // DELETE api/users/1
+        [HttpDelete("{id}")]
+        public ActionResult<long> Delete(long id)
+        {
+            try
+            {
+                return UserRepository.DeleteUserById(id);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

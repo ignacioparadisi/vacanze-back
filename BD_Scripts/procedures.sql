@@ -229,6 +229,16 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION DeleteUserById(user_id BIGINT)
+RETURNS BIGINT AS 
+    $$ 
+    DECLARE id BIGINT;
+        BEGIN
+        DELETE FROM Users WHERE use_id = user_id RETURNING user_id INTO id;
+        RETURN id;
+        END;
+    $$ LANGUAGE plpgsql;
+
 ------- grupo 6 ----------
 CREATE OR REPLACE FUNCTION AddHotel(name VARCHAR(100),
                                     amountOfRooms INTEGER,

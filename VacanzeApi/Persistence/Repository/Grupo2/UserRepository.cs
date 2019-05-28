@@ -7,6 +7,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
 {
     public class UserRepository
     {
+        
+        // GETS
         public static List<User> GetEmployees()
         {
             var users = new List<User>();
@@ -29,6 +31,16 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
             return users;
         }
         
+        public static void VerifyEmail(string email)
+        {
+            var table = PgConnection.Instance.ExecuteFunction("GetUserByEmail(@email_id)",
+                email);
+            if (table.Rows.Count > 0)
+                throw new RepeatedEmailException("El Email Ingresado ya Existe");
+        }
+        
+        
+        // - MARK: CREATES
         public static User AddUser(User user)
         {
             var table = PgConnection.Instance.
@@ -48,18 +60,24 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
                 roleid, userid); 
         }
 
-        public static void VerifyEmail(string email)
-        {
-            var table = PgConnection.Instance.ExecuteFunction("GetUserByEmail(@email_id)",
-                email);
-            if (table.Rows.Count > 0)
-                throw new RepeatedEmailException("El Email Ingresado ya Existe");
-        }
-
+        
+        // - MARK: DELETE
         public static void DeleteUserByEmail(string email)
         {
             var table = PgConnection.Instance.ExecuteFunction("DeleteUserByEmail(@email_id)",
                 email);
+        }
+
+        public static long DeleteUserById(long id)
+        {
+            var table = PgConnection.Instance.ExecuteFunction("DeleteUserById(@user_id)", id);
+            var userId = table.Rows[0][0];
+            if (userId == DBNull.Value)
+            {
+                throw new UserNotFoundException("El usuario no se encuentra registrado.");
+            }
+
+            return Convert.ToInt64(userId);
         }
     }
 }
