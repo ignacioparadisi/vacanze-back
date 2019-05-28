@@ -16,6 +16,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
     [EnableCors("MyPolicy")]
     public class FlightsController : ControllerBase
     {
+        /// <summary>GET api/flight</summary>
+        /// <returns>Action result con resultado de la query</returns>
         [HttpGet]
         public ActionResult<IEnumerable<Entity>> Get()
         {
@@ -34,6 +36,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
             }
         }
 
+        /// <summary> GET api/flights/id</summary>
+        /// <param name="id">id del vuelo a buscar</param>
+        /// <returns>ActionResult con resultado de la query</returns>
         [HttpGet("{id}")]
         public ActionResult<Entity> Find(int id)
         {
@@ -52,6 +57,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
             }
         }
 
+        /// <summary> GET api/flights/begin/end</summary>
+        /// <param name="begin">Rango menor de la fecha a buscar</param>
+        /// <param name="end">Rango mayor de la fecha a buscar</param>
+        /// <returns>ActionResult con resultado de la query</returns>
         [HttpGet("{begin}/{end}")]
         public ActionResult<IEnumerable<Entity>> GetByDate(string begin, string end)
         {
@@ -70,6 +79,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
             }
         }
 
+        /// <summary>POST api/flights</summary>
+        /// <param name="flight">Parametro tipo Flight con el vuelo a agregar</param>
+        /// <returns>ActionResult con mensaje de exito si se agrego de manera exitosa</returns>
         [HttpPost]
         public ActionResult<Entity> Post([FromBody] Flight flight)
         {
@@ -97,6 +109,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
             }
         }
 
+        /// <summary>PUT api/flights</summary>
+        /// <param name="flight">Parametro tipo Flight con el vuelo a editar</param>
+        /// <returns>ActionResult con mensaje de exito si se edito de manera exitosa</returns>
         [HttpPut]
         public ActionResult<Entity> Put([FromBody] Flight flight)
         {
@@ -132,6 +147,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
             }
         }
 
+        /// <summary>DELETE api/fligts/id</summary>
+        /// <param name="id">Id del vuelo a elimnar</param>
+        /// <returns>ActionResult con mensaje de exito si se elimino correctamente</returns>
         [HttpDelete("{id}")]    
         public ActionResult<Entity> Delete(int id)    
         {    

@@ -20,6 +20,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
         "updateflight(@_id, @_plane, @_price, @_departure, @_arrival, @_loc_departure, @_loc_arrival)";
 
 
+        /// <summary>Devuelve lista de vuelos de la DB</summary>
+        /// <returns>List<Entity> con el resultado de la query</returns>
         public static List<Entity> Get(){
             try
             {
@@ -56,6 +58,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
             }
         }
 
+
+        /// <summary>Agrega vuelo a la DB</summary>
+        /// <param name="entity">Entidad con vuelo a agregar a la DB</param>
         public static void Add(Entity entity){
             try
             {
@@ -77,7 +82,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
             }
         }
 
-
+        /// <summary>Edita vuelo a la DB</summary>
+        /// <param name="entity">Entidad con vuelo a editar en la DB</param>
         public static void Update(Entity entity){
             try
             {
@@ -98,6 +104,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
             }
         }
 
+        /// <summary>Busca vuelo especifico en la DB</summary>
+        /// <param name="id">Id del vuelo a busac</param>
+        /// <returns>Entity con el resultado de la query</returns>
          public static Entity Find(int id){
             
             try
@@ -136,6 +145,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
 
         }
 
+        /// <summary>Busca vuelo en un rango de fechas en la DB</summary>
+        /// <param name="begin">Fecha menor a buscar</param>
+        /// <param name="end">Fecha mayor a buscar</param>
+        /// <returns> List<Entity> con el resultado de la query</returns>
         public static List<Entity> GetByDate(string begin, string end){
             try
             {
