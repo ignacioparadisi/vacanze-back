@@ -53,7 +53,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             }
             catch (Exception e)
             {
-                BadRequest(e.Message);
+                return BadRequest(e.Message);
             }
             return user;
         }

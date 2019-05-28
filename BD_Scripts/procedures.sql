@@ -206,8 +206,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION AddUser_Role(rol_id INTEGER,
-                                             use_id INTEGER)
+CREATE OR REPLACE FUNCTION AddUser_Role(rol_id BIGINT, use_id BIGINT)
   RETURNS INTEGER AS
 $$
 DECLARE
