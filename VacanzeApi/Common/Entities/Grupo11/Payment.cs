@@ -1,7 +1,5 @@
 ﻿
-using vacanze_back.VacanzeApi.Common.Entities;
-
-namespace vacanze_back.Entities.Grupo11
+namespace vacanze_back.VacanzeApi.Common.Entities.Grupo11
 {
     public class Payment :Entity
     {
