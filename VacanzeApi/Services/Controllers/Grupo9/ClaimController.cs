@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Common.Exceptions;
-using vacanze_back.VacanzeApi.Persistence.Connection.Grupo9;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo9;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 {
@@ -22,7 +22,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 		public int Get()
 		{
 			try{ 
-				ClaimConnection conec= new ClaimConnection();
+				ClaimRepository conec= new ClaimRepository();
 				int rows= conec.GetClaim();
 				return rows; 
 			}catch (DatabaseException )
@@ -40,7 +40,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 		public ActionResult<IEnumerable<Claim>> Get(int id)
 		{
 			try{
-				ClaimConnection conec= new ClaimConnection();
+				ClaimRepository conec= new ClaimRepository();
 				List<Claim> claimList = conec.GetClaim(id);
 
 				return claimList; 
@@ -61,17 +61,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 		{
 			try{
 				if(tipo == "Baggage"){
-					ClaimConnection conec= new ClaimConnection();
+					ClaimRepository conec= new ClaimRepository();
 					List<Claim> claimList = conec.GetClaimBaggage(id);
 					return Ok(claimList); 
 				}else{
 					if(tipo == "documentPasaport"){                   
-						ClaimConnection conec= new ClaimConnection();
+						ClaimRepository conec= new ClaimRepository();
 						List<Claim> claimList = conec.GetClaimDocumentPasaport(id);
 						return Ok(claimList); 
 					}else{
 						if(tipo == "documentCedula"){                   
-							ClaimConnection conec= new ClaimConnection();
+							ClaimRepository conec= new ClaimRepository();
 							List<Claim> claimList = conec.GetClaimDocumentCedula(id);
 							return Ok(claimList); 
 						}else                
@@ -94,7 +94,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 		{            
 			try
 			{ 				
-				ClaimConnection conec= new ClaimConnection();
+				ClaimRepository conec= new ClaimRepository();
 				Claim claim= new Claim(ClaimAux.title, ClaimAux.description, ClaimAux.status);
 				conec.AddClaim(claim);
 				return Ok("Agregado correctamente");
@@ -114,7 +114,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 		public ActionResult<string> Delete(int id)
 		{
 			try{
-				ClaimConnection conec= new ClaimConnection();  
+				ClaimRepository conec= new ClaimRepository();  
 				int rows = conec.DeleteClaim(id);				 
 				return Ok("eliminado exitosamente");
 			}catch (DatabaseException )
@@ -138,7 +138,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 		public ActionResult<string> Put(int id,[FromBody] ClaimSecundary ClaimAux)
 		{
 			try{
-				ClaimConnection conec = new ClaimConnection();
+				ClaimRepository conec = new ClaimRepository();
 				Claim claim = new Claim(ClaimAux.title, ClaimAux.description, ClaimAux.status);
 				Console.WriteLine("estoy aqui");
 				int rows= 0;
