@@ -957,4 +957,8 @@ INSERT INTO public.Plane(
 INSERT INTO public.Plane(
 	pla_id, pla_autonomy, "pla_isActive", pla_capacity, "pla_loadingCap", pla_model)
 	VALUES (nextval('seq_plane'),80,true, 10, 1000, 'Boeing 5');
-    
+	
+	
+--------------Grupo 8 ---------------------------------
+INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'concordia', 100, 1000, 'Modelo1','Linea1', '1.jpg' );
+INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'Lmao', 500, 2000, 'Modelo2','Linea2', '3.jpg' );
