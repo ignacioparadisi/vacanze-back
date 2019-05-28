@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using vacanze_back.Entities.Gripo11;
+using vacanze_back.Entities.Grupo11;
 
 namespace vacanze_back.Controllers
 {
@@ -16,13 +16,6 @@ namespace vacanze_back.Controllers
         public ActionResult<List<Payment>> GetPayment_Method()
         {
             var oResp = new List<Payment>();
-
-            oResp.Add(new Payment { id = 1, name = "TDC", active = true });
-            oResp.Add(new Payment { id = 2, name = "TRANSFERENCIA", active = true });
-            oResp.Add(new Payment { id = 3, name = "TDB", active = true });
-            oResp.Add(new Payment { id = 4, name = "TPAGO", active = true });
-            oResp.Add(new Payment { id = 5, name = "Efectivo", active = true });
-
             Response.StatusCode = 200;
             return oResp;
         }

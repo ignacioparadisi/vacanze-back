@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
+using vacanze_back.VacanzeApi.Common.Entities;
 
 namespace vacanze_back.Entities.Grupo11
 {
