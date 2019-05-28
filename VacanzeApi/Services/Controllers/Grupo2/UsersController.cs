@@ -44,12 +44,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             try
             {
                 user.Validate();
+                UserRepository.VerifyEmail(user.Email);
+                user = UserRepository.AddUser(user);
+                foreach(var roles in user.Roles)
+                {
+                    UserRepository.AddUser_Role(user.Id, roles.Id);
+                }
             }
             catch (Exception e)
             {
                 BadRequest(e.Message);
             }
-            
             return user;
         }
 
