@@ -18,6 +18,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
         private Automobile _automobile;
         private ReservationAutomobile _reservation;
 
+        /** Method GetAutomobileReservations()
+         * Returns all automobile reservations from the system.
+         */
         public List<Entity> GetAutomobileReservations()
                 {
                     List<Entity> reservationAutomobileList = new List<Entity>();
@@ -48,7 +51,11 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                     }
                     return reservationAutomobileList;
                 }
-
+        
+        /** Method Find(int id)
+         * @param id : int
+         * Returns the automobile reservation with the id that was passed.
+         */
         public Entity Find(int id)
         {
             try
@@ -79,7 +86,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             return _reservation;
         }
 
-
+        /** Method Add()
+        * Inserts in the DataBase the reservation that was passed.
+        */
         public ReservationAutomobile AddReservation(ReservationAutomobile reservation)
         {
             try

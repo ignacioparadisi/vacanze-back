@@ -10,7 +10,9 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
         public DateTime CheckIn { get; set; }
         //Checkout: Last date of the reservation
         public DateTime CheckOut { get; set; }
+        //Automobile which the reservation references
         public Automobile Automobile { get; set; }
+        //User who made the reservation
         public User User { get; set; }
 
             /**

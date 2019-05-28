@@ -12,7 +12,9 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
         public DateTime CheckOut { get; set; }
         //Room which the reservation is tied.
         public Room Room { get; set; }
+        //User who made the reservation
         public User User { get; set; }
+        //Hotel of the reservation
         public Hotel Hotel { get; set; }
 
         //public User user { get; set; }

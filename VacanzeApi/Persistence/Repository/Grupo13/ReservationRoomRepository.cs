@@ -43,11 +43,12 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                     var id = Convert.ToInt64(table.Rows[i][0]);
                     var pickup = Convert.ToDateTime(table.Rows[i][1]);
                     var returndate = Convert.ToDateTime(table.Rows[i][2]);
-                    var use_id = Convert.ToInt64(table.Rows[i][3]);
-                    var fk_hotel = Convert.ToInt64(table.Rows[i][4]);
+                    var fk_hotel = Convert.ToInt64(table.Rows[i][3]);
+                    var use_id = Convert.ToInt64(table.Rows[i][4]);
+                    
                     ReservationRoom roomRes = new ReservationRoom(id, pickup, returndate);
-                    roomRes.Hotel.Id = fk_hotel;
-                    roomRes.User.Id = use_id;
+                 //   roomRes.Hotel.Id = fk_hotel;
+                 //   roomRes.User.Id = use_id;
 
                     roomReservationList.Add(roomRes);
                 }
