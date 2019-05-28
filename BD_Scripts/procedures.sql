@@ -286,13 +286,16 @@ $$ LANGUAGE plpgsql;
 
 --------Eliminar Ship--------------------
 CREATE OR REPLACE FUNCTION DeleteShip(_shi_id integer)
-RETURNS void AS
+RETURNS integer AS
 $$
+DECLARE
+ ret_id INTEGER;
 BEGIN
 
     DELETE FROM Ship 
-    WHERE (shi_id = _shi_id);
-
+    WHERE (shi_id = _shi_id)
+    returning shi_id into ret_id;
+   return ret_id;
 END;
 $$ LANGUAGE plpgsql;
 --------Eliminar Cruise------------------
