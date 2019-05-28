@@ -29,7 +29,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 			{            
 				return -1;
 			}
-			catch (GeneralException )
+			catch (InvalidStoredProcedureSignatureException )
 			{
 				return -1;
 			}
@@ -48,7 +48,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 			{            
 				return StatusCode(500);
 			}
-			catch (GeneralException )
+			catch (InvalidStoredProcedureSignatureException )
 			{
 				return StatusCode(500);
 			}
@@ -82,7 +82,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 			{            
 				return StatusCode(500);
 			}
-			catch (GeneralException )
+			catch (InvalidStoredProcedureSignatureException )
 			{
 				return StatusCode(500);
 			}
@@ -102,7 +102,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 			{            
 				return StatusCode(500);
 			}
-			catch (GeneralException )
+			catch (InvalidStoredProcedureSignatureException )
 			{
 				return StatusCode(500);
 			}
@@ -121,7 +121,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 			{            
 				return StatusCode(500);
 			}
-			catch (GeneralException )
+			catch (InvalidStoredProcedureSignatureException )
 			{
 				return StatusCode(500);
 			}catch (NullClaimException )
@@ -151,7 +151,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 			{            
 				return StatusCode(500);
 			}
-			catch (GeneralException )
+			catch (InvalidStoredProcedureSignatureException )
 			{
 				return StatusCode(500);
 			}catch (NullClaimException )
