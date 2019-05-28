@@ -20,10 +20,10 @@ AS $BODY$
 
 BEGIN
 
-   INSERT INTO Flight(fli_id,fli_price ,fli_departureDate, fli_arrivalDate, fli_pla_fk, fli_loc_arrival,
+   INSERT INTO Flight(fli_price ,fli_departureDate, fli_arrivalDate, fli_pla_fk, fli_loc_arrival,
 					 fli_loc_departure) VALUES
-    (nextval('seq_flight'),_price, TO_TIMESTAMP(_departure,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone, TO_TIMESTAMP(_arrival,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone, _plane, _loc_arrival, _loc_departure);
-   RETURN currval('seq_flight');
+    (_price, TO_TIMESTAMP(_departure,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone, TO_TIMESTAMP(_arrival,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone, _plane, _loc_arrival, _loc_departure);
+   RETURN 1;
 END;
 
 $BODY$;
@@ -263,26 +263,58 @@ $$
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION AddUser(_doc_id VARCHAR(20), 
-                                   _name VARCHAR(30), 
-                                   _lastname VARCHAR(30), 
-                                   _email VARCHAR(30),
-                                   _password VARCHAR(50)) 
-RETURNS VOID AS
+CREATE OR REPLACE FUNCTION GetUserByEmail(email_id VARCHAR(30))
+  RETURNS TABLE
+          (id integer,
+           documentId VARCHAR(50),
+           name VARCHAR(50),
+           lastname VARCHAR(50),
+           email VARCHAR(50))
+AS
 $$
 BEGIN
-    INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
-    VALUES (_doc_id, _name, _lastname, _email, _password);
+  RETURN QUERY SELECT use_id, use_document_id, use_name, use_last_name, use_email
+               FROM Users WHERE use_email = email_id;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION AddUser_Role(_rol_id INTEGER,
-                                        _use_id INTEGER)
-RETURNS VOID AS
+CREATE OR REPLACE FUNCTION AddUser(doc_id VARCHAR(20),
+                                        name VARCHAR(30),
+                                        lastname VARCHAR(30),
+                                        email VARCHAR(30),
+                                        password VARCHAR(50))
+  RETURNS INTEGER AS
 $$
+DECLARE
+  id INTEGER;
+BEGIN
+  INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
+  VALUES (doc_id, name, lastname, email, password) RETURNING use_id INTO id;
+  RETURN id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION AddUser_Role(rol_id INTEGER,
+                                             use_id INTEGER)
+  RETURNS INTEGER AS
+$$
+DECLARE
+  id INTEGER;
 BEGIN
   INSERT INTO User_Role(usr_rol_id, usr_use_id)
-  VALUES (_rol_id, _use_id);
+  VALUES (rol_id, use_id) RETURNING usr_id INTO id;
+  RETURN id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION DeleteUserByEmail(email_id VARCHAR(30))
+  RETURNS INTEGER AS
+$$
+DECLARE
+  id INTEGER;
+BEGIN
+  DELETE FROM Users WHERE use_email = email_id RETURNING use_id INTO id;
+  RETURN id;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -786,3 +818,20 @@ END;
 $$ LANGUAGE plpgsql;
 
 ------------------------------------fin de grupo 7---------------------------------
+
+------------------------------------ grupo 10 ---------------------------------
+
+CREATE OR REPLACE FUNCTION GetTravels(userId INTEGER) 
+RETURNS TABLE (
+	travel_id INTEGER,
+	travel_name VARCHAR,
+	travel_description VARCHAR
+) AS $$
+BEGIN
+	RETURN QUERY 
+
+	SELECT tra_id, tra_name, tra_descr FROM travel WHERE tra_use_fk = userId ;
+END; $$ 
+LANGUAGE plpgsql;
+
+------------------------------------fin de grupo 10---------------------------------

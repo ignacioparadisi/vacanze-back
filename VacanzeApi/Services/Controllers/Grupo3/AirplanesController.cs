@@ -14,7 +14,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
     [EnableCors("MyPolicy")]
     public class AirplanesController : ControllerBase
     {
-        // GET api/values
+        /// <summary>api/airplanes</summary>
+        /// <returns>ActionResult con resultado del query</returns>
         [HttpGet]
         public ActionResult<IEnumerable<Entity>> Get()
         {
@@ -33,6 +34,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
             }
         }
 
+        /// <summary>/api/airplanes/id</summary>
+        /// <param name="id">Id del avion a busca</param>
+        /// <returns>ActionResult con el avion buscado o nulo si no encontro nada</returns>
         [HttpGet("{id}")]
         public ActionResult<Entity> Get(int id)
         {

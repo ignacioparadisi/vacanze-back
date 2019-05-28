@@ -4,6 +4,7 @@ using vacanze_back.VacanzeApi.Persistence.Repository.Grupo3;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
 {
+    /// <summary>Clase para validar la informacion de los vuelos</summary>
     public class FlightValidator
     {
         public FlightValidator(Flight flight)
@@ -13,6 +14,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
 
         public Flight flight { get; set; }
 
+        /// <summary>Metodo que valida la informacion del vuelo a agregar</summary>
         public void Validate()
         {
             var plane = (Airplane) AirplanesRepository.Find(flight.plane.Id);

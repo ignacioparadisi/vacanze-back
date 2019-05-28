@@ -895,20 +895,20 @@ INSERT INTO LOCATION (LOC_ID,LOC_CITY, LOC_COUNTRY) VALUES
 (894,'Hakodate','Japan');
 ------- grupo 2 ----------
 
--- INSERT INTO Role (rol_name)
--- VALUES ('Cliente');
+INSERT INTO Role (rol_name)
+VALUES ('Cliente');
 
--- INSERT INTO Role (rol_name)
--- VALUES ('Administrador');
+INSERT INTO Role (rol_name)
+VALUES ('Administrador');
 
--- INSERT INTO Role (rol_name)
--- VALUES ('Checkin');
+INSERT INTO Role (rol_name)
+VALUES ('Checkin');
 
--- INSERT INTO Role (rol_name)
--- VALUES ('Reclamo');
+INSERT INTO Role (rol_name)
+VALUES ('Reclamo');
 
--- INSERT INTO Role (rol_name)
--- VALUES ('Cargador');
+INSERT INTO Role (rol_name)
+VALUES ('Cargador');
 
 INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
 VALUES ('9784673', 'admin@vacanze.com', 'Virtuoso', 'Francisco', MD5('admin123'));
@@ -943,20 +943,20 @@ VALUES ('Hotel 1', 50, TRUE, '1238123', null, 1),
 
 -------------------------------Grupo 3---------------------------------------------------
 INSERT INTO public.Plane(
-	pla_id, pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
-	VALUES (nextval('seq_plane'),100,true, 50, 1000, 'Boeing 1');
+	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
+	VALUES (100,true, 50, 1000, 'Boeing 1');
 INSERT INTO public.Plane(
-	pla_id, pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
-	VALUES (nextval('seq_plane'),150,true, 40, 1000, 'Boeing 2');
+	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
+	VALUES (150,true, 40, 1000, 'Boeing 2');
 INSERT INTO public.Plane(
-	pla_id, pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
-	VALUES (nextval('seq_plane'),111,true, 30, 1000, 'Boeing 3');
+	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
+	VALUES (111,true, 30, 1000, 'Boeing 3');
 INSERT INTO public.Plane(
-	pla_id, pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
-	VALUES (nextval('seq_plane'),200,true, 50, 2000, 'Boeing 4');
+	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
+	VALUES (200,true, 50, 2000, 'Boeing 4');
 INSERT INTO public.Plane(
-	pla_id, pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
-	VALUES (nextval('seq_plane'),80,true, 10, 1000, 'Boeing 5');
+	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
+	VALUES (80,true, 10, 1000, 'Boeing 5');
 	
 	
 --------------Grupo 8 ---------------------------------

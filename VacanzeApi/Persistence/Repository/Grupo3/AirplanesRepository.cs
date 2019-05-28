@@ -13,6 +13,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
         static string GET_ALL_PLANES = "getplanes()";
         static string FIND_PLANE = "findplane(@_id)";
 
+        /// <summary>Busca aviones en la DB</summary>
+        /// <returns> List<Entity> con el resultado de la query </returns>
         public static List<Entity> Get()
         {
             try
@@ -45,6 +47,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
             }
         }
 
+        /// <summary>Busca vuelo especifico en la DB</summary>
+        /// <param name="id">Id del avion a buscar</param>
+        /// <returns>Entity con el resultado de la query</returns>
         public static Entity Find(long id)
         {
             try
