@@ -943,19 +943,19 @@ VALUES ('Hotel 1', 50, TRUE, '1238123', null, 1),
 
 -------------------------------Grupo 3---------------------------------------------------
 INSERT INTO public.Plane(
-	pla_id, pla_autonomy, "pla_isActive", pla_capacity, "pla_loadingCap", pla_model)
+	pla_id, pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
 	VALUES (nextval('seq_plane'),100,true, 50, 1000, 'Boeing 1');
 INSERT INTO public.Plane(
-	pla_id, pla_autonomy, "pla_isActive", pla_capacity, "pla_loadingCap", pla_model)
+	pla_id, pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
 	VALUES (nextval('seq_plane'),150,true, 40, 1000, 'Boeing 2');
 INSERT INTO public.Plane(
-	pla_id, pla_autonomy, "pla_isActive", pla_capacity, "pla_loadingCap", pla_model)
+	pla_id, pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
 	VALUES (nextval('seq_plane'),111,true, 30, 1000, 'Boeing 3');
 INSERT INTO public.Plane(
-	pla_id, pla_autonomy, "pla_isActive", pla_capacity, "pla_loadingCap", pla_model)
+	pla_id, pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
 	VALUES (nextval('seq_plane'),200,true, 50, 2000, 'Boeing 4');
 INSERT INTO public.Plane(
-	pla_id, pla_autonomy, "pla_isActive", pla_capacity, "pla_loadingCap", pla_model)
+	pla_id, pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
 	VALUES (nextval('seq_plane'),80,true, 10, 1000, 'Boeing 5');
 	
 	
