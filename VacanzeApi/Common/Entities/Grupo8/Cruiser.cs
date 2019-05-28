@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json;
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
 {
@@ -11,7 +12,17 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
             public string Model { get; }
             public string Line { get; }
 
+            [JsonConstructor]
             public Cruiser( long id , string name , bool status , int capacity , int loadingShipCap , string model , string line) : base(id)
+            {
+                Name = name;
+                Status = status;
+                Capacity = capacity;
+                LoadingShipCap = loadingShipCap;
+                Model = model;
+                Line = line;
+            }
+            public Cruiser(string name , bool status , int capacity , int loadingShipCap , string model , string line) : base(0)
             {
                 Name = name;
                 Status = status;

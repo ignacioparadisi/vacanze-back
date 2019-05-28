@@ -396,6 +396,25 @@ BEGIN
     FROM Cruise WHERE cru_id = _cru_id;
 END;
 $$ LANGUAGE plpgsql;
+---------Retorna todos los Cruceros--------
+CREATE OR REPLACE FUNCTION GetAllShip()
+RETURNS TABLE
+  (id integer,
+   name VARCHAR(30),
+   status boolean,
+   capacity_people integer,
+   capacity_tonnes integer,
+   model VARCHAR(30),
+   cruise_line VARCHAR(30)
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT
+    shi_id, shi_name, shi_isactive, shi_capacity, shi_loadingcap, shi_model, shi_line
+    FROM Ship;
+END;
+$$ LANGUAGE plpgsql;
 ------------------------------------fin de grupo 8---------------------------------
 
 -- grupo 9 -----------------------------------------
