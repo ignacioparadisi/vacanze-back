@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Common.Exceptions;
-using vacanze_back.VacanzeApi.Persistence.Connection.Grupo9;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo9;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 {
@@ -14,24 +14,24 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 	[ApiController]
 	public class ClaimController : ControllerBase
 	{
-        
+        ResponseError mensaje;
 
 		// GET api/values
-		//se usara para consultar por pasaporte
+		//se usara para consultar la cantidad de reclamos
 		[HttpGet]
-		public ActionResult<IEnumerable<Claim>> Get()
+		public int Get()
 		{
 			try{ 
-				ClaimConnection conec= new ClaimConnection();
-				List<Claim> claimList= conec.GetClaim(2);
-				return Ok(claimList); 
+				ClaimRepository conec= new ClaimRepository();
+				int rows= conec.GetClaim();
+				return rows; 
 			}catch (DatabaseException )
 			{            
-				return StatusCode(500);
+				return -1;
 			}
-			catch (GeneralException )
+			catch (InvalidStoredProcedureSignatureException )
 			{
-				return StatusCode(500);
+				return -1;
 			}
 		}
 
@@ -40,15 +40,15 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 		public ActionResult<IEnumerable<Claim>> Get(int id)
 		{
 			try{
-				ClaimConnection conec= new ClaimConnection();
+				ClaimRepository conec= new ClaimRepository();
 				List<Claim> claimList = conec.GetClaim(id);
 
-				return Ok(claimList); 
+				return claimList; 
 			}catch (DatabaseException )
 			{            
 				return StatusCode(500);
 			}
-			catch (GeneralException )
+			catch (InvalidStoredProcedureSignatureException )
 			{
 				return StatusCode(500);
 			}
@@ -61,17 +61,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 		{
 			try{
 				if(tipo == "Baggage"){
-					ClaimConnection conec= new ClaimConnection();
+					ClaimRepository conec= new ClaimRepository();
 					List<Claim> claimList = conec.GetClaimBaggage(id);
 					return Ok(claimList); 
 				}else{
 					if(tipo == "documentPasaport"){                   
-						ClaimConnection conec= new ClaimConnection();
+						ClaimRepository conec= new ClaimRepository();
 						List<Claim> claimList = conec.GetClaimDocumentPasaport(id);
 						return Ok(claimList); 
 					}else{
 						if(tipo == "documentCedula"){                   
-							ClaimConnection conec= new ClaimConnection();
+							ClaimRepository conec= new ClaimRepository();
 							List<Claim> claimList = conec.GetClaimDocumentCedula(id);
 							return Ok(claimList); 
 						}else                
@@ -82,7 +82,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 			{            
 				return StatusCode(500);
 			}
-			catch (GeneralException )
+			catch (InvalidStoredProcedureSignatureException )
 			{
 				return StatusCode(500);
 			}
@@ -94,7 +94,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 		{            
 			try
 			{ 				
-				ClaimConnection conec= new ClaimConnection();
+				ClaimRepository conec= new ClaimRepository();
 				Claim claim= new Claim(ClaimAux.title, ClaimAux.description, ClaimAux.status);
 				conec.AddClaim(claim);
 				return Ok("Agregado correctamente");
@@ -102,7 +102,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 			{            
 				return StatusCode(500);
 			}
-			catch (GeneralException )
+			catch (InvalidStoredProcedureSignatureException )
 			{
 				return StatusCode(500);
 			}
@@ -114,16 +114,21 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 		public ActionResult<string> Delete(int id)
 		{
 			try{
-				ClaimConnection conec= new ClaimConnection();  
-				conec.DeleteClaim(id);
-				return Ok("Eliminado exitosamente");
+				ClaimRepository conec= new ClaimRepository();  
+				int rows = conec.DeleteClaim(id);				 
+				return Ok("eliminado exitosamente");
 			}catch (DatabaseException )
 			{            
 				return StatusCode(500);
 			}
-			catch (GeneralException )
+			catch (InvalidStoredProcedureSignatureException )
 			{
 				return StatusCode(500);
+			}catch (NullClaimException )
+			{
+				mensaje= new ResponseError();
+				mensaje.error="No existe el elemento que quiere Eliminar";
+				return StatusCode(500,mensaje);
 			}
 
 		}
@@ -133,31 +138,40 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 		public ActionResult<string> Put(int id,[FromBody] ClaimSecundary ClaimAux)
 		{
 			try{
-				ClaimConnection conec = new ClaimConnection();
+				ClaimRepository conec = new ClaimRepository();
 				Claim claim = new Claim(ClaimAux.title, ClaimAux.description, ClaimAux.status);
 				Console.WriteLine("estoy aqui");
+				int rows= 0;
 				if (ClaimAux.status != null)
-					conec.ModifyClaimStatus(id, claim);
+					rows = conec.ModifyClaimStatus(id, claim);
 				else if (ClaimAux.title != null && ClaimAux.description  != null)
-					conec.ModifyClaimTitle(id, claim);
+					rows = conec.ModifyClaimTitle(id, claim);						
 				return Ok("Modificado exitosamente");
 			}catch (DatabaseException )
 			{            
 				return StatusCode(500);
 			}
-			catch (GeneralException )
+			catch (InvalidStoredProcedureSignatureException )
 			{
 				return StatusCode(500);
-			} 
+			}catch (NullClaimException )
+			{
+				mensaje= new ResponseError();
+				mensaje.error="No existe el elemento que quiere Modificar";
+				return StatusCode(500,mensaje);
+			}
 		}
 
 
 	}
-
+public class ResponseError {
+	public string error{get; set;}
+	
+	}
 	public class ClaimSecundary {
-		public string title ;
-		public string description;
-		public string status;
+		public string title {get; set;} 
+		public string description{get; set;}
+		public string status{get; set;}
 		public string getStatus(){
 			return this.status;
 		}
