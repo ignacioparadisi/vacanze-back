@@ -671,3 +671,20 @@ END;
 $$ LANGUAGE plpgsql;
 
 ------------------------------------fin de grupo 7---------------------------------
+
+------------------------------------ grupo 10 ---------------------------------
+
+CREATE OR REPLACE FUNCTION GetTravels(userId INTEGER) 
+RETURNS TABLE (
+	travel_id INTEGER,
+	travel_name VARCHAR,
+	travel_description VARCHAR
+) AS $$
+BEGIN
+	RETURN QUERY 
+
+	SELECT tra_id, tra_name, tra_descr FROM travel WHERE tra_use_fk = userId ;
+END; $$ 
+LANGUAGE plpgsql;
+
+------------------------------------fin de grupo 10---------------------------------
