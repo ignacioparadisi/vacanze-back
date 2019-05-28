@@ -23,8 +23,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
         /// </summary>
         protected void CreateStringConnection()
         {
-            _cadena = "Server=192.168.99.100;User Id=postgres;" +
-                      "Password=docker;Database=postgres;";
+            _cadena = "Server=127.0.0.1;User Id=postgres;" +
+                      "Password=1234;Database=vacanza;";
             //cadena de prueba
             /*
 			_cadena = "Server=127.0.0.1;User Id=postgres;" + 

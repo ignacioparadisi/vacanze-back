@@ -1,5 +1,6 @@
 ﻿using System;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
 {
@@ -11,7 +12,8 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
         public DateTime CheckOut { get; set; }
         //Room which the reservation is tied.
         public Room Room { get; set; }
-        private User User { get; set; }
+        public User User { get; set; }
+        public Hotel Hotel { get; set; }
 
         //public User user { get; set; }
 
@@ -21,13 +23,13 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
         public ReservationRoom(long id) : base(id)
         {
         }
-        public ReservationRoom(long id, bool status, DateTime CheckIn, DateTime CheckOut) : base(id)
+        public ReservationRoom(long id, DateTime CheckIn, DateTime CheckOut) : base(id)
         {
             this.CheckIn = CheckIn;
             this.CheckOut = CheckOut;
         }
 
-        public ReservationRoom(long id, bool status, DateTime CheckIn, DateTime CheckOut, Room room) : base(id)
+        public ReservationRoom(long id, DateTime CheckIn, DateTime CheckOut, Room room) : base(id)
         {
             this.CheckIn = CheckIn;
             this.CheckOut = CheckOut;

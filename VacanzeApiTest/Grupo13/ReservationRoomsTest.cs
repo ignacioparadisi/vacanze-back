@@ -12,11 +12,11 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
     [TestFixture]
     public class ReservationRoomsTest
     {
-        ReservationRoomConnection reservationRoomConnection;
+        ReservationRoomRepository reservationRoomConnection;
         [SetUp]
         public void SetUp()
         {
-            reservationRoomConnection = new ReservationRoomConnection();
+            reservationRoomConnection = new ReservationRoomRepository();
         }
 
         [Test]

@@ -10,7 +10,7 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
 {
-    public class ReservationRoomConnection : Connection
+    public class ReservationRoomRepository
     {
         const String SP_SELECT = "m13_getResRooms()";
         const String SP_FIND = "m13_findByReservaHabitacionId(@_id)";
@@ -34,16 +34,20 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
         {
             try
             {
+                var table = PgConnection.Instance.ExecuteFunction(SP_SELECT);
                 List<Entity> roomReservationList = new List<Entity>();
                 RoomConnection _roomConnection = new RoomConnection();
 
-                Connect();
-                StoredProcedure(SP_SELECT);
-                ExecuteReader();
-                for (int i = 0; i < numberRecords; i++)
+                for (int i = 0; i < table.Rows.Count; i++)
                 {
-                    ReservationRoom roomRes = new ReservationRoom(GetInt(i, 0), GetBool(i, 1), GetDateTime(i, 2), GetDateTime(i, 3));
-                    roomRes.Room = (Room) _roomConnection.FindRoom(GetInt(i, 4));
+                    var id = Convert.ToInt64(table.Rows[i][0]);
+                    var pickup = Convert.ToDateTime(table.Rows[i][1]);
+                    var returndate = Convert.ToDateTime(table.Rows[i][2]);
+                    var use_id = Convert.ToInt64(table.Rows[i][3]);
+                    var fk_hotel = Convert.ToInt64(table.Rows[i][4]);
+                    ReservationRoom roomRes = new ReservationRoom(id, pickup, returndate);
+                    roomRes.Hotel.Id = fk_hotel;
+                    roomRes.User.Id = use_id;
 
                     roomReservationList.Add(roomRes);
                 }
@@ -61,7 +65,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             }
             finally
             {
-                Disconnect();
             }
         }
 
@@ -73,14 +76,18 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
         {
             try
             {
-                Connect();
-                StoredProcedure(SP_FIND);
-                AddParameter("_id", id);
-                ExecuteReader();
-                for (int i = 0; i < numberRecords; i++)
+                var table = PgConnection.Instance.ExecuteFunction(SP_FIND, id);
+                for (int i = 0; i < table.Rows.Count; i++)
                 {
-                    _reservationRoom = new ReservationRoom(GetInt(i, 0), GetBool(i, 1), GetDateTime(i, 2), GetDateTime(i, 3));
-                    _reservationRoom.Room = (Room)_roomConnection.FindRoom(GetInt(i, 4));
+                    var pickup = Convert.ToDateTime(table.Rows[i][1]);
+                    var returndate = Convert.ToDateTime(table.Rows[i][2]);
+                    var userid = Convert.ToInt64(table.Rows[i][3]);
+                    var autfk = Convert.ToInt64(table.Rows[i][4]);
+                    // var payfk = Convert.ToInt64(table.Rows[i][5]);
+                    _reservationRoom = new ReservationRoom(id, pickup, returndate);
+                    //  _reservation.User.Id = userid;
+                    //  _reservation.Automobile.Id = autfk;
+                    //Falta Payment
                 }
                 return _reservationRoom;
             }
@@ -92,16 +99,13 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             {
                 e.ToString();
             }
-            finally
-            {
-                Disconnect();
-            }
             return _reservationRoom;
         }
 
         /** Method GetAvailableRoomReservations()
          * Returns all room reservations from the system which are available within the range of dates that were passed.
          */
+         /*
         public List<Entity> GetAvailableRoomReservations(DateTime checkIn, DateTime checkOut)
         {
             List<Entity> roomReservationList = new List<Entity>();
@@ -135,11 +139,12 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             }
             return roomReservationList;
         }
-
+        */
         /** Method Add()
          * Inserts in the DataBase the room reservation that was passed.
          */
         //Falta el user
+        /*
         public void Add(Entity entity)
         {
             try
@@ -171,5 +176,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                 throw new Exception();
             }
         }
+        */
     }
 }

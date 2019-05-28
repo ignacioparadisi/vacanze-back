@@ -21,7 +21,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         {
             try
             {
-                ReservationRoomConnection reservationRoomConnection = new ReservationRoomConnection();
+                ReservationRoomRepository reservationRoomConnection = new ReservationRoomRepository();
                 List<Entity> result = reservationRoomConnection.GetRoomReservations();
                 return Ok(result.ToList());
             }
@@ -37,7 +37,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         {
             try
             {
-                ReservationRoomConnection reservationRoomConnection = new ReservationRoomConnection();
+                ReservationRoomRepository reservationRoomConnection = new ReservationRoomRepository();
                 Entity result = reservationRoomConnection.Find(id);
                 return Ok(result);
             }

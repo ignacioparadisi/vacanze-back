@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Cors;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 {
@@ -21,7 +22,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         {
             try
             {
-                ReservationAutomobileConnection reservationAutomobileConnection = new ReservationAutomobileConnection();
+                ReservationAutomobileRepository reservationAutomobileConnection = new ReservationAutomobileRepository();
                 List<Entity> result = reservationAutomobileConnection.GetAutomobileReservations();
                 return Ok(result.ToList());
             }
@@ -32,14 +33,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             }
         }
 
-        /*
         [HttpGet("{id}")]
         public ActionResult<Entity> Get(int id)
         {
             try
             {
-                ReservationAutomobileConnection reservationAutomobileConnection = new ReservationAutomobileConnection();
-                Entity result = reservationAutomobileConnection.Find(id);
+                ReservationAutomobileRepository connection = new ReservationAutomobileRepository();
+                Entity result = connection.Find(id);
                 return Ok(result);
             }
             catch (System.Exception)
@@ -48,13 +48,24 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
                 throw;
             }
         }
-        */
 
         // POST api/values //CREAR UN RECURSO
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult<Entity> Post([FromBody] ReservationAutomobile reservation)
         {
+            try
+            {
+                var connection = new ReservationAutomobileRepository();
+                connection.AddReservation(reservation);
+                return Ok(new { Message = "Agregada Reservacion de automovil" });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
         }
+
 
         // PUT api/values/5    //ACTUALIZAR UN RECURSO
         [HttpPut("{id}")]
