@@ -314,12 +314,14 @@ CREATE OR REPLACE FUNCTION AddShip(
   ) 
 RETURNS integer AS
 $$
+DECLARE
+ ret_id INTEGER;
 BEGIN
-
-   INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,
+	INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,
                     shi_line, shi_picture ) VALUES
-    (nextval('seq_ship'), _shi_name, _shi_capacity, _shi_loadingcap, _shi_model, _shi_line, _shi_picture );
-   RETURN currval('SEQ_SHIP');
+    (default, _shi_name, _shi_capacity, _shi_loadingcap, _shi_model, _shi_line, _shi_picture ) 
+	RETURNING shi_id INTO ret_id;
+ RETURN ret_id;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -335,24 +337,30 @@ CREATE OR REPLACE FUNCTION AddCruise(
   ) 
 RETURNS integer AS
 $$
+DECLARE
+  ret_id INTEGER;
 BEGIN
 
    INSERT INTO Cruise(cru_id, cru_shi_fk, cru_departuredate, cru_arrivaldate, cru_price,
                        cru_loc_arrival, cru_loc_departure ) VALUES
-    (nextval('seq_cruise'), _cru_shi_fk, _cru_departuredate, _cru_arrivaldate, _cru_price, _cru_loc_arrival, _cru_loc_departure );
-   RETURN currval('SEQ_CRUISE');
+    (default, _cru_shi_fk, _cru_departuredate, _cru_arrivaldate, _cru_price, _cru_loc_arrival, _cru_loc_departure )
+    RETURNING cru_id INTO ret_id;
+   RETURN ret_id;
 END;
 $$ LANGUAGE plpgsql;
 
 --------Eliminar Ship--------------------
 CREATE OR REPLACE FUNCTION DeleteShip(_shi_id integer)
-RETURNS void AS
+RETURNS integer AS
 $$
+DECLARE
+ ret_id INTEGER;
 BEGIN
 
     DELETE FROM Ship 
-    WHERE (shi_id = _shi_id);
-
+    WHERE (shi_id = _shi_id)
+    returning shi_id into ret_id;
+   return ret_id;
 END;
 $$ LANGUAGE plpgsql;
 --------Eliminar Cruise------------------
@@ -415,9 +423,9 @@ CREATE OR REPLACE FUNCTION GetShip(_shi_id integer)
 RETURNS TABLE
   (id integer,
    name VARCHAR(30),
-   status VARCHAR(30),
-   capacity_people VARCHAR(30),
-   capacity_tonnes VARCHAR(30),
+   status boolean,
+   capacity_people integer,
+   capacity_tonnes integer,
    model VARCHAR(30),
    cruise_line VARCHAR(30)
   )
@@ -454,6 +462,25 @@ BEGIN
     RETURN QUERY SELECT
     cru_id, cru_shi_fk, cru_departuredate, cru_arrivaldate, cru_price
     FROM Cruise WHERE cru_id = _cru_id;
+END;
+$$ LANGUAGE plpgsql;
+---------Retorna todos los Cruceros--------
+CREATE OR REPLACE FUNCTION GetAllShip()
+RETURNS TABLE
+  (id integer,
+   name VARCHAR(30),
+   status boolean,
+   capacity_people integer,
+   capacity_tonnes integer,
+   model VARCHAR(30),
+   cruise_line VARCHAR(30)
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT
+    shi_id, shi_name, shi_isactive, shi_capacity, shi_loadingcap, shi_model, shi_line
+    FROM Ship;
 END;
 $$ LANGUAGE plpgsql;
 ------------------------------------fin de grupo 8---------------------------------
@@ -527,7 +554,7 @@ $$
 BEGIN
     RETURN QUERY SELECT
     cla_id, cla_title,cla_descr, cla_status
-    FROM ClaimWHERE WHERE cla_id = _cla_id;
+    FROM Claim WHERE cla_id = _cla_id;
 END;
 $$ LANGUAGE plpgsql;
 
