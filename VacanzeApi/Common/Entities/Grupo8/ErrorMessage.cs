@@ -7,8 +7,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
     {
         public int StatusCode;
         public string Error;
-
-        [JsonConstructor]
+        
         public ErrorMessage(int statusCode, string value)
         {
             StatusCode = statusCode;

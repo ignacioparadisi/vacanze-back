@@ -29,7 +29,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (CruiserNotFoundException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(400,e.Message);
+                ErrorMessage errorMessage = new ErrorMessage(400, e.Message);
+                return BadRequest(errorMessage);
+            }
+            catch (DatabaseException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(400, e.Message);
                 return BadRequest(errorMessage);
             }
         }
@@ -39,13 +44,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         {
             try
             {
-                Cruiser cruiser=  CruiserRepository.GetCruiser(id);
-             
-                 return Ok(cruiser);
+                Cruiser cruiser = CruiserRepository.GetCruiser(id);
+
+                return Ok(cruiser);
             }
             catch (CruiserNotFoundException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(400,e.Message);
+                ErrorMessage errorMessage = new ErrorMessage(400, e.Message);
+                return BadRequest(errorMessage);
+            }
+            catch (DatabaseException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(400, e.Message);
                 return BadRequest(errorMessage);
             }
         }
@@ -60,7 +70,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 var id = CruiserRepository.AddCruiser(cruiser);
                 var savedCruiser = new Cruiser(id, cruiser.Name, cruiser.Status, cruiser.Capacity,
                     cruiser.LoadingShipCap, cruiser.Model, cruiser.Line, cruiser.Picture);
-                return StatusCode(200, savedCruiser);
+                return Ok(savedCruiser);
             }
             catch (NotValidAttributeException e)
             {
@@ -82,7 +92,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
              {
                  cruiser.Validate();
                  var updatedCruiser = CruiserRepository.UpdateCruiser(cruiser);
-                 return StatusCode(200, cruiser);
+                 return Ok(updatedCruiser);
              }
              catch (NotValidAttributeException e)
              {
@@ -91,8 +101,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
              }
              catch (CruiserNotFoundException e)
              {
-                 ErrorMessage errorMsg = new ErrorMessage(400, e.Message);
-                 return BadRequest(errorMsg);
+                 ErrorMessage errorMessage = new ErrorMessage(400, e.Message);
+                 return BadRequest(errorMessage);
+             }
+             catch (DatabaseException e)
+             {
+                 ErrorMessage errorMessage = new ErrorMessage(400, e.Message);
+                 return BadRequest(errorMessage);
              }
          }
 
@@ -102,11 +117,16 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             try
             {
                 var deletedId = CruiserRepository.DeleteCruiser(id);
-                return StatusCode(200, deletedId);
+                return Ok(new {id = deletedId});
             }
             catch (CruiserNotFoundException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(400,e.Message);
+                ErrorMessage errorMessage = new ErrorMessage(400, e.Message);
+                return BadRequest(errorMessage);
+            }
+            catch (DatabaseException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(400, e.Message);
                 return BadRequest(errorMessage);
             }
         }

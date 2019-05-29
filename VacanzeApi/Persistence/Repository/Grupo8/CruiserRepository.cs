@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
@@ -67,21 +68,21 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
         public static Cruiser UpdateCruiser(Cruiser cruiser)
         {
             try
-            {
+            { 
                 var table = PgConnection.Instance.ExecuteFunction(
                     "ModifyShip(@Id, @Status, @Name, @Capacity, @Loadcap, @Model, @line, @Picture)",Convert.ToInt32(cruiser.Id),
                     cruiser.Status, cruiser.Name, cruiser.Capacity,cruiser.LoadingShipCap, cruiser.Model, cruiser.Line,cruiser.Picture);
-                if (table.Rows.Count == 0)
-                {
-                    throw new CruiserNotFoundException("Crucero no encontrado");
-                }
+                var updatedid = Convert.ToInt32(table.Rows[0][0]);
                 return cruiser;
             }
             catch (InvalidOperationException)
             {
                 throw new NotValidAttributeException("Error en los parametros de entrada");
             }
-
+            catch (InvalidCastException)
+            {
+                throw new CruiserNotFoundException("Crucero no encontrado");
+            }
         }
         public static int DeleteCruiser(int id)
         {
@@ -95,7 +96,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
             {
                 throw new CruiserNotFoundException("Crucero no encontrado");
             }
-    
         }
     }
 }

@@ -388,16 +388,19 @@ CREATE OR REPLACE FUNCTION ModifyShip(
     _shi_model varchar(20),
     _shi_line varchar(30),
     _shi_picture varchar)
-RETURNS integer AS
+    RETURNS integer as
 $$
+declare 
+    ret_id integer;
 BEGIN
 
    UPDATE Ship SET shi_isactive = _shi_isactive,
     shi_name = _shi_name, shi_capacity = _shi_capacity,
     shi_loadingcap = _shi_loadingcap, shi_model = _shi_model,
     shi_line = _shi_line, shi_picture = _shi_picture
-    WHERE (shi_id = _shi_id);
-   RETURN _shi_id;
+    WHERE (shi_id = _shi_id)
+   returning shi_id into ret_id;
+   return ret_id;
 END;
 $$ LANGUAGE plpgsql;
 
