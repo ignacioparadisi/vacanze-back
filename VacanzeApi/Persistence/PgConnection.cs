@@ -20,7 +20,7 @@ namespace vacanze_back.VacanzeApi.Persistence
         // TODO: Obtener datos para conectar con la BD de algun archivo de configuracion
         public static PgConnection Instance =>
             _instance ??
-            (_instance = new PgConnection("127.0.0.1",
+            (_instance = new PgConnection("localhost",
                 "vacanza",
                 "vacanza",
                 "vacanza"));

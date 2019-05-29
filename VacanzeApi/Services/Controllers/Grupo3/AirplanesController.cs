@@ -14,14 +14,14 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
     [EnableCors("MyPolicy")]
     public class AirplanesController : ControllerBase
     {
-        // GET api/values
+        /// <summary>api/airplanes</summary>
+        /// <returns>ActionResult con resultado del query</returns>
         [HttpGet]
         public ActionResult<IEnumerable<Entity>> Get()
         {
             try
             {
-                var aircon = new AirplanesConnection();
-                var result = aircon.Get();
+                var result = AirplanesRepository.Get();
                 return Ok(result.ToList());
             }
             catch (DbErrorException ex)
@@ -34,13 +34,15 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
             }
         }
 
+        /// <summary>/api/airplanes/id</summary>
+        /// <param name="id">Id del avion a busca</param>
+        /// <returns>ActionResult con el avion buscado o nulo si no encontro nada</returns>
         [HttpGet("{id}")]
         public ActionResult<Entity> Get(int id)
         {
             try
             {
-                var aircon = new AirplanesConnection();
-                var result = aircon.Find(id);
+                var result = AirplanesRepository.Find(id);
                 return Ok(result);
             }
             catch (DbErrorException ex)
