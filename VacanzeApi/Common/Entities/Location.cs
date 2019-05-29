@@ -1,11 +1,11 @@
-using Newtonsoft.Json;
-
 namespace vacanze_back.VacanzeApi.Common.Entities
 {
     public class Location : Entity
     {
-    
-        [JsonConstructor]
+        public Location() : base(0)
+        {
+        }
+
         public Location(long id, string city, string country) : base(id)
         {
             City = city;

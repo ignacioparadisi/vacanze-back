@@ -4,8 +4,6 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
 {
     public class Hotel : Entity
     {
-        // [JsonConstructor]
-
         public Hotel() : base(0)
         {
         }
