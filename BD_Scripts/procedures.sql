@@ -859,7 +859,7 @@ CREATE OR REPLACE FUNCTION getResRestaurant(usuario INTEGER) RETURNS TABLE (
     RETURN QUERY SELECT R.rr_id as ID, R.rr_date as fechaReservar, R.RR_NUM_PPL as CantidadPersonas, R.rr_timestamp as fechaReservo,
     R.rr_use_fk as userID, R.rr_res_fk as restaurantID, R.rr_pay_fk as paymentID
     FROM RES_REST as R, users as U
-    WHERE U.USE_ID = R.rr_use_fk;
+    WHERE U.USE_ID = R.rr_use_fk and R.rr_use_fk = usuario;
   END;
   $$ LANGUAGE plpgsql;
 

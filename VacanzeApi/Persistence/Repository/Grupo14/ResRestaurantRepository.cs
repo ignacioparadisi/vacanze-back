@@ -24,5 +24,32 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo14{
             
             Console.WriteLine("ID del insert: " , resRest);
         }
+    
+         
+         public List<Restaurant_res> getResRestaurant(int user){
+
+            var ReservationList = new List<Restaurant_res>();
+            var table = PgConnection.Instance.ExecuteFunction("getResRestaurant(@userId)",user);
+            for (var i = 0; i < table.Rows.Count; i++){
+
+                var id = Convert.ToInt32(table.Rows[i][0].ToString());
+                var fecha_for_res = table.Rows[i][1].ToString();
+                var number_people =  Convert.ToInt32(table.Rows[i][2].ToString());
+                var fecha_que_reservo = table.Rows[i][3].ToString();
+                var userID =  Convert.ToInt32(table.Rows[i][4].ToString());
+                var restaurantID =  Convert.ToInt32(table.Rows[i][5].ToString());
+                var Restaurant_res = new Restaurant_res(id, fecha_for_res,number_people,fecha_que_reservo,userID,restaurantID);
+                ReservationList.Add(Restaurant_res);
+            };
+            return ReservationList;
+        }
+        
+    
+    
+    
+    
+    
+    
+    
     }
 }

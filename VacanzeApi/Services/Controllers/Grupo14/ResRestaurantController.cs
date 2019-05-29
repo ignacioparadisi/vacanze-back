@@ -37,6 +37,23 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 
 		}
 
+        [HttpGet("{id}")]
+		public ActionResult<IEnumerable<Restaurant_res>> Get(int userid){
+			try{
+				ResRestaurantRepository conec= new ResRestaurantRepository();
+				List<Restaurant_res> resRestaurantList = conec.getResRestaurant(userid);
+                Console.WriteLine("Fuera del SP");
+                Console.WriteLine(resRestaurantList);
+				return resRestaurantList; 
+			}
+            catch (DatabaseException ){            
+				return StatusCode(500);
+			}
+			catch (InvalidStoredProcedureSignatureException ){
+				return StatusCode(500);
+			}
+		}
+
 	}
 
     public class ResponseError {
