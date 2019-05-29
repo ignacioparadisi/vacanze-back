@@ -23,7 +23,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         {
             try
             {
-                var CruiserList = CruiserConnection.GetCruisers();
+                var CruiserList = CruiserRepository.GetCruisers();
                 return Ok(CruiserList);
             }
 //            catch (IndexOutOfRangeException)
@@ -41,7 +41,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         {
             try
             {
-                 Cruiser cruiser=  CruiserConnection.GetCruiser(id);
+                 Cruiser cruiser=  CruiserRepository.GetCruiser(id);
                  return Ok(cruiser);
             }
             catch (IndexOutOfRangeException)
@@ -54,7 +54,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         [HttpPost]
         public ActionResult<Cruiser> PostCruiser([FromBody] Cruiser cruiser)
         {
-            var id = CruiserConnection.AddCruiser(cruiser);
+            var id = CruiserRepository.AddCruiser(cruiser);
             if (id.Equals(-1))
             {
                 return BadRequest("Faltan campos en el crucero");
@@ -67,7 +67,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         [HttpPut]
          public ActionResult<Cruiser> PutCruiser([FromBody] Cruiser cruiser)
          {
-             var UpdatedCruiser = CruiserConnection.UpdateCruiser(cruiser);
+             var UpdatedCruiser = CruiserRepository.UpdateCruiser(cruiser);
              if (UpdatedCruiser.Id.Equals(-1))
              {
                  return BadRequest("Error actualizando crucero");
@@ -78,7 +78,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         [HttpDelete("{id}")]
         public ActionResult<int> DeleteCruiser(int id)
         {
-            var DeletedId = CruiserConnection.DeleteCruiser(id);
+            var DeletedId = CruiserRepository.DeleteCruiser(id);
             if (DeletedId.Equals(-1))
             {
                 return BadRequest("Error eliminando el crucero");

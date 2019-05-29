@@ -7,7 +7,7 @@ using vacanze_back.VacanzeApi.Common.Exceptions;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
 {
-    public static class CruiserConnection
+    public static class CruiserRepository
     {
 
         public static List<Cruiser> GetCruisers()
