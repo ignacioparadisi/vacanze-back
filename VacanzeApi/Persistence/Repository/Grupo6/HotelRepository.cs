@@ -46,6 +46,15 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
             return ExtractHotelFromRow(resultTable.Rows[0]);
         }
 
+        public static List<Hotel> GetHotelsByCity(int city)
+        {
+            var table = PgConnection.Instance.ExecuteFunction("GetHotelsByCity(@city_id)", city);
+            var hotelList = new List<Hotel>();
+            for (var i = 0; i < table.Rows.Count; i++)
+                hotelList.Add(ExtractHotelFromRow(table.Rows[i]));
+            return hotelList;
+        }
+        
         private static Hotel ExtractHotelFromRow(DataRow row)
         {
             var id = Convert.ToInt64(row[0]);
