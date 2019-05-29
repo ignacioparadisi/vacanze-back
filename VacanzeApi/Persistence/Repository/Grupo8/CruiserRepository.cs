@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
 {
@@ -23,8 +24,13 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
                 var LoadingShipCap = Convert.ToInt32(table.Rows[i][4]);
                 var model = table.Rows[i][5].ToString();
                 var line = table.Rows[i][6].ToString();
-                Cruiser cruiser = new Cruiser(id,name,status,capacity,LoadingShipCap,model,line);
+                var picture = table.Rows[i][7].ToString();
+                Cruiser cruiser = new Cruiser(id,name,status,capacity,LoadingShipCap,model,line,picture);
                 CruiserList.Add(cruiser);
+            }
+            if (CruiserList.Count.Equals(0))
+            {
+                throw new EmptyResponseException("No se encontraron cruceros");
             }
             return CruiserList;
         }
@@ -38,34 +44,27 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
                 var name = table.Rows[0][1].ToString();
                 var status = Convert.ToBoolean(table.Rows[0][2]);
                 var capacity = Convert.ToInt32(table.Rows[0][3]);
-                var LoadingShipCap = Convert.ToInt32(table.Rows[0][4]);
+                var loadingShipCap = Convert.ToInt32(table.Rows[0][4]);
                 var model = table.Rows[0][5].ToString();
                 var line = table.Rows[0][6].ToString();
+                var picture = table.Rows[0][7].ToString();
                 Console.WriteLine(name);
-                Cruiser cruiser = new Cruiser(id,name,status,capacity,LoadingShipCap,model,line);
+                Cruiser cruiser = new Cruiser(id,name,status,capacity,loadingShipCap,model,line,picture);
                 return cruiser;
             }
-            catch (Exception e)
+            catch (ArgumentOutOfRangeException)
             {
-                Console.WriteLine(e);
-                throw;
+                throw new EmptyResponseException("No se encontro el cruisero de id "+ ship_id);
             }
         }
 
         public static int AddCruiser(Cruiser cruiser)
         {
-            try
-            {
-                var table = PgConnection.Instance.ExecuteFunction(
+            var table = PgConnection.Instance.ExecuteFunction(
                     "AddShip(@name,@capacity,@loadingcap,@model,@line,@picture)", cruiser.Name, cruiser.Capacity,
-                    cruiser.LoadingShipCap, cruiser.Model, cruiser.Line, "cruiser.jpg");
+                    cruiser.LoadingShipCap, cruiser.Model, cruiser.Line, cruiser.Picture);
                 var id = Convert.ToInt32(table.Rows[0][0]);
                 return id;
-            }
-            catch (InvalidOperationException)
-            {
-                return -1;
-            }
         }
 
         public static Cruiser UpdateCruiser(Cruiser cruiser)
@@ -74,7 +73,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
             {
                 var table = PgConnection.Instance.ExecuteFunction(
                     "ModifyShip(@Id, @Status, @Name, @Capacity, @Loadcap, @Model, @line, @Picture)",Convert.ToInt32(cruiser.Id),
-                    cruiser.Status, cruiser.Name, cruiser.Capacity,cruiser.LoadingShipCap, cruiser.Model, cruiser.Line,"jpg");
+                    cruiser.Status, cruiser.Name, cruiser.Capacity,cruiser.LoadingShipCap, cruiser.Model, cruiser.Line,cruiser.Picture);
                 var id = Convert.ToInt32(table.Rows[0][0]);
                 return cruiser;
             }

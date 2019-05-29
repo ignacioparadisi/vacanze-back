@@ -7,6 +7,7 @@ using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo8;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
@@ -26,13 +27,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 var CruiserList = CruiserRepository.GetCruisers();
                 return Ok(CruiserList);
             }
-//            catch (IndexOutOfRangeException)
-//            {
-//                return BadRequest("No hay cruceros disponibles")
-//            }
-            catch (DatabaseException)
+            catch (Exception e)
             {
-                return BadRequest("Error obteniendo los cruceros");
+                return BadRequest(e.Message);
             }
         }
         // GET/Cruiser/{id}
@@ -41,12 +38,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         {
             try
             {
-                 Cruiser cruiser=  CruiserRepository.GetCruiser(id);
+                Cruiser cruiser=  CruiserRepository.GetCruiser(id);
+             
                  return Ok(cruiser);
             }
-            catch (IndexOutOfRangeException)
+            catch (Exception e)
             {
-                return BadRequest("Error obteniendo el crucero");
+                return BadRequest(e.Message);
             }
         }
 
@@ -54,13 +52,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         [HttpPost]
         public ActionResult<Cruiser> PostCruiser([FromBody] Cruiser cruiser)
         {
-            var id = CruiserRepository.AddCruiser(cruiser);
-            if (id.Equals(-1))
+            try
             {
-                return BadRequest("Faltan campos en el crucero");
+                cruiser.Validate();
+                var id = CruiserRepository.AddCruiser(cruiser);
+                var savedCruiser = new Cruiser(id,cruiser.Name,cruiser.Status,cruiser.Capacity,cruiser.LoadingShipCap,cruiser.Model,cruiser.Line,cruiser.Picture);
+                return StatusCode(200,savedCruiser);
             }
-            var savedCruiser = new Cruiser(id,cruiser.Name,cruiser.Status,cruiser.Capacity,cruiser.LoadingShipCap,cruiser.Model,cruiser.Line);
-            return StatusCode(200,savedCruiser);
+            catch (NotValidAttributeException e)
+            {
+               return BadRequest(e.Message);
+            }
         }
         
         
