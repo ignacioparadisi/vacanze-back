@@ -7,16 +7,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo6;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
 {
     public class ReservationRoomRepository
     {
         const String SP_SELECT = "m13_getResRooms()";
-        const String SP_FIND = "m13_findByReservaHabitacionId(@_id)";
+        const String SP_FIND = "m13_findbyroomreservationid(@_id)";
         const String SP_AVAILABLE = "m13_getAvailableRooms(@_checkin, @_checkout)";
-        const String SP_ADD_RESERVATION = "m13_addRoomReservation (@_status, @_checkin, @_checkout,@_roo_fk,@_use_fk)";
-        const String SP_DELETE_RESERVATION ="";
+        const String SP_ADD_RESERVATION = "m13_addRoomReservation(@_checkin, @_checkout,@_use_fk,@_hot_fk)";
+        const String SP_DELETE_RESERVATION = "m13_deleteRoomReservation(@_rooid)";
         const String SP_ADD_PAYMENT = "";
 
         private ReservationRoom _reservationRoom;
@@ -43,12 +45,14 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                     var id = Convert.ToInt64(table.Rows[i][0]);
                     var pickup = Convert.ToDateTime(table.Rows[i][1]);
                     var returndate = Convert.ToDateTime(table.Rows[i][2]);
-                    var fk_hotel = Convert.ToInt64(table.Rows[i][3]);
-                    var use_id = Convert.ToInt64(table.Rows[i][4]);
+                    var timestamp = Convert.ToDateTime(table.Rows[i][3]);
+                    //var fk_hotel = Convert.ToInt32(table.Rows[i][4]);
+                    var use_id = (int) Convert.ToInt64(table.Rows[i][5]);
+                   // var payment = Convert.ToInt64(table.Rows[i][6]);
                     
                     ReservationRoom roomRes = new ReservationRoom(id, pickup, returndate);
-                 //   roomRes.Hotel.Id = fk_hotel;
-                 //   roomRes.User.Id = use_id;
+                    roomRes.Hotel = HotelRepository.GetHotelById(Convert.ToInt32(table.Rows[i][4]));
+                    roomRes.Fk_user = use_id;
 
                     roomReservationList.Add(roomRes);
                 }
@@ -78,16 +82,21 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             try
             {
                 var table = PgConnection.Instance.ExecuteFunction(SP_FIND, id);
+                
                 for (int i = 0; i < table.Rows.Count; i++)
                 {
+                    var id2 = Convert.ToInt64(table.Rows[i][0]);
                     var pickup = Convert.ToDateTime(table.Rows[i][1]);
                     var returndate = Convert.ToDateTime(table.Rows[i][2]);
-                    var userid = Convert.ToInt64(table.Rows[i][3]);
-                    var autfk = Convert.ToInt64(table.Rows[i][4]);
-                    // var payfk = Convert.ToInt64(table.Rows[i][5]);
-                    _reservationRoom = new ReservationRoom(id, pickup, returndate);
+                    var timestamp = Convert.ToDateTime(table.Rows[i][3]);
+                    var userid = (int)Convert.ToInt64(table.Rows[i][5]);
+                    var hot_fk = Convert.ToInt64(table.Rows[i][5]);
+
+                    // var payfk = Convert.ToInt64(table.Rows[i][6]);
+                    _reservationRoom = new ReservationRoom(id2, pickup, returndate);
+                    _reservationRoom.Hotel = HotelRepository.GetHotelById(Convert.ToInt32(table.Rows[i][4]));
+                    _reservationRoom.Fk_user = userid;
                     //  _reservation.User.Id = userid;
-                    //  _reservation.Automobile.Id = autfk;
                     //Falta Payment
                 }
                 return _reservationRoom;
@@ -145,38 +154,41 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
          * Inserts in the DataBase the room reservation that was passed.
          */
         //Falta el user
-        /*
-        public void Add(Entity entity)
+
+        public void Add(ReservationRoom reservation)
         {
             try
             {
-                ReservationRoom reservationRoom = (ReservationRoom)entity;
-                int res_id = 0;
-
-                Connect();
-                StoredProcedure(SP_ADD_RESERVATION);
-
-                AddParameter("_checkin", reservationRoom.CheckIn);
-                AddParameter("_checkout", reservationRoom.CheckOut);
-                AddParameter("_roo_fk", reservationRoom.Room.Id);
-            //    AddParameter("_use_fk",reservationRoom.user.Id);
-
-                ExecuteReader();
-
-                if (numberRecords > 0)
-                {
-                    res_id = GetInt(0, 0);
-                }
-                Disconnect();
+                var table = PgConnection.Instance.
+                    ExecuteFunction(SP_ADD_RESERVATION,
+                        reservation.CheckIn,
+                        reservation.CheckOut,
+                        reservation.Fk_user,
+                        (int)reservation.Hotel.Id);
             }
-            catch (NpgsqlException e)
+            catch(Exception e)
             {
-
                 Console.WriteLine(e.ToString());
-                Disconnect();
-                throw new Exception();
+                throw;
             }
         }
-        */
+
+        public void Delete(Entity entity)
+        {
+            try
+            {
+                ReservationRoom reservation = (ReservationRoom) entity;
+                var table = PgConnection.Instance.ExecuteFunction(
+                   SP_DELETE_RESERVATION,
+                   (int)reservation.Id
+               );
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                throw;
+            }
+        }
+
     }
 }

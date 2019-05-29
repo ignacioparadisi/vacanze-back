@@ -50,9 +50,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 
         // POST api/values //CREAR UN RECURSO
         [HttpPost]
-        public ActionResult<Entity> Post([FromBody] Entity entity)
+        public ActionResult<Entity> Post([FromBody] ReservationRoom reservation)
         {
-            return entity;
+            try
+            {
+                ReservationRoomRepository repository = new ReservationRoomRepository();
+                 repository.Add(reservation);
+                return Ok(new { Message = "Reservacion Agregada" });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { e.Message });
+            }
         }
 
         // PUT api/values/5    //ACTUALIZAR UN RECURSO
@@ -63,8 +72,23 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 
         // DELETE api/values/5 //BORRAR
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult<Entity> Delete(int id)
         {
+            try
+            {
+                ReservationRoomRepository repository = new ReservationRoomRepository();
+                ReservationRoom reservation = (ReservationRoom) repository.Find(id);
+
+                repository.Delete(reservation);
+
+                return Ok(new { Message = "Reservacion eliminada" });
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
         }
     }
 }

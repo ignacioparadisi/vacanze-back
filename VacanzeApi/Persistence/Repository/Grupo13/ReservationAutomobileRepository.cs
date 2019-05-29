@@ -13,6 +13,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
     public class ReservationAutomobileRepository
     { 
         const String SP_SELECT = "m13_getResAutos()";
+        const String SP_AVAILABLE = "m13_getavailableautomobilereservations('01/03/2019', '01/05/2019')";
         const String SP_FIND = "m13_findByResAutId(@_id)";
         const String SP_ADD = "m13_addautomobilereservation(@_ra_id,@_checkin,@_checkout,@_ra_use_fk,@_ra_aut_fk)";
         private Automobile _automobile;
@@ -51,7 +52,38 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                     }
                     return reservationAutomobileList;
                 }
-        
+
+        public List<Entity> GetAvailableAutomobileReservations()
+        {
+            List<Entity> reservationAutomobileList = new List<Entity>();
+            try
+            {
+                var table = PgConnection.Instance.ExecuteFunction(SP_AVAILABLE);
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    var id = Convert.ToInt64(table.Rows[i][0]);
+                    var pickup = Convert.ToDateTime(table.Rows[i][1]);
+                    var returndate = Convert.ToDateTime(table.Rows[i][2]);
+
+                    ReservationAutomobile reservation = new ReservationAutomobile(id, pickup, returndate);
+                    reservationAutomobileList.Add(reservation);
+                }
+                return reservationAutomobileList;
+            }
+            catch (NpgsqlException e)
+            {
+                e.ToString();
+            }
+            catch (Exception e)
+            {
+                e.ToString();
+            }
+            finally
+            {
+            }
+            return reservationAutomobileList;
+        }
+
         /** Method Find(int id)
          * @param id : int
          * Returns the automobile reservation with the id that was passed.
