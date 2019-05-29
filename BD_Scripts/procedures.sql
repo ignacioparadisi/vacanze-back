@@ -821,6 +821,27 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+--------------------------------------------------
+CREATE OR REPLACE FUNCTION ConsultforPlaceandStatusAuto(_place integer,_status bool )
+RETURNS TABLE
+  (id integer,
+   make varchar(30),
+   model varchar(30),
+   capacity integer,
+   isactive BOOLEAN, 
+   price numeric , 
+   license varchar(30), 
+   picture varchar (30), 
+   loc_fk integer
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY  select * 
+    FROM AUTOMOBILE  WHERE aut_loc_fk = _place and aut_isactive =_status ;
+END;
+$$ LANGUAGE plpgsql;
+
 -------------consultar por estado del auto ---------------------------------
 CREATE OR REPLACE FUNCTION ConsultforStatusAuto(codigo integer)
 RETURNS TABLE

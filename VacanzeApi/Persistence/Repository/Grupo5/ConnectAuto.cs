@@ -66,7 +66,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo5
             }
             return AutoList;
         }
-<<<<<<< HEAD
            
         public static List<Auto> consultforall(int _place , string _result , string _license , int _capacity)
         {
@@ -94,7 +93,33 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo5
             }
             return AutoList;
 
-        }            
+        } 
+         public static List<Auto> ConsultforPlaceandStatu(int _place,bool _status)
+        {
+            var AutoList = new List<Auto>();
+            bool isactive;
+            string command="ConsultforPlaceandStatusAuto (@AUT_LOC_FK,@AUT_ISACTIVE)";
+            var table = PgConnection.Instance.ExecuteFunction(command,_place,_status);
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                var id = Convert.ToInt32(table.Rows[i][0]);
+                var make = table.Rows[i][1].ToString();
+                var model = table.Rows[i][2].ToString();
+                var capacity =Convert.ToInt32(table.Rows[i][3]);
+                var status = table.Rows[i][4].ToString();
+                var price = Convert.ToInt32(table.Rows[i][5]);
+                var licence = table.Rows[i][6].ToString();
+                var picture =table.Rows[i][7].ToString();
+                var place =Convert.ToInt32(table.Rows[i][0]);
+                if (status== "true"){
+                    isactive=true;
+                }else {isactive= false;}
+                Auto auto=new Auto(make,model,capacity,isactive,licence,price,picture,place);
+                auto.setId(id);
+                AutoList.Add(auto);
+            }
+            return AutoList;
+        }        
 
 
            public static List<Auto> ConsultforPlace(int _id)
@@ -125,7 +150,4 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo5
 
         }
     }                    
-=======
-    }
->>>>>>> 9389fe56395310fe4901e2e3b40e7619889bf593
 }

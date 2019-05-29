@@ -67,7 +67,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
                 return StatusCode(500,"No hay auto registrados");
             }
         }
-
+        [HttpGet("consultplaceStatus/{place}/{status}")]
+        public  ActionResult<IEnumerable<Auto>> GetConsultforPlaceandStatu(int place, bool status)
+        {
+            try{
+                
+                List<Auto> AutoList =ConnectAuto.ConsultforPlaceandStatu(place,status);
+                 return Ok(JsonConvert.SerializeObject(AutoList));
+            }catch (IndexOutOfRangeException)
+            {
+                return StatusCode(500,"No hay auto registrados");
+            }
+        }
 
 
 
