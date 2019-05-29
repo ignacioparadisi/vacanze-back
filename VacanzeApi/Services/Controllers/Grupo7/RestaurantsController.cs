@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using Newtonsoft.Json;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo7;
@@ -34,6 +35,21 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
             }
         }
 
+        // GET/Restaurant/{id}
+        [HttpGet("{id}")]
+        public IActionResult GetRestaurant(int id)
+        {
+            try
+            {
+                 Restaurant restaurant=  RestaurantRepository.GetRestaurant(id);
+                 return Ok(JsonConvert.SerializeObject(restaurant));
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return StatusCode(500,"El Restaurant no fue encontrado");
+            }
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -52,6 +68,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         public void Put([FromBody] Restaurant restaurant)
         {
             var receivedId = RestaurantRepository.PutRestaurant(restaurant);
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult<int> DeleteRestaurant(int id)
+        {
+            var deletedid = RestaurantRepository.DeleteRestaurant(id);
+            if (deletedid.Equals(-1))
+            {
+                return StatusCode(500, "El restaurante no existe");
+            }
+            return StatusCode(200, "Eliminado satisfactoriamente");
         }
 
     }

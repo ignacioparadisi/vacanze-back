@@ -56,5 +56,47 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
 
             return restaurantList; 
         }
+        public static Restaurant GetRestaurant(int restaurant_id)
+        {
+            var table = PgConnection.Instance.ExecuteFunction("GetRestaurant(@restaurant_id)" , restaurant_id);
+            try
+            {
+                var id = Convert.ToInt64(table.Rows[0][0]);
+                var name = table.Rows[0][1].ToString();
+                var capacity = Convert.ToInt32(table.Rows[0][2]); 
+                var isActive = Convert.ToBoolean(table.Rows[0][3]);
+                var qualify = Convert.ToDecimal(table.Rows[0][4]);
+                var specialty = table.Rows[0][5].ToString();
+                var price = Convert.ToDecimal(table.Rows[0][6]);
+                var businessName = table.Rows[0][7].ToString();
+                var picture = table.Rows[0][8].ToString();
+                var description = table.Rows[0][9].ToString();
+                var phone = table.Rows[0][10].ToString();
+                var location = Convert.ToInt32(table.Rows[0][11]);
+                var address = table.Rows[0][12].ToString();
+                Console.WriteLine(name);
+                Restaurant restaurant = new Restaurant(id, name, capacity, isActive, qualify, specialty, price, businessName, picture, description, phone, location, address);
+                return restaurant;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+         public static int DeleteRestaurant(int id)
+        {
+            try
+            {
+                var table = PgConnection.Instance.ExecuteFunction("DeleteRestaurant(@id)",id);
+                var deletedid = Convert.ToInt32(table.Rows[0][0]);
+                return deletedid;
+            }
+            catch (InvalidCastException)
+            {
+                return -1;
+            }
+        }
     }
 }
