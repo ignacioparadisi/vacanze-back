@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
 {
@@ -16,7 +17,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
         const String SP_AVAILABLE = "m13_getavailableautomobilereservations('01/03/2019', '01/05/2019')";
         const String SP_FIND = "m13_findByResAutId(@_id)";
         const String SP_ADD = "m13_addautomobilereservation(@_ra_id,@_checkin,@_checkout,@_ra_use_fk,@_ra_aut_fk)";
-        private Automobile _automobile;
+        private Auto _automobile;
         private ReservationAutomobile _reservation;
 
         /** <summary>Trae de la BD, las reservas de automoviles</summary>
@@ -125,7 +126,11 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             {
                 var table = PgConnection.Instance.
                     ExecuteFunction(SP_ADD,
-                        reservation.Id, reservation.CheckIn, reservation.CheckOut, reservation.User.Id, reservation.Automobile.Id);
+                        reservation.Id,
+                        reservation.CheckIn,
+                        reservation.CheckOut,
+                        reservation.User.Id,
+                        reservation.Automobile.getId());
                 return reservation;
             }
             catch

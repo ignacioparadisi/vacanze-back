@@ -36,7 +36,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             {
                 var table = PgConnection.Instance.ExecuteFunction(SP_SELECT);
                 List<Entity> roomReservationList = new List<Entity>();
-                RoomConnection _roomConnection = new RoomConnection();
 
                 for (int i = 0; i < table.Rows.Count; i++)
                 {
