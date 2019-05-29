@@ -678,12 +678,13 @@ $$ LANGUAGE plpgsql;
 --------------------------Borrar Restaurant--------------------
 
 CREATE OR REPLACE FUNCTION DeleteRestaurant(id integer)
-RETURNS void AS
+RETURNS INTEGER AS
 $$
 BEGIN
 
     DELETE FROM Restaurant 
     WHERE (res_id = id);
+	RETURN id;
 
 END;
 $$ LANGUAGE plpgsql;
