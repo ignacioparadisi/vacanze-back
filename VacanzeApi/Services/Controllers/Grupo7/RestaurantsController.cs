@@ -41,11 +41,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         {
             var receivedId = RestaurantRepository.AddRestaurant(restaurant);
             var savedrestaurant = new Restaurant(receivedId, restaurant.Name, restaurant.Capacity, restaurant.IsActive,
-                                                 restaurant.Specialty, restaurant.Price, restaurant.BusinessName, 
+                                                 restaurant.Qualify, restaurant.Specialty, restaurant.Price, restaurant.BusinessName, 
                                                  restaurant.Picture, restaurant.Description, restaurant.Phone,
                                                  restaurant.Location,
                                                  restaurant.Address);
-            return CreatedAtAction("Get", "restaurants", savedrestaurant);
+            return CreatedAtAction("Get", "restaurants", savedrestaurant); 
         }
     }
 }
