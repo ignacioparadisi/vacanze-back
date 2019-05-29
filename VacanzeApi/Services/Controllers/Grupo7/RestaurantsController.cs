@@ -47,5 +47,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
                                                  restaurant.Address);
             return CreatedAtAction("Get", "restaurants", savedrestaurant); 
         }
+
+        [HttpPut]
+        public void Put([FromBody] Restaurant restaurant)
+        {
+            var receivedId = RestaurantRepository.PutRestaurant(restaurant);
+        }
+
     }
 }

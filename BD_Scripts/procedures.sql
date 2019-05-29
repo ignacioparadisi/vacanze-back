@@ -650,6 +650,52 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql; 
 
+--------------------------Borrar Restaurant--------------------
+CREATE OR REPLACE FUNCTION DeleteRestaurant(id Integer)
+    RETURNS void AS $$
+DECLARE
+    DEST_ID INTEGER;
+BEGIN
+	DELETE FROM restaurant WHERE RES_ID = id;
+END;
+$$ LANGUAGE plpgsql; 
+
+--------------------------Actualizar Restaurant--------------------
+
+CREATE OR REPLACE FUNCTION UpdateRestaurant(
+									id INTEGER,
+									name VARCHAR(100),
+                                    capacity INTEGER,
+                                    isActive BOOLEAN,
+									qualify DECIMAL,
+                                    specialty VARCHAR(30),
+                                    price DECIMAL,
+									businessName VARCHAR(30),
+									picture VARCHAR,
+									description VARCHAR(30),
+									phone VARCHAR(30),
+                                    location INTEGER,
+									address VARCHAR(30))
+    RETURNS INTEGER AS $$
+BEGIN
+	UPDATE restaurant
+	SET RES_NAME = name,
+		RES_CAPACITY = capacity,
+		RES_ISACTIVE = isActive,
+		RES_QUALIFY = qualify,
+		RES_SPECIALTY = specialty,
+		RES_PRICE = price,
+		RES_BUSINESSNAME = businessName,
+		RES_PICTURE = picture,
+		RES_DESCR = description,
+		RES_TLF = phone,
+		RES_LOC_FK = location,
+		RES_ADDRESS_SPECS = address
+	WHERE RES_ID = id;
+	RETURN id;
+END;
+$$ LANGUAGE plpgsql; 
+
 ------------------------------------fin de grupo 7---------------------------------
 
 ------------------------------------ grupo 10 ---------------------------------
