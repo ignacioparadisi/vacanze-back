@@ -24,12 +24,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         {
             try
             {
-                var CruiserList = CruiserRepository.GetCruisers();
-                return Ok(CruiserList);
+                var cruiserList = CruiserRepository.GetCruisers();
+                return Ok(cruiserList);
             }
-            catch (Exception e)
+            catch (CruiserNotFoundException e)
             {
-                return BadRequest(e.Message);
+                ErrorMessage errorMessage = new ErrorMessage(400,e.Message);
+                return BadRequest(errorMessage);
             }
         }
         // GET/Cruiser/{id}
@@ -42,9 +43,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
              
                  return Ok(cruiser);
             }
-            catch (Exception e)
+            catch (CruiserNotFoundException e)
             {
-                return BadRequest(e.Message);
+                ErrorMessage errorMessage = new ErrorMessage(400,e.Message);
+                return BadRequest(errorMessage);
             }
         }
 
@@ -56,12 +58,19 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             {
                 cruiser.Validate();
                 var id = CruiserRepository.AddCruiser(cruiser);
-                var savedCruiser = new Cruiser(id,cruiser.Name,cruiser.Status,cruiser.Capacity,cruiser.LoadingShipCap,cruiser.Model,cruiser.Line,cruiser.Picture);
-                return StatusCode(200,savedCruiser);
+                var savedCruiser = new Cruiser(id, cruiser.Name, cruiser.Status, cruiser.Capacity,
+                    cruiser.LoadingShipCap, cruiser.Model, cruiser.Line, cruiser.Picture);
+                return StatusCode(200, savedCruiser);
             }
             catch (NotValidAttributeException e)
             {
-               return BadRequest(e.Message);
+                var errorMsg = new ErrorMessage(400,e.Message);
+                return BadRequest(errorMsg);
+            }
+            catch (DatabaseException e)
+            {
+                ErrorMessage errorMsg = new ErrorMessage(400,e.Message);
+                return BadRequest(errorMsg);
             }
         }
         
@@ -69,23 +78,37 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         [HttpPut]
          public ActionResult<Cruiser> PutCruiser([FromBody] Cruiser cruiser)
          {
-             var UpdatedCruiser = CruiserRepository.UpdateCruiser(cruiser);
-             if (UpdatedCruiser.Id.Equals(-1))
+             try
              {
-                 return BadRequest("Error actualizando crucero");
+                 cruiser.Validate();
+                 var updatedCruiser = CruiserRepository.UpdateCruiser(cruiser);
+                 return StatusCode(200, cruiser);
              }
-             return StatusCode(200, cruiser);
+             catch (NotValidAttributeException e)
+             {
+                 ErrorMessage errorMsg = new ErrorMessage(400, e.Message);
+                 return BadRequest(errorMsg);
+             }
+             catch (CruiserNotFoundException e)
+             {
+                 ErrorMessage errorMsg = new ErrorMessage(400, e.Message);
+                 return BadRequest(errorMsg);
+             }
          }
 
         [HttpDelete("{id}")]
         public ActionResult<int> DeleteCruiser(int id)
         {
-            var DeletedId = CruiserRepository.DeleteCruiser(id);
-            if (DeletedId.Equals(-1))
+            try
             {
-                return BadRequest("Error eliminando el crucero");
+                var deletedId = CruiserRepository.DeleteCruiser(id);
+                return StatusCode(200, deletedId);
             }
-            return StatusCode(200, "Eliminado satisfactoriamente");
+            catch (CruiserNotFoundException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(400,e.Message);
+                return BadRequest(errorMessage);
+            }
         }
     }
 }
