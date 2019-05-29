@@ -22,7 +22,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
         const String SP_ADD_PAYMENT = "";
 
         private ReservationRoom _reservationRoom;
-        private RoomConnection _roomConnection;
 
         public void create(Entity e)
         {
@@ -173,6 +172,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             }
         }
 
+        /** Method Delete()
+         * Deletes in the DataBase the room reservation that was passed.
+         */
         public void Delete(Entity entity)
         {
             try
