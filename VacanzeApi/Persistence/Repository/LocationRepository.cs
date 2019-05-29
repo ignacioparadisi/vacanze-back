@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using Npgsql;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 
@@ -12,21 +11,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
         public static List<Location> GetLocations()
         {
             var locationList = new List<Location>();
-            try
-            {
-                var results = PgConnection.Instance.ExecuteFunction("GetLocations()");
-                for (var i = 0; i < results.Rows.Count; i++)
-                    locationList.Add(ExtractLocationFromRow(results.Rows[i]));
-                return locationList;
-            }
-            catch (NpgsqlException)
-            {
-                throw new DatabaseException("Error con la base de datos al consultar los lugares");
-            }
-            catch (Exception e)
-            {
-                throw new GeneralException(e, DateTime.Now);
-            }
+            var results = PgConnection.Instance.ExecuteFunction("GetLocations()");
+            for (var i = 0; i < results.Rows.Count; i++)
+                locationList.Add(ExtractLocationFromRow(results.Rows[i]));
+            return locationList;
         }
 
         public static Location GetLocationById(int id)
