@@ -467,13 +467,13 @@ $$ LANGUAGE plpgsql;
 -------------------------------------ELIMAR Reclamo-----------------------------
 
 CREATE OR REPLACE FUNCTION DeleteClaim(_cla_id integer)
-RETURNS void AS
+RETURNS integer AS
 $$
 BEGIN
 
     DELETE FROM Claim 
     WHERE (cla_id = _cla_id);
-
+    RETURN _cla_id;
 END;
 $$ LANGUAGE plpgsql;
 --------------------------CONSULTAR Claim--------------------

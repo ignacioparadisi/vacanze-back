@@ -125,7 +125,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
         {
             var table= PgConnection.Instance.ExecuteFunction("getclaim(@cla_id)",claimId);    
             if(table.Rows.Count < 1) throw new NullClaimException("no existe esa id");                           
-            PgConnection.Instance.ExecuteFunction("modifyclaimtitle(@cla_id,@cla_descr)",claimId ,claim._description);
+            PgConnection.Instance.ExecuteFunction("modifyclaimtitle(@cla_id,@cla_title,@cla_descr)",claimId ,claim._title,claim._description);
             return claimId;  
         }
     }
