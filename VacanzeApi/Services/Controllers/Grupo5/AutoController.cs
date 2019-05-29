@@ -40,19 +40,37 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
             return StatusCode(200, "Eliminado satisfactoriamente");
         
         }
-        /*https://localhost:5001/api/Auto/consultar/2*/
-        [HttpGet("consultar/{i}")]
-        public  ActionResult<IEnumerable<Auto>> GetconsultA(int i)
+        /*https://localhost:5001/api/Auto/consultarforall/2 
+         result = isactive */ 
+        [HttpGet("consultforall/{i}")]
+        public  ActionResult<IEnumerable<Auto>> GetconsultAll(int place , string result , string license , int capacity)
         {
             try{
                 
-                List<Auto> AutoList =ConnectAuto.ConsultforId(i);
+                List<Auto> AutoList =ConnectAuto.consultforall(place,result,license,capacity);
                  return Ok(JsonConvert.SerializeObject(AutoList));
             }catch (IndexOutOfRangeException)
             {
                 return StatusCode(500,"No hay auto registrados");
             }
         }
+
+        [HttpGet("consultforplace/{i}")]
+        public  ActionResult<IEnumerable<Auto>> GetconsultPlace(int place)
+        {
+            try{
+                
+                List<Auto> AutoList =ConnectAuto.ConsultforPlace(place);
+                 return Ok(JsonConvert.SerializeObject(AutoList));
+            }catch (IndexOutOfRangeException)
+            {
+                return StatusCode(500,"No hay auto registrados");
+            }
+        }
+
+
+
+
 		/*https://localhost:5001/api/Auto/modificar/2/cambio/cambio/532/false/cambio/12345/cambio/2 */
         [HttpGet("modificar/{id}/{make}/{model}/{capacity}/{status}/{licence}/{price}/{picture}/{place}")]
         public  IActionResult  modify(int id, string make,string model,int capacity,bool status, string licence, float price, string picture , int place)

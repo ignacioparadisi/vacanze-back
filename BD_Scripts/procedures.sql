@@ -626,7 +626,7 @@ RETURNS TABLE
    model varchar(30),
    capacity integer,
    isactive BOOLEAN, 
-   price real , 
+   price numeric , 
    license varchar(30), 
    picture varchar (30), 
    loc_fk integer
@@ -647,7 +647,7 @@ RETURNS TABLE
    model varchar(30),
    capacity integer,
    isactive BOOLEAN, 
-   price real , 
+   price numeric , 
    license varchar(30), 
    picture varchar (30), 
    loc_fk integer
@@ -701,7 +701,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 ------------------consulta por modelo----------------------------------------
-CREATE OR REPLACE FUNCTION ConsultforMakeAuto(codigo integer)
+CREATE OR REPLACE FUNCTION ConsultformodelAuto(codigo integer)
 RETURNS TABLE
   (id integer,
    make varchar(30),
@@ -720,6 +720,63 @@ BEGIN
     FROM AUTOMOBILE  WHERE aut_model = codigo ;
 END;
 $$ LANGUAGE plpgsql;
+----------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION consultayuda(
+	_place integer,
+	_result varchar,
+	_license character varying,
+	_capacity integer)
+    RETURNS TABLE(id integer, make character varying, model character varying, capacity integer, isactive boolean, price numeric, license character varying, picture character varying, loc_fk integer) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+declare
+    _status bool;
+BEGIN
+   
+	if (_result = 'true'  ) then 
+		_status:=true;
+	else  
+	    _status:= false;
+    end if;
+	IF (_result = 'null' and _license = 'null' and _capacity= 0 ) THEN
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_loc_fk = _place;
+    ELSIF  (_place = 0  and _license = 'null' and _capacity= 0 ) THEN
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_isactive = _status ;
+	ELSIF (_place = 0  and _result = 'null' and _capacity= 0 ) then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_license = _license ;
+	ELSIF (_place = 0  and _result = 'null' and _license= 'null' ) then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_capacity = _capacity ;
+	ELSIF (_place = 0 and _result= 'null') then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_license = _license  and aut_capacity = _capacity;
+	ELSIF (_place = 0 and _license='null') then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_isactive = _status  and aut_capacity = _capacity;
+	ELSIF (_place=0 and _capacity = 0) then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_isactive = _status  and aut_license = _license;
+    ELSIF (_place=0 ) then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_isactive = _status  and aut_license = _license and aut_loc_fk=_place;
+    ELSIF (_result= 'null' and _license ='null' ) then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_loc_fk=_place and aut_capacity =_capacity;
+    ELSIF (_result= 'null' and _capacity =0 ) then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_loc_fk=_place and aut_license =_license;
+    ELSIF (_result= 'null' ) then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_loc_fk=_place and aut_license =_license and aut_capacity= _capacity;		
+    ELSIF (_license = 'null' and _capacity= 0  ) then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_loc_fk=_place  and aut_isactive= _status;	
+    ELSIF ( _capacity= 0  ) then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_loc_fk=_place  and aut_isactive= _status and aut_license=_license;	
+    ELSIF (_license = 'null'  ) then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_loc_fk=_place  and aut_isactive= _status and aut_capacity = _capacity;
+	ELSE 
+		RETURN QUERY  select *FROM AUTOMOBILE where aut_loc_fk=_place  and aut_isactive= _status and aut_capacity = _capacity and aut_license=_license;
+	END IF; 
+
+END;
+$BODY$;
+
 
 -------------modificar auto--------------------------------------------------
 CREATE OR REPLACE FUNCTION 
