@@ -60,7 +60,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             }
             catch (Exception e)
             {
-                return BadRequest(new { e.Message });
+                Console.WriteLine(e.ToString());
+                return null;
             }
         }
 
