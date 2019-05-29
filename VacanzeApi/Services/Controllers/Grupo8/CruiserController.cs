@@ -19,16 +19,20 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
     {
         // GET/Cruisers
         [HttpGet]
-        public ActionResult<IEnumerable<Cruiser>> GetCruisers(int id)
+        public ActionResult<IEnumerable<Cruiser>> GetCruisers()
         {
             try
             {
-                var CruiserList=  CruiserConnection.GetCruisers();
-                return Ok(JsonConvert.SerializeObject(CruiserList));
+                var CruiserList = CruiserConnection.GetCruisers();
+                return Ok(CruiserList);
             }
-            catch (IndexOutOfRangeException)
+//            catch (IndexOutOfRangeException)
+//            {
+//                return BadRequest("No hay cruceros disponibles")
+//            }
+            catch (DatabaseException)
             {
-                return StatusCode(500,"No hay cruceros registrados");
+                return BadRequest("Error obteniendo los cruceros");
             }
         }
         // GET/Cruiser/{id}
@@ -38,11 +42,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             try
             {
                  Cruiser cruiser=  CruiserConnection.GetCruiser(id);
-                 return Ok(JsonConvert.SerializeObject(cruiser));
+                 return Ok(cruiser);
             }
             catch (IndexOutOfRangeException)
             {
-                return StatusCode(500,"El Crusero no fue encontrado");
+                return BadRequest("Error obteniendo el crucero");
             }
         }
 
@@ -50,27 +54,34 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         [HttpPost]
         public ActionResult<Cruiser> PostCruiser([FromBody] Cruiser cruiser)
         {
-            Console.WriteLine(cruiser);
             var id = CruiserConnection.AddCruiser(cruiser);
+            if (id.Equals(-1))
+            {
+                return BadRequest("Faltan campos en el crucero");
+            }
             var savedCruiser = new Cruiser(id,cruiser.Name,cruiser.Status,cruiser.Capacity,cruiser.LoadingShipCap,cruiser.Model,cruiser.Line);
             return StatusCode(200,savedCruiser);
         }
         
-//    
-//        }
-//        [HttpPut]
-//        public Cruiser PutCruiser(Cruiser cruiser)
-//        {
-//         
-////      }
-/// 
+        
+        [HttpPut]
+         public ActionResult<Cruiser> PutCruiser([FromBody] Cruiser cruiser)
+         {
+             var UpdatedCruiser = CruiserConnection.UpdateCruiser(cruiser);
+             if (UpdatedCruiser.Id.Equals(-1))
+             {
+                 return BadRequest("Error actualizando crucero");
+             }
+             return StatusCode(200, cruiser);
+         }
+
         [HttpDelete("{id}")]
         public ActionResult<int> DeleteCruiser(int id)
         {
-            var deletedid = CruiserConnection.DeleteCruiser(id);
-            if (deletedid.Equals(-1))
+            var DeletedId = CruiserConnection.DeleteCruiser(id);
+            if (DeletedId.Equals(-1))
             {
-                return StatusCode(500, "El crucero no existe");
+                return BadRequest("Error eliminando el crucero");
             }
             return StatusCode(200, "Eliminado satisfactoriamente");
         }

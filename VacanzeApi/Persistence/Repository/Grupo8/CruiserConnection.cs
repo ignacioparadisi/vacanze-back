@@ -17,7 +17,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
             for (int i = 0; i < table.Rows.Count; i++)
             {
                 var id = Convert.ToInt32(table.Rows[i][0]);
-                var name = table.Rows[0][1].ToString();
+                var name = table.Rows[i][1].ToString();
                 var status = Convert.ToBoolean(table.Rows[i][2]);
                 var capacity = Convert.ToInt32(table.Rows[i][3]);
                 var LoadingShipCap = Convert.ToInt32(table.Rows[i][4]);
@@ -54,11 +54,41 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
 
         public static int AddCruiser(Cruiser cruiser)
         {
-            var table = PgConnection.Instance.ExecuteFunction(
-                "AddShip(@name,@capacity,@loadingcap,@model,@line,@picture)", cruiser.Name, cruiser.Capacity,
-                cruiser.LoadingShipCap, cruiser.Model, cruiser.Line, "cruiser.jpg");
-            var id = Convert.ToInt32(table.Rows[0][0]);
-            return id;
+            try
+            {
+                var table = PgConnection.Instance.ExecuteFunction(
+                    "AddShip(@name,@capacity,@loadingcap,@model,@line,@picture)", cruiser.Name, cruiser.Capacity,
+                    cruiser.LoadingShipCap, cruiser.Model, cruiser.Line, "cruiser.jpg");
+                var id = Convert.ToInt32(table.Rows[0][0]);
+                return id;
+            }
+            catch (InvalidOperationException)
+            {
+                return -1;
+            }
+        }
+
+        public static Cruiser UpdateCruiser(Cruiser cruiser)
+        {
+            try
+            {
+                var table = PgConnection.Instance.ExecuteFunction(
+                    "ModifyShip(@Id, @Status, @Name, @Capacity, @Loadcap, @Model, @line, @Picture)",Convert.ToInt32(cruiser.Id),
+                    cruiser.Status, cruiser.Name, cruiser.Capacity,cruiser.LoadingShipCap, cruiser.Model, cruiser.Line,"jpg");
+                var id = Convert.ToInt32(table.Rows[0][0]);
+                return cruiser;
+            }
+            catch (InvalidOperationException)
+            {
+                cruiser.Id = -1;
+                return cruiser;
+            }
+            catch (InvalidCastException)
+            {
+                cruiser.Id = -1;
+                return cruiser;
+            }
+           
         }
         public static int DeleteCruiser(int id)
         {
