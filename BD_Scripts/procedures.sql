@@ -605,7 +605,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
------------------------------------------------------------------------------------------
+
 ----------------eliminar auto-------------------------------
 
 CREATE OR REPLACE FUNCTION DeleteAuto(_id integer)
@@ -618,7 +618,7 @@ BEGIN
 
 END;
 $$ LANGUAGE plpgsql;
-------------------------------------------------
+-------consultar por id de auto-------------------------
 CREATE OR REPLACE FUNCTION ConsultforIdAuto(codigo integer)
 RETURNS TABLE
   (id integer,
@@ -639,7 +639,89 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
---------------------------------------------------------------------------------------------
+----------consultar por lugar ----------------------------------
+CREATE OR REPLACE FUNCTION ConsultforPlaceAuto(codigo integer)
+RETURNS TABLE
+  (id integer,
+   make varchar(30),
+   model varchar(30),
+   capacity integer,
+   isactive BOOLEAN, 
+   price real , 
+   license varchar(30), 
+   picture varchar (30), 
+   loc_fk integer
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY  select * 
+    FROM AUTOMOBILE  WHERE aut_loc_fk = codigo ;
+END;
+$$ LANGUAGE plpgsql;
+
+-------------consultar por estado del auto ---------------------------------
+CREATE OR REPLACE FUNCTION ConsultforStatusAuto(codigo integer)
+RETURNS TABLE
+  (id integer,
+   make varchar(30),
+   model varchar(30),
+   capacity integer,
+   isactive BOOLEAN, 
+   price real , 
+   license varchar(30), 
+   picture varchar (30), 
+   loc_fk integer
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY  select * 
+    FROM AUTOMOBILE  WHERE aut_isactive = codigo ;
+END;
+$$ LANGUAGE plpgsql;
+-------------------consulta por marca de auto-------------------------------
+CREATE OR REPLACE FUNCTION ConsultforMakeAuto(codigo integer)
+RETURNS TABLE
+  (id integer,
+   make varchar(30),
+   model varchar(30),
+   capacity integer,
+   isactive BOOLEAN, 
+   price real , 
+   license varchar(30), 
+   picture varchar (30), 
+   loc_fk integer
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY  select * 
+    FROM AUTOMOBILE  WHERE aut_make = codigo ;
+END;
+$$ LANGUAGE plpgsql;
+------------------consulta por modelo----------------------------------------
+CREATE OR REPLACE FUNCTION ConsultforMakeAuto(codigo integer)
+RETURNS TABLE
+  (id integer,
+   make varchar(30),
+   model varchar(30),
+   capacity integer,
+   isactive BOOLEAN, 
+   price real , 
+   license varchar(30), 
+   picture varchar (30), 
+   loc_fk integer
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY  select * 
+    FROM AUTOMOBILE  WHERE aut_model = codigo ;
+END;
+$$ LANGUAGE plpgsql;
+
+-------------modificar auto--------------------------------------------------
 CREATE OR REPLACE FUNCTION 
 MODIFYAUTOMOBILE(
 	_id integer,
@@ -675,7 +757,7 @@ BEGIN
     FROM LOCATION;
 END;
 $$ LANGUAGE plpgsql;
-
+------------------------fin de grupo 5-------------------------------------------
 ------------------------------------inicio de grupo 7---------------------------------
 
 --------------------------CONSULTAR Restaurant--------------------
