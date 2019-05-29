@@ -65,10 +65,15 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         }
 
         [HttpPut]
-        public void Put([FromBody] Restaurant restaurant)
-        {
-            var receivedId = RestaurantRepository.PutRestaurant(restaurant);
-        }
+         public ActionResult<Restaurant> PutRestaurant([FromBody] Restaurant restaurant)
+         {
+             var UpdatedRestaurant = RestaurantRepository.UpdateRestaurant(restaurant);
+             if (UpdatedRestaurant.Id.Equals(-1))
+             {
+                 return BadRequest("Error actualizando crucero");
+             }
+             return StatusCode(200, restaurant);
+         }
 
         [HttpDelete("{id}")]
         public ActionResult<int> DeleteRestaurant(int id)

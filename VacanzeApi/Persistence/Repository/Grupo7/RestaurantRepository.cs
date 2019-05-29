@@ -19,16 +19,29 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
             return savedId;
         }
 
-        public static long PutRestaurant(Restaurant restaurant)
+        public static Restaurant UpdateRestaurant(Restaurant restaurant)
         {
-            
-            var table = PgConnection.Instance.ExecuteFunction(
-                "UpdateRestaurant(@id,@name,@capacity,@isActive,@qualify,@specialty,@price,@businessName,@picture,@description,@phone,@location,@address)",
-                restaurant.Id, restaurant.Name, restaurant.Capacity, restaurant.IsActive, restaurant.Qualify, restaurant.Specialty, restaurant.Price, restaurant.BusinessName, 
-                restaurant.Picture, restaurant.Description, restaurant.Phone, restaurant.Location, restaurant.Address
-            );
-
-            return restaurant.Id;
+            try
+            {
+                var table = PgConnection.Instance.ExecuteFunction(
+                    "ModifyRestaurant(@id,@name,@capacity,@isActive,@qualify,@specialty,@price,@businessName,@picture,@description,@phone,@location,@address)",Convert.ToInt32(restaurant.Id),
+                    restaurant.Name, restaurant.Capacity, restaurant.IsActive, restaurant.Qualify, restaurant.Specialty, restaurant.Price, restaurant.BusinessName, 
+                    restaurant.Picture, restaurant.Description, restaurant.Phone, restaurant.Location, restaurant.Address
+                );
+                var id = Convert.ToInt32(table.Rows[0][0]);
+                return restaurant;
+            }
+            catch (InvalidOperationException)
+            {
+                restaurant.Id = -1;
+                return restaurant;
+            }
+            catch (InvalidCastException)
+            {
+                restaurant.Id = -1;
+                return restaurant;
+            }
+           
         }
 
         public static List<Restaurant> GetRestaurants()

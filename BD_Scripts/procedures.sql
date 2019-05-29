@@ -676,50 +676,47 @@ END;
 $$ LANGUAGE plpgsql; 
 
 --------------------------Borrar Restaurant--------------------
-CREATE OR REPLACE FUNCTION DeleteRestaurant(id Integer)
-    RETURNS void AS $$
-DECLARE
-    DEST_ID INTEGER;
+
+CREATE OR REPLACE FUNCTION DeleteRestaurant(id integer)
+RETURNS void AS
+$$
 BEGIN
-	DELETE FROM restaurant WHERE RES_ID = id;
+
+    DELETE FROM Restaurant 
+    WHERE (res_id = id);
+
 END;
-$$ LANGUAGE plpgsql; 
+$$ LANGUAGE plpgsql;
 
 --------------------------Actualizar Restaurant--------------------
 
-CREATE OR REPLACE FUNCTION UpdateRestaurant(
-									id INTEGER,
-									name VARCHAR(100),
-                                    capacity INTEGER,
-                                    isActive BOOLEAN,
-									qualify DECIMAL,
-                                    specialty VARCHAR(30),
-                                    price DECIMAL,
-									businessName VARCHAR(30),
-									picture VARCHAR,
-									description VARCHAR(30),
-									phone VARCHAR(30),
-                                    location INTEGER,
-									address VARCHAR(30))
-    RETURNS INTEGER AS $$
+CREATE OR REPLACE FUNCTION ModifyRestaurant( 
+   id integer,
+   name VARCHAR(100),
+   capacity INTEGER,
+   isActive BOOLEAN,
+   qualify DECIMAL,
+   specialty VARCHAR(30),
+   price DECIMAL,
+   businessName VARCHAR(30),
+   picture VARCHAR,
+   description VARCHAR(30),
+   phone VARCHAR(30),
+   location INTEGER,
+   address VARCHAR(30))
+RETURNS integer AS
+$$
 BEGIN
-	UPDATE restaurant
-	SET RES_NAME = name,
-		RES_CAPACITY = capacity,
-		RES_ISACTIVE = isActive,
-		RES_QUALIFY = qualify,
-		RES_SPECIALTY = specialty,
-		RES_PRICE = price,
-		RES_BUSINESSNAME = businessName,
-		RES_PICTURE = picture,
-		RES_DESCR = description,
-		RES_TLF = phone,
-		RES_LOC_FK = location,
-		RES_ADDRESS_SPECS = address
-	WHERE RES_ID = id;
-	RETURN id;
+
+   UPDATE Restaurant SET res_name = name, 
+   res_capacity = capacity, res_isactive = isActive, res_qualify = qualify ,
+   res_specialty = specialty, res_price = price, res_businessname = businessName, 
+   res_picture = picture, res_descr = description, res_tlf = phone, res_loc_fk = location, 
+   res_address_specs = address
+    WHERE (res_id = id);
+   RETURN id;
 END;
-$$ LANGUAGE plpgsql; 
+$$ LANGUAGE plpgsql;
 
 ------------------------------------fin de grupo 7---------------------------------
 
