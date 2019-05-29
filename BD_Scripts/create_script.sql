@@ -152,8 +152,9 @@ CREATE TABLE RESTAURANT(
     
 CREATE TABLE RES_REST(
   RR_ID SERIAL,
-  RR_DATE TIMESTAMP NOT NULL,
-  RR_TIMESTAMP TIMESTAMP NOT NULL,
+  RR_DATE TIMESTAMP NOT NULL, --Fecha para saber para que dia reservo (fecha futuro)
+  RR_NUM_PPL INTEGER NOT NULL, --Cantidad de personas que iran para esa reserva
+  RR_TIMESTAMP TIMESTAMP NOT NULL, --Fecha para saber que dia reservo (fecha actual)
   RR_USE_FK INTEGER NOT NULL,
   RR_RES_FK INTEGER NOT NULL,
   RR_PAY_FK INTEGER,
