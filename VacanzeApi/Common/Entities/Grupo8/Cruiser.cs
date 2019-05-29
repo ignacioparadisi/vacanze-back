@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Security;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 using NLog.Targets.Wrappers;
@@ -8,19 +9,12 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
 {
     public class Cruiser : Entity
     {
-            [Required]
-            public string Name { get; }
-            [Required]
+        public string Name { get; }
             public bool Status { get; }
-            [Required]
             public int Capacity { get; }
-            [Required]
             public int LoadingShipCap { get; }
-            [Required]
             public string Model { get; }
-            [Required]
             public string Line { get; }
-            [Required]
             public string Picture { get; }
 
             [JsonConstructor]
@@ -47,6 +41,10 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
 
             public void Validate()
             {
+                if (string.IsNullOrEmpty(Name))
+                {
+                    throw new NotValidAttributeException("El nombre es requerido");
+                }
                 if (Capacity <= 0)
                 {
                     throw new NotValidAttributeException("La capacidad tiene que ser mayor a 0");
@@ -54,6 +52,19 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
                 if (LoadingShipCap <= 0)
                 {
                     throw new NotValidAttributeException("La capacidad de carga debe ser mayor a 0");
+                }
+                if (string.IsNullOrEmpty(Model))
+                {
+                    throw  new NotValidAttributeException("El modelo es requerido");
+                }
+                if (string.IsNullOrEmpty(Line))
+                {
+                    throw new NotValidAttributeException("La Linea del crucero es requerida");
+                }
+
+                if (string.IsNullOrEmpty(Picture))
+                {
+                    throw new NotValidAttributeException("La imagen es requerida");
                 }
             }
         }
