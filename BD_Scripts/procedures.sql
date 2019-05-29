@@ -743,3 +743,56 @@ END; $$
 LANGUAGE plpgsql;
 
 ------------------------------------fin de grupo 10---------------------------------
+
+----------------------------------- grupo 14 ---------------------------------
+
+--SP para insertar una reserva de hotel
+CREATE OR REPLACE FUNCTION addReservationRestaurant(fecha VARCHAR, 
+    people INTEGER, fecha_reservacion VARCHAR, userId INTEGER, restaurantId INTEGER)
+  RETURNS INTEGER AS $$
+  DECLARE 
+    res_rest_id INTEGER;
+  
+  BEGIN
+    INSERT INTO res_rest(rr_date, rr_number_people, rr_timestamp, rr_use_fk,
+      rr_res_fk)
+      VALUES (TO_TIMESTAMP(fecha, 'yyyy-mm-dd hh24:mi'), people, TO_TIMESTAMP(fecha_reservacion,'yyyy-mm-dd hh24:mi'),userId,restaurantId) RETURNING rr_id INTO res_rest_id;
+    
+    RETURN res_rest_id;
+  END;
+  $$ LANGUAGE plpgsql;
+
+--SP para retornar todas las reservas de restaurant para un usuario
+CREATE OR REPLACE FUNCTION getResRestaurant(usuario INTEGER) RETURNS TABLE (
+  id INTEGER, fecha_for_res TIMESTAMP, number_people INTEGER, fecha_que_reservo TIMESTAMP,
+  userID INTEGER, restaurantID INTEGER, paymentID INTEGER) AS $$
+  
+  BEGIN
+    RETURN QUERY SELECT R.rr_id as ID, R.rr_date as fechaReservar, R.rr_number_people as CantidadPersonas, R.rr_timestamp as fechaReservo,
+    R.rr_use_fk as userID, R.rr_res_fk as restaurantID, R.rr_pay_fk as paymentID
+    FROM RES_REST as R, users as U
+    WHERE U.USE_ID = R.rr_use_fk;
+  END;
+  $$ LANGUAGE plpgsql;
+
+--SP para cancelar la reserva de un usuario 
+CREATE OR  REPLACE FUNCTION deleteReservation(reservationID INTEGER) RETURNS INTEGER AS $$
+  DECLARE res_id INTEGER;
+  BEGIN
+    DELETE FROM RES_REST WHERE (rr_id = reservationID) returning rr_id INTO res_id;
+
+    RETURN res_id;
+  END;
+  $$ LANGUAGE plpgsql;
+
+--SP para agregar si se pago la reserva
+CREATE OR REPLACE FUNCTION modifyReservationPayment(pay INTEGER,reservation INTEGER) RETURNS INTEGER AS $$
+  DECLARE res_id INTEGER;
+  BEGIN
+    UPDATE res_rest SET rr_pay_fk = pay 
+    WHERE(rr_id = reservation) returning rr_id INTO res_id;
+    RETURN res_id;
+  END;
+  $$ LANGUAGE plpgsql;
+
+-----------------------------------fin grupo 14-----------------------------------------------------------
