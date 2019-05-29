@@ -747,3 +747,18 @@ END; $$
 LANGUAGE plpgsql;
 
 ------------------------------------fin de grupo 10---------------------------------
+------------------------------------Grupo12-----------------------------------------
+------------------------------------Reservar Vuelo-------------------------------
+
+CREATE OR REPLACE FUNCTION AddReservationFlight(seatNum VARCHAR,timeS VARCHAR,
+id_user INTEGER,id_fli INTEGER)
+RETURNS INTEGER
+AS $$
+BEGIN
+	INSERT INTO res_fli(rf_seatnum,rf_timestamp,rf_use_fk,rf_pay_fk,rf_fli_fk)
+	VALUES(seatNum,TO_TIMESTAMP(timeS,'yyyy-mm-dd hh24:mi'),id_user,null,id_fli);
+    RETURN res_res_fli_id;
+END	
+$$ 
+LANGUAGE plpgsql;
+
