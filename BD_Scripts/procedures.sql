@@ -175,64 +175,133 @@ $$
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION AddUser(_doc_id VARCHAR(20), 
-                                   _name VARCHAR(30), 
-                                   _lastname VARCHAR(30), 
-                                   _email VARCHAR(30),
-                                   _password VARCHAR(50)) 
-RETURNS VOID AS
+CREATE OR REPLACE FUNCTION GetUserByEmail(email_id VARCHAR(30))
+  RETURNS TABLE
+          (id integer,
+           documentId VARCHAR(50),
+           name VARCHAR(50),
+           lastname VARCHAR(50),
+           email VARCHAR(50))
+AS
 $$
 BEGIN
-    INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
-    VALUES (_doc_id, _name, _lastname, _email, _password);
+  RETURN QUERY SELECT use_id, use_document_id, use_name, use_last_name, use_email
+               FROM Users WHERE use_email = email_id;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION AddUser_Role(_rol_id INTEGER,
-                                        _use_id INTEGER)
-RETURNS VOID AS
+CREATE OR REPLACE FUNCTION AddUser(doc_id VARCHAR(20),
+                                        name VARCHAR(30),
+                                        lastname VARCHAR(30),
+                                        email VARCHAR(30),
+                                        password VARCHAR(50))
+  RETURNS INTEGER AS
 $$
+DECLARE
+  id INTEGER;
+BEGIN
+  INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
+  VALUES (doc_id, name, lastname, email, password) RETURNING use_id INTO id;
+  RETURN id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION AddUser_Role(rol_id INTEGER,
+                                             use_id INTEGER)
+  RETURNS INTEGER AS
+$$
+DECLARE
+  id INTEGER;
 BEGIN
   INSERT INTO User_Role(usr_rol_id, usr_use_id)
-  VALUES (_rol_id, _use_id);
+  VALUES (rol_id, use_id) RETURNING usr_id INTO id;
+  RETURN id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION DeleteUserByEmail(email_id VARCHAR(30))
+  RETURNS INTEGER AS
+$$
+DECLARE
+  id INTEGER;
+BEGIN
+  DELETE FROM Users WHERE use_email = email_id RETURNING use_id INTO id;
+  RETURN id;
 END;
 $$ LANGUAGE plpgsql;
 
 ------- grupo 6 ----------
 CREATE OR REPLACE FUNCTION AddHotel(name VARCHAR(100),
                                     amountOfRooms INTEGER,
+                                    capacityPerRoom INTEGER,
                                     active BOOLEAN,
-                                    phone VARCHAR(30),
-                                    website VARCHAR(30),
+                                    addressSpecs VARCHAR(200),
+                                    roomPrice DECIMAL,
+                                    website VARCHAR,
+                                    phone VARCHAR,
+                                    picture VARCHAR,
+                                    stars INTEGER,
                                     location INTEGER)
     RETURNS integer AS
 $$
 DECLARE
     dest_id INTEGER;
 BEGIN
-    INSERT INTO hotel (hot_nombre, hot_cant_habitaciones, hot_activo, hot_telefono, hot_sitio_web,
-                       hot_fk_lugar)
-    VALUES (name, amountOfRooms, active, phone, website, location) RETURNING hot_id INTO dest_id;
+    INSERT INTO HOTEL (hot_name, hot_room_qty, hot_room_capacity, hot_address_specs, hot_room_price,
+                       hot_website, hot_phone, hot_picture, hot_stars, hot_loc_fk, hot_is_active)
+    VALUES (name, amountOfRooms, capacityPerRoom, addressSpecs, roomPrice, website, phone, picture,
+            stars, location, active) RETURNING HOT_ID INTO dest_id;
     RETURN dest_id;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION ConsultarHoteles()
+CREATE OR REPLACE FUNCTION GetHotels()
 RETURNS TABLE
   (id integer,
-   nombre VARCHAR(100),
-   cantHuespedes INTEGER,
-   status BOOLEAN,
-   telefono VARCHAR(20),
-   sitioweb VARCHAR(100),
-   ciudad VARCHAR(100)
+   name VARCHAR(100),
+   roomQuantity INTEGER,
+   roomCapacity INTEGER,
+   isActive BOOLEAN,
+   addressSpecs VARCHAR(200),
+   pricePerRoom DECIMAL,
+   website VARCHAR(100),
+   phone VARCHAR(20),
+   picture VARCHAR,
+   stars INTEGER,
+   location INTEGER
   )
 AS
 $$
 BEGIN
-    RETURN QUERY SELECT
-    H.hot_id, H.hot_nombre, H.hot_cant_habitaciones , H.hot_activo ,H.hot_telefono,H.hot_sitio_web, L.l_nombre
-    FROM Hotel AS H, Lugar AS L WHERE L.l_id = H.hot_fk_lugar;
+    RETURN QUERY SELECT H.HOT_ID,
+                        H.HOT_NAME,
+                        H.hot_room_qty,
+                        H.hot_room_capacity,
+                        H.hot_is_active,
+                        H.hot_address_specs,
+                        H.hot_room_price,
+                        H.hot_website,
+                        H.hot_phone,
+                        H.HOT_PICTURE,
+                        H.HOT_STARS,
+                        H.hot_loc_fk
+                 FROM Hotel AS H;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION GetLocationById(p_id INTEGER)
+    RETURNS TABLE
+            (
+                id integer,
+                city VARCHAR(30),
+                country VARCHAR(30)
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT LOC_ID, LOC_CITY, LOC_COUNTRY
+                 FROM LOCATION
+                 WHERE loc_id = p_id;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -489,7 +558,7 @@ $$
 BEGIN
     RETURN QUERY SELECT
     cla_id, cla_title,cla_descr, cla_status
-    FROM ClaimWHERE WHERE cla_id = _cla_id;
+    FROM Claim WHERE cla_id = _cla_id;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -548,6 +617,7 @@ $$ LANGUAGE plpgsql;
 
 ------------------------------------fin de grupo 9---------------------------------
 ------ Consulta de los lugares ------
+
 CREATE OR REPLACE FUNCTION GetLocations()
 RETURNS TABLE
   (id integer,
@@ -561,3 +631,79 @@ BEGIN
     FROM LOCATION;
 END;
 $$ LANGUAGE plpgsql;
+
+
+------------------------------------inicio de grupo 7---------------------------------
+
+--------------------------CONSULTAR Restaurant--------------------
+
+CREATE OR REPLACE FUNCTION GetRestaurants()
+RETURNS TABLE
+  (id integer,
+   name VARCHAR(100),
+   capacity INTEGER,
+   isActive BOOLEAN,
+   qualify DECIMAL,
+   specialty VARCHAR(30),
+   price DECIMAL,
+   businessName VARCHAR(30),
+   picture VARCHAR,
+   description VARCHAR(30),
+   phone VARCHAR(30),
+   location INTEGER,
+   address VARCHAR(30)
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT
+    R.res_id, R.res_name, R.res_capacity , R.res_isactive, R.res_qualify ,R.res_specialty,R.res_price, R.res_businessname, R.res_picture, R.res_descr, R.res_tlf, R.res_loc_fk, R.res_address_specs
+    FROM Restaurant AS R;
+END;
+$$ LANGUAGE plpgsql;
+
+--------------------------Agregar Restaurant--------------------
+
+CREATE OR REPLACE FUNCTION AddRestaurant(name VARCHAR(100),
+                                    capacity INTEGER,
+                                    isActive BOOLEAN,
+									qualify DECIMAL,
+                                    specialty VARCHAR(30),
+                                    price DECIMAL,
+									businessName VARCHAR(30),
+									picture VARCHAR,
+									description VARCHAR(30),
+									phone VARCHAR(30),
+                                    location INTEGER,
+									address VARCHAR(30))
+    RETURNS integer AS
+$$
+DECLARE
+    DEST_ID INTEGER;
+BEGIN
+    INSERT INTO restaurant (RES_NAME,RES_CAPACITY,RES_ISACTIVE,RES_QUALIFY,RES_SPECIALTY,RES_PRICE,
+  RES_BUSINESSNAME,RES_PICTURE,RES_DESCR,RES_TLF,RES_LOC_FK,RES_ADDRESS_SPECS)
+    VALUES (name,capacity,isActive,qualify,specialty,price,businessName,
+			picture,description,phone,location,address) RETURNING RES_ID INTO DEST_ID;
+    RETURN DEST_ID;
+END;
+$$ LANGUAGE plpgsql; 
+
+------------------------------------fin de grupo 7---------------------------------
+
+------------------------------------ grupo 10 ---------------------------------
+
+CREATE OR REPLACE FUNCTION GetTravels(userId INTEGER) 
+RETURNS TABLE (
+	travel_id INTEGER,
+	travel_name VARCHAR,
+	travel_description VARCHAR
+) AS $$
+BEGIN
+	RETURN QUERY 
+
+	SELECT tra_id, tra_name, tra_descr FROM travel WHERE tra_use_fk = userId ;
+END; $$ 
+LANGUAGE plpgsql;
+
+------------------------------------fin de grupo 10---------------------------------

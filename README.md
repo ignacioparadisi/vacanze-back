@@ -2,7 +2,7 @@
 
 ### Tecnologías
 - .NET Core v2.2
-- PostgreSQL v11.2
+- PostgreSQL v10.7
 
 ### Ejecución del proyecto
 `dotnet build` Sirve para construir el proyecto<br/>
