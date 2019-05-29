@@ -46,6 +46,13 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10
             this._description = _description;
         }
 
+        public Travel(string _name, string _description) :base(0){
+            this._name = _name;
+            this._description = _description;
+        }
+
+        public Travel() :base(0){}
+
         public void AddCar(Entity car){
             _carReservations.Add(car);
         }

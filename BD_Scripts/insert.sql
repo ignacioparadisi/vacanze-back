@@ -926,10 +926,10 @@ INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_passw
 VALUES ('20766589', 'cliente@vacanze.com', 'Martinez', 'Carlos', MD5('cliente123'));
 
 INSERT INTO USERS (use_document_id, use_email, use_last_name, use_name, use_password)
-VALUES ('23613704', 'larry.page@vacanze.com', 'Page', 'Larry', 'google');
+VALUES ('23613704', 'larry.page@vacanze.com', 'Page', 'Larry', MD5('google'));
 
 INSERT INTO USERS (use_document_id, use_email, use_last_name, use_name, use_password)
-VALUES ('23613704', 'reggaebob@vacanze.com', 'Marley', 'Bob', 'jah');
+VALUES ('23613704', 'reggaebob@vacanze.com', 'Marley', 'Bob', MD5('jah'));
 
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (2, 1);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (3, 2);
