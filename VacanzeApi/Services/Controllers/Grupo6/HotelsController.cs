@@ -32,16 +32,33 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
             }
         }
 
+        [HttpGet("{hotelId}", Name = "GetHotelById")]
+        public ActionResult<Hotel> GetById([FromRoute] int hotelId)
+        {
+            try
+            {
+                return HotelRepository.GetHotelById(hotelId);
+            }
+            catch (EntityNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (DatabaseException e)
+            {
+                // TODO: No se deberia mandar un Ok cuando falla la base de datos, se deberia mandar
+                //       un error 500 o algo
+                return Ok(e.Message);
+            }
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Hotel> Create([FromBody] Hotel hotel)
         {
             var receivedId = HotelRepository.AddHotel(hotel);
-            var savedHotel = new Hotel(receivedId, hotel.Name, hotel.AmountOfRooms, hotel.IsActive,
-                hotel.Phone,
-                hotel.Website);
-            return CreatedAtAction("Get", "hotels", savedHotel);
+            hotel.Id = receivedId;
+            return CreatedAtAction("Get", "hotels", hotel);
         }
     }
 }

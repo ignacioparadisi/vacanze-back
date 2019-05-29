@@ -12,8 +12,11 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo3
         public int loc_departure { get; set;}
         public int loc_arrival { get; set; }
 
+        /* public Flight(long id):base(id)
+        {
+        }*/
 
-        public Flight(long id):base(id)
+        public Flight(int id):base(id)
         {
         }
 
@@ -31,7 +34,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo3
             this.loc_departure = loc_departure;
         }
 
-        public Flight(long id, Airplane plane, double price, string departure, string arrival, int loc_arrival, int loc_departure):base(id)
+        public Flight(int id, Airplane plane, double price, string departure, string arrival, int loc_arrival, int loc_departure):base(id)
         {
             this.plane = plane;
             this.price = price;
