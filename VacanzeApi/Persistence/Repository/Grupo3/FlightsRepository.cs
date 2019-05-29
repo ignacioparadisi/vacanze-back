@@ -14,6 +14,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
         static string ADD_FLIGHT =
         "addflight( @_plane, @_price, @_departure,@_arrival, @_loc_arrival, @_loc_departure )";
         static string GET_FLIGTS_BY_DATE = "getflightsbydate(@_begin, @_end)";
+        static string GET_FLIGHTS_BY_LOCATION = "getflightsbylocation(@_arrival, @_departure)";
         static string FIND_FLIGHT = "findflight(@_id)";
         static string UPDATE_FLIGHT =
         "updateflight(@_id, @_plane, @_price, @_departure, @_arrival, @_loc_departure, @_loc_arrival)";
@@ -110,6 +111,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
             }
         }
 
+        /// <summary>Funcion para borrar un vuelo de la DB</summary>
+        /// <param name="entiry">Entidad con id a borrar</param>
         public static void Delete(Entity entity)
         {
             try
@@ -186,6 +189,49 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
             try
             {
                 var table = PgConnection.Instance.ExecuteFunction(GET_FLIGTS_BY_DATE, begin, end);
+                List<Entity> flights = new List<Entity>();
+
+                for (var i = 0; i < table.Rows.Count; i++)
+                {
+
+                    Flight flight = new Flight(Convert.ToInt32(table.Rows[i][0]));
+                    flight.Id = Convert.ToInt32(table.Rows[i][0]);
+                    flight.plane = (Airplane)AirplanesRepository.Find(Convert.ToInt32(table.Rows[i][1]));
+                    flight.price = Convert.ToDouble(table.Rows[i][2]);
+                    flight.departure = table.Rows[i][3].ToString();
+                    flight.arrival = table.Rows[i][4].ToString();
+                    flight.loc_arrival = Convert.ToInt32(table.Rows[i][5]);
+                    flight.loc_departure = Convert.ToInt32(table.Rows[i][6]);
+
+                    flights.Add(flight);
+                }
+
+                return flights;
+            }
+            catch (DatabaseException ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw new DbErrorException("Ups, a ocurrido un error al conectarse a la base de datos", ex);
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+            finally
+            {
+            }
+        }
+
+        /// <summary>Busca vuelo en un rango de fechas en la DB</summary>
+        /// <param name="departure">Locacion de salida del vuelo</param>
+        /// <param name="arrival">Locacion de llegada del vuelo</param>
+        /// <returns> List<Entity> con el resultado de la query</returns>
+        public static List<Entity> GetByLocation(int departure, int arrival)
+        {
+            try
+            {
+                var table = PgConnection.Instance.ExecuteFunction(GET_FLIGHTS_BY_LOCATION, departure, arrival);
                 List<Entity> flights = new List<Entity>();
 
                 for (var i = 0; i < table.Rows.Count; i++)
