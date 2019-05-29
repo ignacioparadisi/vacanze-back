@@ -19,8 +19,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
         private Automobile _automobile;
         private ReservationAutomobile _reservation;
 
-        /** Method GetAutomobileReservations()
-         * Returns all automobile reservations from the system.
+        /** <summary>Trae de la BD, las reservas de automoviles</summary>
          */
         public List<Entity> GetAutomobileReservations()
                 {
@@ -84,9 +83,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             return reservationAutomobileList;
         }
 
-        /** Method Find(int id)
-         * @param id : int
-         * Returns the automobile reservation with the id that was passed.
+        /** <summary>Busca en la BD, la reserva que posee el identificador suministrado</summary>
+         * <param name="id">El identificador de la entidad reserva de automovil a buscar</param>
          */
         public Entity Find(int id)
         {
@@ -118,9 +116,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             return _reservation;
         }
 
-        /** Method Add()
-        * Inserts in the DataBase the reservation that was passed.
-        */
+        /** <summary>Inserta en la BD, la reservacion de automovil que es suministrada</summary> 
+         * <param name="reservation">La reservacion a agregar en la BD</param>
+         */
         public ReservationAutomobile AddReservation(ReservationAutomobile reservation)
         {
             try

@@ -28,8 +28,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             _reservationRoom = (ReservationRoom)e;
         }
 
-        /** Method GetRoomReservations()
-         * Returns all room reservation from the system.
+        /** <summary>Trae de la BD, las reservas de habitacion</summary>
          */
         public List<Entity> GetRoomReservations()
         {
@@ -72,9 +71,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             }
         }
 
-        /** Method Find(int id)
-         * @param id : int
-         * Returns the room reservation with the id that was passed.
+        /** <summary>Busca en la BD, la reserva que posee el identificador suministrado</summary>
+         * <param name="id">El identificador de la entidad reserva de habitacion a buscar</param>
          */
         public Entity Find(int id)
         {
@@ -114,46 +112,46 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
         /** Method GetAvailableRoomReservations()
          * Returns all room reservations from the system which are available within the range of dates that were passed.
          */
-         /*
-        public List<Entity> GetAvailableRoomReservations(DateTime checkIn, DateTime checkOut)
-        {
-            List<Entity> roomReservationList = new List<Entity>();
-            try
-            {
-                Connect();
-                StoredProcedure(SP_AVAILABLE);
-                AddParameter("_checkin", checkIn);
-                AddParameter("_checkout", checkOut);
-                ExecuteReader();
-                for (int i = 0; i < numberRecords; i++)
-                {
-                    ReservationRoom roomRes = new ReservationRoom(GetInt(i, 0), GetBool(i, 1), GetDateTime(i, 2), GetDateTime(i, 3));
-                    roomRes.Room = (Room)_roomConnection.FindRoom(GetInt(i, 4));
+        /*
+       public List<Entity> GetAvailableRoomReservations(DateTime checkIn, DateTime checkOut)
+       {
+           List<Entity> roomReservationList = new List<Entity>();
+           try
+           {
+               Connect();
+               StoredProcedure(SP_AVAILABLE);
+               AddParameter("_checkin", checkIn);
+               AddParameter("_checkout", checkOut);
+               ExecuteReader();
+               for (int i = 0; i < numberRecords; i++)
+               {
+                   ReservationRoom roomRes = new ReservationRoom(GetInt(i, 0), GetBool(i, 1), GetDateTime(i, 2), GetDateTime(i, 3));
+                   roomRes.Room = (Room)_roomConnection.FindRoom(GetInt(i, 4));
 
-                    roomReservationList.Add(roomRes);
-                }
-                return roomReservationList;
-            }
-            catch (NpgsqlException e)
-            {
-                e.ToString();
-            }
-            catch (Exception e)
-            {
-                e.ToString();
-            }
-            finally
-            {
-                Disconnect();
-            }
-            return roomReservationList;
-        }
-        */
-        /** Method Add()
-         * Inserts in the DataBase the room reservation that was passed.
+                   roomReservationList.Add(roomRes);
+               }
+               return roomReservationList;
+           }
+           catch (NpgsqlException e)
+           {
+               e.ToString();
+           }
+           catch (Exception e)
+           {
+               e.ToString();
+           }
+           finally
+           {
+               Disconnect();
+           }
+           return roomReservationList;
+       }
+       */
+
+        /** <summary>Inserta en la BD, la reservacion de habitacion que es suministrada</summary> 
+         * <param name="reservation">La reservacion a agregar en la BD</param>
          */
         //Falta el user
-
         public void Add(ReservationRoom reservation)
         {
             try
@@ -172,8 +170,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             }
         }
 
-        /** Method Delete()
-         * Deletes in the DataBase the room reservation that was passed.
+        /** <summary>Borra de la BD, la reservacion que es suministrada</summary>
+         * <param name="entity">La entidad reservacion a borrar de la BD</param>
          */
         public void Delete(Entity entity)
         {
