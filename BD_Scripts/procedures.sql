@@ -321,38 +321,75 @@ $$ LANGUAGE plpgsql;
 ------- grupo 6 ----------
 CREATE OR REPLACE FUNCTION AddHotel(name VARCHAR(100),
                                     amountOfRooms INTEGER,
+                                    capacityPerRoom INTEGER,
                                     active BOOLEAN,
-                                    phone VARCHAR(30),
-                                    website VARCHAR(30),
+                                    addressSpecs VARCHAR(200),
+                                    roomPrice DECIMAL,
+                                    website VARCHAR,
+                                    phone VARCHAR,
+                                    picture VARCHAR,
+                                    stars INTEGER,
                                     location INTEGER)
     RETURNS integer AS
 $$
 DECLARE
     dest_id INTEGER;
 BEGIN
-    INSERT INTO hotel (hot_nombre, hot_cant_habitaciones, hot_activo, hot_telefono, hot_sitio_web,
-                       hot_fk_lugar)
-    VALUES (name, amountOfRooms, active, phone, website, location) RETURNING hot_id INTO dest_id;
+    INSERT INTO HOTEL (hot_name, hot_room_qty, hot_room_capacity, hot_address_specs, hot_room_price,
+                       hot_website, hot_phone, hot_picture, hot_stars, hot_loc_fk, hot_is_active)
+    VALUES (name, amountOfRooms, capacityPerRoom, addressSpecs, roomPrice, website, phone, picture,
+            stars, location, active) RETURNING HOT_ID INTO dest_id;
     RETURN dest_id;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION ConsultarHoteles()
+CREATE OR REPLACE FUNCTION GetHotels()
 RETURNS TABLE
   (id integer,
-   nombre VARCHAR(100),
-   cantHuespedes INTEGER,
-   status BOOLEAN,
-   telefono VARCHAR(20),
-   sitioweb VARCHAR(100),
-   ciudad VARCHAR(100)
+   name VARCHAR(100),
+   roomQuantity INTEGER,
+   roomCapacity INTEGER,
+   isActive BOOLEAN,
+   addressSpecs VARCHAR(200),
+   pricePerRoom DECIMAL,
+   website VARCHAR(100),
+   phone VARCHAR(20),
+   picture VARCHAR,
+   stars INTEGER,
+   location INTEGER
   )
 AS
 $$
 BEGIN
-    RETURN QUERY SELECT
-    H.hot_id, H.hot_nombre, H.hot_cant_habitaciones , H.hot_activo ,H.hot_telefono,H.hot_sitio_web, L.l_nombre
-    FROM Hotel AS H, Lugar AS L WHERE L.l_id = H.hot_fk_lugar;
+    RETURN QUERY SELECT H.HOT_ID,
+                        H.HOT_NAME,
+                        H.hot_room_qty,
+                        H.hot_room_capacity,
+                        H.hot_is_active,
+                        H.hot_address_specs,
+                        H.hot_room_price,
+                        H.hot_website,
+                        H.hot_phone,
+                        H.HOT_PICTURE,
+                        H.HOT_STARS,
+                        H.hot_loc_fk
+                 FROM Hotel AS H;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION GetLocationById(p_id INTEGER)
+    RETURNS TABLE
+            (
+                id integer,
+                city VARCHAR(30),
+                country VARCHAR(30)
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT LOC_ID, LOC_CITY, LOC_COUNTRY
+                 FROM LOCATION
+                 WHERE loc_id = p_id;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -668,6 +705,7 @@ $$ LANGUAGE plpgsql;
 
 ------------------------------------fin de grupo 9---------------------------------
 ------ Consulta de los lugares ------
+
 CREATE OR REPLACE FUNCTION GetLocations()
 RETURNS TABLE
   (id integer,
@@ -681,6 +719,7 @@ BEGIN
     FROM LOCATION;
 END;
 $$ LANGUAGE plpgsql;
+
 
 ------------------------------------inicio de grupo 7---------------------------------
 

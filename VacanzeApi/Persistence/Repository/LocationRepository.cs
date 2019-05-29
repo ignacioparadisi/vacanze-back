@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using Npgsql;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Exceptions;
@@ -15,14 +16,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
             {
                 var results = PgConnection.Instance.ExecuteFunction("GetLocations()");
                 for (var i = 0; i < results.Rows.Count; i++)
-                {
-                    var id = Convert.ToInt64(results.Rows[i][0]);
-                    var city = results.Rows[i][1].ToString();
-                    var country = results.Rows[i][2].ToString();
-                    var location = new Location(id, city, country);
-                    locationList.Add(location);
-                }
-
+                    locationList.Add(ExtractLocationFromRow(results.Rows[i]));
                 return locationList;
             }
             catch (NpgsqlException)
@@ -33,6 +27,23 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
             {
                 throw new GeneralException(e, DateTime.Now);
             }
+        }
+
+        public static Location GetLocationById(int id)
+        {
+            var resultTable = PgConnection.Instance.ExecuteFunction("GetLocationById(@p_id)", id);
+            if (resultTable.Rows.Count == 0)
+                throw new EntityNotFoundException($"Location with id {id} not found");
+
+            return ExtractLocationFromRow(resultTable.Rows[0]);
+        }
+
+        private static Location ExtractLocationFromRow(DataRow row)
+        {
+            var id = Convert.ToInt64(row[0]);
+            var city = row[1].ToString();
+            var country = row[2].ToString();
+            return new Location(id, city, country);
         }
     }
 }
