@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -59,8 +60,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         public ActionResult<Hotel> Create([FromBody] Hotel hotel)
         {
             var receivedId = HotelRepository.AddHotel(hotel);
-            hotel.Id = receivedId;
-            return CreatedAtAction("Get", "hotels", hotel);
+            // TODO: Si le pasas un ID de un location que no existe, explota. Arreglar
+            return CreatedAtAction("Get", "hotels",
+                HotelRepository.GetHotelById(Convert.ToInt32(receivedId)));
         }
     }
 }

@@ -23,7 +23,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
                 hotel.Phone,
                 hotel.Picture,
                 hotel.Stars,
-                hotel.Location.Id
+                Convert.ToInt32(hotel.Location.Id) // TODO: ver si cambiamos el ID de Entity a int
             );
             var savedId = Convert.ToInt64(table.Rows[0][0]);
             return savedId;
