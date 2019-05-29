@@ -617,7 +617,7 @@ CREATE OR REPLACE FUNCTION UpdateRestaurant(
 									phone VARCHAR(30),
                                     location INTEGER,
 									address VARCHAR(30))
-    RETURNS void AS $$
+    RETURNS INTEGER AS $$
 BEGIN
 	UPDATE restaurant
 	SET RES_NAME = name,
@@ -633,6 +633,7 @@ BEGIN
 		RES_LOC_FK = location,
 		RES_ADDRESS_SPECS = address
 	WHERE RES_ID = id;
+	RETURN id;
 END;
 $$ LANGUAGE plpgsql; 
 ------------------------------------fin de grupo 7---------------------------------

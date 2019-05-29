@@ -19,6 +19,18 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
             return savedId;
         }
 
+        public static long PutRestaurant(Restaurant restaurant)
+        {
+            
+            var table = PgConnection.Instance.ExecuteFunction(
+                "UpdateRestaurant(@id,@name,@capacity,@isActive,@qualify,@specialty,@price,@businessName,@picture,@description,@phone,@location,@address)",
+                restaurant.Id, restaurant.Name, restaurant.Capacity, restaurant.IsActive, restaurant.Qualify, restaurant.Specialty, restaurant.Price, restaurant.BusinessName, 
+                restaurant.Picture, restaurant.Description, restaurant.Phone, restaurant.Location, restaurant.Address
+            );
+
+            return restaurant.Id;
+        }
+
         public static List<Restaurant> GetRestaurants()
         {
             var table = PgConnection.Instance.ExecuteFunction("getrestaurants()");
