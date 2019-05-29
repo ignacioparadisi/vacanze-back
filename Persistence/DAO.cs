@@ -1,43 +1,37 @@
-﻿using System;
+﻿using Npgsql;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
-using Npgsql;
+using System.Linq;
+using System.Web;
 
-namespace vacanze_back.VacanzeApi.Persistence.Repository
+namespace vacanze_back.Persistence
 {
-    public abstract class Connection
+    public abstract class DAO
     {
-        private string _cadena;
-        private NpgsqlCommand _command;
         private NpgsqlConnection _con;
+        private NpgsqlCommand _command;
         private DataTable _dataTable;
+        private string _cadena;
+        private int _rowNumber;
 
-        public Connection()
+        public DAO()
         {
-            CreateStringConnection();
+            CrearStringConexion();
         }
 
-        public int numberRecords { get; private set; }
+        public int rowNumber
+        {
+            get { return _rowNumber; }
+        }
 
         /// <summary>
-        ///     hay que optimizar la cadena porque hasta ahora la hacemos local
+        ///  Busca el string de conexión a la base de datos en el archivo web.config, dicho string se llama "postgrestring"
         /// </summary>
-        protected void CreateStringConnection()
+        private void CrearStringConexion()
         {
-
-             _cadena = "Server=127.0.0.1;User Id=vacanza;" + 
-                      "Password=vacanza;Database=vacanza;" ;
-                        
-           //  cadena  de prueba----------grupo 5--------------------
-            /* _cadena = "Server=localhost;Port=5433;User Id=postgres;" + 
-                      "Password=122324;Database=vacanza;" ;
-            /cadena de prueba--------------------------------------*/
-            /* _cadena = "Server=192.168.99.100;User Id=postgres;" +
-                      "Password=docker;Database=postgres;";
-            //cadena de prueba*/
-
-            /*
-			_cadena = "Server=127.0.0.1;User Id=postgres;" + 
-                        "Password=jorge;Database=postgres;" ;*/
+            _cadena = "User ID=postgres;Password=1234;Host=localhost;Database=vacanza;Port=5432";
         }
 
         private bool IsConnected()
@@ -45,7 +39,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
             if (_con == null)
                 return false;
 
-            if (_con.State == ConnectionState.Open)
+            if (_con.State == System.Data.ConnectionState.Open)
                 return true;
 
             return false;
@@ -76,20 +70,22 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
         }
 
         /// <summary>
-        ///     Ejecutar el StoredProcedure con un valor de retorno (ResultSet), habilita el uso de las
-        ///     funciones "GetInt, GetString, etc" y devuelve un objeto DataTable.
+        /// Ejecutar el StoredProcedure con un valor de retorno (ResultSet), habilita el uso de las funciones "GetInt, GetString, etc" y devuelve un objeto DataTable.
         /// </summary>
         public DataTable ExecuteReader()
         {
+
             try
             {
+
                 _dataTable = new DataTable();
 
                 _dataTable.Load(_command.ExecuteReader());
 
                 Disconnect();
 
-                numberRecords = _dataTable.Rows.Count;
+                _rowNumber = _dataTable.Rows.Count;
+
             }
             catch (NpgsqlException exc)
             {
@@ -103,18 +99,18 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
             }
 
             return _dataTable;
+
         }
 
 
         /// <summary>
-        ///     Ejecutar el StoredProcedure sin valor de retorno (ResultSet), devuelve el número de filas
-        ///     afectadas.
+        /// Ejecutar el StoredProcedure sin valor de retorno (ResultSet), devuelve el número de filas afectadas.
         /// </summary>
         public int ExecuteQuery()
         {
             try
             {
-                var filasAfectadas = _command.ExecuteNonQuery();
+                int filasAfectadas = _command.ExecuteNonQuery();
 
                 Disconnect();
 
@@ -122,7 +118,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
             }
             catch (NpgsqlException exc)
             {
-                Console.WriteLine(exc);
                 Disconnect();
                 throw exc;
             }
@@ -134,7 +129,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
         }
 
         /// <summary>
-        ///     Crea el comando para ejecutar el StoredProcedure, Ejemplo: StoredProcedure("nombreSP(@param)")
+        /// Crea el comando para ejecutar el StoredProcedure, Ejemplo: StoredProcedure("nombreSP(@param)")
         /// </summary>
         public NpgsqlCommand StoredProcedure(string sp)
         {
@@ -154,7 +149,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
             return _command;
         }
 
-
+        
         public void AddParameter(string nombre, object valor)
         {
             try
@@ -179,7 +174,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
         {
             try
             {
-                var intItem = Convert.ToInt32(_dataTable.Rows[fila][columna]);
+                int intItem = Convert.ToInt32(_dataTable.Rows[fila][columna]);
 
                 return intItem;
             }
@@ -209,7 +204,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
         {
             try
             {
-                var charItem = Convert.ToChar(_dataTable.Rows[fila][columna]);
+                char charItem = Convert.ToChar(_dataTable.Rows[fila][columna]);
 
                 return charItem;
             }
@@ -239,7 +234,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
         {
             try
             {
-                var stringItem = Convert.ToString(_dataTable.Rows[fila][columna]);
+                string stringItem = Convert.ToString(_dataTable.Rows[fila][columna]);
 
                 return stringItem;
             }
@@ -269,7 +264,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
         {
             try
             {
-                var doubleItem = Convert.ToDouble(_dataTable.Rows[fila][columna]);
+                double doubleItem = Convert.ToDouble(_dataTable.Rows[fila][columna]);
 
                 return doubleItem;
             }
@@ -299,7 +294,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
         {
             try
             {
-                var decimalItem = Convert.ToDecimal(_dataTable.Rows[fila][columna]);
+                decimal decimalItem = Convert.ToDecimal(_dataTable.Rows[fila][columna]);
 
                 return decimalItem;
             }
@@ -329,7 +324,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
         {
             try
             {
-                var boolItem = Convert.ToBoolean(_dataTable.Rows[fila][columna]);
+                bool boolItem = Convert.ToBoolean(_dataTable.Rows[fila][columna]);
 
                 return boolItem;
             }
@@ -355,7 +350,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
         {
             try
             {
-                var dateItem = Convert.ToDateTime(_dataTable.Rows[fila][columna]);
+                DateTime dateItem = Convert.ToDateTime(_dataTable.Rows[fila][columna]);
 
                 return dateItem;
             }
@@ -376,12 +371,11 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
                 throw e;
             }
         }
-
         public byte[] GetByte(int fila, int columna)
         {
             try
             {
-                var dateItem = (byte[]) _dataTable.Rows[fila][columna];
+                byte[] dateItem = (byte[])_dataTable.Rows[fila][columna];
 
                 return dateItem;
             }
@@ -402,5 +396,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
                 throw e;
             }
         }
+
     }
 }
