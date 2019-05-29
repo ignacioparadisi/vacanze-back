@@ -961,6 +961,11 @@ UPDATE automobile
 	aut_license=_license, aut_picture=_picture, aut_loc_fk=_place
 	WHERE aut_id =_id;
 	RETURN _id;
+<<<<<<< HEAD
+=======
+
+------------------------fin de grupo 5-------------------------------------------
+>>>>>>> 9389fe56395310fe4901e2e3b40e7619889bf593
 ------ Consulta de los lugares ------
 
 CREATE OR REPLACE FUNCTION GetLocations()
@@ -977,11 +982,17 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 <<<<<<< HEAD
+<<<<<<< HEAD
 ------------------------fin de grupo 5-------------------------------------------
 =======
 
 
 >>>>>>> 6ee0ee5817e815cac027916528199f31f69ea294
+=======
+
+
+
+>>>>>>> 9389fe56395310fe4901e2e3b40e7619889bf593
 ------------------------------------inicio de grupo 7---------------------------------
 
 --------------------------CONSULTAR Restaurant--------------------
