@@ -325,6 +325,42 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION GetHotelsByCity(city_id integer)
+    RETURNS TABLE
+            (
+                id integer,
+                name VARCHAR(100),
+                roomQuantity INTEGER,
+                roomCapacity INTEGER,
+                isActive BOOLEAN,
+                addressSpecs VARCHAR(200),
+                pricePerRoom DECIMAL,
+                website VARCHAR(100),
+                phone VARCHAR(20),
+                picture VARCHAR,
+                stars INTEGER,
+                location INTEGER
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT H.HOT_ID,
+                        H.HOT_NAME,
+                        H.hot_room_qty,
+                        H.hot_room_capacity,
+                        H.hot_is_active,
+                        H.hot_address_specs,
+                        H.hot_room_price,
+                        H.hot_website,
+                        H.hot_phone,
+                        H.HOT_PICTURE,
+                        H.HOT_STARS,
+                        H.hot_loc_fk
+                 FROM Hotel AS H, LOCATION L
+                 WHERE H.hot_loc_fk = L.LOC_ID and H.hot_loc_fk = city_id;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION GetLocationById(p_id INTEGER)
     RETURNS TABLE
             (
@@ -338,6 +374,22 @@ BEGIN
     RETURN QUERY SELECT LOC_ID, LOC_CITY, LOC_COUNTRY
                  FROM LOCATION
                  WHERE loc_id = p_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION GetLocationByCountry(countryName VARCHAR(30))
+    RETURNS TABLE
+            (
+                id integer,
+                city VARCHAR(30),
+                country VARCHAR(30)
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT LOC_ID, LOC_CITY, LOC_COUNTRY
+                 FROM LOCATION
+                 WHERE loc_country = countryName;
 END;
 $$ LANGUAGE plpgsql;
 
