@@ -43,16 +43,23 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo14{
             };
             return ReservationList;
         }
-        
 
         public int deleteResRestaurant(int resRestId){
-            Console.WriteLine(resRestId);
-            PgConnection.Instance.ExecuteFunction("deleteReservation(@rr_id)",resRestId );
-            Console.WriteLine("Ya corri el SP");
-            Console.WriteLine(resRestId);
-            return resRestId;
+            try{
+                var table = PgConnection.Instance.ExecuteFunction("deleteReservation(@reservationID)",resRestId);
+                var deletedid = Convert.ToInt32(table.Rows[0][0]);
+                Console.WriteLine(deletedid);
+                return deletedid;
+            }
+            catch(InvalidCastException){
+                return -1;
+            }
+            // Console.WriteLine(resRestId);
+            // PgConnection.Instance.ExecuteFunction("deleteReservation(@rr_id)",resRestId );
+            // Console.WriteLine("Ya corri el SP");
+            // Console.WriteLine(resRestId);
+            // return resRestId;
         }
-    
     
     
     

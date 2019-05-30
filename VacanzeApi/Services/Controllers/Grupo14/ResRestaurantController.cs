@@ -37,7 +37,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 
 		}
 
-        [HttpGet("{id}")]
+		[HttpGet("{id}")]
 		public ActionResult<IEnumerable<Restaurant_res>> Get(int userid){
 			try{
 				ResRestaurantRepository conec= new ResRestaurantRepository();
@@ -56,29 +56,21 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 
 		//api/ResRestaurant/id
 		[HttpDelete("{id}")]
-		public ActionResult<string> Delete(int resRestid)
-		{
-			try{
-				ResRestaurantRepository conec= new ResRestaurantRepository();  
-				int id_eliminado = conec.deleteResRestaurant(resRestid); 
-				return Ok("Eliminado exitosamente");
-			}catch (DatabaseException )
-			{            
-				return StatusCode(500);
-			}
-			catch (InvalidStoredProcedureSignatureException){
+		public ActionResult<string> Delete(int resRestid){
 
-				return StatusCode(500);
-			}
-			catch (NullClaimException ){
+			Console.WriteLine(resRestid);
+			ResRestaurantRepository conec= new ResRestaurantRepository();
+			var deletedid = conec.deleteResRestaurant(resRestid);
 
+			if(deletedid.Equals(-1)){
 				ResponseError mensaje = new ResponseError();
 				mensaje.error="No existe el elemento que quiere Eliminar";
 				return StatusCode(500,mensaje);
 			}
+			Console.WriteLine(deletedid);
+			return StatusCode(200, "Eliminado satisfactoriamente");
 
 		}
-		
 
 	}
 
