@@ -829,9 +829,9 @@ $$
 BEGIN
 
 
-   INSERT INTO AUTOMOBILE(AUT_ID,AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_LICENSE,AUT_PRICE,AUT_PICTURE,AUT_LOC_FK) VALUES
-    (nextval('SEQ_AUTOMOBILE'), _make, _model,_capacity,_status,_licence,_price,_picture,_place);
-   RETURN currval('SEQ_AUTOMOBILE');
+   INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_LICENSE,AUT_PRICE,AUT_PICTURE,AUT_LOC_FK) VALUES
+    (_make, _model,_capacity,_status,_licence,_price,_picture,_place);
+   RETURN AUT_ID;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1051,7 +1051,8 @@ UPDATE automobile
 	aut_license=_license, aut_picture=_picture, aut_loc_fk=_place
 	WHERE aut_id =_id;
 	RETURN _id;
-
+END;
+$$ LANGUAGE plpgsql;
 ------ Consulta de los lugares ------
 
 CREATE OR REPLACE FUNCTION GetLocations()
