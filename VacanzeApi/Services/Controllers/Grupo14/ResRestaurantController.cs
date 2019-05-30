@@ -37,9 +37,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 
 		}
 
-		[HttpGet("{id}")]
+		[HttpGet("{userid}")]
 		public ActionResult<IEnumerable<Restaurant_res>> Get(int userid){
 			try{
+				Console.WriteLine(userid);
 				ResRestaurantRepository conec= new ResRestaurantRepository();
 				List<Restaurant_res> resRestaurantList = conec.getResRestaurant(userid);
                 Console.WriteLine("Fuera del SP");
@@ -55,12 +56,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 		}
 
 		//api/ResRestaurant/id
-		[HttpDelete("{id}")]
-		public ActionResult<string> Delete(int resRestid){
+		[HttpDelete("{resRestId}")]
+		public ActionResult<string> Delete(int resRestId){
 
-			Console.WriteLine(resRestid);
+			Console.WriteLine(resRestId);
 			ResRestaurantRepository conec= new ResRestaurantRepository();
-			var deletedid = conec.deleteResRestaurant(resRestid);
+			var deletedid = conec.deleteResRestaurant(resRestId);
 
 			if(deletedid.Equals(-1)){
 				ResponseError mensaje = new ResponseError();
@@ -71,6 +72,51 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 			return StatusCode(200, "Eliminado satisfactoriamente");
 
 		}
+
+		//api/Clain/status/5
+		[HttpPut("{resRestId}")]
+		public ActionResult<string> Put(int resRestId, reservationRestaurant resAux)
+		{
+			try{
+				ResRestaurantRepository conec = new ResRestaurantRepository();
+				Restaurant_res reserva = new Restaurant_res(resAux.pay_id);
+
+				Console.WriteLine(resAux.pay_id);
+
+				if (resAux.pay_id == 0){
+					ResponseError mensaje= new ResponseError();
+					mensaje.error="Can't modify a null value.";
+					return StatusCode(500,mensaje);
+				}						
+				else{
+					int deletedid = conec.updateResRestaurant(resAux.pay_id, resRestId);
+					if (deletedid == -1){
+						ResponseError mensaje= new ResponseError();
+						mensaje.error="Can't modify your reservation.";
+						return StatusCode(500,mensaje);
+					}
+					return Ok("Your payment have been made succesfully.");
+				}
+				
+			}catch (DatabaseException )
+			{            
+				ResponseError mensaje= new ResponseError();
+				mensaje.error="DataBase error.";
+				return StatusCode(500, mensaje);
+			}
+			catch (InvalidStoredProcedureSignatureException e)
+			{
+				ResponseError mensaje= new ResponseError();
+				mensaje.error="Inside error at modify.";
+				return StatusCode(500);
+			}catch (NullClaimException )
+			{
+				ResponseError mensaje= new ResponseError();
+				mensaje.error="Your reservation doesn't exits.";
+				return StatusCode(500,mensaje);
+			}
+		}
+
 
 	}
 
@@ -88,5 +134,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
         public int user_id { get; set;}
 
         public int rest_id { get; set;}
+
+		public int pay_id {get; set;}
 	}
 }

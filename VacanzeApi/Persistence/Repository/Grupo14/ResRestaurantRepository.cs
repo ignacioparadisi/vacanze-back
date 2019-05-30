@@ -54,15 +54,19 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo14{
             catch(InvalidCastException){
                 return -1;
             }
-            // Console.WriteLine(resRestId);
-            // PgConnection.Instance.ExecuteFunction("deleteReservation(@rr_id)",resRestId );
-            // Console.WriteLine("Ya corri el SP");
-            // Console.WriteLine(resRestId);
-            // return resRestId;
         }
-    
-    
-    
-    
+
+        public int updateResRestaurant(int payID, int resRestID){
+            try{
+                Console.WriteLine(payID); Console.WriteLine(resRestID);
+                var table = PgConnection.Instance.ExecuteFunction("modifyReservationPayment(@pay, @reservation)", payID, resRestID);
+                var deletedid = Convert.ToInt32(table.Rows[0][0]);
+                Console.WriteLine(deletedid);
+                return deletedid;
+            }
+            catch(InvalidCastException){
+                return -1;
+            }
+        }
     }
 }
