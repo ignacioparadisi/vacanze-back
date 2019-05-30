@@ -4,7 +4,11 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo4;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+<<<<<<< HEAD
 using vacanze_back.VacanzeApi.Persistence.Grupo4;
+=======
+using vacanze_back.VacanzeApi.Persistence.Connection.Grupo4;
+>>>>>>> 979d953386630d498c24041e0c89ee6e1993d0bc
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo4
 {
@@ -19,6 +23,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo4
           // GET api/values
           //se usara para consultar por pasaporte
           [HttpGet]
+<<<<<<< HEAD
           public string Get()
           {
                return "hola";
@@ -46,6 +51,27 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo4
                return "exito " + prueba;
 
           }
+=======
+          public ActionResult<IEnumerable<Baggage>> GetBaggage()
+          {
+
+               var baggage = new List<Baggage>();
+
+               try
+               {
+                    baggage = BaggageConnection.GetBaggage();
+               }
+               catch (DatabaseException)
+               {
+                    return BadRequest("Error obteniendo los empleados");
+               }
+               return baggage;
+
+          }
+
+
+
+>>>>>>> 979d953386630d498c24041e0c89ee6e1993d0bc
 
      }
 
