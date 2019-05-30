@@ -738,11 +738,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
---------------------------CONSULTAR Claim--------------------
-CREATE OR REPLACE FUNCTION GetClaimBaggage(_cla_id integer)
+--------------------------CONSULTAR BAGGAGE por serial-------------------
+CREATE OR REPLACE FUNCTION GetBaggage(_BAG_ID integer)
 RETURNS TABLE
   (id integer,
-   title VARCHAR(30),
    descr VARCHAR(30),
    status VARCHAR(30)
   )
@@ -750,16 +749,37 @@ AS
 $$
 BEGIN
     RETURN QUERY SELECT
-    cla_id, cla_title,cla_descr, cla_status
-    FROM Claim WHERE cla_id = _cla_id;
+    cla_id, cla_descr, cla_status
+    FROM Claim WHERE cla_id = _BAG_ID;
+    --RETURN QUERY SELECT
+    --BAG_ID, bag_descr, bag_status
+    --FROM BAGGAGE WHERE BAG_ID = _BAG_ID;
 END;
 $$ LANGUAGE plpgsql;
 
---------------------------CONSULTAR Claim--------------------
-CREATE OR REPLACE FUNCTION GetClaimDocumentPasaport(_cla_id integer)
+--------------------------CONSULTAR Baggage por pasaporte--------------------
+CREATE OR REPLACE FUNCTION GetBaggageDocumentPasaport(_BAG_id integer)
 RETURNS TABLE
   (id integer,
-   title VARCHAR(30),
+   descr VARCHAR(30),
+   status VARCHAR(30)
+  )
+AS
+$$
+BEGIN    
+    RETURN QUERY SELECT
+    cla_id, cla_descr, cla_status
+    FROM Claim WHERE cla_id = _BAG_ID;
+    --RETURN QUERY SELECT
+    --BAG_ID, bag_descr, bag_status
+    --FROM BAGGAGE WHERE BAG_ID = _BAG_ID;
+END;
+$$ LANGUAGE plpgsql;
+
+--------------------------CONSULTAR Baggage por cedula --------------------
+CREATE OR REPLACE FUNCTION GetBaggageDocumentCedula(_bag_id integer)
+RETURNS TABLE
+  (id integer,
    descr VARCHAR(30),
    status VARCHAR(30)
   )
@@ -767,29 +787,27 @@ AS
 $$
 BEGIN
     RETURN QUERY SELECT
-    cla_id, cla_title,cla_descr, cla_status
-    FROM Claim WHERE cla_id = _cla_id;
+    cla_id, cla_descr, cla_status
+    FROM Claim WHERE cla_id = _BAG_ID;
+    --RETURN QUERY SELECT
+    --BAG_ID, bag_descr, bag_status
+    --FROM BAGGAGE WHERE BAG_ID = _BAG_ID;
 END;
 $$ LANGUAGE plpgsql;
-
---------------------------CONSULTAR Claim--------------------
-CREATE OR REPLACE FUNCTION GetClaimDocumentCedula(_cla_id integer)
-RETURNS TABLE
-  (id integer,
-   title VARCHAR(30),
-   descr VARCHAR(30),
-   status VARCHAR(30)
-  )
-AS
+---------MODIFICAR EQUIPAJE -----------------
+CREATE OR REPLACE FUNCTION modifyBaggagestatus( 
+    _bag_id integer,
+    _bag_status VARCHAR(35))
+RETURNS integer AS
 $$
 BEGIN
-    RETURN QUERY SELECT
-    cla_id, cla_title,cla_descr, cla_status
-    FROM Claim WHERE cla_id = _cla_id;
+   UPDATE Claim SET cla_status= _bag_status
+    WHERE (cla_id = _BAG_ID);
+   RETURN _BAG_ID;
+   --UPDATE BAGGAGE SET bag_status= _bag_status
+    --WHERE (bag_id = _BAG_ID);
 END;
 $$ LANGUAGE plpgsql;
-
-
 
 ------------------------------------fin de grupo 9---------------------------------
 ------ Consulta de los lugares ------

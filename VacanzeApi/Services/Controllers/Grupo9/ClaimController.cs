@@ -54,41 +54,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 			}
 		}
 
-		// GET api/values/5
-		// Get para la tabla equipaje
-		[HttpGet("{tipo}/{id}")]
-		public ActionResult<IEnumerable<Claim>> Get(string tipo, int id)
-		{
-			try{
-				if(tipo == "Baggage"){
-					ClaimRepository conec= new ClaimRepository();
-					List<Claim> claimList = conec.GetClaimBaggage(id);
-					return Ok(claimList); 
-				}else{
-					if(tipo == "documentPasaport"){                   
-						ClaimRepository conec= new ClaimRepository();
-						List<Claim> claimList = conec.GetClaimDocumentPasaport(id);
-						return Ok(claimList); 
-					}else{
-						if(tipo == "documentCedula"){                   
-							ClaimRepository conec= new ClaimRepository();
-							List<Claim> claimList = conec.GetClaimDocumentCedula(id);
-							return Ok(claimList); 
-						}else                
-							return StatusCode(404);
-					}                            
-				}
-			}catch (DatabaseException )
-			{            
-				return StatusCode(500);
-			}
-			catch (InvalidStoredProcedureSignatureException )
-			{
-				return StatusCode(500);
-			}
-		}
-		// Post api/Claim/
-	
+		// Post api/Claim/	
 		[HttpPost]
 		public ActionResult<string> Post([FromBody] ClaimSecundary ClaimAux)
 		{            
