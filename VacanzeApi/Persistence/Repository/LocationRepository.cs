@@ -25,7 +25,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
 
             return ExtractLocationFromRow(resultTable.Rows[0]);
         }
-        
+
         public static List<Location> GetCountries()
         {
             var locationList = new List<Location>();
@@ -34,7 +34,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
                 locationList.Add(ExtractLocationFromRow(results.Rows[i]));
             return locationList;
         }
-        
+
         public static List<Location> GetCitiesByCountry(int id)
         {
             var locationList = new List<Location>();
@@ -49,7 +49,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
             var id = Convert.ToInt32(row[0]);
             var city = row[1].ToString();
             var country = row[2].ToString();
-            return new Location(id, city, country);
+            return new Location(id, country, city);
         }
     }
 }

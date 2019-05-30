@@ -15,36 +15,30 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
     {
         // GET api/location/[?countries={}]
         [HttpGet]
-        public ActionResult<IEnumerable<Location>> Get([FromQuery] bool countries = false)
+        public ActionResult<IEnumerable<Location>> Get()
+        {
+            return LocationRepository.GetLocations();
+        }
+
+        [HttpGet("countries")]
+        public ActionResult<IEnumerable<Location>> GetCountries()
+        {
+            return LocationRepository.GetCountries();
+        }
+
+        [HttpGet("countries/{countryId}/cities")]
+        public ActionResult<IEnumerable<Location>> GetCitiesByCountry([FromRoute] int countryId)
         {
             try
             {
-                return countries == false ? LocationRepository.GetLocations() : LocationRepository.GetCountries();
+                LocationRepository.GetLocationById(countryId);
             }
-            catch (DatabaseException e)
+            catch (EntityNotFoundException)
             {
-                // TODO: No se deberia mandar un Ok cuando falla la base de datos, se deberia mandar
-                //       un error 500 o algo
-                return Ok(e.Message);
+                return NotFound($"Location with id {countryId} not found");
             }
+
+            return LocationRepository.GetCitiesByCountry(countryId);
         }
-        
-        // GET api/country/[?city_of={city_id}]
-        [HttpGet]
-        public ActionResult<IEnumerable<Location>> GetCitiesByCountry([FromQuery] int city_of = -1)
-        {
-            try
-            {   
-                // TODO: Chequear cuando el id es -1
-                return LocationRepository.GetCitiesByCountry(city_of);
-            }
-            catch (DatabaseException e)
-            {
-                // TODO: No se deberia mandar un Ok cuando falla la base de datos, se deberia mandar
-                //       un error 500 o algo
-                return Ok(e.Message);
-            }
-        }
-        
     }
 }
