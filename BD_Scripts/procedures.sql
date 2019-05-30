@@ -1,13 +1,47 @@
 -------------------------------Grupo 3---------------------------------
--- FUNCTION: public.addflight(integer, double precision, timestamp without time zone, timestamp without time zone, integer, integer)
+-- FUNCTION: public.addflight(integer, double precision, character varying, character varying, integer, integer)
 
--- DROP FUNCTION public.addflight(integer, double precision, timestamp without time zone, timestamp without time zone, integer, integer);
+-- DROP FUNCTION public.addflight(integer, double precision,character varying , character varying, integer, integer);
 
 CREATE OR REPLACE FUNCTION public.addflight(
 	_plane integer,
 	_price double precision,
-	_departure timestamp without time zone,
-	_arrival timestamp without time zone,
+	_departure character varying,
+	_arrival character varying,
+	_loc_arrival integer,
+	_loc_departure integer)
+    RETURNS integer
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    
+AS $BODY$
+
+BEGIN
+
+   INSERT INTO Flight(fli_price ,fli_departureDate, fli_arrivalDate, fli_pla_fk, fli_loc_arrival,
+					 fli_loc_departure) VALUES
+    (_price, TO_TIMESTAMP(_departure,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone, TO_TIMESTAMP(_arrival,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone, _plane, _loc_arrival, _loc_departure);
+   RETURN 1;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.addflight(integer, double precision, character varying, character varying, integer, integer)
+    OWNER TO vacanza;
+
+
+
+-- FUNCTION: public.updateflight(integer, integer, double precision, date, date, integer, integer)
+
+-- DROP FUNCTION public.updateflight(integer, integer, double precision, date, date, integer, integer);
+CREATE OR REPLACE FUNCTION public.updateflight( 
+    _id integer,
+   _plane integer,
+	_price double precision,
+	_departure character varying,
+	_arrival character varying,
 	_loc_arrival integer,
 	_loc_departure integer)
     RETURNS integer
@@ -19,15 +53,42 @@ AS $BODY$
 
 BEGIN
 
-   INSERT INTO Flight(fli_id,fli_price ,fli_departureDate, fli_arrivalDate, fli_pla_fk, fli_loc_arrival,
-					 fli_loc_departure) VALUES
-    (nextval('seq_flight'),_price, _departure, _arrival, _plane, _loc_arrival, _loc_departure);
-   RETURN currval('seq_flight');
+    UPDATE Flight SET 
+    fli_pla_fk = _plane,
+    fli_price = _price,
+    fli_departuredate = TO_TIMESTAMP(_departure,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone,
+    fli_arrivaldate = TO_TIMESTAMP(_arrival,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone,
+    fli_loc_departure = _loc_departure,
+    fli_loc_arrival = _loc_arrival
+    WHERE (fli_id = _id);
+   RETURN _id;
 END;
+$BODY$; 
 
+ALTER FUNCTION public.updateflight(integer, integer, double precision, character varying, character varying, integer, integer)
+    OWNER TO vacanza;
+
+
+-- FUNCTION: public.deleteflight()
+
+-- DROP FUNCTION public.deleteflight();
+CREATE OR REPLACE FUNCTION public.deleteflight
+(_id integer)
+RETURNS integer
+LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+AS $BODY$
+BEGIN
+
+    DELETE FROM Flight 
+    WHERE (fli_id = _id);
+    return _id;
+END;
 $BODY$;
 
-ALTER FUNCTION public.addflight(integer, double precision, timestamp without time zone, timestamp without time zone, integer, integer)
+ALTER FUNCTION public.deleteflight(integer)
     OWNER TO vacanza;
 
 -- FUNCTION: public.getplanes()
@@ -80,6 +141,33 @@ $BODY$;
 
 ALTER FUNCTION public.findplane(integer)
     OWNER TO postgres;
+
+
+-- FUNCTION: public.findflight(integer)
+
+-- DROP FUNCTION public.findflight(integer);
+
+CREATE OR REPLACE FUNCTION public.findflight(
+	_id integer)
+    RETURNS TABLE(id integer, price numeric, departuredate timestamp, arrivaldate timestamp, loc_arrival integer, loc_departure integer, pla_fk integer) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+	RETURN QUERY SELECT
+	fli_id, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_arrival, fli_loc_departure, fli_pla_fk
+	FROM public.Flight WHERE _id = fli_id;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.findflight(integer)
+    OWNER TO vacanza;
+
 
 -- FUNCTION: public.getflights()
 
@@ -289,6 +377,78 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION GetHotelById(p_id INTEGER)
+    RETURNS TABLE
+            (
+                id integer,
+                name VARCHAR(100),
+                roomQuantity INTEGER,
+                roomCapacity INTEGER,
+                isActive BOOLEAN,
+                addressSpecs VARCHAR(200),
+                pricePerRoom DECIMAL,
+                website VARCHAR(100),
+                phone VARCHAR(20),
+                picture VARCHAR,
+                stars INTEGER,
+                location INTEGER
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT H.HOT_ID,
+                        H.HOT_NAME,
+                        H.hot_room_qty,
+                        H.hot_room_capacity,
+                        H.hot_is_active,
+                        H.hot_address_specs,
+                        H.hot_room_price,
+                        H.hot_website,
+                        H.hot_phone,
+                        H.HOT_PICTURE,
+                        H.HOT_STARS,
+                        H.hot_loc_fk
+                 FROM Hotel AS H
+                 WHERE H.hot_id = p_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION GetHotelsByCity(city_id integer)
+    RETURNS TABLE
+            (
+                id integer,
+                name VARCHAR(100),
+                roomQuantity INTEGER,
+                roomCapacity INTEGER,
+                isActive BOOLEAN,
+                addressSpecs VARCHAR(200),
+                pricePerRoom DECIMAL,
+                website VARCHAR(100),
+                phone VARCHAR(20),
+                picture VARCHAR,
+                stars INTEGER,
+                location INTEGER
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT H.HOT_ID,
+                        H.HOT_NAME,
+                        H.hot_room_qty,
+                        H.hot_room_capacity,
+                        H.hot_is_active,
+                        H.hot_address_specs,
+                        H.hot_room_price,
+                        H.hot_website,
+                        H.hot_phone,
+                        H.HOT_PICTURE,
+                        H.HOT_STARS,
+                        H.hot_loc_fk
+                 FROM Hotel AS H, LOCATION L
+                 WHERE H.hot_loc_fk = L.LOC_ID and H.hot_loc_fk = city_id;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION GetLocationById(p_id INTEGER)
     RETURNS TABLE
             (
@@ -302,6 +462,22 @@ BEGIN
     RETURN QUERY SELECT LOC_ID, LOC_CITY, LOC_COUNTRY
                  FROM LOCATION
                  WHERE loc_id = p_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION GetLocationByCountry(countryName VARCHAR(30))
+    RETURNS TABLE
+            (
+                id integer,
+                city VARCHAR(30),
+                country VARCHAR(30)
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT LOC_ID, LOC_CITY, LOC_COUNTRY
+                 FROM LOCATION
+                 WHERE loc_country = countryName;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -532,7 +708,7 @@ RETURNS integer AS
 $$
 BEGIN
 
-   UPDATE Claim SET cla_title= _cla_title and cla_descr= _cla_descr
+   UPDATE Claim SET cla_title= _cla_title, cla_descr= _cla_descr
 	WHERE (cla_id = _cla_id);
    RETURN _cla_id;
 END;
@@ -540,13 +716,13 @@ $$ LANGUAGE plpgsql;
 -------------------------------------ELIMAR Reclamo-----------------------------
 
 CREATE OR REPLACE FUNCTION DeleteClaim(_cla_id integer)
-RETURNS void AS
+RETURNS integer AS
 $$
 BEGIN
 
     DELETE FROM Claim 
     WHERE (cla_id = _cla_id);
-
+    RETURN _cla_id;
 END;
 $$ LANGUAGE plpgsql;
 --------------------------CONSULTAR Claim--------------------
@@ -711,3 +887,56 @@ END; $$
 LANGUAGE plpgsql;
 
 ------------------------------------fin de grupo 10---------------------------------
+
+----------------------------------- grupo 14 ---------------------------------
+
+--SP para insertar una reserva de hotel
+CREATE OR REPLACE FUNCTION addReservationRestaurant(fecha VARCHAR, 
+    people INTEGER, fecha_reservacion VARCHAR, userId INTEGER, restaurantId INTEGER)
+  RETURNS INTEGER AS $$
+  DECLARE 
+    res_rest_id INTEGER;
+  
+  BEGIN
+    INSERT INTO res_rest(rr_date, rr_number_people, rr_timestamp, rr_use_fk,
+      rr_res_fk)
+      VALUES (TO_TIMESTAMP(fecha, 'yyyy-mm-dd hh24:mi'), people, TO_TIMESTAMP(fecha_reservacion,'yyyy-mm-dd hh24:mi'),userId,restaurantId) RETURNING rr_id INTO res_rest_id;
+    
+    RETURN res_rest_id;
+  END;
+  $$ LANGUAGE plpgsql;
+
+--SP para retornar todas las reservas de restaurant para un usuario
+CREATE OR REPLACE FUNCTION getResRestaurant(usuario INTEGER) RETURNS TABLE (
+  id INTEGER, fecha_for_res TIMESTAMP, number_people INTEGER, fecha_que_reservo TIMESTAMP,
+  userID INTEGER, restaurantID INTEGER, paymentID INTEGER) AS $$
+  
+  BEGIN
+    RETURN QUERY SELECT R.rr_id as ID, R.rr_date as fechaReservar, R.rr_number_people as CantidadPersonas, R.rr_timestamp as fechaReservo,
+    R.rr_use_fk as userID, R.rr_res_fk as restaurantID, R.rr_pay_fk as paymentID
+    FROM RES_REST as R, users as U
+    WHERE U.USE_ID = R.rr_use_fk;
+  END;
+  $$ LANGUAGE plpgsql;
+
+--SP para cancelar la reserva de un usuario 
+CREATE OR  REPLACE FUNCTION deleteReservation(reservationID INTEGER) RETURNS INTEGER AS $$
+  DECLARE res_id INTEGER;
+  BEGIN
+    DELETE FROM RES_REST WHERE (rr_id = reservationID) returning rr_id INTO res_id;
+
+    RETURN res_id;
+  END;
+  $$ LANGUAGE plpgsql;
+
+--SP para agregar si se pago la reserva
+CREATE OR REPLACE FUNCTION modifyReservationPayment(pay INTEGER,reservation INTEGER) RETURNS INTEGER AS $$
+  DECLARE res_id INTEGER;
+  BEGIN
+    UPDATE res_rest SET rr_pay_fk = pay 
+    WHERE(rr_id = reservation) returning rr_id INTO res_id;
+    RETURN res_id;
+  END;
+  $$ LANGUAGE plpgsql;
+
+-----------------------------------fin grupo 14-----------------------------------------------------------

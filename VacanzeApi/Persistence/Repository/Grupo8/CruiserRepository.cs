@@ -75,9 +75,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
                 var updatedid = Convert.ToInt32(table.Rows[0][0]);
                 return cruiser;
             }
-            catch (InvalidOperationException)
+            catch (NullReferenceException e)
             {
-                throw new NotValidAttributeException("Error en los parametros de entrada");
+                throw new NullCruiserException("El crucero no puede ser null");
             }
             catch (InvalidCastException)
             {

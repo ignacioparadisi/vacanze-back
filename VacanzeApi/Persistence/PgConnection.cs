@@ -64,7 +64,8 @@ namespace vacanze_back.VacanzeApi.Persistence
             }
             catch (NpgsqlException e)
             {
-                throw new DatabaseException(e.Message);
+                throw new DatabaseException(
+                    $"Error ejecutando funcion: {functionSignature}.{Environment.NewLine}{e.Message}");
             }
             finally
             {

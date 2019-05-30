@@ -104,6 +104,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                  ErrorMessage errorMessage = new ErrorMessage(400, e.Message);
                  return BadRequest(errorMessage);
              }
+             catch (NullCruiserException e)
+             {
+                 ErrorMessage errorMessage = new ErrorMessage(400, e.Message);
+                 return BadRequest(errorMessage);
+             }
              catch (DatabaseException e)
              {
                  ErrorMessage errorMessage = new ErrorMessage(400, e.Message);
