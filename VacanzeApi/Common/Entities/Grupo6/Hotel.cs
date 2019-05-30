@@ -1,26 +1,31 @@
+using System.ComponentModel.DataAnnotations;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
 {
-    public class Hotel : Entity
+    public class Hotel
     {
-        // [JsonConstructor]
+        public int Id { get; set; }
 
-        public Hotel() : base(0)
-        {
-        }
+        [Required] public string Name { get; set; }
 
-        public string Name { get; set; }
-        public int AmountOfRooms { get; set; }
-        public int RoomCapacity { get; set; }
-        public bool IsActive { get; set; }
-        public string AddressSpecification { get; set; }
-        public decimal PricePerRoom { get; set; }
+        [Required] [Range(1, int.MaxValue)] public int AmountOfRooms { get; set; }
+
+        [Required] [Range(1, int.MaxValue)] public int RoomCapacity { get; set; }
+
+        [Required] public bool IsActive { get; set; }
+
+        [Required] public string AddressSpecification { get; set; }
+
+        [Required] public decimal PricePerRoom { get; set; }
+
         public string Phone { get; set; }
         public string Website { get; set; }
         public string Picture { get; set; }
-        public int Stars { get; set; }
-        public Location Location { get; set; }
+
+        [Required] [Range(1, 5)] public int Stars { get; set; }
+
+        [Required] public Location Location { get; set; }
 
         public void Validate()
         {
