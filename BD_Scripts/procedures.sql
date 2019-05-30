@@ -449,6 +449,53 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION UpdateHotel(_id INTEGER,
+                                       _name VARCHAR(100),
+                                       _amountOfRooms INTEGER,
+                                       _capacityPerRoom INTEGER,
+                                       _active BOOLEAN,
+                                       _addressSpecs VARCHAR(200),
+                                       _roomPrice DECIMAL,
+                                       _website VARCHAR,
+                                       _phone VARCHAR,
+                                       _picture VARCHAR,
+                                       _stars INTEGER,
+                                       _location INTEGER)
+    RETURNS TABLE
+            (
+                id integer,
+                name VARCHAR(100),
+                roomQuantity INTEGER,
+                roomCapacity INTEGER,
+                isActive BOOLEAN,
+                addressSpecs VARCHAR(200),
+                pricePerRoom DECIMAL,
+                website VARCHAR(100),
+                phone VARCHAR(20),
+                picture VARCHAR,
+                stars INTEGER,
+                location INTEGER
+            )
+AS
+$$
+BEGIN
+    UPDATE hotel
+    SET hot_name          = _name,
+        hot_room_qty      = _amountOfRooms,
+        hot_room_capacity = _capacityPerRoom,
+        hot_is_active     = _active,
+        hot_address_specs = _addressSpecs,
+        hot_room_price    = _roomPrice,
+        hot_website       = _website,
+        hot_phone         = _phone,
+        hot_picture       = _picture,
+        hot_stars         = _stars,
+        hot_loc_fk        = _location
+    WHERE hot_id = _id;
+    return query select * from gethotelbyid(_id);
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION GetLocationById(p_id INTEGER)
     RETURNS TABLE
             (

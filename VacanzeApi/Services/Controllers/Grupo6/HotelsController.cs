@@ -15,7 +15,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
     [ApiController]
     public class HotelsController : ControllerBase
     {
-        // GET api/hotels/[?location={location_id}]
         [HttpGet]
         public ActionResult<IEnumerable<Hotel>> Get([FromQuery] int location = -1)
         {
@@ -63,6 +62,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         {
             HotelRepository.DeleteHotel(id);
             return Ok();
+        }
+
+        [HttpPut("{hotelId}", Name = "UpdateHotel")]
+        public ActionResult<Hotel> Update([FromBody] Hotel dataToUpdate)
+        {
+            // TODO: Implementar
+            return Ok(dataToUpdate);
         }
     }
 }

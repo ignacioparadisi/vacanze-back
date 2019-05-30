@@ -72,6 +72,29 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
             return hotelList;
         }
 
+        public static void DeleteHotel(int id)
+        {
+            try
+            {
+                PgConnection.Instance.ExecuteFunction("DeleteHotel(@id)", id);
+            }
+            catch (DatabaseException)
+            {
+                // TODO: Loggear underlying exception
+                throw new DeleteEntityException(
+                    $"Database error while trying to delete hotel {id}");
+            }
+            catch (Exception)
+            {
+                // TODO: Loggear underlying exception
+                throw new DeleteEntityException($"Unknown error while deleting hotel {id}.");
+            }
+        }
+
+        public static void UpdateHotel(int id)
+        {
+        }
+
         private static Hotel ExtractHotelFromRow(DataRow row)
         {
             try
@@ -122,25 +145,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
                 // TODO: Loggear underlying exception
                 throw new ParseFromDatabaseRowException(
                     "Mapping of the DataRow to a Hotel entity failed");
-            }
-        }
-
-        public static void DeleteHotel(int id)
-        {
-            try
-            {
-                PgConnection.Instance.ExecuteFunction("DeleteHotel(@id)", id);
-            }
-            catch (DatabaseException)
-            {
-                // TODO: Loggear underlying exception
-                throw new DeleteEntityException(
-                    $"Database error while trying to delete hotel {id}");
-            }
-            catch (Exception)
-            {
-                // TODO: Loggear underlying exception
-                throw new DeleteEntityException($"Unknown error while deleting hotel {id}.");
             }
         }
     }
