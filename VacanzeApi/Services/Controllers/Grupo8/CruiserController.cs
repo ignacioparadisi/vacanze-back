@@ -40,7 +40,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         }
         // GET/Cruiser/{id}
         [HttpGet("{id}")]
-        public IActionResult GetCruiser(int id)
+        public ActionResult<Cruiser> GetCruiser(int id)
         {
             try
             {
