@@ -55,56 +55,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
             }
             return ClaimList;
         }
-
-        public List<Claim> GetClaimBaggage(int numero)
-        {
-            var ClaimList = new List<Claim>();
-            var table = PgConnection.Instance.ExecuteFunction("GetClaimBaggage(@cla_id)",numero);
-            for (var i = 0; i < table.Rows.Count; i++)
-            {
-                var id = Convert.ToInt32(table.Rows[i][0].ToString());
-                var titulo = table.Rows[i][1].ToString();
-                var descripcion = table.Rows[i][2].ToString();
-                var status = table.Rows[i][3].ToString();
-                var claim = new Claim(id, titulo, descripcion, status);
-                ClaimList.Add(claim);
-            };
-            return ClaimList;
-        }
-
-        public List<Claim> GetClaimDocumentPasaport(int numero)
-        {
-            var ClaimList = new List<Claim>();
-            var table = PgConnection.Instance.ExecuteFunction("GetClaimDocumentPasaport(@cla_id)",numero);
-
-            for (var i = 0; i < table.Rows.Count; i++)
-            {
-                var id = Convert.ToInt32(table.Rows[i][0].ToString());
-                var titulo = table.Rows[i][1].ToString();
-                var descripcion = table.Rows[i][2].ToString();
-                var status = table.Rows[i][3].ToString();
-                var claim = new Claim(id, titulo, descripcion, status);
-                ClaimList.Add(claim);
-            }
-            return ClaimList;
-        }
-
-        public List<Claim> GetClaimDocumentCedula(int numero)
-        {
-            var ClaimList = new List<Claim>();
-            var table = PgConnection.Instance.ExecuteFunction("GetClaimDocumentCedula(@cla_id)",numero);
-            for (var i = 0; i < table.Rows.Count; i++)
-            {
-                var id = Convert.ToInt32(table.Rows[i][0].ToString());
-                var titulo = table.Rows[i][1].ToString();
-                var descripcion = table.Rows[i][2].ToString();
-                var status = table.Rows[i][3].ToString();
-                var claim = new Claim(id, titulo, descripcion, status);
-                ClaimList.Add(claim);
-            };
-            return ClaimList;
-        }
-
+        
         public int DeleteClaim(int claimId)
         {
             var table= PgConnection.Instance.ExecuteFunction("getclaim(@cla_id)",claimId);    
