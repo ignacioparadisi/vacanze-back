@@ -826,12 +826,13 @@ ADDAUTOMOBILE(
     ) 
 RETURNS integer AS
 $$
+
 BEGIN
 
 
    INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_LICENSE,AUT_PRICE,AUT_PICTURE,AUT_LOC_FK) VALUES
-    (_make, _model,_capacity,_status,_licence,_price,_picture,_place);
-   RETURN AUT_ID;
+    ( _make, _model,_capacity,_status,_licence,_price,_picture,_place);
+   RETURN 1 ;
 END;
 $$ LANGUAGE plpgsql;
 
