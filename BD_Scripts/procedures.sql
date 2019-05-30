@@ -413,6 +413,42 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION GetHotelsByCity(city_id integer)
+    RETURNS TABLE
+            (
+                id integer,
+                name VARCHAR(100),
+                roomQuantity INTEGER,
+                roomCapacity INTEGER,
+                isActive BOOLEAN,
+                addressSpecs VARCHAR(200),
+                pricePerRoom DECIMAL,
+                website VARCHAR(100),
+                phone VARCHAR(20),
+                picture VARCHAR,
+                stars INTEGER,
+                location INTEGER
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT H.HOT_ID,
+                        H.HOT_NAME,
+                        H.hot_room_qty,
+                        H.hot_room_capacity,
+                        H.hot_is_active,
+                        H.hot_address_specs,
+                        H.hot_room_price,
+                        H.hot_website,
+                        H.hot_phone,
+                        H.HOT_PICTURE,
+                        H.HOT_STARS,
+                        H.hot_loc_fk
+                 FROM Hotel AS H, LOCATION L
+                 WHERE H.hot_loc_fk = L.LOC_ID and H.hot_loc_fk = city_id;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION GetLocationById(p_id INTEGER)
     RETURNS TABLE
             (
@@ -429,6 +465,39 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION GetCountries()
+    RETURNS TABLE
+            (
+                id integer,
+                city VARCHAR(30),
+                country VARCHAR(30)
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT X.LOC_ID, X.LOC_CITY, X.LOC_COUNTRY
+                 FROM (
+                     SELECT row_number() OVER (PARTITION BY LOC_COUNTRY ORDER BY LOC_ID) AS R, T.* FROM LOCATION T
+                      ) X
+                 WHERE X.R <= 1;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION GetCitiesByCountry(city_id integer)
+    RETURNS TABLE
+            (
+                id integer,
+                city VARCHAR(30),
+                country VARCHAR(30)
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT L.LOC_ID, L.LOC_CITY, L.LOC_COUNTRY
+                 FROM LOCATION L, (select LOC_COUNTRY FROM LOCATION WHERE LOC_ID = city_id) AS L1
+                 WHERE L.LOC_COUNTRY = L1.LOC_COUNTRY;
+END;
+$$ LANGUAGE plpgsql;
 ------------------------------------ grupo 8 --------------------------------------
 
 ---------Agregar Ship-------------------
@@ -740,6 +809,251 @@ $$ LANGUAGE plpgsql;
 
 
 ------------------------------------fin de grupo 9---------------------------------
+
+-----------------------------------Grupo 5 ------------------------------------------------
+-------------AGREGAR AUTO-----------------
+
+CREATE OR REPLACE FUNCTION 
+ADDAUTOMOBILE(
+    _make VARCHAR(20), 
+    _model VARCHAR(30),
+    _capacity integer,
+    _status BOOLEAN,
+    _licence varchar(30),
+    _price real,
+    _picture varchar,
+    _place integer
+    ) 
+RETURNS integer AS
+$$
+
+BEGIN
+
+
+   INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_LICENSE,AUT_PRICE,AUT_PICTURE,AUT_LOC_FK) VALUES
+    ( _make, _model,_capacity,_status,_licence,_price,_picture,_place);
+   RETURN 1 ;
+END;
+$$ LANGUAGE plpgsql;
+
+
+----------------eliminar auto-------------------------------
+
+CREATE OR REPLACE FUNCTION DeleteAuto(_id integer)
+RETURNS void AS
+$$
+BEGIN
+
+    DELETE FROM AUTOMOBILE
+    WHERE (AUT_ID = _id);
+
+END;
+$$ LANGUAGE plpgsql;
+-------consultar por id de auto-------------------------
+CREATE OR REPLACE FUNCTION ConsultforIdAuto(codigo integer)
+RETURNS TABLE
+  (id integer,
+   make varchar(30),
+   model varchar(30),
+   capacity integer,
+   isactive BOOLEAN, 
+   price numeric , 
+   license varchar(30), 
+   picture varchar (30), 
+   loc_fk integer
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY  select * 
+    FROM AUTOMOBILE  WHERE aut_id = codigo;
+END;
+$$ LANGUAGE plpgsql;
+
+----------consultar por lugar ----------------------------------
+CREATE OR REPLACE FUNCTION ConsultforPlaceAuto(codigo integer)
+RETURNS TABLE
+  (id integer,
+   make varchar(30),
+   model varchar(30),
+   capacity integer,
+   isactive BOOLEAN, 
+   price numeric , 
+   license varchar(30), 
+   picture varchar (30), 
+   loc_fk integer
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY  select * 
+    FROM AUTOMOBILE  WHERE aut_loc_fk = codigo ;
+END;
+$$ LANGUAGE plpgsql;
+
+--------------------------------------------------
+CREATE OR REPLACE FUNCTION ConsultforPlaceandStatusAuto(_place integer,_status bool )
+RETURNS TABLE
+  (id integer,
+   make varchar(30),
+   model varchar(30),
+   capacity integer,
+   isactive BOOLEAN, 
+   price numeric , 
+   license varchar(30), 
+   picture varchar (30), 
+   loc_fk integer
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY  select * 
+    FROM AUTOMOBILE  WHERE aut_loc_fk = _place and aut_isactive =_status ;
+END;
+$$ LANGUAGE plpgsql;
+
+-------------consultar por estado del auto ---------------------------------
+CREATE OR REPLACE FUNCTION ConsultforStatusAuto(codigo integer)
+RETURNS TABLE
+  (id integer,
+   make varchar(30),
+   model varchar(30),
+   capacity integer,
+   isactive BOOLEAN, 
+   price real , 
+   license varchar(30), 
+   picture varchar (30), 
+   loc_fk integer
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY  select * 
+    FROM AUTOMOBILE  WHERE aut_isactive = codigo ;
+END;
+$$ LANGUAGE plpgsql;
+-------------------consulta por marca de auto-------------------------------
+CREATE OR REPLACE FUNCTION ConsultforMakeAuto(codigo integer)
+RETURNS TABLE
+  (id integer,
+   make varchar(30),
+   model varchar(30),
+   capacity integer,
+   isactive BOOLEAN, 
+   price real , 
+   license varchar(30), 
+   picture varchar (30), 
+   loc_fk integer
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY  select * 
+    FROM AUTOMOBILE  WHERE aut_make = codigo ;
+END;
+$$ LANGUAGE plpgsql;
+------------------consulta por modelo----------------------------------------
+CREATE OR REPLACE FUNCTION ConsultformodelAuto(codigo integer)
+RETURNS TABLE
+  (id integer,
+   make varchar(30),
+   model varchar(30),
+   capacity integer,
+   isactive BOOLEAN, 
+   price real , 
+   license varchar(30), 
+   picture varchar (30), 
+   loc_fk integer
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY  select * 
+    FROM AUTOMOBILE  WHERE aut_model = codigo ;
+END;
+$$ LANGUAGE plpgsql;
+----------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION consultayuda(
+	_place integer,
+	_result varchar,
+	_license character varying,
+	_capacity integer)
+    RETURNS TABLE(id integer, make character varying, model character varying, capacity integer, isactive boolean, price numeric, license character varying, picture character varying, loc_fk integer) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+declare
+    _status bool;
+BEGIN
+   
+	if (_result = 'true'  ) then 
+		_status:=true;
+	else  
+	    _status:= false;
+    end if;
+	IF (_result = 'null' and _license = 'null' and _capacity= 0 ) THEN
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_loc_fk = _place;
+    ELSIF  (_place = 0  and _license = 'null' and _capacity= 0 ) THEN
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_isactive = _status ;
+	ELSIF (_place = 0  and _result = 'null' and _capacity= 0 ) then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_license = _license ;
+	ELSIF (_place = 0  and _result = 'null' and _license= 'null' ) then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_capacity = _capacity ;
+	ELSIF (_place = 0 and _result= 'null') then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_license = _license  and aut_capacity = _capacity;
+	ELSIF (_place = 0 and _license='null') then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_isactive = _status  and aut_capacity = _capacity;
+	ELSIF (_place=0 and _capacity = 0) then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_isactive = _status  and aut_license = _license;
+    ELSIF (_place=0 ) then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_isactive = _status  and aut_license = _license and aut_loc_fk=_place;
+    ELSIF (_result= 'null' and _license ='null' ) then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_loc_fk=_place and aut_capacity =_capacity;
+    ELSIF (_result= 'null' and _capacity =0 ) then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_loc_fk=_place and aut_license =_license;
+    ELSIF (_result= 'null' ) then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_loc_fk=_place and aut_license =_license and aut_capacity= _capacity;		
+    ELSIF (_license = 'null' and _capacity= 0  ) then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_loc_fk=_place  and aut_isactive= _status;	
+    ELSIF ( _capacity= 0  ) then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_loc_fk=_place  and aut_isactive= _status and aut_license=_license;	
+    ELSIF (_license = 'null'  ) then 
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_loc_fk=_place  and aut_isactive= _status and aut_capacity = _capacity;
+	ELSE 
+		RETURN QUERY  select *FROM AUTOMOBILE where aut_loc_fk=_place  and aut_isactive= _status and aut_capacity = _capacity and aut_license=_license;
+	END IF; 
+
+END;
+$BODY$;
+
+
+-------------modificar auto--------------------------------------------------
+CREATE OR REPLACE FUNCTION 
+MODIFYAUTOMOBILE(
+	_id integer,
+    _make VARCHAR(20), 
+    _model VARCHAR(30),
+    _capacity integer,
+    _status BOOLEAN,
+    _license varchar(30),
+    _price real,
+    _picture varchar,
+    _place integer
+    ) 
+RETURNS integer AS
+$$
+BEGIN
+UPDATE automobile
+	SET  aut_make=_make, aut_model=_model,
+	aut_capacity=_capacity, aut_isactive=_status, aut_price=_price,
+	aut_license=_license, aut_picture=_picture, aut_loc_fk=_place
+	WHERE aut_id =_id;
+	RETURN _id;
+END;
+$$ LANGUAGE plpgsql;
 ------ Consulta de los lugares ------
 
 CREATE OR REPLACE FUNCTION GetLocations()
@@ -756,6 +1070,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+------------------------fin de grupo 5-------------------------------------------
 
 ------------------------------------inicio de grupo 7---------------------------------
 
