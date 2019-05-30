@@ -766,27 +766,26 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
 --------------------------CONSULTAR BAGGAGE por serial-------------------
 CREATE OR REPLACE FUNCTION GetBaggage(_BAG_ID integer)
 RETURNS TABLE
   (id integer,
    descr VARCHAR(30),
-   status VARCHAR(30)
+   status boolean
   )
 AS
 $$
 BEGIN
     RETURN QUERY SELECT
-    cla_id, cla_descr, cla_status
-    FROM Claim WHERE cla_id = _BAG_ID;
-    --RETURN QUERY SELECT
-    --BAG_ID, bag_descr, bag_status
-    --FROM BAGGAGE WHERE BAG_ID = _BAG_ID;
+    BAG_ID, bag_descr, bag_status
+    FROM BAGGAGE WHERE BAG_ID = _BAG_ID;
 END;
 $$ LANGUAGE plpgsql;
 
 --------------------------CONSULTAR Baggage por pasaporte--------------------
-CREATE OR REPLACE FUNCTION GetBaggageDocumentPasaport(_BAG_id integer)
+
+CREATE OR REPLACE FUNCTION GetBaggageDocumentPasaport(_users_document_id integer)
 RETURNS TABLE
   (id integer,
    descr VARCHAR(30),
@@ -798,28 +797,9 @@ BEGIN
     RETURN QUERY SELECT
     cla_id, cla_descr, cla_status
     FROM Claim WHERE cla_id = _BAG_ID;
-    --RETURN QUERY SELECT
-    --BAG_ID, bag_descr, bag_status
-    --FROM BAGGAGE WHERE BAG_ID = _BAG_ID;
-END;
-$$ LANGUAGE plpgsql;
+    RETURN QUERY select bag_id, bag_status, bag_descr from Baggage , res_fli, users
 
---------------------------CONSULTAR Baggage por cedula --------------------
-CREATE OR REPLACE FUNCTION GetBaggageDocumentCedula(_bag_id integer)
-RETURNS TABLE
-  (id integer,
-   descr VARCHAR(30),
-   status VARCHAR(30)
-  )
-AS
-$$
-BEGIN
-    RETURN QUERY SELECT
-    cla_id, cla_descr, cla_status
-    FROM Claim WHERE cla_id = _BAG_ID;
-    --RETURN QUERY SELECT
-    --BAG_ID, bag_descr, bag_status
-    --FROM BAGGAGE WHERE BAG_ID = _BAG_ID;
+where bag_res_fli_fk =rf_id and rf_use_fk =use_id  and use_document_id=_users_document_id;
 END;
 $$ LANGUAGE plpgsql;
 

@@ -33,7 +33,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 			controller.Put(3,cs);
 		    ActionResult<IEnumerable<Baggage>> enumerable = controller.Get(3);			
 			Baggage[] baggage = enumerable.Value.ToArray();
-			Assert.AreEqual(baggage[0]._status, "CERADO");
+			Assert.AreEqual(baggage[0]._status, "CERRADO");
 
 		}
 
