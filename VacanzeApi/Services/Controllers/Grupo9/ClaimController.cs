@@ -81,7 +81,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 			try
 			{ 				
 				ClaimRepository conec= new ClaimRepository();
-				Claim claim= new Claim(ClaimAux.title, ClaimAux.description, ClaimAux.status);
+				Claim claim= new Claim(ClaimAux.title, ClaimAux.description);
+				claim.Validate();
+				claim.ValidatePost();
 				conec.AddClaim(claim,id);
 				return Ok("Agregado correctamente");
 			}catch (DatabaseException )
@@ -92,31 +94,40 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 			{
 				return StatusCode(500);
 			}
-
+			catch (AttributeSizeException exc)
+			{
+				return StatusCode(500,exc.Message);
+			}
+			catch (AttributeValueException exc)
+			{
+				return StatusCode(500,exc.Message);
+			}
 		}
 		
 		// DELETE api/Claim/5
 		[HttpDelete("{id}")]
 		public ActionResult<string> Delete(int id)
 		{
-			try{
-				ClaimRepository conec= new ClaimRepository();  
-				int rows = conec.DeleteClaim(id);				 
+			try
+			{
+				ClaimRepository conec = new ClaimRepository();
+				int rows = conec.DeleteClaim(id);
 				return Ok("eliminado exitosamente");
-			}catch (DatabaseException )
-			{            
-				return StatusCode(500);
 			}
-			catch (InvalidStoredProcedureSignatureException )
+			catch (DatabaseException)
 			{
 				return StatusCode(500);
-			}catch (NullClaimException )
-			{
-				mensaje= new ResponseError();
-				mensaje.error="No existe el elemento que quiere Eliminar";
-				return StatusCode(500,mensaje);
 			}
-
+			catch (InvalidStoredProcedureSignatureException)
+			{
+				return StatusCode(500);
+			}
+			catch (NullClaimException)
+			{
+				mensaje = new ResponseError();
+				mensaje.error = "No existe el elemento que quiere Eliminar";
+				return StatusCode(500, mensaje);
+			}
 		}
 		
 		//api/Clain/status/5
@@ -126,6 +137,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 			try{
 				ClaimRepository conec = new ClaimRepository();
 				Claim claim = new Claim(ClaimAux.title, ClaimAux.description, ClaimAux.status);
+				claim.Validate();
+				claim.ValidatePut();
 				int rows= 0;
 				if (ClaimAux.status != null)
 					rows = conec.ModifyClaimStatus(id, claim);
@@ -144,6 +157,14 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 				mensaje= new ResponseError();
 				mensaje.error="No existe el elemento que quiere Modificar";
 				return StatusCode(500,mensaje);
+			}
+			catch (AttributeSizeException exc)
+			{
+				return StatusCode(500,exc.Message);
+			}
+			catch (AttributeValueException exc)
+			{
+				return StatusCode(500,exc.Message);
 			}
 		}
 
