@@ -825,10 +825,25 @@ RETURNS TABLE (
 ) AS $$
 BEGIN
 	RETURN QUERY 
-
 	SELECT tra_id, tra_name, tra_descr FROM travel WHERE tra_use_fk = userId ;
 END; $$ 
 LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION AddTravel(
+  travelName VARCHAR, 
+	travelDescription VARCHAR, 
+	userId BIGINT)
+RETURNS BIGINT AS
+$$
+DECLARE
+	travelId BIGINT;
+BEGIN
+	INSERT INTO Travel(tra_name, tra_descr, tra_use_fk)
+	VALUES(travelName, travelDescription, userId) RETURNING tra_id INTO travelId;
+	RETURN travelId;
+END;
+$$
+LANGUAGE 'plpgsql';
 
 ------------------------------------fin de grupo 10---------------------------------
 

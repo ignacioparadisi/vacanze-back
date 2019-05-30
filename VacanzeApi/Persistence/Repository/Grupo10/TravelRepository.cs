@@ -15,7 +15,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
         ///<returns>
         /// User's travels
         ///</returns>
-        ///<param name=userId>User's id</param>
+        ///<param name="userId">User's id</param>
         public static List<Travel> GetTravels(int userId){
             List<Travel> listOfTravels = new List<Travel>();
             try{
@@ -34,18 +34,45 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
                     throw new WithoutExistenceOfTravelsException(userId, "Animate, planifica un viaje");
                 }
             }catch(DatabaseException){
-            
+                
             }catch(InvalidStoredProcedureSignatureException){
                 
+            }finally{
+
             }
             return listOfTravels;
         }
 
-        public static Boolean PostTravel(Travel travel){
-            Boolean posted = false;
+        ///<sumary>
+        /// Create a Travel for a specific User
+        ///</sumary>
+        ///<returns>
+        /// Travel's id
+        ///</returns>
+        ///<param name="travel">Travel that should be inserted at the db</param>
+        public static long AddTravel(Travel travel){
+            long id = 0;
+            try{
+                //1. Validate: User exist & Is a Client
+                    //throw exception
+                //2. Validate: Name repeated
+                    //throw exception
+                if(string.IsNullOrEmpty(travel.Name)){
+                    throw new NameRequiredException("El viaje debe tener un nombre");
+                }
+                PgConnection pgConnection = PgConnection.Instance;
+                DataTable dataTable = pgConnection.ExecuteFunction("AddTravel(@travelName, @travelDescription, @userId)", 
+                    travel.Name, travel.Description, travel.UserId);
+                id = Convert.ToInt64(dataTable.Rows[0][0]);
+                travel.Id = id;
+            }catch(DatabaseException){
 
+            }catch(InvalidStoredProcedureSignatureException){
+                
+            }finally{
 
-            return posted;
+            }
+            return id;
         }
 
     }

@@ -21,17 +21,23 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
                 travels = TravelRepository.GetTravels(userId);
             }catch(WithoutExistenceOfTravelsException ex){
                 return BadRequest(ex.Message);
+            }catch(Exception ex){
+                return BadRequest(ex.Message);
             }
             return Ok(travels);
         }
 
         [Consumes("application/json")]
         [HttpPost]
-        public IActionResult PostTravel([FromBody] Travel travel){
-            if(!TravelRepository.PostTravel(travel)){
-                return BadRequest("bad request");
+        public IActionResult AddTravel([FromBody] Travel travel){
+            try{
+                long id = TravelRepository.AddTravel(travel);
+                if(id == 0)
+                    return BadRequest("Lo sentimos, el vieje no pudo ser creado");
+                return Ok(travel);
+            }catch(NameRequiredException ex){
+                return BadRequest(ex.Message);
             }
-            return Ok(travel);
         }
     }
 }

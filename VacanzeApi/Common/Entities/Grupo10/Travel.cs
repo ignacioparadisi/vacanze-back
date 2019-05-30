@@ -5,10 +5,21 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10
 {
     public class Travel : Entity{
 
+        private List<Entity> _carReservations;
+        private List<Entity> _hotelReservations; 
+        private List<Entity> _restaurantReservations;
+        private List<Entity> _flightReservations;
+
         private User _user;
         public User User{
             get{ return _user; }
             set{ _user = value; }
+        }
+
+        private long _userId;
+        public long UserId{
+            get { return _userId; }
+            set{ _userId = value; }
         }
 
         private string _name;
@@ -22,11 +33,6 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10
             get{ return _description; }
             set{ _description = value; }
         }
-
-        private List<Entity> _carReservations;
-        private List<Entity> _hotelReservations; 
-        private List<Entity> _restaurantReservations;
-        private List<Entity> _flightReservations;
 
         public Travel(long id, string _name, string _description, User _user) :base(id){
             this.Id = id;
@@ -46,9 +52,10 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10
             this._description = _description;
         }
 
-        public Travel(string _name, string _description) :base(0){
-            this._name = _name;
-            this._description = _description;
+        public Travel(string _name, string _description, long _userId) :base(0){
+            this.Name = _name;
+            this.Description = _description;
+            this.UserId = _userId;
         }
 
         public Travel() :base(0){}
