@@ -8,7 +8,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
 {
     public static class HotelRepository
     {
-        public static long AddHotel(Hotel hotel)
+        public static int AddHotel(Hotel hotel)
         {
             var table = PgConnection.Instance.ExecuteFunction(
                 "addhotel(@name, @amountOfRooms, @capacityPerRoom, @active, @addressSpecs, " +
@@ -23,9 +23,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
                 hotel.Phone,
                 hotel.Picture,
                 hotel.Stars,
-                Convert.ToInt32(hotel.Location.Id) // TODO: ver si cambiamos el ID de Entity a int
+                hotel.Location.Id
             );
-            var savedId = Convert.ToInt64(table.Rows[0][0]);
+            var savedId = Convert.ToInt32(table.Rows[0][0]);
             return savedId;
         }
 
@@ -54,10 +54,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
                 hotelList.Add(ExtractHotelFromRow(table.Rows[i]));
             return hotelList;
         }
-        
+
         private static Hotel ExtractHotelFromRow(DataRow row)
         {
-            var id = Convert.ToInt64(row[0]);
+            var id = Convert.ToInt32(row[0]);
             var name = row[1].ToString();
             var amountOfRooms = Convert.ToInt32(row[2]);
             var roomCapacity = Convert.ToInt32(row[3]);
