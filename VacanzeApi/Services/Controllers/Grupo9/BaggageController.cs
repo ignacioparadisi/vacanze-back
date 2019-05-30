@@ -14,16 +14,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 	[ApiController]
 	public class BaggageController : ControllerBase
 	{
-        ResponseError mensaje;
-
-		// GET api/values/5
+        private ResponseError mensaje;
+		/// <summary>
+		// GET api/values/id
+		// consultar los equipajes segun su id
+		/// </summary>
 		[HttpGet("{id}")]
 		public ActionResult<IEnumerable<Baggage>> Get(int id)
 		{
-			try{
+			try
+			{
 				BaggageRepository conec= new BaggageRepository();
 				List<Baggage> BaggageList = conec.GetBaggage(id);
-
 				return BaggageList; 
 			}catch (DatabaseException )
 			{            
@@ -34,25 +36,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 				return StatusCode(500);
 			}
 		}
-
+		/// <summary>
 		// GET api/values/5
-		// Get para la tabla equipaje
-		[HttpGet("{tipo}/{id}")]
-		public ActionResult<IEnumerable<Baggage>> Get(string tipo, int id)
+		// Get para la tabla equipaje segun su documento de identidad
+		/// </summary>
+		[HttpGet("documentPasaport/{id}")]
+		public ActionResult<IEnumerable<Baggage>> Get(string id)
 		{
-			try{
-				if(tipo == "documentPasaport"){                   
-					BaggageRepository conec= new BaggageRepository();
-					List<Baggage> BaggageList = conec.GetBaggageDocumentPasaport(id);
-					return Ok(BaggageList); 
-				}else{
-					if(tipo == "documentCedula"){                   
-					BaggageRepository conec= new BaggageRepository();
-					List<Baggage> BaggageList = conec.GetBaggageDocumentCedula(id);
-					return Ok(BaggageList); 
-				}else                
-					return StatusCode(404);
-				}                            
+			try
+			{                 
+				BaggageRepository conec= new BaggageRepository();
+				List<Baggage> BaggageList = conec.GetBaggageDocumentPasaport(id);
+				return Ok(BaggageList);                          
 			}catch (DatabaseException )
 			{            
 				return StatusCode(500);
@@ -62,13 +57,16 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 				return StatusCode(500);
 			}
 		}
+		/// <summary>
+		//consultar los equipajes segun su estatus
+		/// </summary>
 		[HttpGet("admin/getStatus/{status}")]
 		public ActionResult<IEnumerable<Baggage>> GetStatus(string status)
 		{
-			try{
+			try
+			{
 				BaggageRepository conec= new BaggageRepository();
 				List<Baggage> BaggageList = conec.GetBaggageStatus(status);
-
 				return BaggageList; 
 			}catch (DatabaseException )
 			{            
@@ -79,16 +77,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 				return StatusCode(500);
 			}
 		}
-
+		/// <summary>
 		//api/Clain/status/5
+		// modificar el estatus del equipaje
+		/// </summary>
 		[HttpPut("{id}")]
 		public ActionResult<string> Put(int id,[FromBody] Baggage Baggage)
 		{
-			try{
+			try
+			{
 				BaggageRepository conec = new BaggageRepository();
-				int rows= 0;
 				if (Baggage._status != null)
-					rows = conec.ModifyBaggageStatus(id, Baggage);		
+					conec.ModifyBaggageStatus(id, Baggage);		
 				else
 					throw new NullBaggageException("no contiene un status");				
 				return Ok("Modificado exitosamente");
@@ -106,7 +106,5 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 				return StatusCode(500,mensaje);
 			}
 		}
-
-
 	}
 }

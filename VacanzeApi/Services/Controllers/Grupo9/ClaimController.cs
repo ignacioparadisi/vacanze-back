@@ -15,14 +15,16 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 	[ApiController]
 	public class ClaimController : ControllerBase
 	{
-        ResponseError mensaje;
-
-		// GET api/values
-		//se usara para consultar la cantidad de reclamos
+        private ResponseError mensaje;
+        /// <summary>
+		// GET api/Claim
+		//se usara para consultar la cantidad de reclamos en la base de datos
+        /// </summary>
 		[HttpGet]
 		public int Get()
 		{
-			try{ 
+			try
+			{ 
 				ClaimRepository conec= new ClaimRepository();
 				int rows= conec.GetClaim();
 				return rows; 
@@ -35,15 +37,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 				return -1;
 			}
 		}
-
-		// GET api/values/5
+        /// <summary>
+		// GET api/claim/id
+		// usado para consultar un claim segun id
+		/// </summary>
 		[HttpGet("{id}")]
 		public ActionResult<IEnumerable<Claim>> Get(int id)
 		{
-			try{
+			try
+			{
 				ClaimRepository conec= new ClaimRepository();
 				List<Claim> claimList = conec.GetClaim(id);
-
 				return claimList; 
 			}catch (DatabaseException )
 			{            
@@ -54,14 +58,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 				return StatusCode(500);
 			}
 		}
-		
+		/// <summary>
+		// GET api/claim/admin/status
+		// usado para que el administrador consulte los reclamos por estatus
+		/// </summary>
 		[HttpGet("admin/{status}")]
 		public ActionResult<IEnumerable<Claim>> GetStatus(string status)
 		{
-			try{
+			try
+			{
 				ClaimRepository conec= new ClaimRepository();
 				List<Claim> claimList = conec.GetClaimStatus(status);
-
 				return claimList; 
 			}catch (DatabaseException )
 			{            
@@ -72,9 +79,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 				return StatusCode(500);
 			}
 		}
-
-
-		// Post api/Claim/	
+		/// <summary>
+		// Post api/Claim/id
+		//utilizado para crear un reclamo con una id del equipaje
+		/// </summary>	
 		[HttpPost("{id}")]
 		public ActionResult<string> Post(int id, [FromBody] ClaimSecundary ClaimAux)
 		{            
@@ -92,14 +100,16 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 			{
 				return StatusCode(500);
 			}
-
-		}
-		
-		// DELETE api/Claim/5
+		}		
+		/// <summary>
+		// DELETE api/Claim/id
+		//eliminar un reclamo
+		/// </summary>
 		[HttpDelete("{id}")]
 		public ActionResult<string> Delete(int id)
 		{
-			try{
+			try
+			{
 				ClaimRepository conec= new ClaimRepository();  
 				int rows = conec.DeleteClaim(id);				 
 				return Ok("eliminado exitosamente");
@@ -117,9 +127,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 				return StatusCode(500,mensaje);
 			}
 
-		}
-		
-		//api/Clain/status/5
+		}		
+		/// <summary>
+		//api/Clain/status/id
+		// modificar un reclamo , tanto por status o por titulo y descripcion
+		/// </summary>
 		[HttpPut("{id}")]
 		public ActionResult<string> Put(int id,[FromBody] ClaimSecundary ClaimAux)
 		{
@@ -130,7 +142,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 				if (ClaimAux.status != null)
 					rows = conec.ModifyClaimStatus(id, claim);
 				else if (ClaimAux.title != null && ClaimAux.description  != null)
-					rows = conec.ModifyClaimTitle(id, claim);						
+						rows = conec.ModifyClaimTitle(id, claim);	
+					else throw new 	NullClaimException("claim vacio");				
 				return Ok("Modificado exitosamente");
 			}catch (DatabaseException )
 			{            
@@ -146,13 +159,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 				return StatusCode(500,mensaje);
 			}
 		}
-
-
 	}
-public class ResponseError {
-	public string error{get; set;}
-	
+
+	public class ResponseError {
+		public string error{get; set;}
 	}
+
 	public class ClaimSecundary {
 		public string title {get; set;} 
 		public string description{get; set;}
