@@ -85,5 +85,23 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
                 .WithAddressDescription(addressSpecs)
                 .Build();
         }
+
+
+
+        public static int DeleteHotel(int id)
+        {
+            try
+            {
+                var table = PgConnection.Instance.ExecuteFunction("DeleteHotel(@id)", id);
+                var deletedid = Convert.ToInt32(table.Rows[0][0]);
+                return deletedid;
+            }
+            catch (InvalidCastException)
+            {
+                return -1;
+            }
+        }
+
+
     }
 }
