@@ -45,7 +45,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 			cs.status = "ABIERTO";
 			
 			int rows= controller.Get();
-			controller.Post(cs);
+			controller.Post(7,cs);
 			Assert.AreEqual( rows + 1 , controller.Get());
 		}
 

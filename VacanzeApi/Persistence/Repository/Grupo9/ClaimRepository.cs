@@ -13,11 +13,11 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
         ///     Metodo para agregar un clalamo
         /// </summary>
         /// <param name="claim"></param>
-        public void AddClaim(Claim claim)
+        public void AddClaim(Claim claim, int id)
         {  
             var table = PgConnection.Instance.ExecuteFunction(
-            "addclaim(@cla_title,@cla_descr)",
-            claim._title, claim._description);
+            "addclaim(@cla_title,@cla_descr, @bag_int)",
+            claim._title, claim._description, id);
         }
        /// <summary>
         ///     Metodo para obtener los numero de reclamos en la tabla reclamo

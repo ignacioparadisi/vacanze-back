@@ -74,14 +74,14 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 
 
 		// Post api/Claim/	
-		[HttpPost]
-		public ActionResult<string> Post([FromBody] ClaimSecundary ClaimAux)
+		[HttpPost("{id}")]
+		public ActionResult<string> Post(int id, [FromBody] ClaimSecundary ClaimAux)
 		{            
 			try
 			{ 				
 				ClaimRepository conec= new ClaimRepository();
 				Claim claim= new Claim(ClaimAux.title, ClaimAux.description, ClaimAux.status);
-				conec.AddClaim(claim);
+				conec.AddClaim(claim,id);
 				return Ok("Agregado correctamente");
 			}catch (DatabaseException )
 			{            
@@ -125,7 +125,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 			try{
 				ClaimRepository conec = new ClaimRepository();
 				Claim claim = new Claim(ClaimAux.title, ClaimAux.description, ClaimAux.status);
-				Console.WriteLine("estoy aqui");
 				int rows= 0;
 				if (ClaimAux.status != null)
 					rows = conec.ModifyClaimStatus(id, claim);

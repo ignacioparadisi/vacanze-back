@@ -670,7 +670,8 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION AddClaim(
     _cla_title VARCHAR(20), 
-    _cla_description VARCHAR(30)
+    _cla_description VARCHAR(30),
+	_bag_id int
     ) 
 RETURNS integer AS
 $$
@@ -680,6 +681,9 @@ BEGIN
 
    INSERT INTO Claim(cla_title, cla_descr, cla_status) VALUES
     ( _cla_title, _cla_description, 'ABIERTO')RETURNING cla_ID INTO _cla_ID;
+	if (_cla_ID is not null)then 
+	update BAGGAGE set bag_status = false , bag_cla_fk= _cla_id where bag_id = _bag_id;
+	end if;
     RETURN _cla_ID;
 END;
 $$ LANGUAGE plpgsql;
@@ -691,7 +695,12 @@ CREATE OR REPLACE FUNCTION ModifyClaimStatus(
 RETURNS integer AS
 $$
 BEGIN
-
+	if(_cla_status ='CERRADO') then
+	UPDATE BAGGAGE set bag_status=false where bag_cla_fk= _cla_id;
+	end if;
+	if(_cla_status = 'ABIERTO') then
+	UPDATE BAGGAGE set bag_status=true where bag_cla_fk= _cla_id;
+	end if;
    UPDATE Claim SET cla_status= _cla_status
     WHERE (cla_id = _cla_id);
    RETURN _cla_id;
@@ -717,7 +726,7 @@ CREATE OR REPLACE FUNCTION DeleteClaim(_cla_id integer)
 RETURNS integer AS
 $$
 BEGIN
-
+	Update BAGGAGE set bag_cla_fk= null where bag_cla_fk=_cla_id;
     DELETE FROM Claim 
     WHERE (cla_id = _cla_id);
     RETURN _cla_id;
