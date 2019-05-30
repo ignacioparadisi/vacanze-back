@@ -20,7 +20,7 @@ namespace vacanze_back.VacanzeApi.Persistence
         // TODO: Obtener datos para conectar con la BD de algun archivo de configuracion
         public static PgConnection Instance =>
             _instance ??
-            (_instance = new PgConnection("localhost",
+            (_instance = new PgConnection("127.0.0.1",
                 "vacanza",
                 "vacanza",
                 "vacanza"));
@@ -62,9 +62,10 @@ namespace vacanze_back.VacanzeApi.Persistence
                 dataTable.Load(command.ExecuteReader());
                 return dataTable;
             }
-            catch (NpgsqlException)
+            catch (NpgsqlException e)
             {
-                throw new DatabaseException($"Error ejecutando funcion: {functionSignature}");
+                throw new DatabaseException(
+                    $"Error ejecutando funcion: {functionSignature}.{Environment.NewLine}{e.Message}");
             }
             finally
             {

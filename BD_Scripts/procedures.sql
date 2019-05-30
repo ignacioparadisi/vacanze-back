@@ -439,6 +439,42 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION GetHotelsByCity(city_id integer)
+    RETURNS TABLE
+            (
+                id integer,
+                name VARCHAR(100),
+                roomQuantity INTEGER,
+                roomCapacity INTEGER,
+                isActive BOOLEAN,
+                addressSpecs VARCHAR(200),
+                pricePerRoom DECIMAL,
+                website VARCHAR(100),
+                phone VARCHAR(20),
+                picture VARCHAR,
+                stars INTEGER,
+                location INTEGER
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT H.HOT_ID,
+                        H.HOT_NAME,
+                        H.hot_room_qty,
+                        H.hot_room_capacity,
+                        H.hot_is_active,
+                        H.hot_address_specs,
+                        H.hot_room_price,
+                        H.hot_website,
+                        H.hot_phone,
+                        H.HOT_PICTURE,
+                        H.HOT_STARS,
+                        H.hot_loc_fk
+                 FROM Hotel AS H, LOCATION L
+                 WHERE H.hot_loc_fk = L.LOC_ID and H.hot_loc_fk = city_id;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION GetLocationById(p_id INTEGER)
     RETURNS TABLE
             (
@@ -455,6 +491,39 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION GetCountries()
+    RETURNS TABLE
+            (
+                id integer,
+                city VARCHAR(30),
+                country VARCHAR(30)
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT X.LOC_ID, X.LOC_CITY, X.LOC_COUNTRY
+                 FROM (
+                     SELECT row_number() OVER (PARTITION BY LOC_COUNTRY ORDER BY LOC_ID) AS R, T.* FROM LOCATION T
+                      ) X
+                 WHERE X.R <= 1;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION GetCitiesByCountry(city_id integer)
+    RETURNS TABLE
+            (
+                id integer,
+                city VARCHAR(30),
+                country VARCHAR(30)
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT L.LOC_ID, L.LOC_CITY, L.LOC_COUNTRY
+                 FROM LOCATION L, (select LOC_COUNTRY FROM LOCATION WHERE LOC_ID = city_id) AS L1
+                 WHERE L.LOC_COUNTRY = L1.LOC_COUNTRY;
+END;
+$$ LANGUAGE plpgsql;
 ------------------------------------ grupo 8 --------------------------------------
 
 ---------Agregar Ship-------------------

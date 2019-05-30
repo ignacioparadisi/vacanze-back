@@ -13,20 +13,32 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
     [ApiController]
     public class LocationsController : ControllerBase
     {
-        // GET api/location/
+        // GET api/location/[?countries={}]
         [HttpGet]
         public ActionResult<IEnumerable<Location>> Get()
         {
+            return LocationRepository.GetLocations();
+        }
+
+        [HttpGet("countries")]
+        public ActionResult<IEnumerable<Location>> GetCountries()
+        {
+            return LocationRepository.GetCountries();
+        }
+
+        [HttpGet("countries/{countryId}/cities")]
+        public ActionResult<IEnumerable<Location>> GetCitiesByCountry([FromRoute] int countryId)
+        {
             try
             {
-                return LocationRepository.GetLocations();
+                LocationRepository.GetLocationById(countryId);
             }
-            catch (DatabaseException e)
+            catch (EntityNotFoundException)
             {
-                // TODO: No se deberia mandar un Ok cuando falla la base de datos, se deberia mandar
-                //       un error 500 o algo
-                return Ok(e.Message);
+                return NotFound($"Location with id {countryId} not found");
             }
+
+            return LocationRepository.GetCitiesByCountry(countryId);
         }
     }
 }

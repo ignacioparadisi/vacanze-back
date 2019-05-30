@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Persistence.Repository;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo6;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
@@ -16,20 +17,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
     {
         // GET api/hotels/[?location={location_id}]
         [HttpGet]
-        public ActionResult<IEnumerable<Hotel>> Get([FromQuery] long location = -1)
+        public ActionResult<IEnumerable<Hotel>> Get([FromQuery] int location = -1)
         {
-            try
-            {
-                if (location == -1)
-                    return HotelRepository.GetHotels();
-                return Ok($"No implementado todavia. Recibi location: {location}");
-            }
-            catch (DatabaseException e)
-            {
-                // TODO: No se deberia mandar un Ok cuando falla la base de datos, se deberia mandar
-                //       un error 500 o algo
-                return Ok(e.Message);
-            }
+            return location == -1
+                ? HotelRepository.GetHotels()
+                : HotelRepository.GetHotelsByCity(location);
         }
 
         [HttpGet("{hotelId}", Name = "GetHotelById")]
@@ -43,12 +35,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
             {
                 return NotFound();
             }
-            catch (DatabaseException e)
-            {
-                // TODO: No se deberia mandar un Ok cuando falla la base de datos, se deberia mandar
-                //       un error 500 o algo
-                return Ok(e.Message);
-            }
         }
 
         [HttpPost]
@@ -56,9 +42,20 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Hotel> Create([FromBody] Hotel hotel)
         {
-            var receivedId = HotelRepository.AddHotel(hotel);
-            hotel.Id = receivedId;
-            return CreatedAtAction("Get", "hotels", hotel);
+            try
+            {
+                LocationRepository.GetLocationById(hotel.Location.Id);
+            }
+            catch (EntityNotFoundException)
+            {
+                ModelState.AddModelError("Location",
+                    $"Invalid location ID {hotel.Location.Id} (Not found)");
+                return new BadRequestObjectResult(ModelState);
+            }
+
+            var idFromDatabase = HotelRepository.AddHotel(hotel);
+            return CreatedAtAction("Get", "hotels",
+                HotelRepository.GetHotelById(idFromDatabase));
         }
     }
 }
