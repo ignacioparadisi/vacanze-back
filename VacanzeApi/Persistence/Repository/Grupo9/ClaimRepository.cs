@@ -56,6 +56,26 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
             return ClaimList;
         }
         
+		public List<Claim> GetClaimStatus(string cla_status)
+        {
+            var ClaimList = new List<Claim>();
+            var table = new DataTable();
+            
+                table = PgConnection.Instance.ExecuteFunction("getclaimstatus(@cla_status)",cla_status);
+            
+            for (var i = 0; i < table.Rows.Count; i++)
+            {
+                var id = Convert.ToInt32(table.Rows[i][0].ToString());
+                var titulo = table.Rows[i][1].ToString();
+                var descripcion = table.Rows[i][2].ToString();
+                var status = table.Rows[i][3].ToString();
+                var claim = new Claim(id, titulo, descripcion, status);
+               ClaimList.Add(claim);
+            }
+            return ClaimList;
+        }
+        
+
         public int DeleteClaim(int claimId)
         {
             var table= PgConnection.Instance.ExecuteFunction("getclaim(@cla_id)",claimId);    

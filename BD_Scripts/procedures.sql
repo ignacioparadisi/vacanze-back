@@ -737,6 +737,23 @@ BEGIN
     FROM Claim WHERE cla_id = _cla_id;
 END;
 $$ LANGUAGE plpgsql;
+-- consultar Claim dado un status
+
+CREATE OR REPLACE FUNCTION GetClaimStatus(_cla_status varchar(30))
+RETURNS TABLE
+  (id integer,
+   title VARCHAR(30),
+   descr VARCHAR(30),
+   status VARCHAR(30)
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT
+    cla_id, cla_title,cla_descr, cla_status
+    FROM Claim WHERE cla_status = _cla_status;
+END;
+$$ LANGUAGE plpgsql;
 
 --------------------------CONSULTAR BAGGAGE por serial-------------------
 CREATE OR REPLACE FUNCTION GetBaggage(_BAG_ID integer)

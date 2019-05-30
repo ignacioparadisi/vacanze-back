@@ -53,6 +53,25 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 				return StatusCode(500);
 			}
 		}
+		
+		[HttpGet("admin/{status}")]
+		public ActionResult<IEnumerable<Claim>> GetStatus(string status)
+		{
+			try{
+				ClaimRepository conec= new ClaimRepository();
+				List<Claim> claimList = conec.GetClaimStatus(status);
+
+				return claimList; 
+			}catch (DatabaseException )
+			{            
+				return StatusCode(500);
+			}
+			catch (InvalidStoredProcedureSignatureException )
+			{
+				return StatusCode(500);
+			}
+		}
+
 
 		// Post api/Claim/	
 		[HttpPost]
