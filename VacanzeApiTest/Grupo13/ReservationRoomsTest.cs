@@ -26,6 +26,24 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             Assert.AreNotEqual(0, reservations.Count());
         }
 
+        //PIEDRERA
+        [Test]
+        public void GetReservationsRoomByIdTest()
+        {
+            ReservationRoomRepository repository = new ReservationRoomRepository();
+            Assert.IsNotNull(repository.Find(11));
+        }
+
+        /*
+        [Test]
+        public void AddReservationsRoomTest()
+        {
+            List<Entity> reservations = reservationRoomConnection.GetRoomReservations();
+          //  reservationRoomConnection.Add(reservation);
+            List<Entity> reservationslater = reservationRoomConnection.GetRoomReservations();
+            Assert.Greater(reservationslater.Count, reservations.Count);
+        }
+        */
     }
 
 }
