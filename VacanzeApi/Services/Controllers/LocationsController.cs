@@ -13,13 +13,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
     [ApiController]
     public class LocationsController : ControllerBase
     {
-        // GET api/location/
+        // GET api/location/[?countries={}]
         [HttpGet]
-        public ActionResult<IEnumerable<Location>> Get()
+        public ActionResult<IEnumerable<Location>> Get([FromQuery] bool countries = false)
         {
             try
             {
-                return LocationRepository.GetLocations();
+                return countries == false ? LocationRepository.GetLocations() : LocationRepository.GetCountries();
             }
             catch (DatabaseException e)
             {
@@ -28,5 +28,23 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
                 return Ok(e.Message);
             }
         }
+        
+        // GET api/country/[?city_of={city_id}]
+        [HttpGet]
+        public ActionResult<IEnumerable<Location>> GetCitiesByCountry([FromQuery] int city_of = -1)
+        {
+            try
+            {   
+                // TODO: Chequear cuando el id es -1
+                return LocationRepository.GetCitiesByCountry(city_of);
+            }
+            catch (DatabaseException e)
+            {
+                // TODO: No se deberia mandar un Ok cuando falla la base de datos, se deberia mandar
+                //       un error 500 o algo
+                return Ok(e.Message);
+            }
+        }
+        
     }
 }

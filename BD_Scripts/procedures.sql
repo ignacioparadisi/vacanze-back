@@ -465,7 +465,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION GetLocationByCountry(countryName VARCHAR(30))
+CREATE OR REPLACE FUNCTION GetCountries()
     RETURNS TABLE
             (
                 id integer,
@@ -475,12 +475,29 @@ CREATE OR REPLACE FUNCTION GetLocationByCountry(countryName VARCHAR(30))
 AS
 $$
 BEGIN
-    RETURN QUERY SELECT LOC_ID, LOC_CITY, LOC_COUNTRY
-                 FROM LOCATION
-                 WHERE loc_country = countryName;
+    RETURN QUERY SELECT X.LOC_ID, X.LOC_CITY, X.LOC_COUNTRY
+                 FROM (
+                     SELECT row_number() OVER (PARTITION BY LOC_COUNTRY ORDER BY LOC_ID) AS R, T.* FROM LOCATION T
+                      ) X
+                 WHERE X.R <= 1;
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION GetCitiesByCountry(city_id integer)
+    RETURNS TABLE
+            (
+                id integer,
+                city VARCHAR(30),
+                country VARCHAR(30)
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT L.LOC_ID, L.LOC_CITY, L.LOC_COUNTRY
+                 FROM LOCATION L, (select LOC_COUNTRY FROM LOCATION WHERE LOC_ID = city_id) AS L1
+                 WHERE L.LOC_COUNTRY = L1.LOC_COUNTRY;
+END;
+$$ LANGUAGE plpgsql;
 ------------------------------------ grupo 8 --------------------------------------
 
 ---------Agregar Ship-------------------
