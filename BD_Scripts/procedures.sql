@@ -498,6 +498,27 @@ BEGIN
                  WHERE L.LOC_COUNTRY = L1.LOC_COUNTRY;
 END;
 $$ LANGUAGE plpgsql;
+
+---DELETE HOTEL---
+CREATE OR REPLACE FUNCTION DeleteHotel(_HOT_ID integer)
+RETURNS integer AS
+$$
+DECLARE
+ RET_ID INTEGER;
+BEGIN
+
+    DELETE FROM HOTEL 
+    WHERE (HOT_ID = _HOT_ID)
+    returning HOT_ID into RET_ID;
+   return RET_ID;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+
+
+
 ------------------------------------ grupo 8 --------------------------------------
 
 ---------Agregar Ship-------------------
