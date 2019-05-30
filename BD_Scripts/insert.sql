@@ -230,18 +230,3 @@ INSERT INTO public.Plane(
 --------------Grupo 8 ---------------------------------
 INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'concordia', 100, 1000, 'Modelo1','Linea1', '1.jpg' );
 INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'Lmao', 500, 2000, 'Modelo2','Linea2', '3.jpg' );
-<<<<<<< HEAD
-
-
-
-
-
-
-
-
-
--- FUNCTION: public.consultayuda(integer, boolean, character varying, integer)
-
--- DROP FUNCTION public.consultayuda(integer, boolean, character varying, integer);
-=======
->>>>>>> 079f8161d56bc8cabcfe265d5ca72974244d9eda
