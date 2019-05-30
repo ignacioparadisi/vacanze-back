@@ -29,12 +29,12 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 		[Test]
 		public void PutBaggageStatusTest()
 		{
-			Baggage cs = new Baggage(1,"","");
-			cs._status = "descripcion despues";
-			controller.Put(5,cs);
-			Assert.Pass();
-			//no compila aca abajo
-			//Assert.True(claim.Value.title == cs.title && claim.Value.description== cs.description);
+			Baggage cs = new Baggage(1,"","CERADO");
+			controller.Put(3,cs);
+		    ActionResult<IEnumerable<Baggage>> enumerable = controller.Get(3);			
+			Baggage[] baggage = enumerable.Value.ToArray();
+			Assert.AreEqual(baggage[0]._status, "CERADO");
+
 		}
 
 		[TearDown]

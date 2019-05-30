@@ -31,7 +31,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 
 		[Test]
 		public void GetClaimEspecificTest() {
-			claim = controller.Get(2);
+			claim = controller.Get(1);
 			response = claim.Value.Count();
 			Assert.AreEqual(1, response);
 		}
@@ -51,11 +51,10 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 		[Test]
 		public void DeleteClaimTest()
 		{	//se pone un id que exista en la bd por lo menos el 7 
-			controller.Delete(7);
-			claim = controller.Get(7);
+			controller.Delete(4);
+			claim = controller.Get(4);
 			response = claim.Value.Count();
 			Assert.AreEqual(0, response);
-
 		}
 
 		[Test]
@@ -63,11 +62,10 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 		{
 			cs.title = "Despues del put";
 			cs.description = "descripcion despues";
-			controller.Put(5,cs);
-			claim = controller.Get(5);
-			Assert.Pass();
-			//no compila aca abajo
-			//Assert.True(claim.Value.title == cs.title && claim.Value.description== cs.description);
+			controller.Put(3,cs);
+		    ActionResult<IEnumerable<Claim>> enumerable = controller.Get(3);			
+			Claim[] claim = enumerable.Value.ToArray();
+			Assert.AreEqual(claim[0]._title, "Despues del put");
 		}
 
 		[TearDown]

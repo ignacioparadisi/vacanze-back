@@ -86,7 +86,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
         public int ModifyBaggageStatus(int BaggageId, Baggage Baggage)
         {               
             var table= PgConnection.Instance.ExecuteFunction("GetBaggage(@BAG_ID)",BaggageId);    
-            if(table.Rows.Count < 1) throw new NullClaimException("no existe esa id");                           
+            if(table.Rows.Count < 1) throw new NullBaggageException("no existe esa id");                           
             PgConnection.Instance.ExecuteFunction("modifyBaggagestatus(@bag_id,@bag_status)",BaggageId ,Baggage._status);
             return BaggageId;
         }
