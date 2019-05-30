@@ -674,11 +674,13 @@ CREATE OR REPLACE FUNCTION AddClaim(
     ) 
 RETURNS integer AS
 $$
+DECLARE
+    _cla_ID INTEGER;
 BEGIN
 
    INSERT INTO Claim(cla_title, cla_descr, cla_status) VALUES
-    ( _cla_title, _cla_description, 'ABIERTO');
-   RETURN currval('SEQ_Claim');
+    ( _cla_title, _cla_description, 'ABIERTO')RETURNING cla_ID INTO _cla_ID;
+    RETURN _cla_ID;
 END;
 $$ LANGUAGE plpgsql;
 

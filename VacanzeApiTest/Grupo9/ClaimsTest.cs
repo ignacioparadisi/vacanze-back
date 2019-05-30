@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
@@ -51,8 +52,11 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 		[Test]
 		public void DeleteClaimTest()
 		{	//se pone un id que exista en la bd por lo menos el 7 
-			controller.Delete(4);
-			claim = controller.Get(4);
+			ActionResult<IEnumerable<Claim>> enumerable = controller.Get(0);
+			Claim claimList = enumerable.Value.ToList().Find(x => x._title.Equals("Probando"));
+			
+			controller.Delete(Convert.ToInt32(claimList.Id));
+			claim = controller.Get(Convert.ToInt32(claimList.Id));
 			response = claim.Value.Count();
 			Assert.AreEqual(0, response);
 		}
@@ -66,6 +70,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 		    ActionResult<IEnumerable<Claim>> enumerable = controller.Get(3);			
 			Claim[] claim = enumerable.Value.ToArray();
 			Assert.AreEqual(claim[0]._title, "Despues del put");
+			
 		}
 
 		[TearDown]

@@ -76,12 +76,14 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
         }
         
 
-        public int DeleteClaim(int claimId)
+        public int  DeleteClaim(int claimId)
         {
             var table= PgConnection.Instance.ExecuteFunction("getclaim(@cla_id)",claimId);    
             if(table.Rows.Count < 1) throw new NullClaimException("no existe esa id");
-            PgConnection.Instance.ExecuteFunction("DeleteClaim(@cla_id)",claimId );
-            return claimId;
+            PgConnection.Instance.ExecuteFunction("deleteclaim(@cla_id)",claimId );
+
+            var id = Convert.ToInt32(table.Rows[0][0].ToString());
+            return id;
         }
 
         public int ModifyClaimStatus(int claimId, Claim claim)
