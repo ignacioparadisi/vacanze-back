@@ -832,21 +832,43 @@ LANGUAGE plpgsql;
 
 ------------------------------------fin de grupo 10---------------------------------
 ------------------------------------Grupo12-----------------------------------------
-------------------------------------Reservar Vuelo-------------------------------
-
-CREATE OR REPLACE FUNCTION AddReservationFlight(seatNum VARCHAR,timeS VARCHAR,
-id_user INTEGER,id_fli INTEGER)
+------------------------------------------------------------------------------------
+--Agregar Reserva de Vuelo
+CREATE OR REPLACE FUNCTION AddReservationFlight(seatNum VARCHAR,tim VARCHAR,numPas INTEGER,
+id_user INTEGER,pay INTEGER,id_fli INTEGER)
 RETURNS INTEGER
 AS $$
 BEGIN
-	INSERT INTO res_fli(rf_seatnum,rf_timestamp,rf_use_fk,rf_pay_fk,rf_fli_fk)
-	VALUES(seatNum,TO_TIMESTAMP(timeS,'yyyy-mm-dd hh24:mi'),id_user,null,id_fli);
+	INSERT INTO res_fli(rf_seatnum,rf_timestamp,rf_num_ps,rf_use_fk,rf_pay_fk,rf_fli_fk)
+	VALUES(seatNum,TO_TIMESTAMP(tim,'yyyy-mm-dd hh24:mi'),numPas,id_user,pay,id_fli);
     RETURN res_res_fli_id;
 END	
 $$ 
 LANGUAGE plpgsql;
 
+--Cancelar Reservar de Vuelo
+CREATE OR  REPLACE FUNCTION deleteReservationFlight(id_reservation INTEGER) RETURNS INTEGER AS $$
+  DECLARE res_id_fli INTEGER;
+  BEGIN
+    DELETE FROM RES_FLI WHERE (rf_id = id_reservation) returning rf_id INTO res_id_fli;
 
+    RETURN res_id_fli;
+  END;
+  $$ LANGUAGE plpgsql;
+
+  --retornar Reserva de vuelo de un Pasajero
+CREATE OR REPLACE FUNCTION getReservationFlight(id_user INTEGER) 
+RETURNS TABLE (
+  id INTEGER,seatNum VARCHAR,fecha_res_fli TIMESTAMP,num_Pas INTEGER,id_rf_use INTEGER,
+  id_rf_pay INTEGER, id_rf_fli INTEGER) AS $$
+  BEGIN
+    RETURN QUERY SELECT R.rf_id AS ID_RES,R.rf_seatnum AS SEATUM,R.rf_timestamp AS REFTIMESTAMP,
+    R.rf_num_ps AS NUMPAS,R.rf_use_fk AS REFUSE,R.rf_pay_fk AS REFPAY,R.res_fli AS RESFLI
+    FROM RES_FLI AS R,users AS U
+    WHERE U.USE_ID = R.rr_use_fk;
+  END;
+  $$ LANGUAGE plpgsql;
+------------------------------------Fin Grupo12--------------------------------------------------
 ----------------------------------- grupo 14 ---------------------------------
 
 --SP para insertar una reserva de hotel
