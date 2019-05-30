@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Cors;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
+using Microsoft.AspNetCore.Http;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 {
@@ -51,6 +52,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 
         // POST api/values //CREAR UN RECURSO
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Entity> Post([FromBody] ReservationAutomobile reservation)
         {
             try
