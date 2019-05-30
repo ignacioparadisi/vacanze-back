@@ -14,7 +14,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
             return new HotelBuilder();
         }
 
-        public HotelBuilder IdentifiedBy(long id)
+        public HotelBuilder IdentifiedBy(int id)
         {
             _hotel.Id = id;
             return this;

@@ -206,6 +206,8 @@ INSERT INTO hotel (hot_id, hot_name, hot_room_qty, hot_room_capacity, hot_is_act
                    hot_stars, hot_loc_fk)
 VALUES (1, 'Prueba 1', 30, 4, true, 'Alguna direccion, algun lugar', 234.5, null, null, null, 4, 1),
        (2, 'Prueba 2', 40, 2, true, 'Alguna direccion, algun lugar', 500.5, null, '+58 4253 2732',
+        null, 5, 10),
+       (3, 'Prueba 3', 40, 2, true, 'Alguna direccion, algun lugar', 500.5, null, '+58 4253 2732',
         null, 5, 10);
 
 

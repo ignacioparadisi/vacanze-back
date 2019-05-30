@@ -9,7 +9,7 @@ using vacanze_back.VacanzeApi.Persistence.Repository.Grupo9;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 {
-	[Produces("application/json")] 
+[Produces("application/json")] 
 	[Route("api/[controller]")]
 	[EnableCors("MyPolicy")]
 	[ApiController]
