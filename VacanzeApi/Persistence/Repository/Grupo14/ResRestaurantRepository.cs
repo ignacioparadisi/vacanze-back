@@ -9,7 +9,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo14{
     public class ResRestaurantRepository{
 
         /// <summary>
-        ///     Metodo para agregar un clalamo
+        ///     Metodo para agregar una reserva de restaurant
         /// </summary>
         /// <param name="reserva"></param>
         public void addReservation(Restaurant_res reserva){
@@ -26,7 +26,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo14{
         }
     
          
-         public List<Restaurant_res> getResRestaurant(int user){
+        public List<Restaurant_res> getResRestaurant(int user){
 
             var ReservationList = new List<Restaurant_res>();
             var table = PgConnection.Instance.ExecuteFunction("getResRestaurant(@userId)",user);
@@ -44,8 +44,14 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo14{
             return ReservationList;
         }
         
-    
-    
+
+        public int deleteResRestaurant(int resRestId){
+            Console.WriteLine(resRestId);
+            PgConnection.Instance.ExecuteFunction("deleteReservation(@rr_id)",resRestId );
+            Console.WriteLine("Ya corri el SP");
+            Console.WriteLine(resRestId);
+            return resRestId;
+        }
     
     
     

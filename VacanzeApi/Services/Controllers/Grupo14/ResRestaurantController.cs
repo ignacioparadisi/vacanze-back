@@ -43,7 +43,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 				ResRestaurantRepository conec= new ResRestaurantRepository();
 				List<Restaurant_res> resRestaurantList = conec.getResRestaurant(userid);
                 Console.WriteLine("Fuera del SP");
-                Console.WriteLine(resRestaurantList);
+                Console.WriteLine(resRestaurantList.ToArray());
 				return resRestaurantList; 
 			}
             catch (DatabaseException ){            
@@ -53,6 +53,32 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 				return StatusCode(500);
 			}
 		}
+
+		//api/ResRestaurant/id
+		[HttpDelete("{id}")]
+		public ActionResult<string> Delete(int resRestid)
+		{
+			try{
+				ResRestaurantRepository conec= new ResRestaurantRepository();  
+				int id_eliminado = conec.deleteResRestaurant(resRestid); 
+				return Ok("Eliminado exitosamente");
+			}catch (DatabaseException )
+			{            
+				return StatusCode(500);
+			}
+			catch (InvalidStoredProcedureSignatureException){
+
+				return StatusCode(500);
+			}
+			catch (NullClaimException ){
+
+				ResponseError mensaje = new ResponseError();
+				mensaje.error="No existe el elemento que quiere Eliminar";
+				return StatusCode(500,mensaje);
+			}
+
+		}
+		
 
 	}
 
