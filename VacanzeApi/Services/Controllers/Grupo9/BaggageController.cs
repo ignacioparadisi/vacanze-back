@@ -62,6 +62,23 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 				return StatusCode(500);
 			}
 		}
+		[HttpGet("admin/getStatus/{status}")]
+		public ActionResult<IEnumerable<Baggage>> GetStatus(string status)
+		{
+			try{
+				BaggageRepository conec= new BaggageRepository();
+				List<Baggage> BaggageList = conec.GetBaggageStatus(status);
+
+				return BaggageList; 
+			}catch (DatabaseException )
+			{            
+				return StatusCode(500);
+			}
+			catch (InvalidStoredProcedureSignatureException )
+			{
+				return StatusCode(500);
+			}
+		}
 
 		//api/Clain/status/5
 		[HttpPut("{id}")]

@@ -66,6 +66,22 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
             return BaggageList;
         }
 
+		public List<Baggage> GetBaggageStatus(string bag_status)
+        {
+            var BaggageList = new List<Baggage>();
+            var table = new DataTable();
+            
+            table = PgConnection.Instance.ExecuteFunction("getBaggagestatus(@bag_status)",bag_status);
+            for (var i = 0; i < table.Rows.Count; i++)
+            {
+                var id = Convert.ToInt32(table.Rows[i][0].ToString());
+                var descripcion = table.Rows[i][1].ToString();
+                var status = table.Rows[i][2].ToString();
+                var Baggage = new Baggage(id, descripcion, status);
+                BaggageList.Add(Baggage);
+            }
+            return BaggageList;
+        }
  
         public int ModifyBaggageStatus(int BaggageId, Baggage Baggage)
         {               

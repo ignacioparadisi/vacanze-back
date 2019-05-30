@@ -811,6 +811,25 @@ BEGIN
     --FROM BAGGAGE WHERE BAG_ID = _BAG_ID;
 END;
 $$ LANGUAGE plpgsql;
+
+-- consultar baggage dado un status
+
+CREATE OR REPLACE FUNCTION GetBaggageStatus(_bag_status varchar(30))
+RETURNS TABLE
+  (id integer,
+   descr VARCHAR(30),
+   status VARCHAR(30)
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT
+    cla_id,cla_descr, cla_status
+    FROM Claim WHERE cla_status = _bag_status;
+    --HACERLO CON TABLA EQUIPAJE
+END;
+$$ LANGUAGE plpgsql;
+
 ---------MODIFICAR EQUIPAJE -----------------
 CREATE OR REPLACE FUNCTION modifyBaggagestatus( 
     _bag_id integer,
