@@ -58,20 +58,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
                 HotelRepository.GetHotelById(idFromDatabase));
         }
 
-
-        [HttpDelete("{id}")]
-        public ActionResult<int> Delete(int id)
+        [HttpDelete("{id}", Name = "DeleteHotel")]
+        public ActionResult Delete([FromRoute] int id)
         {
-            try
-            {
-                var deletedId = HotelRepository.DeleteHotel(id);
-                return Ok(new { id = deletedId });
-            }
-            catch (EntityNotFoundException)
-            {
-                return NotFound();
-            }
+            HotelRepository.DeleteHotel(id);
+            return Ok();
         }
-
     }
 }
