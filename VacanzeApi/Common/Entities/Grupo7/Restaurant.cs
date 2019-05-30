@@ -3,18 +3,19 @@ using Newtonsoft.Json;
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo7
 {
     public class Restaurant : Entity
-    {
+    { 
         // TODO: Cuando se cree la clase Lugar, implementar esta parte
         // private Lugar _direccion;
 
         [JsonConstructor]
-        public Restaurant(long id, string name, int capacity,bool isActive, string specialty, 
-                          long price, string businessName, string picture, 
+        public Restaurant(long id, string name, int capacity,bool isActive,decimal qualify, string specialty, 
+                          decimal price, string businessName, string picture, 
                           string description, string phone, int location, string address) : base(id)
         {
             Name = name;
             Capacity = capacity;
             IsActive = isActive;
+            Qualify = qualify;
             Specialty = specialty;
             Price = price;
             BusinessName = businessName;
@@ -26,13 +27,14 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo7
         }
 
         
-        public Restaurant(string name, int capacity,bool isActive, string specialty, 
-                          long price, string businessName, string picture, 
+        public Restaurant(string name, int capacity,bool isActive, decimal qualify, string specialty, 
+                          decimal price, string businessName, string picture, 
                           string description, string phone, int location, string address) : base(0)
         {
             Name = name;
             Capacity = capacity;
             IsActive = isActive;
+            Qualify = qualify;
             Specialty = specialty;
             Price = price;
             BusinessName = businessName;
@@ -46,8 +48,9 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo7
         public string Name  { get; }
         public int Capacity  { get; }
         public bool IsActive { get; }
+        public decimal Qualify { get; }
         public string Specialty { get; }
-        public long Price { get; }
+        public decimal Price { get; }
         public string BusinessName { get; }
         public string Picture { get; }
         public string Description { get; }

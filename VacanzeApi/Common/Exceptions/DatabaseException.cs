@@ -4,10 +4,8 @@ namespace vacanze_back.VacanzeApi.Common.Exceptions
 {
     public class DatabaseException : Exception
     {
-        string _Menssage;
-        public DatabaseException(string menssage)
+        public DatabaseException(string message) : base(message)
         {
-            _Menssage = menssage;
         }
     }
 }
