@@ -682,13 +682,14 @@ END;
 $$ LANGUAGE plpgsql;
 ------------------------------------fin de grupo 8---------------------------------
 
--- grupo 9 -----------------------------------------
--------------AGREGAR Claim-----------------
 
+------------------------------------ grupo 9 ----------------------------------------
+
+--------------------------------------AGREGAR RECLAMO----------------------------------
 CREATE OR REPLACE FUNCTION AddClaim(
     _cla_title VARCHAR(20), 
     _cla_description VARCHAR(30),
-	_bag_id int
+	  _bag_id int
     ) 
 RETURNS integer AS
 $$
@@ -697,15 +698,16 @@ DECLARE
 BEGIN
 
    INSERT INTO Claim(cla_title, cla_descr, cla_status) VALUES
-    ( _cla_title, _cla_description, 'ABIERTO')RETURNING cla_ID INTO _cla_ID;
-	if (_cla_ID is not null)then 
-	update BAGGAGE set bag_status = false , bag_cla_fk= _cla_id where bag_id = _bag_id;
-	end if;
-    RETURN _cla_ID;
+   ( _cla_title, _cla_description, 'ABIERTO')RETURNING cla_ID INTO _cla_ID;
+	
+    if (_cla_ID is not null)then 
+	    update BAGGAGE set bag_status = 'EXTRAVIADO' , bag_cla_fk= _cla_id where bag_id = _bag_id;
+	  end if;
+   RETURN _cla_ID;
 END;
 $$ LANGUAGE plpgsql;
 
----------MODIFICAR Reclamo-----------------
+----------------------------------------MODIFICAR RECLAMO -----------------------------
 CREATE OR REPLACE FUNCTION ModifyClaimStatus( 
     _cla_id integer,
     _cla_status VARCHAR(35))
@@ -713,43 +715,47 @@ RETURNS integer AS
 $$
 BEGIN
 	if(_cla_status ='CERRADO') then
-	UPDATE BAGGAGE set bag_status=false where bag_cla_fk= _cla_id;
+	  UPDATE BAGGAGE set bag_status='ENCONTRADO' where bag_cla_fk= _cla_id;
 	end if;
 	if(_cla_status = 'ABIERTO') then
-	UPDATE BAGGAGE set bag_status=true where bag_cla_fk= _cla_id;
+	  UPDATE BAGGAGE set bag_status='EXTRAVIADO' where bag_cla_fk= _cla_id;
 	end if;
-   UPDATE Claim SET cla_status= _cla_status
-    WHERE (cla_id = _cla_id);
-   RETURN _cla_id;
+  UPDATE Claim SET cla_status= _cla_status
+  WHERE (cla_id = _cla_id);
+  RETURN _cla_id;
 END;
 $$ LANGUAGE plpgsql;
--- modificar el titulo del reclam y la descripcion
+
+----------------------- MODIFICAR TITUO Y DESCRIPCION DEL RECLAMO --------------------
 CREATE OR REPLACE FUNCTION ModifyClaimTitle( 
 	_cla_id integer,
-    _cla_title VARCHAR(35),
-	_cla_descr VARCHAR(30))
+  _cla_title VARCHAR(35),
+	_cla_descr VARCHAR(35))
 RETURNS integer AS
 $$
 BEGIN
 
-   UPDATE Claim SET cla_title= _cla_title, cla_descr= _cla_descr
+  UPDATE Claim SET cla_title= _cla_title, cla_descr= _cla_descr
 	WHERE (cla_id = _cla_id);
-   RETURN _cla_id;
+  RETURN _cla_id;
 END;
 $$ LANGUAGE plpgsql;
--------------------------------------ELIMAR Reclamo-----------------------------
 
+-------------------------------------ELIMAR RECLAMO-----------------------------
 CREATE OR REPLACE FUNCTION DeleteClaim(_cla_id integer)
 RETURNS integer AS
 $$
 BEGIN
 	Update BAGGAGE set bag_cla_fk= null where bag_cla_fk=_cla_id;
-    DELETE FROM Claim 
-    WHERE (cla_id = _cla_id);
-    RETURN _cla_id;
+  
+  DELETE FROM Claim 
+  WHERE (cla_id = _cla_id);
+  
+  RETURN _cla_id;
 END;
 $$ LANGUAGE plpgsql;
---------------------------CONSULTAR Claim--------------------
+
+--------------------------CONSULTAR RECLAMO ------------------------------------
 CREATE OR REPLACE FUNCTION GetClaim(_cla_id integer)
 RETURNS TABLE
   (id integer,
@@ -765,8 +771,8 @@ BEGIN
     FROM Claim WHERE cla_id = _cla_id;
 END;
 $$ LANGUAGE plpgsql;
--- consultar Claim dado un status
 
+---------------------- CONSULTAR RECLAMO SEGUN ESTATUS -------------------------
 CREATE OR REPLACE FUNCTION GetClaimStatus(_cla_status varchar(30))
 RETURNS TABLE
   (id integer,
@@ -783,13 +789,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
---------------------------CONSULTAR BAGGAGE por serial-------------------
+--------------------------CONSULTAR EQUIPAJE POR SERIAL-------------------------
 CREATE OR REPLACE FUNCTION GetBaggage(_BAG_ID integer)
 RETURNS TABLE
   (id integer,
    descr VARCHAR(30),
-   status boolean
+   status VARCHAR(30)
   )
 AS
 $$
@@ -800,9 +805,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
---------------------------CONSULTAR Baggage por pasaporte--------------------
-
-CREATE OR REPLACE FUNCTION GetBaggageDocumentPasaport(_users_document_id integer)
+--------------------------CONSULTAR EQUIPAJE POR SERIAL -------------------------
+CREATE OR REPLACE FUNCTION GetBaggageDocumentPasaport(_users_document_id varchar(30))
 RETURNS TABLE
   (id integer,
    descr VARCHAR(30),
@@ -811,17 +815,13 @@ RETURNS TABLE
 AS
 $$
 BEGIN    
-    RETURN QUERY SELECT
-    cla_id, cla_descr, cla_status
-    FROM Claim WHERE cla_id = _BAG_ID;
-    RETURN QUERY select bag_id, bag_status, bag_descr from Baggage , res_fli, users
-
-where bag_res_fli_fk =rf_id and rf_use_fk =use_id  and use_document_id=_users_document_id;
+    RETURN QUERY SELECT 
+    bag_id, bag_descr, bag_status from Baggage , res_fli, users
+    where bag_res_fli_fk =rf_id and rf_use_fk =use_id  and use_document_id=_users_document_id;
 END;
 $$ LANGUAGE plpgsql;
 
--- consultar baggage dado un status
-
+------------------- CONSUTAR EQUIPAJE SEGUN ESTATUS------------------------------------
 CREATE OR REPLACE FUNCTION GetBaggageStatus(_bag_status varchar(30))
 RETURNS TABLE
   (id integer,
@@ -832,28 +832,36 @@ AS
 $$
 BEGIN
     RETURN QUERY SELECT
-    cla_id,cla_descr, cla_status
-    FROM Claim WHERE cla_status = _bag_status;
-    --HACERLO CON TABLA EQUIPAJE
+    BAG_id, BAG_descr, BAG_status
+    FROM Baggage WHERE BAG = _bag_status;
 END;
 $$ LANGUAGE plpgsql;
 
----------MODIFICAR EQUIPAJE -----------------
+---------------------------- MODIFICAR ESTATUS DE EQUIPAJE -----------------------
 CREATE OR REPLACE FUNCTION modifyBaggagestatus( 
     _bag_id integer,
-    _bag_status VARCHAR(35))
+    _bag_status VARCHAR(30))
 RETURNS integer AS
 $$
+DECLARE
+    _cla_ID INTEGER;
 BEGIN
-   UPDATE Claim SET cla_status= _bag_status
-    WHERE (cla_id = _BAG_ID);
+	if(_bag_status = 'RECLAMADO') then
+   UPDATE Baggage SET bag_status = _bag_status 
+   WHERE (bag_id = _BAG_ID) RETURNING bag_cla_fk INTO _cla_ID;
+
+   if(_cla_ID is not null) then
+         UPDATE Baggage SET bag_cla_fk = null 
+         WHERE (bag_id = _BAG_ID);
+  
+         delete FROM CLAIM where cla_ID= _cla_ID;
+   end if;
    RETURN _BAG_ID;
-   --UPDATE BAGGAGE SET bag_status= _bag_status
-    --WHERE (bag_id = _BAG_ID);
+  end if;
+
 END;
 $$ LANGUAGE plpgsql;
-
-------------------------------------fin de grupo 9---------------------------------
+------------------------------------FIN DEL GRUPO 9--------------------------------
 
 -----------------------------------Grupo 5 ------------------------------------------------
 -------------AGREGAR AUTO-----------------

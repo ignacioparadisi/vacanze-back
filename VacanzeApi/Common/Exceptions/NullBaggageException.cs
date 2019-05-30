@@ -4,10 +4,9 @@ namespace vacanze_back.VacanzeApi.Common.Exceptions
 {
     public class NullBaggageException : Exception
     {
-        string _Menssage;
-        public NullBaggageException(string menssage)
+        public NullBaggageException(string menssage): base(menssage)
         {
-            _Menssage = menssage;
+           
         }
     }
 }
