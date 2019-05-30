@@ -28,7 +28,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
 
         private static Location ExtractLocationFromRow(DataRow row)
         {
-            var id = Convert.ToInt64(row[0]);
+            var id = Convert.ToInt32(row[0]);
             var city = row[1].ToString();
             var country = row[2].ToString();
             return new Location(id, city, country);
