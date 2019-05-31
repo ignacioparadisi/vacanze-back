@@ -12,19 +12,18 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo12
     public class  FlightResConnection 
     {
 
-        public int AddReservationFlight(Entity entity){
+        public void AddReservationFlight(Entity entity){
               
             var resflight=(FlightRes) entity; 
             try{
-
-                var capacity= PgConnection.Instance.ExecuteFunction("GetCapacityFlight(@id_flight)",id);
-                int i= Convert.ToInt32(capacity.ToString()); 
-                return i;
-                /* 
-                 PgConnection.Instance.ExecuteFunction(
+                //var table = new DataTable();
+                //table= PgConnection.Instance.ExecuteFunction("GetCapacityFlight(@id_flight)",resflight._id_fli);
+                 //Console.WriteLine("Estoy aqui++++:",tablegit;
+                 
+                  PgConnection.Instance.ExecuteFunction(
                  "AddReservationFlight(@seatNum,@tim,@numPas,@id_user,@pay,@id_fli)",
                  resflight._seatNum,resflight._timestamp,resflight._numPas,
-                 resflight._id_user,resflight._id_pay,resflight._id_fli);*/
+                 resflight._id_user,resflight._id_pay,resflight._id_fli);
 
             } catch(DBFailedException e){
             
