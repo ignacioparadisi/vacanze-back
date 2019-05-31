@@ -1,24 +1,27 @@
-using Newtonsoft.Json;
-
 namespace vacanze_back.VacanzeApi.Common.Entities
 {
-    public class Location : Entity
+    public class Location
     {
-    
-        [JsonConstructor]
-        public Location(long id, string city, string country) : base(id)
+        public Location()
         {
-            City = city;
-            Country = country;
         }
 
-        public Location(string city, string country) : base(0)
+        public Location(int id, string country, string city)
         {
-            City = city;
+            Id = id;
             Country = country;
+            City = city;
         }
 
-        public string Country { get; }
-        public string City { get; }
+        public Location(string country, string city)
+        {
+            Id = 0;
+            Country = country;
+            City = city;
+        }
+
+        public int Id { get; set; }
+        public string Country { get; set; }
+        public string City { get; set; }
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo8;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
@@ -19,30 +20,44 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
     {
         // GET/Cruisers
         [HttpGet]
-        public ActionResult<IEnumerable<Cruiser>> GetCruisers(int id)
+        public ActionResult<IEnumerable<Cruiser>> GetCruisers()
         {
             try
             {
-                var CruiserList=  CruiserConnection.GetCruisers();
-                return Ok(JsonConvert.SerializeObject(CruiserList));
+                var cruiserList = CruiserRepository.GetCruisers();
+                return Ok(cruiserList);
             }
-            catch (IndexOutOfRangeException)
+            catch (CruiserNotFoundException e)
             {
-                return StatusCode(500,"No hay cruceros registrados");
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
+            }
+            catch (DatabaseException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
             }
         }
+
         // GET/Cruiser/{id}
         [HttpGet("{id}")]
-        public IActionResult GetCruiser(int id)
+        public ActionResult<Cruiser> GetCruiser(int id)
         {
             try
             {
-                 Cruiser cruiser=  CruiserConnection.GetCruiser(id);
-                 return Ok(JsonConvert.SerializeObject(cruiser));
+                Cruiser cruiser = CruiserRepository.GetCruiser(id);
+
+                return Ok(cruiser);
             }
-            catch (IndexOutOfRangeException)
+            catch (CruiserNotFoundException e)
             {
-                return StatusCode(500,"El Crusero no fue encontrado");
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
+            }
+            catch (DatabaseException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
             }
         }
 
@@ -50,29 +65,116 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         [HttpPost]
         public ActionResult<Cruiser> PostCruiser([FromBody] Cruiser cruiser)
         {
-            Console.WriteLine(cruiser);
-            var id = CruiserConnection.AddCruiser(cruiser);
-            var savedCruiser = new Cruiser(id,cruiser.Name,cruiser.Status,cruiser.Capacity,cruiser.LoadingShipCap,cruiser.Model,cruiser.Line);
-            return StatusCode(200,savedCruiser);
+            try
+            {
+                cruiser.Validate();
+                var id = CruiserRepository.AddCruiser(cruiser);
+                var savedCruiser = new Cruiser(id, cruiser.Name, cruiser.Status, cruiser.Capacity,
+                    cruiser.LoadingShipCap, cruiser.Model, cruiser.Line, cruiser.Picture);
+                return Ok(savedCruiser);
+            }
+            catch (InvalidAttributeException e)
+            {
+                var errorMsg = new ErrorMessage(e.Message);
+                return BadRequest(errorMsg);
+            }
+            catch (DatabaseException e)
+            {
+                ErrorMessage errorMsg = new ErrorMessage(e.Message);
+                return BadRequest(errorMsg);
+            }
         }
-        
-//    
-//        }
-//        [HttpPut]
-//        public Cruiser PutCruiser(Cruiser cruiser)
-//        {
-//         
-////      }
-/// 
+
+
+        [HttpPut]
+        public ActionResult<Cruiser> PutCruiser([FromBody] Cruiser cruiser)
+        {
+            try
+            {
+                cruiser.Validate();
+                var updatedCruiser = CruiserRepository.UpdateCruiser(cruiser);
+                return Ok(updatedCruiser);
+            }
+            catch (InvalidAttributeException e)
+            {
+                ErrorMessage errorMsg = new ErrorMessage(e.Message);
+                return BadRequest(errorMsg);
+            }
+            catch (CruiserNotFoundException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
+            }
+            catch (NullCruiserException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
+            }
+            catch (DatabaseException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
+            }
+        }
+
         [HttpDelete("{id}")]
         public ActionResult<int> DeleteCruiser(int id)
         {
-            var deletedid = CruiserConnection.DeleteCruiser(id);
-            if (deletedid.Equals(-1))
+            try
             {
-                return StatusCode(500, "El crucero no existe");
+                var deletedId = CruiserRepository.DeleteCruiser(id);
+                return Ok(new {id = deletedId});
             }
-            return StatusCode(200, "Eliminado satisfactoriamente");
+            catch (CruiserNotFoundException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
+            }
+            catch (DatabaseException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
+            }
+        }
+
+        [HttpGet("{cruiserId}/Layover")]
+        public ActionResult<IEnumerable<Layover>> GetLayovers(int cruiserId)
+        {
+            try
+            {
+                var layovers = CruiserRepository.GetLayovers(cruiserId);
+                return Ok(layovers);
+            }
+            catch (LayoverNotFoundException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
+            }
+            catch (DatabaseException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
+            }
+        }
+
+        [HttpDelete("Layover/{layover_id}")]
+        public ActionResult<int> DeleteLayover(int layoverid)
+        {
+            try
+            {
+                var deletedId = CruiserRepository.DeleteLayover(layoverid);
+                return Ok(deletedId);
+            }
+            catch (LayoverNotFoundException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
+            }
+            catch (DatabaseException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
+            }
         }
     }
 }
