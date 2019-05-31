@@ -127,7 +127,21 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
             var user = UserRepository.AddUser(UserTest);
             Assert.Throws<RepeatedEmailException>(() => UserRepository.VerifyEmail("cliente1@vacanze.com"));
         }
-        
+
+        [Test]
+        public void GetUserTest()
+        {
+            var controller = new UsersController();
+            ActionResult<User> user = controller.Get(1);
+            Assert.True((user.Value.Id == 1) && (user.Value.Roles.Count > 0));
+        }
+
+        [Test]
+        public void UserNotFoundTest()
+        {
+            var controller = new UsersController();
+            Assert.Throws<UserNotFoundException>(() => UserRepository.GetUserById(100));
+        }
 
         [TearDown]
         public void DeleteUserTest()
