@@ -27,11 +27,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
                     return RestaurantRepository.GetRestaurants();
                 return Ok($"No implementado todavia. Recibi location: {location}");
             }
-            catch (DatabaseException e)
+            catch (GetRestaurantExcepcion e)
             {
                 // TODO: No se deberia mandar un Ok cuando falla la base de datos, se deberia mandar
                 //       un error 500 o algo
-                return Ok(e.Message);
+                return StatusCode(500, "No se pudieron obtener los restaurants");
             }
         }
 
@@ -48,6 +48,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
             {
                 return StatusCode(500,"El Restaurant no fue encontrado");
             }
+            catch(GetRestaurantExcepcion)
+            {
+                return StatusCode(500, "El restaurant no pudo ser encontrado");
+            }
         }
 
         [HttpPost]
@@ -55,35 +59,51 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Restaurant> Create([FromBody] Restaurant restaurant)
         {
-            var receivedId = RestaurantRepository.AddRestaurant(restaurant);
-            var savedrestaurant = new Restaurant(receivedId, restaurant.Name, restaurant.Capacity, restaurant.IsActive,
-                                                 restaurant.Qualify, restaurant.Specialty, restaurant.Price, restaurant.BusinessName, 
-                                                 restaurant.Picture, restaurant.Description, restaurant.Phone,
-                                                 restaurant.Location,
-                                                 restaurant.Address);
-            return CreatedAtAction("Get", "restaurants", savedrestaurant); 
+            try
+            {
+                var receivedId = RestaurantRepository.AddRestaurant(restaurant);
+                var savedrestaurant = new Restaurant(receivedId, restaurant.Name, restaurant.Capacity, restaurant.IsActive,
+                                             restaurant.Qualify, restaurant.Specialty, restaurant.Price, restaurant.BusinessName, 
+                                             restaurant.Picture, restaurant.Description, restaurant.Phone,
+                                             restaurant.Location,
+                                             restaurant.Address);
+                return CreatedAtAction("Get", "restaurants", savedrestaurant); 
+            }
+            catch(AddRestaurantException)
+            {
+                return StatusCode(500, "No se pudo crear el restaurant");
+            }
+            
         }
 
         [HttpPut]
          public ActionResult<Restaurant> PutRestaurant([FromBody] Restaurant restaurant)
          {
-             var UpdatedRestaurant = RestaurantRepository.UpdateRestaurant(restaurant);
-             if (UpdatedRestaurant.Id.Equals(-1))
+             try
              {
-                 return BadRequest("Error actualizando crucero");
+                var UpdatedRestaurant = RestaurantRepository.UpdateRestaurant(restaurant);
+                return StatusCode(200, restaurant);
              }
-             return StatusCode(200, restaurant);
+             catch(UpdateRestaurantException)
+             {
+                 return StatusCode(500, "No se pudo actualizar el restaurant");
+             }
+            
          }
 
         [HttpDelete("{id}")]
         public ActionResult<int> DeleteRestaurant(int id)
         {
-            var deletedid = RestaurantRepository.DeleteRestaurant(id);
-            if (deletedid.Equals(-1))
+            try
+            {
+                var deletedid = RestaurantRepository.DeleteRestaurant(id);
+                return StatusCode(200, "Eliminado satisfactoriamente");
+            }
+            catch(DeleteRestaurantException)
             {
                 return StatusCode(500, "El restaurante no existe");
             }
-            return StatusCode(200, "Eliminado satisfactoriamente");
+            
         }
 
     }

@@ -10,14 +10,12 @@ using System;
 namespace vacanze_back.VacanzeApiTest.Grupo7
 {
 	[TestFixture]
-	public class ClaimsTest
+	public class RestaurantTest
 	{
-		ActionResult<IEnumerable<Restaurant>> restaurant;
 		RestaurantsController controller;
 		Restaurant res;
         Restaurant secondRes;
         List<Restaurant> restaurantList;
-        List<Restaurant> secondRestaurantList;
 		long id;
 		[SetUp]
 		public void setup()

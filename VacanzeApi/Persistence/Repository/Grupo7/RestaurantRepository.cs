@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
+using vacanze_back.VacanzeApi.Common.Exceptions;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
 {
@@ -8,15 +9,21 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
     {
         public static long AddRestaurant(Restaurant restaurant)
         {
-            
-            var table = PgConnection.Instance.ExecuteFunction(
+            try
+            {
+                var table = PgConnection.Instance.ExecuteFunction(
                 "addrestaurant(@name,@capacity,@isActive,@qualify,@specialty,@price,@businessName,@picture,@description,@phone,@location,@address)",
                 restaurant.Name, restaurant.Capacity, restaurant.IsActive, restaurant.Qualify, restaurant.Specialty, restaurant.Price, restaurant.BusinessName, 
                 restaurant.Picture, restaurant.Description, restaurant.Phone, restaurant.Location, restaurant.Address
-            );
-
-            var savedId = Convert.ToInt64(table.Rows[0][0]);
-            return savedId;
+                );
+                var savedId = Convert.ToInt64(table.Rows[0][0]);
+                return savedId;
+            }
+            catch(DatabaseException)
+            {
+                throw new AddRestaurantException("No se pudo agregar el restaurant");
+            }
+            
         }
 
         public static Restaurant UpdateRestaurant(Restaurant restaurant)
@@ -33,41 +40,50 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
             }
             catch (InvalidOperationException)
             {
-                restaurant.Id = -1;
-                return restaurant;
+                throw new UpdateRestaurantException("Error, no se pudo actualizar el restaurant");
             }
             catch (InvalidCastException)
             {
-                restaurant.Id = -1;
-                return restaurant;
+                throw new UpdateRestaurantException("Error, no se pudo actualizar el restaurant");
+            }
+            catch (DatabaseException)
+            {
+                throw new UpdateRestaurantException("Error, no se pudo conectar con la base de datos");
             }
            
         }
 
         public static List<Restaurant> GetRestaurants()
         {
-            var table = PgConnection.Instance.ExecuteFunction("getrestaurants()");
-            var restaurantList = new List<Restaurant>();
-            for (var i = 0; i < table.Rows.Count; i++)
+            try
             {
-                var id = Convert.ToInt64(table.Rows[i][0]);
-                var name = table.Rows[i][1].ToString();
-                var capacity = Convert.ToInt32(table.Rows[i][2]); 
-                var isActive = Convert.ToBoolean(table.Rows[i][3]);
-                var qualify = Convert.ToDecimal(table.Rows[i][4]);
-                var specialty = table.Rows[i][5].ToString();
-                var price = Convert.ToDecimal(table.Rows[i][6]);
-                var businessName = table.Rows[i][7].ToString();
-                var picture = table.Rows[i][8].ToString();
-                var description = table.Rows[i][9].ToString();
-                var phone = table.Rows[i][10].ToString();
-                var location = Convert.ToInt32(table.Rows[i][11]);
-                var address = table.Rows[i][12].ToString();
-                var restaurant = new Restaurant(id, name, capacity, isActive, qualify, specialty, price, businessName, picture, description, phone, location, address);
-                restaurantList.Add(restaurant);
-            }
+                var table = PgConnection.Instance.ExecuteFunction("getrestaurants()");
+                var restaurantList = new List<Restaurant>();
+                for (var i = 0; i < table.Rows.Count; i++)
+                {
+                    var id = Convert.ToInt64(table.Rows[i][0]);
+                    var name = table.Rows[i][1].ToString();
+                    var capacity = Convert.ToInt32(table.Rows[i][2]); 
+                    var isActive = Convert.ToBoolean(table.Rows[i][3]);
+                    var qualify = Convert.ToDecimal(table.Rows[i][4]);
+                    var specialty = table.Rows[i][5].ToString();
+                    var price = Convert.ToDecimal(table.Rows[i][6]);
+                    var businessName = table.Rows[i][7].ToString();
+                    var picture = table.Rows[i][8].ToString();
+                    var description = table.Rows[i][9].ToString();
+                    var phone = table.Rows[i][10].ToString();
+                    var location = Convert.ToInt32(table.Rows[i][11]);
+                    var address = table.Rows[i][12].ToString();
+                    var restaurant = new Restaurant(id, name, capacity, isActive, qualify, specialty, price, businessName, picture, description, phone, location, address);
+                    restaurantList.Add(restaurant);
+                }
 
-            return restaurantList; 
+                return restaurantList; 
+            }
+            catch(DatabaseException){
+                throw new GetRestaurantExcepcion("No se pudieron obtener los restaurants existentes");
+            }
+            
         }
         public static Restaurant GetRestaurant(int restaurant_id)
         {
@@ -91,10 +107,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
                 Restaurant restaurant = new Restaurant(id, name, capacity, isActive, qualify, specialty, price, businessName, picture, description, phone, location, address);
                 return restaurant;
             }
-            catch (Exception e)
+            catch (DatabaseException)
             {
-                Console.WriteLine(e);
-                throw;
+                throw new GetRestaurantExcepcion("No se pudo obtener el restaurant solicitado");
             }
         }
 
@@ -108,7 +123,11 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
             }
             catch (InvalidCastException)
             {
-                return -1;
+                throw new DeleteRestaurantException("No se pudo eliminar el restaurant");
+            }
+            catch (DatabaseException)
+            {
+                throw new DeleteRestaurantException("No se pudo conectar con la base de datos");
             }
         }
     }
