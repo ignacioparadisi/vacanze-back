@@ -635,16 +635,16 @@ CREATE OR REPLACE FUNCTION GetCruise(_cru_id integer)
 RETURNS TABLE
   (id integer,
    ship VARCHAR(30),
-   departure_date VARCHAR(30),
-   arrival_date VARCHAR(30),
-   price VARCHAR(30)
+   departure_date TIMESTAMP,
+   arrival_date TIMESTAMP,
+   price DECIMAL
   )
 AS
 $$
 BEGIN
     RETURN QUERY SELECT
-    cru_id, cru_shi_fk, cru_departuredate, cru_arrivaldate, cru_price
-    FROM Cruise WHERE cru_id = _cru_id;
+    c.cru_id, s.shi_name, c.cru_departuredate, c.cru_arrivaldate, c.cru_price
+    FROM Cruise c, Ship s WHERE c.cru_id = _cru_id and s.shi_id = c.cru_shi_fk;
 END;
 $$ LANGUAGE plpgsql;
 ---------Retorna todos los Cruceros--------
