@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Services.Controllers.Grupo9;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo9;
+using vacanze_back.VacanzeApi.Common.Exceptions;
+
 namespace vacanze_back.VacanzeApiTest.Grupo9
 {
 	[TestFixture]
@@ -11,6 +14,8 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 	{
 		ActionResult<IEnumerable<Baggage>> Baggage;
 		BaggageController controller;
+		
+		BaggageRepository conec;
 		int response;
 		[SetUp]
 		public void setup()
@@ -27,6 +32,21 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 		}
 
 		[Test]
+		public void GetBaggagestatusTest()
+		{
+			Baggage =controller.GetStatus("EXTRAVIADO");
+			response = Baggage.Value.Count();
+			Assert.True(response >1);		
+		}
+
+		public void GetBaggageGetDocumentTest()
+		{
+			Baggage =controller.GetDocument("1");
+			response = Baggage.Value.Count();
+			Assert.True(response >= 0);		
+		}
+
+		[Test]
 		public void PutBaggageStatusTest()
 		{
 			Baggage cs = new Baggage(1,"","CERADO");
@@ -35,6 +55,14 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 			Baggage[] baggage = enumerable.Value.ToArray();
 			Assert.AreEqual(baggage[0]._status, "CERRADO");
 
+		}
+
+		[Test]
+		public void NullBaggageExceptionModifyBaggageStatusTest()
+		{
+			var p= new Baggage(1,"UNITARIA","EXTRAVIADO");
+
+			Assert.Throws<NullBaggageException>(() => conec.ModifyBaggageStatus(-1,p));
 		}
 
 		[TearDown]

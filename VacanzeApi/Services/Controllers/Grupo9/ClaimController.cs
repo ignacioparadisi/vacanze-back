@@ -62,7 +62,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 		// Get para la tabla equipaje segun su documento de identidad
 		/// </summary>
 		[HttpGet("document/{id}")]
-		public ActionResult<IEnumerable<Baggage>> Get(string id)
+		public ActionResult<IEnumerable<Claim>> GetDocument(string id)
 		{
 			try
 			{                 

@@ -82,8 +82,14 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 		{
 			claim =controller.GetStatus("ABIERTO");
 			response = claim.Value.Count();
-			Assert.True(response >1);
-			
+			Assert.True(response >1);		
+		}
+
+		public void GetClaimGetDocumentTest()
+		{
+			claim =controller.GetDocument("1");
+			response = claim.Value.Count();
+			Assert.True(response >= 0);		
 		}
 		
 		[Test]
