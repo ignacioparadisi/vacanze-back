@@ -31,11 +31,21 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
         }
 
         // GET api/values/5
-//        [HttpGet("{id}")]
-//        public ActionResult<string> Get(int id)
-//        {
-//            return "value";
-//        }
+        [HttpGet("{id}")]
+        public ActionResult<User> Get(int id)
+        {
+            User user;
+            try
+            {
+                user = UserRepository.GetUserById(id);
+                user.Roles = RoleRepository.GetRolesForUser(id);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            return user;
+        }
 
         // POST api/users
         [HttpPost]

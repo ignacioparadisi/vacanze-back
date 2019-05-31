@@ -38,6 +38,26 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
             if (table.Rows.Count > 0)
                 throw new RepeatedEmailException("El Email Ingresado ya Existe");
         }
+
+        public static User GetUserById(int id)
+        {
+            User user;
+            var table = PgConnection.Instance.ExecuteFunction("GetUserById(@user_id)", id);
+            if (table.Rows.Count == 0)
+                throw new UserNotFoundException("No se Encontró Usuario");
+            else
+            {
+                
+                var user_id = Convert.ToInt64(table.Rows[0][0]);
+                var documentId = Convert.ToInt64(table.Rows[0][1]);
+                var name = table.Rows[0][2].ToString();
+                var lastname = table.Rows[0][3].ToString();
+                var email = table.Rows[0][4].ToString();
+                user = new User(user_id, documentId, name, lastname, email);
+            }
+
+            return user;
+        }
         
         
         // - MARK: CREATES
