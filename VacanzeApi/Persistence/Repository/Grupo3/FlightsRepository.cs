@@ -5,6 +5,7 @@ using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo3;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo3;
+using System.Data;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
 {
@@ -32,14 +33,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
 
                 for (var i = 0; i < table.Rows.Count; i++)
                 {
-                    Flight flight = new Flight(Convert.ToInt32(table.Rows[i][0]));
-                    flight.Id = Convert.ToInt32(table.Rows[i][0]);
-                    flight.plane = (Airplane)AirplanesRepository.Find(Convert.ToInt32(table.Rows[i][1]));
-                    flight.price = Convert.ToDouble(table.Rows[i][2]);
-                    flight.departure = table.Rows[i][3].ToString();
-                    flight.arrival = table.Rows[i][4].ToString();
-                    flight.loc_arrival = Convert.ToInt32(table.Rows[i][5]);
-                    flight.loc_departure = Convert.ToInt32(table.Rows[i][6]);
+                    Flight flight = GetRow(table,i);
 
                     flights.Add(flight);
                 }
@@ -72,7 +66,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
 
                 var table = PgConnection.Instance.ExecuteFunction(
                     ADD_FLIGHT,
-                    (int)flight.plane.Id, flight.price, flight.departure, flight.arrival, flight.loc_arrival, flight.loc_departure
+                    (int)flight.plane.Id, flight.price, flight.departure, flight.arrival, flight.loc_arrival.Id, flight.loc_departure.Id
                 );
             }
             catch (DatabaseException ex)
@@ -97,7 +91,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
 
                 var table = PgConnection.Instance.ExecuteFunction(
                     UPDATE_FLIGHT,
-                    (int)flight.Id, (int)flight.plane.Id, flight.price, flight.departure, flight.arrival, (int)flight.loc_departure, (int)flight.loc_arrival
+                    (int)flight.Id, (int)flight.plane.Id, flight.price, flight.departure, flight.arrival, (int)flight.loc_departure.Id, (int)flight.loc_arrival.Id
                 );
             }
             catch (DatabaseException ex)
@@ -155,8 +149,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
                     flight.price = Convert.ToDouble(table.Rows[0][1]);
                     flight.departure = table.Rows[0][2].ToString();
                     flight.arrival = table.Rows[0][3].ToString();
-                    flight.loc_arrival = Convert.ToInt32(table.Rows[0][4]);
-                    flight.loc_departure = Convert.ToInt32(table.Rows[0][5]);
+                    flight.loc_arrival = LocationRepository.GetLocationById(Convert.ToInt32(table.Rows[0][4]));
+                    flight.loc_departure = LocationRepository.GetLocationById(Convert.ToInt32(table.Rows[0][5]));
                     flight.plane = (Airplane)AirplanesRepository.Find(Convert.ToInt32(table.Rows[0][6]));
                 }
 
@@ -194,14 +188,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
                 for (var i = 0; i < table.Rows.Count; i++)
                 {
 
-                    Flight flight = new Flight(Convert.ToInt32(table.Rows[i][0]));
-                    flight.Id = Convert.ToInt32(table.Rows[i][0]);
-                    flight.plane = (Airplane)AirplanesRepository.Find(Convert.ToInt32(table.Rows[i][1]));
-                    flight.price = Convert.ToDouble(table.Rows[i][2]);
-                    flight.departure = table.Rows[i][3].ToString();
-                    flight.arrival = table.Rows[i][4].ToString();
-                    flight.loc_arrival = Convert.ToInt32(table.Rows[i][5]);
-                    flight.loc_departure = Convert.ToInt32(table.Rows[i][6]);
+                    Flight flight = GetRow(table,i);
 
                     flights.Add(flight);
                 }
@@ -237,14 +224,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
                 for (var i = 0; i < table.Rows.Count; i++)
                 {
 
-                    Flight flight = new Flight(Convert.ToInt32(table.Rows[i][0]));
-                    flight.Id = Convert.ToInt32(table.Rows[i][0]);
-                    flight.plane = (Airplane)AirplanesRepository.Find(Convert.ToInt32(table.Rows[i][1]));
-                    flight.price = Convert.ToDouble(table.Rows[i][2]);
-                    flight.departure = table.Rows[i][3].ToString();
-                    flight.arrival = table.Rows[i][4].ToString();
-                    flight.loc_arrival = Convert.ToInt32(table.Rows[i][5]);
-                    flight.loc_departure = Convert.ToInt32(table.Rows[i][6]);
+                    Flight flight = GetRow(table,i);
 
                     flights.Add(flight);
                 }
@@ -264,6 +244,21 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
             finally
             {
             }
+        }
+
+        static private Flight GetRow(DataTable table, int i){
+
+            Flight flight = new Flight(Convert.ToInt32(table.Rows[i][0]));
+            flight.Id = Convert.ToInt32(table.Rows[i][0]);
+            flight.plane = (Airplane)AirplanesRepository.Find(Convert.ToInt32(table.Rows[i][1]));
+            flight.price = Convert.ToDouble(table.Rows[i][2]);
+            flight.departure = table.Rows[i][3].ToString();
+            flight.arrival = table.Rows[i][4].ToString();
+            flight.loc_arrival = LocationRepository.GetLocationById(Convert.ToInt32(table.Rows[i][5]));
+            flight.loc_departure = LocationRepository.GetLocationById(Convert.ToInt32(table.Rows[i][6]));
+
+            return flight;
+
         }
 
     }
