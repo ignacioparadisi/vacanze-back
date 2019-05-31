@@ -65,10 +65,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         }
 
         [HttpPut("{hotelId}", Name = "UpdateHotel")]
-        public ActionResult<Hotel> Update([FromBody] Hotel dataToUpdate)
+        public ActionResult<Hotel> Update([FromRoute] int hotelId, [FromBody] Hotel dataToUpdate)
         {
-            // TODO: Implementar
-            return Ok(dataToUpdate);
+            // TODO: Buscar por id primero a ver si existe
+            var updated = HotelRepository.UpdateHotel(hotelId, dataToUpdate);
+            return Ok(updated);
         }
     }
 }

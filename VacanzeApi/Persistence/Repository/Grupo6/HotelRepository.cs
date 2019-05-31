@@ -91,8 +91,25 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
             }
         }
 
-        public static void UpdateHotel(int id)
+        public static Hotel UpdateHotel(int id, Hotel newData)
         {
+            PgConnection.Instance.ExecuteFunction(
+                "updatehotel(@_id, @name, @amountOfRooms, @capacityPerRoom, @active, @addressSpecs, " +
+                "@roomPrice, @website, @phone, @picture, @stars, @location)",
+                id,
+                newData.Name,
+                newData.AmountOfRooms,
+                newData.RoomCapacity,
+                newData.IsActive,
+                newData.AddressSpecification,
+                newData.PricePerRoom,
+                newData.Website ?? "",
+                newData.Phone ?? "",
+                newData.Picture ?? "",
+                newData.Stars,
+                newData.Location.Id
+            );
+            return GetHotelById(id);
         }
 
         private static Hotel ExtractHotelFromRow(DataRow row)
