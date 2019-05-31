@@ -773,7 +773,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 --------------------------CONSULTAR RECLAMO POR DOCUMENTO -------------------------
-CREATE OR REPLACE FUNCTION GetClaimDocument(_users_document_id varchar(30))
+CCREATE OR REPLACE FUNCTION GetClaimDocument(_users_document_id varchar(30))
 RETURNS TABLE
   (id integer,
    title VARCHAR(30),
@@ -786,7 +786,7 @@ BEGIN
     RETURN QUERY SELECT 
     cla_id, cla_title,cla_descr, cla_status from claim, Baggage , res_fli, users
     where bag_res_fli_fk =rf_id and rf_use_fk =use_id  and use_document_id=_users_document_id
-    and bag_cla_fk=_cla_id; 
+    and bag_cla_fk=cla_id; 
 END;
 $$ LANGUAGE plpgsql;
 

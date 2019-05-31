@@ -26,8 +26,8 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 			conec = new ClaimRepository();
 
 		}
-
-		[Test]
+	
+		[Test, Order(1)]
 		public void GetClaimsTest()
 		{
 
@@ -37,7 +37,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 
 
 
-		[Test]
+		[Test, Order(2)]
 		public void PostClaimTest()
 		{
 			cs.title = "Probando";
@@ -49,60 +49,67 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 			Assert.AreEqual(rows + 1, controller.Get());
 		}
 
-		[Test]
+		[Test, Order(3)]
 		public void GetClaimEspecificTest()
 		{
 			ActionResult<IEnumerable<Claim>> enumerable = controller.Get(0);
 			Claim claimList = enumerable.Value.ToList().Find(x => x._title.Equals("Probando"));
 
 			//response = claimList.Value.Count();
-			Assert.AreEqual("Despues del put", claimList._title);
+			Assert.AreEqual("Probando", claimList._title);
 		}
 
-		[Test]
+		[Test,Order(4) ]
 		public void PutClaimTitleTest()
-		{
+		{	
 			cs.title = "Despues del put";
 			cs.description = "descripcion despues";
-			controller.Put(3, cs);
-			ActionResult<IEnumerable<Claim>> enumerable = controller.Get(3);
+			ActionResult<IEnumerable<Claim>> enumerable = controller.Get(0);
+			Claim claimList = enumerable.Value.ToList().Find(x => x._title.Equals("Probando"));
+
+			controller.Put(Convert.ToInt32(claimList.Id), cs);
+		 enumerable = controller.Get(Convert.ToInt32(claimList.Id));
 			Claim[] claim = enumerable.Value.ToArray();
 			Assert.AreEqual(claim[0]._title, "Despues del put");
 
 		}
 
-		[Test]
+		[Test,Order(5) ]
 		public void PutClaimStatusTest()
 		{
 			cs.status = "CERRADO";
-			controller.Put(3, cs);
-			ActionResult<IEnumerable<Claim>> enumerable = controller.Get(3);
+			ActionResult<IEnumerable<Claim>> enumerable = controller.Get(0);
+			Claim claimList = enumerable.Value.ToList().Find(x => x._title.Equals("Despues del put"));
+
+			controller.Put(Convert.ToInt32(claimList.Id), cs);
+			enumerable = controller.Get(Convert.ToInt32(claimList.Id));
 			Claim[] claim = enumerable.Value.ToArray();
 			Assert.AreEqual(claim[0]._status, "CERRADO");
 
 		}
 
-		[Test]
+		[Test, Order(6)]
 		public void GetClaimStatusTest()
 		{
-			claim = controller.GetStatus("ABIERTO");
+			claim = controller.GetStatus("CERRADO");
 			response = claim.Value.Count();
-			Assert.True(response > 1);
+			Assert.True(response > 0);
 		}
-
+		[Test, Order(7)]
 		public void GetClaimGetDocumentTest()
 		{
-			claim = controller.GetDocument("1");
-			response = claim.Value.Count();
+			claim = controller.GetDocument("26055828");
+
+		response = claim.Value.Count();
 			Assert.True(response >= 0);
 		}
 
-		[Test]
+		[Test, Order(8)]
 		public void DeleteClaimTest()
 		{
 			//se pone un id que exista en la bd por lo menos el 7 
 			ActionResult<IEnumerable<Claim>> enumerable = controller.Get(0);
-			Claim claimList = enumerable.Value.ToList().Find(x => x._title.Equals("Probando"));
+			Claim claimList = enumerable.Value.ToList().Find(x => x._title.Equals("Despues del put"));
 
 			controller.Delete(Convert.ToInt32(claimList.Id));
 			claim = controller.Get(Convert.ToInt32(claimList.Id));
@@ -110,13 +117,13 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 			Assert.AreEqual(0, response);
 		}
 
-		[Test]
+		[Test, Order(9)]
 		public void NullClaimExceptionDeleteTest()
 		{
 			Assert.Throws<NullClaimException>(() => conec.DeleteClaim(-1));
 		}
 
-		[Test]
+		[Test,Order(10)]
 		public void NullClaimExceptionModifyTitleTest()
 		{
 			var p = new Claim("PROBANDO", "UNITARIA", "CERRADO");
@@ -124,7 +131,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 			Assert.Throws<NullClaimException>(() => conec.ModifyClaimTitle(-1, p));
 		}
 
-		[Test]
+		[Test, Order(11)]
 		public void NullClaimExceptionModifyStatusTest()
 		{
 			var p = new Claim("PROBANDO", "UNITARIA", "CERRADO");
@@ -132,21 +139,21 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 			Assert.Throws<NullClaimException>(() => conec.ModifyClaimStatus(-1, p));
 		}
 
-		[Test]
+		[Test, Order(12)]
 		public void ValidateStatusClaimTest()
 		{
 			Claim c = new Claim("validando", "mi test", "mal");
 			Assert.Throws<AttributeValueException>((() => c.Validate()));
 		}
 
-		[Test]
+		[Test, Order(13)]
 		public void ValidateLengTitleClaimTest()
 		{
 			Claim c = new Claim("validaaxedededdededededdedendod3dd3dd3d33", "mi test", "ABIERTO");
 			Assert.Throws<AttributeSizeException>((() => c.Validate()));
 		}
 
-		[Test]
+		[Test,Order(14)]
 		public void ValidatePutClaimTest()
 		{
 			Claim c = new Claim("valida", "mi test", "ABIERTO");

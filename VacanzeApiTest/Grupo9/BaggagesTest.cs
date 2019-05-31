@@ -24,21 +24,22 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 			conec = new BaggageRepository();
 		}
 
-		[Test]
+		[Test,  Order(1)]
 		public void GetBaggageEspecificTest() {
 			Baggage = controller.Get(5);
 			response = Baggage.Value.Count();
 			Assert.AreEqual(1, response);
 		}
 
-		[Test]
+		[Test,  Order(2)]
 		public void GetBaggagestatusTest()
 		{
 			Baggage =controller.GetStatus("EXTRAVIADO");
 			response = Baggage.Value.Count();
 			Assert.True(response >1);		
 		}
-
+		
+		[ Test, Order(3)]
 		public void GetBaggageGetDocumentTest()
 		{
 			Baggage =controller.GetDocument("26055828");
@@ -46,7 +47,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 			Assert.True(response >= 0);		
 		}
 
-		[Test]
+		[Test,  Order(4)]
 		public void PutBaggageStatusTest()
 		{
 			Baggage cs = new Baggage(1,"","EXTRAVIADO");
@@ -56,7 +57,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 			Assert.AreEqual(baggage[0]._status, "EXTRAVIADO");
 		}
 
-		[Test]
+		[Test, Order(5)]
 		public void NullBaggageExceptionModifyBaggageStatusTest()
 		{
 			var p= new Baggage(1,"UNITARIA","EXTRAVIADO");

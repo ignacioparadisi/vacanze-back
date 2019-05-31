@@ -68,7 +68,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 			{                 
 				ClaimRepository conec= new ClaimRepository();
 				List<Claim> ClaimList = conec.GetClaimDocument(id);
-				return Ok(ClaimList);                          
+				return ClaimList;                          
 			}catch (DatabaseException ex)
 			{            
 				return StatusCode(500, ex.Message);
