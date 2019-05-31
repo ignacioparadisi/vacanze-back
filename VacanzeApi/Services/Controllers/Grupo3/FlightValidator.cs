@@ -4,6 +4,7 @@ using vacanze_back.VacanzeApi.Persistence.Repository.Grupo3;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
 {
+    /// <summary>Clase para validar la informacion de los vuelos</summary>
     public class FlightValidator
     {
         public FlightValidator(Flight flight)
@@ -13,10 +14,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
 
         public Flight flight { get; set; }
 
+        /// <summary>Metodo que valida la informacion del vuelo a agregar</summary>
         public void Validate()
         {
-            var aircon = new AirplanesConnection();
-            var plane = (Airplane) aircon.Find(flight.plane.Id);
+            var plane = (Airplane) AirplanesRepository.Find(flight.plane.Id);
 
             if (flight.plane == null || flight.arrival == null || flight.departure == null ||
                 flight.price == null
@@ -32,6 +33,24 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
             // if( DateTime.Compare(departureDate, arrivalDate) > 0 ){
             //     throw new ValidationErrorException("La fecha de salida no puede ser mayor a la de llegada");
             // }
+
         }
+
+
+        /*
+        * Revisa si existe el vuelo
+        * @param int id: id del vuelo
+        */
+        /* public void CheckIfExist(long id){
+
+            FlightsConnection flightcon = new FlightsConnection();
+            Flight flight = (Flight) flightcon.Find(id);
+
+            if(flight == null){
+                throw new ValidationErrorException("El vuelo a editar no existe");
+            }
+
+        }*/
+
     }
 }

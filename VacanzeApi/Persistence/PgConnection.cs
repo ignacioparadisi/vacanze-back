@@ -62,9 +62,10 @@ namespace vacanze_back.VacanzeApi.Persistence
                 dataTable.Load(command.ExecuteReader());
                 return dataTable;
             }
-            catch (NpgsqlException)
+            catch (NpgsqlException e)
             {
-                throw new DatabaseException($"Error ejecutando funcion: {functionSignature}");
+                throw new DatabaseException(
+                    $"Error ejecutando funcion: {functionSignature}.{Environment.NewLine}{e.Message}");
             }
             finally
             {
