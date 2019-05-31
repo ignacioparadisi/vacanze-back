@@ -34,6 +34,22 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             }
         }
 
+        [HttpGet]
+        public ActionResult<IEnumerable<Entity>> GetAllByUserID([FromQuery] int user_id = -1)
+        {
+            try
+            {
+                ReservationAutomobileRepository connection = new ReservationAutomobileRepository();
+                return user_id == -1
+                    ? connection.GetAllByUserId(user_id)
+                    : connection.GetAllByUserId(user_id);
+            }
+            catch (SystemException)
+            {
+                throw;
+            }
+        }
+
         [HttpGet("{id}")]
         public ActionResult<Entity> Get(int id)
         {
@@ -45,7 +61,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             }
             catch (System.Exception)
             {
-
                 throw;
             }
         }
