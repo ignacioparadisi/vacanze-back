@@ -199,8 +199,8 @@ ALTER FUNCTION public.getflights()
 -- DROP FUNCTION public.getflightsbydate(timestamp without time zone, timestamp without time zone);
 
 CREATE OR REPLACE FUNCTION public.getflightsbydate(
-	_begin timestamp without time zone,
-	_end timestamp without time zone)
+	_begin char varying,
+	_end char varying)
     RETURNS TABLE(id integer, plane integer, price numeric, departuredate timestamp without time zone, arrivaldate timestamp without time zone, locdeparture integer, locarrival integer) 
     LANGUAGE 'plpgsql'
 
@@ -212,13 +212,14 @@ AS $BODY$
 BEGIN
 	RETURN QUERY SELECT
 	fli_id, fli_pla_fk, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, fli_loc_arrival
-	FROM public.Flight WHERE fli_departuredate BETWEEN _begin AND _end + '1 days'::interval;
+	FROM public.Flight WHERE fli_departuredate BETWEEN _begin::timestamp without time zone AND _end::timestamp without time zone + '1 days'::interval;
 END;
 
 $BODY$;
 
-ALTER FUNCTION public.getflightsbydate(timestamp without time zone, timestamp without time zone)
+ALTER FUNCTION public.getflightsbydate(char varying, char varying)
     OWNER TO vacanza;
+
 
 -- FUNCTION: public.getflightsbylocation(integer, integer)
 
