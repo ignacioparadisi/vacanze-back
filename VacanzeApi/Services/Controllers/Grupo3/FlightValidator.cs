@@ -25,8 +25,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
                 || flight.loc_arrival == null || flight.loc_departure == null)
                 throw new ValidationErrorException("Debe llenar todos los campos");
 
-            DateTime arrivalDate= DateTime.ParseExact(flight.arrival, "MM-dd-yy hh:mm:ss",null);
-            DateTime departureDate= DateTime.ParseExact(flight.departure, "MM-dd-yy hh:mm:ss",null);
+            DateTime arrivalDate= DateTime.ParseExact(flight.arrival, "MM-dd-yyyy HH:mm:ss",null);
+            DateTime departureDate= DateTime.ParseExact(flight.departure, "MM-dd-yyyy HH:mm:ss",null);
 
             if (plane == null)
                 throw new ValidationErrorException("El seleccionado avión no existe");
