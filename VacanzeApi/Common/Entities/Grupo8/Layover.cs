@@ -39,19 +39,19 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
         {
             if (string.IsNullOrEmpty(ArrivalDate))
             {
-                throw new NotValidAttributeException("Arrival Date is required");
+                throw new InvalidAttributeException("Arrival Date is required");
             }
             if (string.IsNullOrEmpty(DepartureDate))
             {
-                throw new NotValidAttributeException("Departure Date is required");
+                throw new InvalidAttributeException("Departure Date is required");
             }
             if (LocDeparture == 0)
             {
-                throw  new NotValidAttributeException("Departure location id is required");
+                throw  new InvalidAttributeException("Departure location id is required");
             }
             if (LocArrival == 0)
             {
-                throw new NotValidAttributeException("Arrival Location id is required");
+                throw new InvalidAttributeException("Arrival Location id is required");
             }
         }
     }

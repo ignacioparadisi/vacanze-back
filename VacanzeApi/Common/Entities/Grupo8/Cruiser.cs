@@ -42,28 +42,28 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
             {
                 if (string.IsNullOrEmpty(Name))
                 {
-                    throw new NotValidAttributeException("El nombre es requerido");
+                    throw new InvalidAttributeException("El nombre es requerido");
                 }
                 if (Capacity <= 0)
                 {
-                    throw new NotValidAttributeException("La capacidad tiene que ser mayor a 0");
+                    throw new InvalidAttributeException("La capacidad tiene que ser mayor a 0");
                 }
                 if (LoadingShipCap <= 0)
                 {
-                    throw new NotValidAttributeException("La capacidad de carga debe ser mayor a 0");
+                    throw new InvalidAttributeException("La capacidad de carga debe ser mayor a 0");
                 }
                 if (string.IsNullOrEmpty(Model))
                 {
-                    throw  new NotValidAttributeException("El modelo es requerido");
+                    throw  new InvalidAttributeException("El modelo es requerido");
                 }
                 if (string.IsNullOrEmpty(Line))
                 {
-                    throw new NotValidAttributeException("La Linea del crucero es requerida");
+                    throw new InvalidAttributeException("La Linea del crucero es requerida");
                 }
 
                 if (string.IsNullOrEmpty(Picture))
                 {
-                    throw new NotValidAttributeException("La imagen es requerida");
+                    throw new InvalidAttributeException("La imagen es requerida");
                 }
             }
         }

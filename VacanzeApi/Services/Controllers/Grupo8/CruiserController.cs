@@ -72,7 +72,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                     cruiser.LoadingShipCap, cruiser.Model, cruiser.Line, cruiser.Picture);
                 return Ok(savedCruiser);
             }
-            catch (NotValidAttributeException e)
+            catch (InvalidAttributeException e)
             {
                 var errorMsg = new ErrorMessage(400,e.Message);
                 return BadRequest(errorMsg);
@@ -94,7 +94,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                  var updatedCruiser = CruiserRepository.UpdateCruiser(cruiser);
                  return Ok(updatedCruiser);
              }
-             catch (NotValidAttributeException e)
+             catch (InvalidAttributeException e)
              {
                  ErrorMessage errorMsg = new ErrorMessage(400, e.Message);
                  return BadRequest(errorMsg);
