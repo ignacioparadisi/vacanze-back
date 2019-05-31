@@ -1,10 +1,7 @@
-using System;
+
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Localization;
-using Newtonsoft.Json;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
@@ -156,13 +153,34 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 return BadRequest(errorMessage);
             }
         }
-
-        [HttpDelete("Layover/{layover_id}")]
-        public ActionResult<int> DeleteLayover(int layoverid)
+        [HttpPost("{cruiserId}/Layover")]
+        public ActionResult<Cruiser> PostLayover([FromBody] Layover layover)
         {
             try
             {
-                var deletedId = CruiserRepository.DeleteLayover(layoverid);
+                layover.Validate();
+                var id = CruiserRepository.AddLayover(layover);
+                var savedLayover = new Layover(id,layover.CruiserId,layover.DepartureDate,layover.ArrivalDate,layover.Price,
+                    layover.LocDeparture,layover.LocArrival);
+                return Ok(savedLayover);
+            }
+            catch (InvalidAttributeException e)
+            {
+                var errorMsg = new ErrorMessage(e.Message);
+                return BadRequest(errorMsg);
+            }
+            catch (DatabaseException e)
+            {
+                ErrorMessage errorMsg = new ErrorMessage(e.Message);
+                return BadRequest(errorMsg);
+            }
+        }
+        [HttpDelete("Layover/{layoverId}")]
+        public ActionResult<int> DeleteLayover(int layoverId)
+        {
+            try
+            {
+                var deletedId = CruiserRepository.DeleteLayover(layoverId);
                 return Ok(deletedId);
             }
             catch (LayoverNotFoundException e)
