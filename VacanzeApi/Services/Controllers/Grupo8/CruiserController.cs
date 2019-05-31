@@ -29,12 +29,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (CruiserNotFoundException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(400, e.Message);
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
                 return BadRequest(errorMessage);
             }
             catch (DatabaseException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(400, e.Message);
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
                 return BadRequest(errorMessage);
             }
         }
@@ -50,12 +50,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (CruiserNotFoundException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(400, e.Message);
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
                 return BadRequest(errorMessage);
             }
             catch (DatabaseException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(400, e.Message);
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
                 return BadRequest(errorMessage);
             }
         }
@@ -74,12 +74,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (InvalidAttributeException e)
             {
-                var errorMsg = new ErrorMessage(400,e.Message);
+                var errorMsg = new ErrorMessage(e.Message);
                 return BadRequest(errorMsg);
             }
             catch (DatabaseException e)
             {
-                ErrorMessage errorMsg = new ErrorMessage(400,e.Message);
+                ErrorMessage errorMsg = new ErrorMessage(e.Message);
                 return BadRequest(errorMsg);
             }
         }
@@ -96,22 +96,22 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
              }
              catch (InvalidAttributeException e)
              {
-                 ErrorMessage errorMsg = new ErrorMessage(400, e.Message);
+                 ErrorMessage errorMsg = new ErrorMessage(e.Message);
                  return BadRequest(errorMsg);
              }
              catch (CruiserNotFoundException e)
              {
-                 ErrorMessage errorMessage = new ErrorMessage(400, e.Message);
+                 ErrorMessage errorMessage = new ErrorMessage(e.Message);
                  return BadRequest(errorMessage);
              }
              catch (NullCruiserException e)
              {
-                 ErrorMessage errorMessage = new ErrorMessage(400, e.Message);
+                 ErrorMessage errorMessage = new ErrorMessage(e.Message);
                  return BadRequest(errorMessage);
              }
              catch (DatabaseException e)
              {
-                 ErrorMessage errorMessage = new ErrorMessage(400, e.Message);
+                 ErrorMessage errorMessage = new ErrorMessage(e.Message);
                  return BadRequest(errorMessage);
              }
          }
@@ -126,12 +126,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (CruiserNotFoundException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(400, e.Message);
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
                 return BadRequest(errorMessage);
             }
             catch (DatabaseException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(400, e.Message);
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
                 return BadRequest(errorMessage);
             }
         }
@@ -146,12 +146,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (LayoverNotFoundException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(400, e.Message);
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
                 return BadRequest(errorMessage);
             }
             catch (DatabaseException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(400, e.Message);
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
                 return BadRequest(errorMessage);
             }
         }
