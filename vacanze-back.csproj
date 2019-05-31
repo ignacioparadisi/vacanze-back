@@ -3,20 +3,48 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <GenerateProgramFile>false</GenerateProgramFile>
     <RootNamespace>vacanze_back</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.0" />
-    <PackageReference Include="NUnit" Version="3.11.0" />
-    <PackageReference Include="NLog" Version="4.6.2" />
+    <Compile Remove="Controllers\**" />
+    <Compile Remove="Entities\**" />
+    <Compile Remove="LogicLayer\**" />
+    <Compile Remove="VacanzeApi\LogicLayer\**" />
+    <Content Remove="Controllers\**" />
+    <Content Remove="Entities\**" />
+    <Content Remove="LogicLayer\**" />
+    <Content Remove="VacanzeApi\LogicLayer\**" />
+    <EmbeddedResource Remove="Controllers\**" />
+    <EmbeddedResource Remove="Entities\**" />
+    <EmbeddedResource Remove="LogicLayer\**" />
+    <EmbeddedResource Remove="VacanzeApi\LogicLayer\**" />
+    <None Remove="Controllers\**" />
+    <None Remove="Entities\**" />
+    <None Remove="LogicLayer\**" />
+    <None Remove="VacanzeApi\LogicLayer\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="LogicLayer\Grupo2" />
-    <Folder Include="Persistence\Grupo2" />
+    <PackageReference Include="MailKit" Version="2.1.5.1" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+
+    <PackageReference Include="Npgsql" Version="4.0.6" />
+
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.0" />
+
+    <PackageReference Include="NUnit" Version="3.11.0" />
+    <PackageReference Include="NLog" Version="4.6.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="VacanzeApi\Common\Exceptions\Grupo13\" />
+
   </ItemGroup>
 
 </Project>
