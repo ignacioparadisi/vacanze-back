@@ -33,14 +33,9 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 			int rows = controller.Get();
 			Assert.True(0 <= rows);
 		}
-
-		[Test]
-		public void GetClaimEspecificTest() {
-			claim = controller.Get(1);
-			response = claim.Value.Count();
-			Assert.AreEqual(1, response);
-		}
 		
+		
+
 		[Test]
 		public void PostClaimTest()
 		{ 
@@ -52,7 +47,14 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 			controller.Post(7,cs);
 			Assert.AreEqual( rows + 1 , controller.Get());
 		}
+		[Test]
+		public void GetClaimEspecificTest() {
+			ActionResult<IEnumerable<Claim>> enumerable = controller.Get(0);
+			Claim claimList = enumerable.Value.ToList().Find(x => x._title.Equals("Probando"));
 
+			//response = claimList.Value.Count();
+			Assert.AreEqual("Probando", claimList._title);
+		}
 
 		[Test]
 		public void PutClaimTitleTest()
@@ -115,6 +117,13 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 			var p= new Claim("PROBANDO","UNITARIA","CERRADO");
 
 			Assert.Throws<NullClaimException>(() => conec.ModifyClaimStatus(-1,p));
+		}
+
+		[Test]
+		public void ValidateClaimTest()
+		{
+			Claim c = new Claim("validando","mi test", "mal");
+			Assert.Throws<AttributeValueException>((() => c.Validate()));
 		}
 		
 		[TearDown]
