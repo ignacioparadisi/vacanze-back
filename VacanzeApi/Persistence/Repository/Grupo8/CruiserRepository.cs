@@ -1,10 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
-using Microsoft.AspNetCore.Mvc;
-using Npgsql;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
-using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
@@ -38,9 +34,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
             return cruiserList;
         }
 
-        public static Cruiser GetCruiser(int ship_id)
+        public static Cruiser GetCruiser(int shipId)
         {
-            var table = PgConnection.Instance.ExecuteFunction("GetShip(@ship_id)", ship_id);
+            var table = PgConnection.Instance.ExecuteFunction("GetShip(@ship_id)", shipId);
             if (table.Rows.Count == 0)
             {
                 throw new CruiserNotFoundException("Crucero no encontrado");
@@ -76,10 +72,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
                     "ModifyShip(@Id, @Status, @Name, @Capacity, @Loadcap, @Model, @line, @Picture)", cruiser.Id,
                     cruiser.Status, cruiser.Name, cruiser.Capacity, cruiser.LoadingShipCap, cruiser.Model, cruiser.Line,
                     cruiser.Picture);
-                var updatedid = Convert.ToInt32(table.Rows[0][0]);
+                var updatedId = Convert.ToInt32(table.Rows[0][0]);
                 return cruiser;
             }
-            catch (NullReferenceException e)
+            catch (NullReferenceException)
             {
                 throw new NullCruiserException("El crucero no puede ser null");
             }
@@ -94,8 +90,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
             try
             {
                 var table = PgConnection.Instance.ExecuteFunction("DeleteShip(@id)", id);
-                var deletedid = Convert.ToInt32(table.Rows[0][0]);
-                return deletedid;
+                var deletedId = Convert.ToInt32(table.Rows[0][0]);
+                return deletedId;
             }
             catch (InvalidCastException)
             {
@@ -124,6 +120,13 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
                     layovers.Add(layover);
                 }
             return layovers;
+        }
+        public static int AddLayover(Layover layover)
+        {
+            var table = PgConnection.Instance.ExecuteFunction(
+                "AddCruise(@cruiserId,@departureDate,@arrivalDate,@price,@LocDeparture,@locArrival)", layover.CruiserId, layover.DepartureDate,layover.ArrivalDate,layover.Price,layover.LocDeparture,layover.LocArrival);
+            var id = Convert.ToInt32(table.Rows[0][0]);
+            return id;
         }
         public static int DeleteLayover(int id)
         {
