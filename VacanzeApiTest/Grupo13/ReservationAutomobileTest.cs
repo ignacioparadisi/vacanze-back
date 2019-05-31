@@ -21,8 +21,8 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         public void SetUp()
         {
             _connection = new ReservationAutomobileRepository();
-            DateTime time = new DateTime(1994, 04, 14);
-            DateTime time2 = new DateTime(1995, 04, 14);
+            DateTime time = new DateTime(1990, 04, 14);
+            DateTime time2 = new DateTime(1990, 04, 14);
             reservation = new ReservationAutomobile(0, time, time2);
             Auto automobile = new Auto("Mazda", "X3", 5, true, "XYZ23D", 35, "mazda.jgp", 1);
             automobile.setId(7);
@@ -59,6 +59,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             Assert.AreNotEqual(j, i);
         }
         
+        /*
         [Test]
         public void DeleteReservationAutomobileTest()
         {
@@ -67,6 +68,6 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             List<Entity> reservationslater = _connection.GetAutomobileReservations();
             Assert.Greater(reservations.Count(),reservationslater.Count());
         }
-        
+        */
     }
 }

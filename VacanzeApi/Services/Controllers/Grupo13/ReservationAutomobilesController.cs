@@ -18,39 +18,26 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
     public class ReservationAutomobilesController : ControllerBase
     {
         // GET api/values
-        [HttpGet]
-        public ActionResult<IEnumerable<Entity>> Get()
-        {
-            try
-            {
-                ReservationAutomobileRepository reservationAutomobileConnection = new ReservationAutomobileRepository();
-                List<Entity> result = reservationAutomobileConnection.GetAutomobileReservations();
-                return Ok(result.ToList());
-            }
-            catch (System.Exception)
-            {
 
-                throw;
-            }
-        }
-
-        /*
+        // GET api/reservationautomobiles/?id={user_id}]
+       /* https://localhost:5001/api/reservationautomobiles/?user=1 */
         [HttpGet]
-        public ActionResult<IEnumerable<Entity>> GetAllByUserID([FromQuery] int user_id = -1)
+        public ActionResult<IEnumerable<Entity>> GetAllByUserID([FromQuery] int user= -1)
         {
             try
             {
                 ReservationAutomobileRepository connection = new ReservationAutomobileRepository();
-                return user_id == -1
-                    ? connection.GetAllByUserId(user_id)
-                    : connection.GetAllByUserId(user_id);
+                return user == -1
+                    ? connection.GetAutomobileReservations()
+                    : connection.GetAllByUserId(user);
             }
             catch (SystemException)
             {
                 throw;
             }
         }
-        */
+
+        
         [HttpGet("{id}")]
         public ActionResult<Entity> Get(int id)
         {

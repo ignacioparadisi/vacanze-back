@@ -19,7 +19,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
         const String SP_FIND = "m13_findByResAutId(@_id)";
         const String SP_ADD = "m13_addautomobilereservation(@_checkin,@_checkout,@_use_fk,@_ra_aut_fk)";
         const String SP_DELETE = "m13_deleteautomobilereservation(@_id)";
-        const String SP_ALL_BY_USER_ID = "m13_getallbyuserid(@_id)";
+        const String SP_ALL_BY_USER_ID = "m13_getresautomobilebyuserid(@_id)";
         private Auto _automobile;
         private ReservationAutomobile _reservation;
 
@@ -40,6 +40,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                             var aut_fk = (int)Convert.ToInt64(table.Rows[i][4]);
                             ReservationAutomobile reservation = new ReservationAutomobile(id,pickup,returndate);
                             reservation.Automobile = ConnectAuto.ConsultforId(aut_fk).ElementAt(0);
+                            reservation.Fk_user = aut_fk;
                             reservationAutomobileList.Add(reservation);
                             }
                     return reservationAutomobileList;
@@ -174,9 +175,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                     var pickup = Convert.ToDateTime(table.Rows[i][1]);
                     var returndate = Convert.ToDateTime(table.Rows[i][2]);
                     //current timestamp
-                    var userid = Convert.ToInt64(table.Rows[i][4]);
-                    var autfk = (int)Convert.ToInt64(table.Rows[i][5]);
-
+                    var timestamp = Convert.ToDateTime(table.Rows[i][3]);
+                    var autfk = (int)Convert.ToInt64(table.Rows[i][4]);
+                    var userid = Convert.ToInt64(table.Rows[i][5]);
+                    
                     ReservationAutomobile reservation = new ReservationAutomobile(id, pickup, returndate);
                     reservation.Automobile = ConnectAuto.ConsultforId(autfk).ElementAt(0);
                     reservation.Fk_user = user_id;

@@ -19,6 +19,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
         const String SP_AVAILABLE = "m13_getAvailableRooms(@_checkin, @_checkout)";
         const String SP_ADD_RESERVATION = "m13_addRoomReservation(@_checkin, @_checkout,@_use_fk,@_hot_fk)";
         const String SP_DELETE_RESERVATION = "m13_deleteRoomReservation(@_rooid)";
+        const String SP_ALL_BY_USER_ID = "m13_getresroobyuserandroomid(@_id)";
         const String SP_ADD_PAYMENT = "";
 
         private ReservationRoom _reservationRoom;
@@ -187,6 +188,43 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                 Console.WriteLine(e.ToString());
                 throw;
             }
+        }
+
+        public List<Entity> GetAllByUserId(int user_id)
+        {
+            List<Entity> reservationAutomobileList = new List<Entity>();
+            try
+            {
+                var table = PgConnection.Instance.ExecuteFunction(SP_ALL_BY_USER_ID,
+                    user_id);
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    var id = Convert.ToInt64(table.Rows[i][0]);
+                    var pickup = Convert.ToDateTime(table.Rows[i][1]);
+                    var returndate = Convert.ToDateTime(table.Rows[i][2]);
+                    //current timestamp
+                  //  var timestamp = Convert.ToDateTime(table.Rows[i][3]);
+                    var hotfk = (int)Convert.ToInt64(table.Rows[i][3]);
+
+                    ReservationRoom reservation = new ReservationRoom(id,pickup,returndate);
+                    reservation.Hotel = HotelRepository.GetHotelById(hotfk);
+                    reservation.Fk_user = user_id;
+                    reservationAutomobileList.Add(reservation);
+                }
+                return reservationAutomobileList;
+            }
+            catch (NpgsqlException e)
+            {
+                e.ToString();
+            }
+            catch (Exception e)
+            {
+                e.ToString();
+            }
+            finally
+            {
+            }
+            return reservationAutomobileList;
         }
 
     }

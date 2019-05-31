@@ -16,19 +16,21 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
     [EnableCors("MyPolicy")]
     public class ReservationRoomsController : ControllerBase
     {
-        // GET api/values
+
+        // GET api/reservationautomobiles/?id={user_id}]
+        /* https://localhost:5001/api/reservationrooms/?user=1 */
         [HttpGet]
-        public ActionResult<IEnumerable<Entity>> Get()
+        public ActionResult<IEnumerable<Entity>> GetAllByUserID([FromQuery] int user = -1)
         {
             try
             {
-                ReservationRoomRepository reservationRoomConnection = new ReservationRoomRepository();
-                List<Entity> result = reservationRoomConnection.GetRoomReservations();
-                return Ok(result.ToList());
+                ReservationRoomRepository connection = new ReservationRoomRepository();
+                return user == -1
+                    ? connection.GetRoomReservations()
+                    : connection.GetAllByUserId(user);
             }
-            catch (System.Exception)
+            catch (SystemException)
             {
-                return null;
                 throw;
             }
         }
