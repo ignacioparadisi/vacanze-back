@@ -1151,13 +1151,14 @@ LANGUAGE plpgsql;
 --Agregar Reserva de Vuelo
 CREATE OR REPLACE FUNCTION AddReservationFlight(seatNum VARCHAR,tim VARCHAR,numPas INTEGER,
 id_user INTEGER,pay INTEGER,id_fli INTEGER)
-RETURNS INTEGER
-AS $$
+ RETURNS INTEGER AS $$
+  DECLARE 
+    res_res_fli_id INTEGER;
 BEGIN
 	INSERT INTO res_fli(rf_seatnum,rf_timestamp,rf_num_ps,rf_use_fk,rf_pay_fk,rf_fli_fk)
-	VALUES(seatNum,TO_TIMESTAMP(tim,'yyyy-mm-dd hh24:mi'),numPas,id_user,pay,id_fli);
+	VALUES(seatNum,TO_TIMESTAMP(tim, 'yyyy-mm-dd hh24:mi'),numPas,id_user,pay,id_fli);
     RETURN res_res_fli_id;
-END	
+END;	
 $$ 
 LANGUAGE plpgsql;
 
@@ -1165,24 +1166,34 @@ LANGUAGE plpgsql;
 CREATE OR  REPLACE FUNCTION deleteReservationFlight(id_reservation INTEGER) RETURNS INTEGER AS $$
   DECLARE res_id_fli INTEGER;
   BEGIN
-    DELETE FROM RES_FLI WHERE (rf_id = id_reservation) returning rf_id INTO res_id_fli;
+    DELETE FROM RES_FLI WHERE rf_id = id_reservation RETURNING rf_id INTO res_id_fli;
 
     RETURN res_id_fli;
   END;
   $$ LANGUAGE plpgsql;
 
   --retornar Reserva de vuelo de un Pasajero
-CREATE OR REPLACE FUNCTION getReservationFlight(id_user INTEGER) 
-RETURNS TABLE (
-  id INTEGER,seatNum VARCHAR,fecha_res_fli TIMESTAMP,num_Pas INTEGER,id_rf_use INTEGER,
+CREATE OR REPLACE FUNCTION getReservationFlight(usuario_id INTEGER) 
+RETURNS TABLE (id INTEGER,seatNum VARCHAR,fecha_res_fli TIMESTAMP,num_Pas INTEGER,id_rf_use INTEGER,
   id_rf_pay INTEGER, id_rf_fli INTEGER) AS $$
   BEGIN
-    RETURN QUERY SELECT R.rf_id AS ID_RES,R.rf_seatnum AS SEATUM,R.rf_timestamp AS REFTIMESTAMP,
-    R.rf_num_ps AS NUMPAS,R.rf_use_fk AS REFUSE,R.rf_pay_fk AS REFPAY,R.res_fli AS RESFLI
-    FROM RES_FLI AS R,users AS U
-    WHERE U.USE_ID = R.rr_use_fk;
+    RETURN QUERY SELECT rf_id,rf_seatnum,rf_timestamp,rf_num_ps,rf_use_fk,rf_pay_fk,rf_fli_fk 
+    FROM RES_FLI , users WHERE users.USE_ID = rf_use_fk and rf_use_fk = usuario_id;
   END;
   $$ LANGUAGE plpgsql;
+
+  --retornar la capacidad del vuelo
+  CREATE OR  REPLACE FUNCTION GetCapacityFlight(id_flight INTEGER) RETURNS INTEGER AS $$
+  DECLARE capacity_fli INTEGER;
+  BEGIN
+    select c.pla_capacity as capacidad FROM plane as c, flight as f, res_fli as h
+    where c.pla_id = f.fli_pla_fk and f.fli_id =id_flight INTO capacity_fli;
+   
+    RETURN capacity_fli;
+  END;
+  $$ LANGUAGE plpgsql;
+
+
 ------------------------------------Fin Grupo12--------------------------------------------------
 ----------------------------------- grupo 14 ---------------------------------
 
