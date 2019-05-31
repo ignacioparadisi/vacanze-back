@@ -680,8 +680,16 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION DeleteRestaurant(id integer)
 RETURNS INTEGER AS
 $$
+DECLARE
+    FOUND_ID INTEGER;
 BEGIN
-
+	SELECT Count(res_id) into FOUND_ID 
+	FROM Restaurant 
+	WHERE (res_id = id);
+	IF (FOUND_ID = 0) THEN
+		RETURN null;
+	END IF;
+	
     DELETE FROM Restaurant 
     WHERE (res_id = id);
 	RETURN id;
