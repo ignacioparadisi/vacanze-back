@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo5;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
 {
@@ -16,7 +17,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
         const String SP_SELECT = "m13_getResAutos()";
         const String SP_AVAILABLE = "m13_getavailableautomobilereservations('01/03/2019', '01/05/2019')";
         const String SP_FIND = "m13_findByResAutId(@_id)";
-        const String SP_ADD = "m13_addautomobilereservation(@_ra_id,@_checkin,@_checkout,@_ra_use_fk,@_ra_aut_fk)";
+        const String SP_ADD = "m13_addautomobilereservation(@_checkin,@_checkout,@_use_fk,@_ra_aut_fk)";
+        const String SP_DELETE = "m13_deleteautomobilereservation(@_id)";
+        const String SP_ALL_BY_USER_ID = "m13_getallbyuserid(@_id)";
         private Auto _automobile;
         private ReservationAutomobile _reservation;
 
@@ -96,8 +99,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                 {
                     var pickup = Convert.ToDateTime(table.Rows[i][1]);
                     var returndate = Convert.ToDateTime(table.Rows[i][2]);
-                    var userid = Convert.ToInt64(table.Rows[i][3]);
-                    var autfk = Convert.ToInt64(table.Rows[i][4]);
+                    var userid = Convert.ToInt64(table.Rows[i][4]);
+                    var autfk = Convert.ToInt64(table.Rows[i][5]);
                    // var payfk = Convert.ToInt64(table.Rows[i][5]);
                     _reservation = new ReservationAutomobile(id,pickup,returndate);
                   //  _reservation.User.Id = userid;
@@ -126,10 +129,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             {
                 var table = PgConnection.Instance.
                     ExecuteFunction(SP_ADD,
-                        reservation.Id,
                         reservation.CheckIn,
                         reservation.CheckOut,
-                        reservation.User.Id,
+                        reservation.Fk_user,
                         reservation.Automobile.getId());
                 return reservation;
             }
@@ -137,6 +139,61 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             {
                 throw;
             }
+        }
+
+        /** <summary>Borra de la BD, la reservacion que es suministrada</summary>
+         * <param name="entity">La entidad reservacion a borrar de la BD</param>
+         */
+        public void Delete(Entity entity)
+        {
+            try
+            {
+                ReservationAutomobile reservation = (ReservationAutomobile)entity;
+                var table = PgConnection.Instance.ExecuteFunction(SP_DELETE,
+                   (int)reservation.Id);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                throw;
+            }
+        }
+
+        public List<Entity> GetAllByUserId(int user_id)
+        {
+            List<Entity> reservationAutomobileList = new List<Entity>();
+            try
+            {
+                var table = PgConnection.Instance.ExecuteFunction(SP_ALL_BY_USER_ID,
+                    user_id);
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    var id = Convert.ToInt64(table.Rows[i][0]);
+                    var pickup = Convert.ToDateTime(table.Rows[i][1]);
+                    var returndate = Convert.ToDateTime(table.Rows[i][2]);
+                    //current timestamp
+                    var userid = Convert.ToInt64(table.Rows[i][4]);
+                    var autfk = (int)Convert.ToInt64(table.Rows[i][5]);
+
+                    ReservationAutomobile reservation = new ReservationAutomobile(id, pickup, returndate);
+                    reservation.Automobile = ConnectAuto.ConsultforId(autfk).ElementAt(0);
+                    reservation.Fk_user = user_id;
+                    reservationAutomobileList.Add(reservation);
+                }
+                return reservationAutomobileList;
+            }
+            catch (NpgsqlException e)
+            {
+                e.ToString();
+            }
+            catch (Exception e)
+            {
+                e.ToString();
+            }
+            finally
+            {
+            }
+            return reservationAutomobileList;
         }
     }
 

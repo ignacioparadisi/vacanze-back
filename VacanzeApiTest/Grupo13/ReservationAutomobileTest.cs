@@ -25,10 +25,12 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             DateTime time2 = new DateTime(1995, 04, 14);
             reservation = new ReservationAutomobile(0, time, time2);
             Auto automobile = new Auto("Mazda", "X3", 5, true, "XYZ23D", 35, "mazda.jgp", 1);
+            automobile.setId(7);
             User user = new User(3, 99, "NameTest", "LastTest", "EmailTest");
             reservation.Automobile = automobile;
             reservation.User = user;
-            //reservation.Automobile.Id = 1;
+            reservation.Fk_user = 2;
+            reservation.Id = 27;
            // reservation.User.Id = 3;
         }
 
@@ -42,19 +44,29 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         [Test]
         public void FindReservationAutomobileTest()
         {
-            ReservationAutomobile reservation = (ReservationAutomobile) _connection.Find(3);
+            ReservationAutomobile reservation = (ReservationAutomobile) _connection.Find(17);
             Assert.IsNotNull(reservation);
         }
-
 
         [Test]
         public void AddReservationsAutomobileTest()
         {
-            List<Entity> reservations = _connection.GetAutomobileReservations();
+             List<Entity> reservations = _connection.GetAutomobileReservations();
+            int i = reservations.Count();
             _connection.AddReservation(reservation);
-            List<Entity> reservationslater = _connection.GetAutomobileReservations();
-            Assert.Greater(reservationslater.Count, reservations.Count);
+            reservations = _connection.GetAutomobileReservations();
+            int j = reservations.Count();
+            Assert.AreNotEqual(j, i);
         }
-
+        
+        [Test]
+        public void DeleteReservationAutomobileTest()
+        {
+            List<Entity> reservations = _connection.GetAutomobileReservations();
+            _connection.Delete(reservation);
+            List<Entity> reservationslater = _connection.GetAutomobileReservations();
+            Assert.Greater(reservations.Count(),reservationslater.Count());
+        }
+        
     }
 }
