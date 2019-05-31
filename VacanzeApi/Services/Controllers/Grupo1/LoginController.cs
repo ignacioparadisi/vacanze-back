@@ -21,7 +21,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
         //POST : /api/Login
         public async Task<IActionResult> Login(Login log)
         {
-           
             LoginRepository lg = new LoginRepository();
             try
             {
@@ -42,5 +41,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
                 return BadRequest(new { message = e.Message });
             }
         }
+
     }
 }
