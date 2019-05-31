@@ -36,8 +36,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                             var id = Convert.ToInt64(table.Rows[i][0]);
                             var pickup = Convert.ToDateTime(table.Rows[i][1]);
                             var returndate = Convert.ToDateTime(table.Rows[i][2]);
-
+                            var user_id = Convert.ToInt64(table.Rows[i][3]);
+                            var aut_fk = (int)Convert.ToInt64(table.Rows[i][4]);
                             ReservationAutomobile reservation = new ReservationAutomobile(id,pickup,returndate);
+                            reservation.Automobile = ConnectAuto.ConsultforId(aut_fk).ElementAt(0);
                             reservationAutomobileList.Add(reservation);
                             }
                     return reservationAutomobileList;

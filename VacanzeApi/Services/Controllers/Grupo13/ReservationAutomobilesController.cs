@@ -18,7 +18,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
     public class ReservationAutomobilesController : ControllerBase
     {
         // GET api/values
-        [HttpGet("/reservations")]
+        [HttpGet]
         public ActionResult<IEnumerable<Entity>> Get()
         {
             try
@@ -34,6 +34,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             }
         }
 
+        /*
         [HttpGet]
         public ActionResult<IEnumerable<Entity>> GetAllByUserID([FromQuery] int user_id = -1)
         {
@@ -49,7 +50,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
                 throw;
             }
         }
-
+        */
         [HttpGet("{id}")]
         public ActionResult<Entity> Get(int id)
         {
