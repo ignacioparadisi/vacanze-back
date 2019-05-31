@@ -97,7 +97,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
                 var titulo = table.Rows[i][1].ToString();
                 var descripcion = table.Rows[i][2].ToString();
                 var status = table.Rows[i][3].ToString();
-                var claim = new Claim(id, titulo, descripcion, status);
+                var idEquipaje = Convert.ToInt32(table.Rows[i][4].ToString());
+                var claim = new Claim(id, titulo, descripcion, status,idEquipaje);
                ClaimList.Add(claim);
             }
             return ClaimList;
