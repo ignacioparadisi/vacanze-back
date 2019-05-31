@@ -18,7 +18,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
     public class ReservationAutomobilesController : ControllerBase
     {
         // GET api/values
-        [HttpGet]
+        [HttpGet("/reservations")]
         public ActionResult<IEnumerable<Entity>> Get()
         {
             try
@@ -76,14 +76,14 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         {
         }
 
-        /*
     [HttpDelete("{id}")]
     public ActionResult<string> Delete(int id)
     {
         try
         {
-            ReservationAutomobileConnection connection = new ReservationAutomobileConnection();
-            connection.DeleteClaim(id);
+            var connection = new ReservationAutomobileRepository();
+               ReservationAutomobile reservation = (ReservationAutomobile)connection.Find(id);
+                connection.Delete(reservation);
             return Ok("Eliminado exitosamente");
         }
         catch (System.Exception)
@@ -92,7 +92,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         }
 
     }
-    */
     }
 
 }
