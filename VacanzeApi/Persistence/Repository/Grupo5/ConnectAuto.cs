@@ -52,15 +52,13 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo5
                 var make = table.Rows[i][1].ToString();
                 var model = table.Rows[i][2].ToString();
                 var capacity =Convert.ToInt32(table.Rows[i][3]);
-                var status = table.Rows[i][4].ToString();
+                var status = Convert.ToBoolean(table.Rows[i][4]);
                 var price = Convert.ToInt32(table.Rows[i][5]);
                 var licence = table.Rows[i][6].ToString();
                 var picture =table.Rows[i][7].ToString();
-                var place =Convert.ToInt32(table.Rows[i][0]);
-                if (status== "true"){
-                    isactive=true;
-                }else {isactive= false;}
-                Auto auto=new Auto(make,model,capacity,isactive,licence,price,picture,place);
+                var place =Convert.ToInt32(table.Rows[i][8]);
+               
+                Auto auto=new Auto(make,model,capacity,status,licence,price,picture,place);
                 auto.setId(id);
                 AutoList.Add(auto);
             }
@@ -79,15 +77,13 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo5
                 var make = table.Rows[i][1].ToString();
                     var model = table.Rows[i][2].ToString();
                     var capacity =Convert.ToInt32(table.Rows[i][3]);
-                    var status = table.Rows[i][4].ToString();
+                    var status = Convert.ToBoolean(table.Rows[i][4]);
                     var price = Convert.ToInt32(table.Rows[i][5]);
                     var licence = table.Rows[i][6].ToString();
                     var picture =table.Rows[i][7].ToString();
-                    var place =Convert.ToInt32(table.Rows[i][0]);
-                    if (status== "true"){
-                        isactive=true;
-                    }else {isactive= false;}
-                    Auto auto=new Auto(make,model,capacity,isactive,licence,price,picture,place);
+                    var place =Convert.ToInt32(table.Rows[i][8]);
+               
+                    Auto auto=new Auto(make,model,capacity,status,licence,price,picture,place);
                     auto.setId(id);
                     AutoList.Add(auto);
             }
@@ -106,15 +102,13 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo5
                 var make = table.Rows[i][1].ToString();
                 var model = table.Rows[i][2].ToString();
                 var capacity =Convert.ToInt32(table.Rows[i][3]);
-                var status = table.Rows[i][4].ToString();
+                var status = Convert.ToBoolean(table.Rows[i][4]);
                 var price = Convert.ToInt32(table.Rows[i][5]);
                 var licence = table.Rows[i][6].ToString();
                 var picture =table.Rows[i][7].ToString();
-                var place =Convert.ToInt32(table.Rows[i][0]);
-                if (status== "true"){
-                    isactive=true;
-                }else {isactive= false;}
-                Auto auto=new Auto(make,model,capacity,isactive,licence,price,picture,place);
+                var place =Convert.ToInt32(table.Rows[i][8]);
+
+                Auto auto=new Auto(make,model,capacity,_status,licence,price,picture,place);
                 auto.setId(id);
                 AutoList.Add(auto);
             }
@@ -134,15 +128,12 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo5
                 var make = table.Rows[i][1].ToString();
                     var model = table.Rows[i][2].ToString();
                     var capacity =Convert.ToInt32(table.Rows[i][3]);
-                    var status = table.Rows[i][4].ToString();
+                    var status = Convert.ToBoolean(table.Rows[i][4]);
                     var price = Convert.ToInt32(table.Rows[i][5]);
                     var licence = table.Rows[i][6].ToString();
                     var picture =table.Rows[i][7].ToString();
-                    var place =Convert.ToInt32(table.Rows[i][0]);
-                    if (status== "true"){
-                        isactive=true;
-                    }else {isactive= false;}
-                    Auto auto=new Auto(make,model,capacity,isactive,licence,price,picture,place);
+                    var place =Convert.ToInt32(table.Rows[i][8]);
+                    Auto auto=new Auto(make,model,capacity,status,licence,price,picture,place);
                     auto.setId(id);
                     AutoList.Add(auto);
             }

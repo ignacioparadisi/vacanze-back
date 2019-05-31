@@ -1036,7 +1036,7 @@ BEGIN
 	ELSIF (_place=0 and _capacity = 0) then 
 		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_isactive = _status  and aut_license = _license;
     ELSIF (_place=0 ) then 
-		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_isactive = _status  and aut_license = _license and aut_loc_fk=_place;
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_isactive = _status  and aut_license = _license and aut_capacity =_capacity;
     ELSIF (_result= 'null' and _license ='null' ) then 
 		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_loc_fk=_place and aut_capacity =_capacity;
     ELSIF (_result= 'null' and _capacity =0 ) then 
@@ -1184,7 +1184,7 @@ CREATE OR REPLACE FUNCTION addReservationRestaurant(fecha VARCHAR,
     res_rest_id INTEGER;
   
   BEGIN
-    INSERT INTO res_rest(rr_date, rr_number_people, rr_timestamp, rr_use_fk,
+    INSERT INTO res_rest(rr_date, RR_NUM_PPL, rr_timestamp, rr_use_fk,
       rr_res_fk)
       VALUES (TO_TIMESTAMP(fecha, 'yyyy-mm-dd hh24:mi'), people, TO_TIMESTAMP(fecha_reservacion,'yyyy-mm-dd hh24:mi'),userId,restaurantId) RETURNING rr_id INTO res_rest_id;
     
@@ -1198,10 +1198,10 @@ CREATE OR REPLACE FUNCTION getResRestaurant(usuario INTEGER) RETURNS TABLE (
   userID INTEGER, restaurantID INTEGER, paymentID INTEGER) AS $$
   
   BEGIN
-    RETURN QUERY SELECT R.rr_id as ID, R.rr_date as fechaReservar, R.rr_number_people as CantidadPersonas, R.rr_timestamp as fechaReservo,
+    RETURN QUERY SELECT R.rr_id as ID, R.rr_date as fechaReservar, R.RR_NUM_PPL as CantidadPersonas, R.rr_timestamp as fechaReservo,
     R.rr_use_fk as userID, R.rr_res_fk as restaurantID, R.rr_pay_fk as paymentID
     FROM RES_REST as R, users as U
-    WHERE U.USE_ID = R.rr_use_fk;
+    WHERE U.USE_ID = R.rr_use_fk and R.rr_use_fk = usuario;
   END;
   $$ LANGUAGE plpgsql;
 

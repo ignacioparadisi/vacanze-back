@@ -42,7 +42,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
         }
         /*https://localhost:5001/api/Auto/consultarforall/2 
          result = isactive */ 
-        [HttpGet("consultforall/{i}")]
+        [HttpGet("consultforall/{place}/{result}/{license}/{capacity}")]
         public  ActionResult<IEnumerable<Auto>> GetconsultAll(int place , string result , string license , int capacity)
         {
             try{
@@ -54,19 +54,35 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
                 return StatusCode(500,"No hay auto registrados");
             }
         }
-
-        [HttpGet("consultforplace/{i}")]
-        public  ActionResult<IEnumerable<Auto>> GetconsultPlace(int place)
+         /*https://localhost:5001/api/Auto/consultforplace/1 */
+        [HttpGet("consultforplace/{id}")]
+        public  ActionResult<IEnumerable<Auto>> GetconsultPlace(int id)
         {
             try{
                 
-                List<Auto> AutoList =ConnectAuto.ConsultforPlace(place);
+                List<Auto> AutoList =ConnectAuto.ConsultforPlace(id);
                  return Ok(JsonConvert.SerializeObject(AutoList));
             }catch (IndexOutOfRangeException)
             {
                 return StatusCode(500,"No hay auto registrados");
             }
         }
+        /*https://localhost:5001/api/Auto/consult/67 */
+         [HttpGet("consult/{id}")]
+        public  ActionResult<IEnumerable<Auto>> Getconsulforid(int id )
+        {
+            try{
+                
+                List<Auto> AutoList =ConnectAuto.ConsultforId(id);
+                
+                 return Ok(AutoList.ToList());
+                 
+            }catch (IndexOutOfRangeException)
+            {
+                return Ok("no hay autos registrados");
+            }
+        }
+        /*https://localhost:5001/api/Auto/consultplaceStatus/1/true*/
         [HttpGet("consultplaceStatus/{place}/{status}")]
         public  ActionResult<IEnumerable<Auto>> GetConsultforPlaceandStatu(int place, bool status)
         {
