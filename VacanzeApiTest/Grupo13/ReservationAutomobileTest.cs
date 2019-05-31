@@ -7,6 +7,7 @@ using vacanze_back.VacanzeApi.Persistence.Repository.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 
 namespace vacanze_back.VacanzeApiTest.Grupo13
 {
@@ -23,7 +24,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             DateTime time = new DateTime(1994, 04, 14);
             DateTime time2 = new DateTime(1995, 04, 14);
             reservation = new ReservationAutomobile(0, time, time2);
-            Automobile automobile = new Automobile(99, "MarcaTest", "ModelTest", 99, true, 99, "LicensTest", "pngtest");
+            Auto automobile = new Auto("Mazda", "X3", 5, true, "XYZ23D", 35, "mazda.jgp", 1);
             User user = new User(3, 99, "NameTest", "LastTest", "EmailTest");
             reservation.Automobile = automobile;
             reservation.User = user;
