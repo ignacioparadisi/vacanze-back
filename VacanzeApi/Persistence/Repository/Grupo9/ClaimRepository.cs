@@ -47,6 +47,14 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
             return fillList(table);;
         }
         /// <summary>
+        // Metodo para obtener reclamo segun un documento de identidad
+        /// </summary>
+        public List<Claim> GetClaimDocument(string numero)
+        {
+            var table = PgConnection.Instance.ExecuteFunction("GetClaimDocument(@cla_id)",numero);
+            return fillList(table);;
+        }
+        /// <summary>
         // eliminar un reclamo
         /// </summary>
         public int  DeleteClaim(int claimId)

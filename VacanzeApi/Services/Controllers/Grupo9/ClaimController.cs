@@ -56,6 +56,27 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 			{
 				return StatusCode(500, ex.Message);
 			}
+		}		
+		/// <summary>
+		// GET api/values/5
+		// Get para la tabla equipaje segun su documento de identidad
+		/// </summary>
+		[HttpGet("document/{id}")]
+		public ActionResult<IEnumerable<Baggage>> Get(string id)
+		{
+			try
+			{                 
+				ClaimRepository conec= new ClaimRepository();
+				List<Claim> ClaimList = conec.GetClaimDocument(id);
+				return Ok(ClaimList);                          
+			}catch (DatabaseException ex)
+			{            
+				return StatusCode(500, ex.Message);
+			}
+			catch (InvalidStoredProcedureSignatureException ex)
+			{
+				return StatusCode(500, ex.Message);
+			}
 		}
 		/// <summary>
 		// GET api/claim/admin/status
