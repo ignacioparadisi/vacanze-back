@@ -851,7 +851,7 @@ $$
 BEGIN
     RETURN QUERY SELECT
     BAG_id, BAG_descr, BAG_status
-    FROM Baggage WHERE BAG = _bag_status;
+    FROM Baggage WHERE BAG_status = _bag_status;
 END;
 $$ LANGUAGE plpgsql;
 
