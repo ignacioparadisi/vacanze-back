@@ -1,3 +1,4 @@
+using System;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
@@ -6,20 +7,30 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
     {
         public int Id { get; }
         public int CruiserId { get;}
-        public string ArrivalDate { get;}
         public string DepartureDate { get;}
+        public string ArrivalDate { get;}
         public double Price { get;}
         public int LocDeparture { get;}
         public int LocArrival { get;}
 
 
-        public Layover(int id, int cruiserId, string arrivalDate, string departureDate, double price, int locDeparture,
+        public Layover(int id, int cruiserId, string departureDate,string arrivalDate, double price, int locDeparture,
             int locArrival)
         {
             Id = id;
             CruiserId = cruiserId;
-            ArrivalDate = arrivalDate;
             DepartureDate = departureDate;
+            ArrivalDate = arrivalDate;
+            Price = price;
+            LocDeparture = locDeparture;
+            LocArrival = locArrival;
+        }
+        public Layover(int cruiserId,string departureDate,string arrivalDate, double price, int locDeparture,
+            int locArrival)
+        {   
+            CruiserId = cruiserId;
+            DepartureDate = departureDate;
+            ArrivalDate = arrivalDate;
             Price = price;
             LocDeparture = locDeparture;
             LocArrival = locArrival;

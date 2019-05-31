@@ -4,8 +4,9 @@ using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
 {
-    public class Cruiser : Entity
+    public class Cruiser
     {
+            public int Id { get; }
             public string Name { get; }
             public bool Status { get; }
             public int Capacity { get; }
@@ -15,8 +16,9 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
             public string Picture { get; }
 
             [JsonConstructor]
-            public Cruiser( long id , string name , bool status , int capacity , int loadingShipCap , string model , string line,string picture) : base(id)
+            public Cruiser( int id , string name , bool status , int capacity , int loadingShipCap , string model , string line,string picture)
             {
+                Id = id;
                 Name = name;
                 Status = status;
                 Capacity = capacity;
@@ -25,7 +27,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
                 Line = line;
                 Picture = picture;
             }
-            public Cruiser(string name , bool status , int capacity , int loadingShipCap , string model , string line, string picture) : base(0)
+            public Cruiser(string name , bool status , int capacity , int loadingShipCap , string model , string line, string picture)
             {
                 Name = name;
                 Status = status;
