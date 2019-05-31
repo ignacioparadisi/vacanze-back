@@ -761,14 +761,15 @@ RETURNS TABLE
   (id integer,
    title VARCHAR(30),
    descr VARCHAR(30),
-   status VARCHAR(30)
+   status VARCHAR(30),
+   idEquipaje integer
   )
 AS
 $$
 BEGIN
     RETURN QUERY SELECT
-    cla_id, cla_title,cla_descr, cla_status
-    FROM Claim WHERE cla_id = _cla_id;
+    cla_id, cla_title,cla_descr, cla_status bag_id
+    FROM Claim, baggage WHERE cla_id = _cla_id and cla_id= bag_cla_fk ;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -778,13 +779,14 @@ RETURNS TABLE
   (id integer,
    title VARCHAR(30),
    descr VARCHAR(30),
-   status VARCHAR(30)
+   status VARCHAR(30),
+   idEquipaje integer
   )
 AS
 $$
 BEGIN    
     RETURN QUERY SELECT 
-    cla_id, cla_title,cla_descr, cla_status from claim, Baggage , res_fli, users
+    cla_id, cla_title,cla_descr, cla_status , bag_id from claim, Baggage , res_fli, users
     where bag_res_fli_fk =rf_id and rf_use_fk =use_id  and use_document_id=_users_document_id
     and bag_cla_fk=cla_id; 
 END;
@@ -796,14 +798,15 @@ RETURNS TABLE
   (id integer,
    title VARCHAR(30),
    descr VARCHAR(30),
-   status VARCHAR(30)
+   status VARCHAR(30),
+   idEquipaje integer
   )
 AS
 $$
 BEGIN
     RETURN QUERY SELECT
-    cla_id, cla_title,cla_descr, cla_status
-    FROM Claim WHERE cla_status = _cla_status;
+    cla_id, cla_title,cla_descr, cla_status, bag_id
+    FROM Claim, baggage WHERE cla_status = _cla_status and cla_id= bag_cla_fk ;
 END;
 $$ LANGUAGE plpgsql;
 
