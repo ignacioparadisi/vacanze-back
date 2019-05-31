@@ -6,13 +6,13 @@ namespace vacanze_back.Entities.Grupo11
     public class Bill : Entity
     {
 
-        public int id { get; set; }
+        public long id { get; set; }
         public int paymentMethod { get; set; }
         public string reference { get; private set; }
-        public long total{get; set;}
+        public double total{get; set;}
 
 
-        public Bill(int _id, int _paymentMethod, string _reference, long _total) : base(_id)
+        public Bill(long _id, int _paymentMethod, string _reference, double _total) : base(_id)
         {
             id = _id;
             paymentMethod = _paymentMethod;
@@ -53,12 +53,12 @@ namespace vacanze_back.Entities.Grupo11
             reference = _reference;
         }
 
-        public long getTotal()
+        public double getTotal()
         {
             return total;
         }
 
-        public void setTotal(long _total)
+        public void setTotal(double _total)
         {
             total = _total;
         }

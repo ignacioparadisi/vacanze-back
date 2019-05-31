@@ -65,7 +65,7 @@ namespace vacanze_back.Controllers
 
             try
             {
-                var lPayments = PaymentRepository.GetPaymentMethod();
+                var lPayments = PaymentRepository.GetInfoOrder(id,type);
 
                 if (lPayments != null && lPayments.Count > 0)
                 {
@@ -77,6 +77,70 @@ namespace vacanze_back.Controllers
                 }
 
 
+
+            }
+            catch (DatabaseException e)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
+
+
+
+
+        }
+
+        [HttpPost]
+        [Route("")]
+        public ActionResult<List<Payment>> AddPayment([FromForm] Bill bill)
+        {
+
+            try
+            {
+                var id = PaymentRepository.AddPayment(bill);
+
+                if (id > 0)
+                {
+                    return Ok("Se ha registrado con exito");
+
+                }
+                else
+                {
+                    return NotFound("Ocurrio un error insertando el pago");
+                }
+
+
+
+            }
+            catch (DatabaseException e)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
+
+
+
+
+        }
+
+
+        [HttpGet]
+        [Route("Procces")]
+        public ActionResult<List<Payment>> GetProccesPayment()
+        {
+
+            try
+            {
+                var oResp = PaymentRepository.PayProcessResponse();
+
+                if (oResp.Item1 == 0)
+                {
+                   return Ok(oResp);
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status402PaymentRequired,oResp);
+                }
 
             }
             catch (DatabaseException e)
