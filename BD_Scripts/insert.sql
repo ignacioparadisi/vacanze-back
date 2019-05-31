@@ -232,3 +232,42 @@ INSERT INTO public.Plane(
 --------------Grupo 8 ---------------------------------
 INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'concordia', 100, 1000, 'Modelo1','Linea1', '1.jpg' );
 INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'Lmao', 500, 2000, 'Modelo2','Linea2', '3.jpg' );
+
+--------------Grupo 13---------------------------------
+INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
+VALUES('FIAT','UNO',5,true,25.99,'TAT77E','fiatuno.jgp',1);
+
+INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
+VALUES('FIAT','FIRE',5,true,24.99,'MEB19G','fiatfire.jgp',1);
+
+INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
+VALUES('BMW','Z3',4,true,35.99,'DDB43S','bmwz3.jpg',2);
+
+INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
+VALUES('Audi','Q7',6,true,40.99,'AA1239G','audiq7.jpg',3);
+
+INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
+VALUES('Sin','Reserva',4,true,34.99,'Bueno','',2);
+
+INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
+VALUES('Sin2','Reserva2',3,true,36.99,'Bueno2','',2);
+
+INSERT INTO public.res_roo(rr_checkinDate,rr_checkoutDate,rr_timestamp,rr_use_fk,rr_hot_fk)
+values('10/12/2018', '02/01/2019','10/12/2018', 1, 1 );
+INSERT INTO public.res_roo(rr_checkinDate,rr_checkoutDate,rr_timestamp,rr_use_fk,rr_hot_fk)
+values('10/11/2018', '02/01/2019','10/11/2018', 2, 2 );
+INSERT INTO public.res_roo(rr_checkinDate,rr_checkoutDate,rr_timestamp,rr_use_fk,rr_hot_fk)
+values('10/10/2018', '02/01/2019','10/10/2018', 1, 1 );
+INSERT INTO public.res_roo(rr_checkinDate,rr_checkoutDate,rr_timestamp,rr_use_fk,rr_hot_fk)
+values('10/09/2018', '02/01/2019','10/09/2018', 2, 2 );
+
+INSERT INTO public.Res_Aut(ra_pickupdate, ra_returndate,ra_timestamp,ra_use_fk, ra_aut_fk)
+values ('01/03/2019', '01/05/2019','01/03/2019', 1, 1);
+INSERT INTO public.Res_Aut(ra_pickupdate, ra_returndate,ra_timestamp,ra_use_fk, ra_aut_fk)
+values ('01/04/2019', '01/07/2019','01/04/2019', 2, 2);
+INSERT INTO public.Res_Aut(ra_pickupdate, ra_returndate,ra_timestamp,ra_use_fk, ra_aut_fk)
+values ('01/02/2019', '01/07/2019','01/02/2019', 2, 3);
+INSERT INTO public.Res_Aut(ra_pickupdate, ra_returndate,ra_timestamp,ra_use_fk, ra_aut_fk)
+values ('02/03/2019', '02/07/2019','02/03/2019', 1, 4);
+INSERT INTO public.Res_Aut(ra_pickupdate, ra_returndate,ra_timestamp,ra_use_fk, ra_aut_fk)
+values ('02/03/2019', '02/09/2019','02/03/2019', 1, 1);
