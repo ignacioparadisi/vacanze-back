@@ -1,15 +1,12 @@
-using System.ComponentModel.DataAnnotations;
-using System.Security;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+
 using Newtonsoft.Json;
-using NLog.Targets.Wrappers;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
 {
     public class Cruiser : Entity
     {
-        public string Name { get; }
+            public string Name { get; }
             public bool Status { get; }
             public int Capacity { get; }
             public int LoadingShipCap { get; }
