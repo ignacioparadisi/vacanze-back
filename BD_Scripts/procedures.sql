@@ -140,7 +140,7 @@ END;
 $BODY$;
 
 ALTER FUNCTION public.findplane(integer)
-    OWNER TO postgres;
+    OWNER TO vacanza;
 
 
 -- FUNCTION: public.findflight(integer)
@@ -192,15 +192,15 @@ END;
 $BODY$;
 
 ALTER FUNCTION public.getflights()
-    OWNER TO postgres;
+    OWNER TO vacanza;
 
 -- FUNCTION: public.getflightsbydate(timestamp without time zone, timestamp without time zone)
 
 -- DROP FUNCTION public.getflightsbydate(timestamp without time zone, timestamp without time zone);
 
 CREATE OR REPLACE FUNCTION public.getflightsbydate(
-	_begin timestamp without time zone,
-	_end timestamp without time zone)
+	_begin char varying,
+	_end char varying)
     RETURNS TABLE(id integer, plane integer, price numeric, departuredate timestamp without time zone, arrivaldate timestamp without time zone, locdeparture integer, locarrival integer) 
     LANGUAGE 'plpgsql'
 
@@ -212,13 +212,40 @@ AS $BODY$
 BEGIN
 	RETURN QUERY SELECT
 	fli_id, fli_pla_fk, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, fli_loc_arrival
-	FROM public.Flight WHERE fli_departuredate BETWEEN _begin AND _end + '1 days'::interval;
+	FROM public.Flight WHERE fli_departuredate BETWEEN _begin::timestamp without time zone AND _end::timestamp without time zone + '1 days'::interval;
 END;
 
 $BODY$;
 
-ALTER FUNCTION public.getflightsbydate(timestamp without time zone, timestamp without time zone)
-    OWNER TO postgres;
+ALTER FUNCTION public.getflightsbydate(char varying, char varying)
+    OWNER TO vacanza;
+
+
+-- FUNCTION: public.getflightsbylocation(integer, integer)
+
+-- DROP FUNCTION public.getflightsbylocation(integer, integer);
+
+CREATE OR REPLACE FUNCTION public.getflightsbylocation(
+	_arrival integer,
+	_departure integer)
+    RETURNS TABLE(id integer, plane integer, price numeric, departuredate timestamp without time zone, arrivaldate timestamp without time zone, locdeparture integer, locarrival integer) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+	RETURN QUERY SELECT
+	fli_id, fli_pla_fk, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, fli_loc_arrival
+	FROM public.Flight WHERE fli_loc_arrival = _arrival AND fli_loc_departure = _departure;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.getflightsbylocation(integer, integer)
+    OWNER TO vacanza;
 
 
 ------- grupo 2 ----------
