@@ -1062,7 +1062,7 @@ BEGIN
 	ELSIF (_place=0 and _capacity = 0) then 
 		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_isactive = _status  and aut_license = _license;
     ELSIF (_place=0 ) then 
-		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_isactive = _status  and aut_license = _license and aut_loc_fk=_place;
+		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_isactive = _status  and aut_license = _license and aut_capacity =_capacity;
     ELSIF (_result= 'null' and _license ='null' ) then 
 		RETURN QUERY  select * FROM AUTOMOBILE  WHERE aut_loc_fk=_place and aut_capacity =_capacity;
     ELSIF (_result= 'null' and _capacity =0 ) then 
