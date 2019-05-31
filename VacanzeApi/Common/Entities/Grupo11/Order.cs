@@ -9,17 +9,19 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo11
 
         [JsonConstructor]
         public Order(long id, string descrip, string image,
-            string brand, double price, double priceTotal) : base(id)
+            string brand, double qty, double price, double priceTotal) : base(id)
         {
             Descrip = descrip;
             Image = image;
             Brand = brand;
+            Qty = qty;
             Price = price;
             PriceTotal = priceTotal;
+            
         }
 
         public Order(string descrip, string image,
-            string brand, double price, double priceTotal) : base(0)
+            string brand, double Qty, double price, double priceTotal) : base(0)
         {
           
         }
@@ -28,7 +30,9 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo11
         public string Descrip { get; }
         public string Image { get; }
         public string Brand { get; }
+        public double Qty { get; }
         public double Price { get; }
         public double PriceTotal { get; }
+      
     }
 }

@@ -28,7 +28,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo11
                         Convert.ToString(_table.Rows[i][2]),
                         Convert.ToString(_table.Rows[i][3]),
                         Convert.ToDouble(_table.Rows[i][4]),
-                        Convert.ToDouble(_table.Rows[i][5]))
+                        Convert.ToDouble(_table.Rows[i][5]),
+                        Convert.ToDouble(_table.Rows[i][6]))
                        
                         );
                 }
