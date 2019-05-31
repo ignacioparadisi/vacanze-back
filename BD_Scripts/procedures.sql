@@ -643,8 +643,8 @@ AS
 $$
 BEGIN
     RETURN QUERY SELECT
-    c.cru_id, s.shi_name, c.cru_departuredate, c.cru_arrivaldate, c.cru_price
-    FROM Cruise c, Ship s WHERE c.cru_id = _cru_id and s.shi_id = c.cru_shi_fk;
+    cru_id, cru_shi_fk, cru_departuredate, cru_arrivaldate, cru_price
+    FROM Cruise WHERE cru_id = _cru_id;
 END;
 $$ LANGUAGE plpgsql;
 ---------Retorna todos los Cruceros--------
