@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 using vacanze_back.VacanzeApi.Persistence.Repository;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo6;
 
@@ -44,17 +46,24 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
             try
             {
                 LocationRepository.GetLocationById(hotel.Location.Id);
+                hotel.Validate();
+                var idFromDatabase = HotelRepository.AddHotel(hotel);
+                return CreatedAtAction("Get", "hotels",
+                    HotelRepository.GetHotelById(idFromDatabase));
             }
             catch (EntityNotFoundException)
             {
-                ModelState.AddModelError("Location",
-                    $"Invalid location ID {hotel.Location.Id} (Not found)");
-                return new BadRequestObjectResult(ModelState);
+                return new BadRequestObjectResult(
+                    new ErrorMessage($"Invalid location ID {hotel.Location.Id} (Not found)"));
             }
-
-            var idFromDatabase = HotelRepository.AddHotel(hotel);
-            return CreatedAtAction("Get", "hotels",
-                HotelRepository.GetHotelById(idFromDatabase));
+            catch (RequiredAttributeException e)
+            {
+                return new BadRequestObjectResult(new ErrorMessage(e.Message));
+            }
+            catch (InvalidAttributeException e)
+            {
+                return new BadRequestObjectResult(new ErrorMessage(e.Message));
+            }
         }
 
         [HttpDelete("{id}", Name = "DeleteHotel")]
