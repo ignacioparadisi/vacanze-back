@@ -38,6 +38,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 return BadRequest(errorMessage);
             }
         }
+
         // GET/Cruiser/{id}
         [HttpGet("{id}")]
         public ActionResult<Cruiser> GetCruiser(int id)
@@ -83,38 +84,38 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 return BadRequest(errorMsg);
             }
         }
-        
-        
+
+
         [HttpPut]
-         public ActionResult<Cruiser> PutCruiser([FromBody] Cruiser cruiser)
-         {
-             try
-             {
-                 cruiser.Validate();
-                 var updatedCruiser = CruiserRepository.UpdateCruiser(cruiser);
-                 return Ok(updatedCruiser);
-             }
-             catch (InvalidAttributeException e)
-             {
-                 ErrorMessage errorMsg = new ErrorMessage(e.Message);
-                 return BadRequest(errorMsg);
-             }
-             catch (CruiserNotFoundException e)
-             {
-                 ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                 return BadRequest(errorMessage);
-             }
-             catch (NullCruiserException e)
-             {
-                 ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                 return BadRequest(errorMessage);
-             }
-             catch (DatabaseException e)
-             {
-                 ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                 return BadRequest(errorMessage);
-             }
-         }
+        public ActionResult<Cruiser> PutCruiser([FromBody] Cruiser cruiser)
+        {
+            try
+            {
+                cruiser.Validate();
+                var updatedCruiser = CruiserRepository.UpdateCruiser(cruiser);
+                return Ok(updatedCruiser);
+            }
+            catch (InvalidAttributeException e)
+            {
+                ErrorMessage errorMsg = new ErrorMessage(e.Message);
+                return BadRequest(errorMsg);
+            }
+            catch (CruiserNotFoundException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
+            }
+            catch (NullCruiserException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
+            }
+            catch (DatabaseException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
+            }
+        }
 
         [HttpDelete("{id}")]
         public ActionResult<int> DeleteCruiser(int id)
@@ -135,14 +136,34 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 return BadRequest(errorMessage);
             }
         }
-        
-        [HttpGet("{cruiser_id}/Layover")]
-        public ActionResult<IEnumerable<Layover>> GetLayovers(int cruiser_id)
+
+        [HttpGet("{cruiserId}/Layover")]
+        public ActionResult<IEnumerable<Layover>> GetLayovers(int cruiserId)
         {
             try
             {
-                var layovers = CruiserRepository.GetLayovers(cruiser_id);
+                var layovers = CruiserRepository.GetLayovers(cruiserId);
                 return Ok(layovers);
+            }
+            catch (LayoverNotFoundException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
+            }
+            catch (DatabaseException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
+            }
+        }
+
+        [HttpDelete("Layover/{layover_id}")]
+        public ActionResult<int> DeleteLayover(int layoverid)
+        {
+            try
+            {
+                var deletedId = CruiserRepository.DeleteLayover(layoverid);
+                return Ok(deletedId);
             }
             catch (LayoverNotFoundException e)
             {

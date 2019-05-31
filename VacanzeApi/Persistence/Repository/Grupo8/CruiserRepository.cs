@@ -125,5 +125,18 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
                 }
             return layovers;
         }
+        public static int DeleteLayover(int id)
+        {
+            try
+            {
+                var table = PgConnection.Instance.ExecuteFunction("DeleteCruise(@id)", id);
+                var deletedid = Convert.ToInt32(table.Rows[0][0]);
+                return deletedid;
+            }
+            catch (InvalidCastException)
+            {
+                throw new LayoverNotFoundException("Escala no encontrada");
+            }
+        }
     }
 }
