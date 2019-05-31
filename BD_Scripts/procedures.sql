@@ -505,7 +505,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--------Agregar Crucero--------------------
+-------Agregar Crucero(ruta)--------------------
 
 CREATE OR REPLACE FUNCTION AddCruise( 
   _cru_shi_fk INTEGER,
@@ -544,14 +544,18 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 --------Eliminar Cruise------------------
+--elimina una ruta dado su id
 CREATE OR REPLACE FUNCTION DeleteCruise(_cru_id integer)
-RETURNS void AS
+RETURNS integer AS
 $$
+DECLARE
+  ret_id INTEGER;
 BEGIN
 
     DELETE FROM Cruise 
-    WHERE (cru_id = _cru_id);
-
+    WHERE (cru_id = _cru_id)
+    returning cru_id into ret_id;
+  return ret_id;
 END;
 $$ LANGUAGE plpgsql;
 --------Modificar Ship-------------------
@@ -581,21 +585,29 @@ END;
 $$ LANGUAGE plpgsql;
 
 
---------Modificar Cruise-----------------
+--------Modificar Cruise(ruta)-----------------
 
-CREATE OR REPLACE FUNCTION ModifyCruiseDepartureDate( 
+CREATE OR REPLACE FUNCTION ModifyCruise( 
     _cru_id integer,
+    _shi_id integer,
     _cru_departuredate TIMESTAMP,
     _cru_arivaldate TIMESTAMP,
+    _loc_arrival integer,
+    _loc_departure integer,
     _cru_price DECIMAL
     )
 RETURNS integer AS
 $$
+declare
+    ret_id integer;
 BEGIN
 
    UPDATE Cruise SET cru_departuredate= _cru_departuredate,
-   cru_arrivaldate = _cru_arivaldate, cru_price = _cru_price
-    WHERE (cru_id = _cru_id);
+   cru_shi_fk = _shi_id, cru_arrivaldate = _cru_arivaldate, 
+   cru_loc_arrival = _loc_arrival, cru_loc_departure = _loc_departure, 
+   cru_price = _cru_price
+    WHERE (cru_id = _cru_id)
+   returning cru_id into ret_id;
    RETURN _cru_id;
 END;
 $$ LANGUAGE plpgsql;
@@ -630,23 +642,51 @@ $$
     FROM Ship WHERE shi_id = _shi_id;
 $$;
 --------Consultar Cruise-----------------
-
+--devuelve una tabla con los datos de una ruta dado su id
 CREATE OR REPLACE FUNCTION GetCruise(_cru_id integer)
 RETURNS TABLE
   (id integer,
    ship VARCHAR(30),
    departure_date TIMESTAMP,
    arrival_date TIMESTAMP,
-   price DECIMAL
+   price DECIMAL,
+   arrival_loc VARCHAR,
+   departure_loc VARCHAR
   )
 AS
 $$
-BEGIN
+DECLARE 
+ loc1 VARCHAR;
+ loc2 VARCHAR;
+BEGIN 
     RETURN QUERY SELECT
-    c.cru_id, s.shi_name, c.cru_departuredate, c.cru_arrivaldate, c.cru_price
-    FROM Cruise c, Ship s WHERE c.cru_id = _cru_id and s.shi_id = c.cru_shi_fk;
+    c.cru_id, s.shi_name, c.cru_departuredate, c.cru_arrivaldate, c.cru_price,
+  	concat(ll.loc_city, ', ',ll.loc_country)::varchar,
+	concat(l.loc_city, ',',l.loc_country)::varchar
+    FROM Cruise c, Ship s, Location ll, Location l
+    WHERE c.cru_id = _cru_id and s.shi_id = c.cru_shi_fk
+	and ll.loc_id = c.cru_loc_arrival
+	and l.loc_id = c.cru_loc_departure;
+    
 END;
 $$ LANGUAGE plpgsql;
+
+-- CREATE OR REPLACE FUNCTION GetCruiseByLocation(_cru_id integer)
+-- RETURNS TABLE
+--   (id integer,
+--    ship VARCHAR(30),
+--    departure_date TIMESTAMP,
+--    arrival_date TIMESTAMP,
+--    price DECIMAL
+--   )
+-- AS
+-- $$
+-- BEGIN
+--     RETURN QUERY SELECT
+--     c.cru_id, s.shi_name, c.cru_departuredate, c.cru_arrivaldate, c.cru_price
+--     FROM Cruise c, Ship s WHERE c.cru_id = _cru_id and s.shi_id = c.cru_shi_fk;
+-- END;
+-- $$ LANGUAGE plpgsql;
 ---------Retorna todos los Cruceros--------
 CREATE OR REPLACE FUNCTION GetAllShip()
 RETURNS TABLE
