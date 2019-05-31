@@ -23,6 +23,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
             {
                 throw new AddRestaurantException("No se pudo agregar el restaurant");
             }
+            catch(InvalidOperationException)
+            {
+                throw new AddRestaurantException("No se llenaron los campos necesarios para poder crear un restaurant");
+            }
             
         }
 
@@ -123,7 +127,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
             }
             catch (InvalidCastException)
             {
-                throw new DeleteRestaurantException("No se pudo eliminar el restaurant");
+                throw new DeleteRestaurantException("El restaurant no existe");
             }
             catch (DatabaseException)
             {

@@ -31,7 +31,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
             {
                 // TODO: No se deberia mandar un Ok cuando falla la base de datos, se deberia mandar
                 //       un error 500 o algo
-                return StatusCode(500, "No se pudieron obtener los restaurants");
+                return StatusCode(500, e.Message);
             }
         }
 
@@ -48,9 +48,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
             {
                 return StatusCode(500,"El Restaurant no fue encontrado");
             }
-            catch(GetRestaurantExcepcion)
+            catch(GetRestaurantExcepcion e)
             {
-                return StatusCode(500, "El restaurant no pudo ser encontrado");
+                return StatusCode(500, e.Message);
             }
         }
 
@@ -69,9 +69,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
                                              restaurant.Address);
                 return CreatedAtAction("Get", "restaurants", savedrestaurant); 
             }
-            catch(AddRestaurantException)
+            catch(AddRestaurantException e)
             {
-                return StatusCode(500, "No se pudo crear el restaurant");
+                return StatusCode(500, e.Message);
             }
             
         }
@@ -84,9 +84,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
                 var UpdatedRestaurant = RestaurantRepository.UpdateRestaurant(restaurant);
                 return StatusCode(200, restaurant);
              }
-             catch(UpdateRestaurantException)
+             catch(UpdateRestaurantException e)
              {
-                 return StatusCode(500, "No se pudo actualizar el restaurant");
+                 return StatusCode(500, e.Message);
              }
             
          }
@@ -99,9 +99,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
                 var deletedid = RestaurantRepository.DeleteRestaurant(id);
                 return StatusCode(200, "Eliminado satisfactoriamente");
             }
-            catch(DeleteRestaurantException)
+            catch(DeleteRestaurantException e)
             {
-                return StatusCode(500, "El restaurante no existe");
+                return StatusCode(500, e.Message);
             }
             
         }
