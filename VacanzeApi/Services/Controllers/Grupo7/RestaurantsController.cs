@@ -19,18 +19,32 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
 
         // GET api/restaurants/[?location={location_id}]
         [HttpGet]
-        public ActionResult<IEnumerable<Restaurant>> Get([FromQuery] long location = -1)
+        public ActionResult<IEnumerable<Restaurant>> Get([FromQuery] long location = 0)
         {
             try
             {
-                if (location == -1)
-                    return RestaurantRepository.GetRestaurants();
-                return Ok($"No implementado todavia. Recibi location: {location}");
+                return RestaurantRepository.GetRestaurants();
             }
             catch (GetRestaurantExcepcion e)
             {
-                // TODO: No se deberia mandar un Ok cuando falla la base de datos, se deberia mandar
-                //       un error 500 o algo
+                return StatusCode(500, e.Message);
+            }
+        }
+
+         // GET/Restaurant/{id}
+        [HttpGet("location/{id}")]
+        public ActionResult<IEnumerable<Restaurant>> GetRestaurantByLocation(int id)
+        {
+            try
+            {
+                return RestaurantRepository.GetRestaurantsByCity(id);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return StatusCode(500,"El Restaurant no fue encontrado");
+            }
+            catch(GetRestaurantExcepcion e)
+            {
                 return StatusCode(500, e.Message);
             }
         }

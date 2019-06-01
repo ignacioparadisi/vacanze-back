@@ -1192,6 +1192,34 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql; 
 
+--------------------------Consultar restaurants por ciudad--------------------
+
+CREATE OR REPLACE FUNCTION GetRestaurantsByCity(sent_location integer)
+RETURNS TABLE
+  (id integer,
+   name VARCHAR(100),
+   capacity INTEGER,
+   isActive BOOLEAN,
+   qualify DECIMAL,
+   specialty VARCHAR(30),
+   price DECIMAL,
+   businessName VARCHAR(30),
+   picture VARCHAR,
+   description VARCHAR(30),
+   phone VARCHAR(30),
+   location INTEGER,
+   address VARCHAR(30)
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT
+    R.res_id, R.res_name, R.res_capacity , R.res_isactive, R.res_qualify ,R.res_specialty,R.res_price, R.res_businessname, R.res_picture, R.res_descr, R.res_tlf, R.res_loc_fk, R.res_address_specs
+    FROM Restaurant AS R
+	WHERE R.res_loc_fk = sent_location;
+END;
+$$ LANGUAGE plpgsql;
+
 --------------------------Borrar Restaurant--------------------
 
 CREATE OR REPLACE FUNCTION DeleteRestaurant(id integer)

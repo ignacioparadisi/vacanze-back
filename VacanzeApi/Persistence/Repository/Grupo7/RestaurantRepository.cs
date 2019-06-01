@@ -90,10 +90,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
             
         }
         public static Restaurant GetRestaurant(int restaurant_id)
-        {
-            var table = PgConnection.Instance.ExecuteFunction("GetRestaurant(@restaurant_id)" , restaurant_id);
+        {       
             try
             {
+                var table = PgConnection.Instance.ExecuteFunction("GetRestaurant(@restaurant_id)" , restaurant_id);
                 var id = Convert.ToInt64(table.Rows[0][0]);
                 var name = table.Rows[0][1].ToString();
                 var capacity = Convert.ToInt32(table.Rows[0][2]); 
@@ -114,6 +114,38 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
             catch (DatabaseException)
             {
                 throw new GetRestaurantExcepcion("No se pudo obtener el restaurant solicitado");
+            }
+        }
+
+        public static List<Restaurant> GetRestaurantsByCity(int location_id)
+        {
+            try
+            {
+                var table = PgConnection.Instance.ExecuteFunction("GetRestaurantsByCity(@location_id)", location_id);
+                var restaurantList = new List<Restaurant>();
+                for (var i = 0; i < table.Rows.Count; i++)
+                {
+                    var id = Convert.ToInt64(table.Rows[i][0]);
+                    var name = table.Rows[i][1].ToString();
+                    var capacity = Convert.ToInt32(table.Rows[i][2]); 
+                    var isActive = Convert.ToBoolean(table.Rows[i][3]);
+                    var qualify = Convert.ToDecimal(table.Rows[i][4]);
+                    var specialty = table.Rows[i][5].ToString();
+                    var price = Convert.ToDecimal(table.Rows[i][6]);
+                    var businessName = table.Rows[i][7].ToString();
+                    var picture = table.Rows[i][8].ToString();
+                    var description = table.Rows[i][9].ToString();
+                    var phone = table.Rows[i][10].ToString();
+                    var location = Convert.ToInt32(table.Rows[i][11]);
+                    var address = table.Rows[i][12].ToString();
+                    var restaurant = new Restaurant(id, name, capacity, isActive, qualify, specialty, price, businessName, picture, description, phone, location, address);
+                    restaurantList.Add(restaurant);
+                }
+                return restaurantList;
+            }
+            catch(DatabaseException)
+            {
+                throw new GetRestaurantExcepcion("No se pudo obtener los restaurantes para esa ciudad");
             }
         }
 
