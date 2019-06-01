@@ -573,6 +573,18 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION AddLocation(city VARCHAR(30),
+                                        country VARCHAR(30))
+    RETURNS integer AS
+$$
+DECLARE
+    dest_id INTEGER;
+BEGIN
+    INSERT INTO LOCATION (loc_city, loc_country) VALUES (city,country) RETURNING LOC_ID INTO dest_id;
+    RETURN dest_id;
+END;
+$$ LANGUAGE plpgsql;
+
 ---DELETE HOTEL---
 CREATE OR REPLACE FUNCTION DeleteHotel(_HOT_ID integer)
 RETURNS integer AS
