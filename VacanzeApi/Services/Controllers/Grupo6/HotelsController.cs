@@ -32,7 +32,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
             {
                 return HotelRepository.GetHotelById(hotelId);
             }
-            catch (EntityNotFoundException)
+            catch (HotelNotFoundException)
             {
                 return NotFound();
             }
@@ -51,10 +51,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
                 return CreatedAtAction("Get", "hotels",
                     HotelRepository.GetHotelById(idFromDatabase));
             }
-            catch (EntityNotFoundException)
+            catch (LocationNotFoundException)
             {
-                return new BadRequestObjectResult(
-                    new ErrorMessage($"Invalid location ID {hotel.Location.Id} (Not found)"));
+                return new NotFoundObjectResult(
+                    new ErrorMessage($"Location con id {hotel.Location.Id} no conseguido"));
             }
             catch (RequiredAttributeException e)
             {
@@ -76,9 +76,32 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         [HttpPut("{hotelId}", Name = "UpdateHotel")]
         public ActionResult<Hotel> Update([FromRoute] int hotelId, [FromBody] Hotel dataToUpdate)
         {
-            // TODO: Buscar por id primero a ver si existe
-            var updated = HotelRepository.UpdateHotel(hotelId, dataToUpdate);
-            return Ok(updated);
+            try
+            {
+                LocationRepository.GetLocationById(dataToUpdate.Location.Id);
+                HotelRepository.GetHotelById(hotelId);
+                dataToUpdate.Validate();
+                var updated = HotelRepository.UpdateHotel(hotelId, dataToUpdate);
+                return Ok(updated);
+            }
+            catch (HotelNotFoundException)
+            {
+                return new NotFoundObjectResult(
+                    new ErrorMessage($"Hotel con id {hotelId} no conseguido"));
+            }
+            catch (LocationNotFoundException)
+            {
+                return new NotFoundObjectResult(
+                    new ErrorMessage($"Location con id {dataToUpdate.Location.Id} no conseguido"));
+            }
+            catch (RequiredAttributeException e)
+            {
+                return new BadRequestObjectResult(new ErrorMessage(e.Message));
+            }
+            catch (InvalidAttributeException e)
+            {
+                return new BadRequestObjectResult(new ErrorMessage(e.Message));
+            }
         }
     }
 }

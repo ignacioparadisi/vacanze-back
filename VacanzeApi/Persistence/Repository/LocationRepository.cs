@@ -21,7 +21,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
         {
             var resultTable = PgConnection.Instance.ExecuteFunction("GetLocationById(@p_id)", id);
             if (resultTable.Rows.Count == 0)
-                throw new EntityNotFoundException($"Location with id {id} not found");
+                throw new LocationNotFoundException(id);
 
             return ExtractLocationFromRow(resultTable.Rows[0]);
         }
@@ -50,6 +50,18 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
             var city = row[1].ToString();
             var country = row[2].ToString();
             return new Location(id, country, city);
+        }
+        
+        public static int AddLocation(Location location)
+        {
+            // TODO: try / catch DatabseException y retornar algo tipo SaveHotelException
+            var table = PgConnection.Instance.ExecuteFunction(
+                "AddLocation(@city, @country)",
+                location.City,
+                location.Country
+            );
+            var savedId = Convert.ToInt32(table.Rows[0][0]);
+            return savedId;
         }
     }
 }
