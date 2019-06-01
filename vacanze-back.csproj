@@ -11,19 +11,16 @@
     <Compile Remove="Controllers\**" />
     <Compile Remove="Entities\**" />
     <Compile Remove="LogicLayer\**" />
-    <Compile Remove="VacanzeApi\LogicLayer\**" />
+    <Compile Include="VacanzeApi\LogicLayer\Encryptor.cs" />
     <Content Remove="Controllers\**" />
     <Content Remove="Entities\**" />
     <Content Remove="LogicLayer\**" />
-    <Content Remove="VacanzeApi\LogicLayer\**" />
     <EmbeddedResource Remove="Controllers\**" />
     <EmbeddedResource Remove="Entities\**" />
     <EmbeddedResource Remove="LogicLayer\**" />
-    <EmbeddedResource Remove="VacanzeApi\LogicLayer\**" />
     <None Remove="Controllers\**" />
     <None Remove="Entities\**" />
     <None Remove="LogicLayer\**" />
-    <None Remove="VacanzeApi\LogicLayer\**" />
   </ItemGroup>
 
   <ItemGroup>
