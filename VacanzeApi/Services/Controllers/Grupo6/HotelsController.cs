@@ -32,7 +32,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
             {
                 return HotelRepository.GetHotelById(hotelId);
             }
-            catch (EntityNotFoundException)
+            catch (HotelNotFoundException)
             {
                 return NotFound();
             }
@@ -53,7 +53,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
             }
             catch (LocationNotFoundException)
             {
-                return new BadRequestObjectResult(
+                return new NotFoundObjectResult(
                     new ErrorMessage($"Location con id {hotel.Location.Id} no conseguido"));
             }
             catch (RequiredAttributeException e)
@@ -86,12 +86,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
             }
             catch (HotelNotFoundException)
             {
-                return new BadRequestObjectResult(
+                return new NotFoundObjectResult(
                     new ErrorMessage($"Hotel con id {hotelId} no conseguido"));
             }
             catch (LocationNotFoundException)
             {
-                return new BadRequestObjectResult(
+                return new NotFoundObjectResult(
                     new ErrorMessage($"Location con id {dataToUpdate.Location.Id} no conseguido"));
             }
             catch (RequiredAttributeException e)

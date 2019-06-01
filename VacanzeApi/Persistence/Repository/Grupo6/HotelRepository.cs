@@ -41,7 +41,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
                 }
                 catch (ParseFromDatabaseRowException)
                 {
-                    // TODO: Log exception
                 }
 
             return hotelList;
@@ -66,7 +65,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
                 }
                 catch (ParseFromDatabaseRowException)
                 {
-                    // TODO: Log exception
                 }
 
             return hotelList;
@@ -80,14 +78,12 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
             }
             catch (DatabaseException)
             {
-                // TODO: Loggear underlying exception
-                throw new DeleteEntityException(
+                throw new DeleteHotelException(
                     $"Database error while trying to delete hotel {id}");
             }
             catch (Exception)
             {
-                // TODO: Loggear underlying exception
-                throw new DeleteEntityException($"Unknown error while deleting hotel {id}.");
+                throw new DeleteHotelException($"Unknown error while deleting hotel {id}.");
             }
         }
 
@@ -146,20 +142,17 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
             }
             catch (IndexOutOfRangeException)
             {
-                // TODO: Loggear underlying exception
                 throw new ParseFromDatabaseRowException(
                     "DataRow does not contain all the required fields for a Hotel");
             }
             catch (FormatException)
             {
-                // TODO: Loggear underlying exception
                 throw new ParseFromDatabaseRowException(
                     "A field couldn't be converted to its corresponding type. " +
                     "Check the ordering of the arguments returned by the Stored Procedure");
             }
             catch (Exception)
             {
-                // TODO: Loggear underlying exception
                 throw new ParseFromDatabaseRowException(
                     "Mapping of the DataRow to a Hotel entity failed");
             }
