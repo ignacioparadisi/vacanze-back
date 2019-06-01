@@ -9,11 +9,10 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo12{
         public int _id_user{get;set;}
         public int _id_fli{get;set;}
         public int _id_pay{get;set;}
-
+        public int _num_capacity{get;set;}
+        public int _sum_capacity{get;set;}
         public FlightRes():base(0){}
         
-     
-
         public FlightRes(string seatNum,string timestamp,int numPas,int id_user,int id_pay,int id_fli ):base(0){
 
             _seatNum=seatNum;
@@ -26,7 +25,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo12{
             
         }
 
-         public FlightRes(int id,string seatNum,string timestamp,int numPas,int id_user,int id_pay,int id_fli ):base(id){
+        public FlightRes(int id,string seatNum,string timestamp,int numPas,int id_user,int id_pay,int id_fli ):base(id){
             _id=id;
             _seatNum=seatNum;
             _timestamp=timestamp;

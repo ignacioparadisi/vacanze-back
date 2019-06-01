@@ -27,10 +27,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
                 FlightRes f=new FlightRes(flight._seatNum,flight._timestamp,
                 flight._numPas,flight._id_user,flight._id_pay,flight._id_fli);
                 con.AddReservationFlight(f);
-                return StatusCode(200, "Se agrego satisfactoriamente");
-                
-            }catch(Exception ){
-
+                  return StatusCode(200, "Se agrego satisfactoriamente");
+                //else
+                  //  return StatusCode(201,"Capacidad No disponible");
+            }catch(Exception e){
+                Console.WriteLine(e);
                  return StatusCode(404, "Error");
             
             }
@@ -62,7 +63,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         public ActionResult<IEnumerable<String>> Delete(int id_res){
 
             try{
-                
+                Console.Write(id_res);
                 FlightResConnection con=new FlightResConnection();
                 con.DeleteReservationFlight(id_res);
                 return StatusCode(200, "Se elimino satisfactoriamente");
