@@ -4,10 +4,8 @@ namespace vacanze_back.VacanzeApi.Common.Exceptions
 {
     public class RepeatedEmailException : Exception
     {
-        string _Menssage;
-        public RepeatedEmailException(string message)
+        public RepeatedEmailException(string message) : base(message)
         {
-            _Menssage = message;
         }
     }
 }
