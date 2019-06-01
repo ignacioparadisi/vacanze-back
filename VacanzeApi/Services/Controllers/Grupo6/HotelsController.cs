@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 using vacanze_back.VacanzeApi.Persistence.Repository;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo6;
 
@@ -44,17 +46,24 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
             try
             {
                 LocationRepository.GetLocationById(hotel.Location.Id);
+                hotel.Validate();
+                var idFromDatabase = HotelRepository.AddHotel(hotel);
+                return CreatedAtAction("Get", "hotels",
+                    HotelRepository.GetHotelById(idFromDatabase));
             }
             catch (EntityNotFoundException)
             {
-                ModelState.AddModelError("Location",
-                    $"Invalid location ID {hotel.Location.Id} (Not found)");
-                return new BadRequestObjectResult(ModelState);
+                return new BadRequestObjectResult(
+                    new ErrorMessage($"Invalid location ID {hotel.Location.Id} (Not found)"));
             }
-
-            var idFromDatabase = HotelRepository.AddHotel(hotel);
-            return CreatedAtAction("Get", "hotels",
-                HotelRepository.GetHotelById(idFromDatabase));
+            catch (RequiredAttributeException e)
+            {
+                return new BadRequestObjectResult(new ErrorMessage(e.Message));
+            }
+            catch (InvalidAttributeException e)
+            {
+                return new BadRequestObjectResult(new ErrorMessage(e.Message));
+            }
         }
 
         [HttpDelete("{id}", Name = "DeleteHotel")]
@@ -67,9 +76,26 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         [HttpPut("{hotelId}", Name = "UpdateHotel")]
         public ActionResult<Hotel> Update([FromRoute] int hotelId, [FromBody] Hotel dataToUpdate)
         {
-            // TODO: Buscar por id primero a ver si existe
-            var updated = HotelRepository.UpdateHotel(hotelId, dataToUpdate);
-            return Ok(updated);
+            try
+            {
+                HotelRepository.GetHotelById(hotelId);
+                dataToUpdate.Validate();
+                var updated = HotelRepository.UpdateHotel(hotelId, dataToUpdate);
+                return Ok(updated);
+            }
+            catch (EntityNotFoundException)
+            {
+                return new BadRequestObjectResult(
+                    new ErrorMessage($"Hotel con id {hotelId} no conseguido"));
+            }
+            catch (RequiredAttributeException e)
+            {
+                return new BadRequestObjectResult(new ErrorMessage(e.Message));
+            }
+            catch (InvalidAttributeException e)
+            {
+                return new BadRequestObjectResult(new ErrorMessage(e.Message));
+            }
         }
     }
 }
