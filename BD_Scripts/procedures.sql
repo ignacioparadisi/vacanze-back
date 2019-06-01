@@ -792,23 +792,30 @@ BEGIN
     
 END;
 $$ LANGUAGE plpgsql;
+--------------get cruise by loc------------------------------------------
+CREATE OR REPLACE FUNCTION GetCruiseByLocation(_dep_id integer, _arr_id integer)
+RETURNS TABLE
+  (id integer,
+   ship_id integer,
+   departure_date TIMESTAMP,
+   arrival_date TIMESTAMP,
+   price DECIMAL,
+   departure_loc integer,
+   arrival_loc integer
+  )
+AS
+$$
+BEGIN 
+    RETURN QUERY SELECT
+    c.cru_id,c.cru_shi_fk, c.cru_departuredate, c.cru_arrivaldate, c.cru_price,
+  	c.cru_loc_departure, c.cru_loc_arrival
+	FROM Cruise c
+    WHERE c.cru_loc_departure = _dep_id
+	and c.cru_loc_arrival = _arr_id;
+    
+END;
+$$ LANGUAGE plpgsql;
 
--- CREATE OR REPLACE FUNCTION GetCruiseByLocation(_cru_id integer)
--- RETURNS TABLE
---   (id integer,
---    ship VARCHAR(30),
---    departure_date TIMESTAMP,
---    arrival_date TIMESTAMP,
---    price DECIMAL
---   )
--- AS
--- $$
--- BEGIN
---     RETURN QUERY SELECT
---     c.cru_id, s.shi_name, c.cru_departuredate, c.cru_arrivaldate, c.cru_price
---     FROM Cruise c, Ship s WHERE c.cru_id = _cru_id and s.shi_id = c.cru_shi_fk;
--- END;
--- $$ LANGUAGE plpgsql;
 ---------Retorna todos los Cruceros--------
 CREATE OR REPLACE FUNCTION GetAllShip()
 RETURNS TABLE
