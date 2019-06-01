@@ -83,7 +83,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             int user_id;
             try
             {
-                user.Validate(true);
+                // user.Validate(true);
                 user_id = UserRepository.UpdateUser(user, id);
                 UserRepository.DeleteUser_Role(id);
                 foreach (var role in user.Roles)

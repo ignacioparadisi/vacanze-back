@@ -370,12 +370,10 @@ RETURNS INTEGER AS
     $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION DeleteUser_Role(user_id INTEGER)
-  RETURNS INTEGER AS
+  RETURNS TABLE (use_id INTEGER) AS
 $$
-DECLARE id INTEGER;
 BEGIN
-  DELETE FROM User_Role WHERE usr_id = user_id RETURNING usr_id INTO id;
-  RETURN id;
+  RETURN QUERY DELETE FROM User_Role WHERE usr_use_id = user_id RETURNING usr_use_id;
 END;
 $$ LANGUAGE plpgsql;
 
