@@ -2,7 +2,7 @@ using System;
 
 namespace vacanze_back.VacanzeApi.Common.Exceptions
 {
-    public class RoleRequiredException : Exception
+    public class RoleRequiredException : GeneralException
     {
         public RoleRequiredException() : base()
         {

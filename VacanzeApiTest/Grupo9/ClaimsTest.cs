@@ -53,10 +53,12 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 		public void GetClaimEspecificTest()
 		{
 			ActionResult<IEnumerable<Claim>> enumerable = controller.Get(0);
-			Claim claimList = enumerable.Value.ToList().Find(x => x._title.Equals("Probando"));
+			Claim claimList = enumerable.Value.ToList().Find(x => (x._title.Equals("Probando") && x._description.Equals("Esta es mi descripcion") && x._status.Equals("ABIERTO")) );
 
 			//response = claimList.Value.Count();
 			Assert.AreEqual("Probando", claimList._title);
+			Assert.AreEqual("Esta es mi descripcion", claimList._description);
+			Assert.AreEqual("ABIERTO", claimList._status);
 		}
 
 		[Test,Order(4) ]
@@ -65,12 +67,14 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 			cs.title = "Despues del put";
 			cs.description = "descripcion despues";
 			ActionResult<IEnumerable<Claim>> enumerable = controller.Get(0);
-			Claim claimList = enumerable.Value.ToList().Find(x => x._title.Equals("Probando"));
+			Claim claimList = enumerable.Value.ToList().Find(x =>(x._title.Equals("Probando") && x._description.Equals("Esta es mi descripcion")));
 
 			controller.Put(Convert.ToInt32(claimList.Id), cs);
 		 enumerable = controller.Get(Convert.ToInt32(claimList.Id));
 			Claim[] claim = enumerable.Value.ToArray();
 			Assert.AreEqual(claim[0]._title, "Despues del put");
+			Assert.AreEqual(claim[0]._description,"descripcion despues");
+			Assert.AreEqual(claim[0]._status,"ABIERTO");
 
 		}
 
@@ -79,7 +83,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 		{
 			cs.status = "CERRADO";
 			ActionResult<IEnumerable<Claim>> enumerable = controller.Get(0);
-			Claim claimList = enumerable.Value.ToList().Find(x => x._title.Equals("Despues del put"));
+			Claim claimList = enumerable.Value.ToList().Find(x => x._title.Equals("Despues del put") && x._description.Equals("descripcion despues"));
 
 			controller.Put(Convert.ToInt32(claimList.Id), cs);
 			enumerable = controller.Get(Convert.ToInt32(claimList.Id));
@@ -109,7 +113,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 		{
 			//se pone un id que exista en la bd por lo menos el 7 
 			ActionResult<IEnumerable<Claim>> enumerable = controller.Get(0);
-			Claim claimList = enumerable.Value.ToList().Find(x => x._title.Equals("Despues del put"));
+			Claim claimList = enumerable.Value.ToList().Find(x =>(x._title.Equals("Despues del put") && x._description.Equals("descripcion despues")) );
 
 			controller.Delete(Convert.ToInt32(claimList.Id));
 			claim = controller.Get(Convert.ToInt32(claimList.Id));

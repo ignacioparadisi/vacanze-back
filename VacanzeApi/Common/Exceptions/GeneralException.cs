@@ -14,6 +14,13 @@ namespace vacanze_back.VacanzeApi.Common.Exceptions
             _date = fechaHora;
             _menssage = "Error general";
         }
+        
+        public GeneralException(string message) : base(message) {
+        }
+
+        public GeneralException() : base()
+        {
+        }
 
         /// <summary>
         /// Getters y Setters del atributo _excepcion
