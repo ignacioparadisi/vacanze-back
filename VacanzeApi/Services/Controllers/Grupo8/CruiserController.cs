@@ -199,5 +199,24 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 return BadRequest(errorMessage);
             }
         }
+        [HttpGet("{departure}/{arrival}/Layover")]
+        public ActionResult<IEnumerable<Layover>> GetLayoverByLoc(int departure, int arrival)
+        {
+            try
+            {
+                var layovers = CruiserRepository.GetLayoversForRes(departure,arrival);
+                return Ok(layovers);
+            }
+            catch (LayoverNotFoundException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
+            }
+            catch (DatabaseException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
+            }
+        }
     }
 }
