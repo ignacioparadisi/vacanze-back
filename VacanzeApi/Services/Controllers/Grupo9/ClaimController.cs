@@ -105,30 +105,42 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 		/// </summary>	
 		[HttpPost("{id}")]
 		public ActionResult<string> Post(int id, [FromBody] ClaimSecundary ClaimAux)
-		{            
+		{
 			try
-			{ 				
-				ClaimRepository conec= new ClaimRepository();
-				Claim claim= new Claim(ClaimAux.title, ClaimAux.description);
+			{
+				BaggageRepository bag = new BaggageRepository();
+				var a = bag.GetBaggage(id);
+				if (a.Count == 0)
+				{
+					throw new NullBaggageException("No existe el Equipaje");
+				}
+
+				ClaimRepository conec = new ClaimRepository();
+				Claim claim = new Claim(ClaimAux.title, ClaimAux.description);
 				claim.Validate();
 				claim.ValidatePost();
-				conec.AddClaim(claim,id);
+				conec.AddClaim(claim, id);
 				return Ok("Agregado correctamente");
-			}catch (DatabaseException ex)
-			{            
+			}
+			catch (DatabaseException ex)
+			{
 				return StatusCode(500, ex.Message);
 			}
-			catch (InvalidStoredProcedureSignatureException ex )
+			catch (InvalidStoredProcedureSignatureException ex)
 			{
 				return StatusCode(500, ex.Message);
 			}
 			catch (AttributeSizeException exc)
 			{
-				return StatusCode(500,exc.Message);
+				return StatusCode(500, exc.Message);
 			}
 			catch (AttributeValueException ex)
 			{
-				return StatusCode(500,ex.Message);
+				return StatusCode(500, ex.Message);
+			}
+			catch (NullBaggageException ex)
+			{
+				return StatusCode(500, ex.Message);
 			}
 		}
 

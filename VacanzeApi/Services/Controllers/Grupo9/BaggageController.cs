@@ -46,7 +46,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 			{                 
 				BaggageRepository conec= new BaggageRepository();
 				List<Baggage> BaggageList = conec.GetBaggageDocumentPasaport(id);
-				return Ok(BaggageList);                          
+				return BaggageList;                          
 			}catch (DatabaseException ex)
 			{            
 				return StatusCode(500, ex.Message);

@@ -159,7 +159,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 			Claim c = new Claim("valida", "mi test", "ABIERTO");
 			Assert.Throws<AttributeValueException>((() => c.ValidatePut()));
 		}
-		
+
 		[TearDown]
 		public void tearDown()
 		{
