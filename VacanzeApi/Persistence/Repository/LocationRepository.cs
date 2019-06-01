@@ -21,7 +21,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
         {
             var resultTable = PgConnection.Instance.ExecuteFunction("GetLocationById(@p_id)", id);
             if (resultTable.Rows.Count == 0)
-                throw new EntityNotFoundException($"Location with id {id} not found");
+                throw new LocationNotFoundException(id);
 
             return ExtractLocationFromRow(resultTable.Rows[0]);
         }

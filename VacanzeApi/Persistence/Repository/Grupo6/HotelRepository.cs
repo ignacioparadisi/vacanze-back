@@ -51,7 +51,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
         {
             var resultTable = PgConnection.Instance.ExecuteFunction("GetHotelById(@p_id)", id);
             if (resultTable.Rows.Count == 0)
-                throw new EntityNotFoundException($"Hotel with id {id} not found");
+                throw new HotelNotFoundException(id);
             return ExtractHotelFromRow(resultTable.Rows[0]);
         }
 
