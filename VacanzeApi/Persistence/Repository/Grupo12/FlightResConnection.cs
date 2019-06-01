@@ -93,20 +93,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo12
             
         }
 
-        public string UpdateReservationFlightPay(int id_res,int id_pay){
-
-
-                return "0";
-        } 
-
-
-        
-        public string ShowReservationId(int id_res){
-            
-
-                return "0";
-        } 
-
         public int GetIDLocation(string name_city){
             var res=new FlightRes();
             var table=new DataTable();
@@ -120,6 +106,20 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo12
             
             }
             
+        }
+
+        public int SumIDPasenger(int _id_res){
+            var res=new FlightRes();
+            var table=new DataTable();
+            try{
+                table=PgConnection.Instance.ExecuteFunction("getSumaSeat(@_res_id)",_id_res);
+                res._sum_pas=Convert.ToInt32(table.Rows[0][0].ToString());
+                return  res._sum_pas;
+            }catch(InvalidStoredProcedureSignatureException){
+
+                throw new InvalidStoredProcedureSignatureException("Tienes un error en el Stored Procedure");
+            
+            }
         }
 
         public void ValidateReservationFlight(int id_flight,int num_pas){

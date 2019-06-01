@@ -1368,7 +1368,7 @@ RETURNS TABLE (id INTEGER,seatNum VARCHAR,fecha_res_fli TIMESTAMP,num_Pas INTEGE
   END;
   $$ LANGUAGE plpgsql;
 
-  --retorna una Reserva de vuelo  en especifico
+  --retorna una Reserva de vuelo  en especifico--Modificar por favor
 CREATE OR REPLACE FUNCTION getReservationFlight(id_res INTEGER) 
 RETURNS TABLE (id_res INTEGER,precio INTEGER,fecha_ida VARCHAR,fecha_vuelta VARCHAR,pais_ida VARCHAR,,
   pais_vuelta VARCHAR) AS $$
@@ -1378,6 +1378,16 @@ RETURNS TABLE (id_res INTEGER,precio INTEGER,fecha_ida VARCHAR,fecha_vuelta VARC
      FROM plane as c, flight as f, res_fli as h, location as loc 
      where c.pla_id = f.fli_pla_fk and f.fli_id=id_res and f.fli_loc_arrival=loc.loc_id 
      and f.fli_loc_departure=loc.loc_id; 
+  END;
+  $$ LANGUAGE plpgsql;
+
+  ---Suma de pasajero en un reserva
+  CREATE OR REPLACE FUNCTION getSumaSeat(_res_id INTEGER) RETURNS INTEGER AS $$
+  DECLARE 
+  available INTEGER;
+  BEGIN
+    SELECT SUM(rf_num_ps) FROM RES_FLI WHERE rf_fli_fk = _res_id INTO available;
+    RETURN available;
   END;
   $$ LANGUAGE plpgsql;
 

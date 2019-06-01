@@ -12,6 +12,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo12{
         public int _num_capacity{get;set;}
         public int _sum_capacity{get;set;}
         public int _id_city{get;set;}
+        public int _sum_pas{get;set;}
         public FlightRes():base(0){}
         
         public FlightRes(string seatNum,string timestamp,int numPas,int id_user,int id_pay,int id_fli ):base(0){
