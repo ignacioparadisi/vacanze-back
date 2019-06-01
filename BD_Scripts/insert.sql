@@ -245,12 +245,12 @@ INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_l
 
 -- Cliente Generico --
 INSERT INTO Travel(tra_name, tra_descr, tra_use_fk, tra_ini, tra_end)
-VALUES ('Surf Trip', 'Surf trip arroud Vnzla', 5, '2019-06-10 00:00:00', '2019-07-10 00:00:00');
+VALUES ('Surf Trip', 'Surf trip arroud Vnzla', 5, '2019-06-10', '2019-07-10');
 INSERT INTO Travel(tra_name, tra_descr, tra_use_fk, tra_ini, tra_end)
-VALUES ('Family', 'Sushi Vacation', 5, '2019-08-10 00:00:00', '2019-09-10 00:00:00');
+VALUES ('Family', 'Sushi Vacation', 5, '2019-08-10', '2019-09-10');
 -- Cliente Larry Page -- 
 INSERT INTO Travel(tra_name, tra_descr, tra_use_fk, tra_ini, tra_end)
-VALUES ('Business Trip', 'About businnes, I am busy', 6, '2019-10-10 00:00:00', '2019-11-10 00:00:00');
+VALUES ('Business Trip', 'About businnes, I am busy', 6, '2019-10-10', '2019-11-10');
 
 -- Surf Trip --
 INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (1,37); -- La Guaira
