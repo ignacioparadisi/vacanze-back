@@ -364,6 +364,21 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION GetUserById(user_id INTEGER)
+  RETURNS TABLE
+          (id integer,
+           documentId VARCHAR(50),
+           name VARCHAR(50),
+           lastname VARCHAR(50),
+           email VARCHAR(50))
+AS
+$$
+BEGIN
+  RETURN QUERY SELECT use_id, use_document_id, use_name, use_last_name, use_email
+               FROM Users WHERE use_id = user_id;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION AddUser(doc_id VARCHAR(20),
                                         name VARCHAR(30),
                                         lastname VARCHAR(30),
@@ -380,8 +395,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION AddUser_Role(rol_id INTEGER,
-                                             use_id INTEGER)
+CREATE OR REPLACE FUNCTION AddUser_Role(rol_id BIGINT, use_id BIGINT)
   RETURNS INTEGER AS
 $$
 DECLARE
@@ -401,6 +415,43 @@ DECLARE
 BEGIN
   DELETE FROM Users WHERE use_email = email_id RETURNING use_id INTO id;
   RETURN id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION DeleteUserById(user_id BIGINT)
+RETURNS BIGINT AS 
+    $$ 
+    DECLARE id BIGINT;
+        BEGIN
+        DELETE FROM Users WHERE use_id = user_id RETURNING user_id INTO id;
+        RETURN id;
+        END;
+    $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION DeleteUser_Role(user_id INTEGER)
+  RETURNS BIGINT AS
+$$
+DECLARE id INTEGER;
+BEGIN
+  DELETE FROM User_Role WHERE usr_id = user_id RETURNING usr_id INTO id;
+  RETURN id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION ModifyUser(id INTEGER,
+                                      doc_id VARCHAR(20),
+                                      name VARCHAR(30),
+                                      lastname VARCHAR(30),
+                                      email VARCHAR(30))
+  RETURNS integer AS
+$$
+DECLARE
+  user_id integer;
+BEGIN
+  UPDATE Users SET Use_name = name, Use_last_name = lastname, Use_document_id = doc_id, Use_email = email
+  WHERE use_id = id
+        RETURNING use_id INTO user_id;
+  RETURN user_id;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -608,7 +659,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--------Agregar Crucero--------------------
+-------Agregar Crucero(ruta)--------------------
 
 CREATE OR REPLACE FUNCTION AddCruise( 
   _cru_shi_fk INTEGER,
@@ -647,14 +698,18 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 --------Eliminar Cruise------------------
+--elimina una ruta dado su id
 CREATE OR REPLACE FUNCTION DeleteCruise(_cru_id integer)
-RETURNS void AS
+RETURNS integer AS
 $$
+DECLARE
+  ret_id INTEGER;
 BEGIN
 
     DELETE FROM Cruise 
-    WHERE (cru_id = _cru_id);
-
+    WHERE (cru_id = _cru_id)
+    returning cru_id into ret_id;
+  return ret_id;
 END;
 $$ LANGUAGE plpgsql;
 --------Modificar Ship-------------------
@@ -667,35 +722,46 @@ CREATE OR REPLACE FUNCTION ModifyShip(
     _shi_model varchar(20),
     _shi_line varchar(30),
     _shi_picture varchar)
-RETURNS integer AS
+    RETURNS integer as
 $$
+declare 
+    ret_id integer;
 BEGIN
 
    UPDATE Ship SET shi_isactive = _shi_isactive,
     shi_name = _shi_name, shi_capacity = _shi_capacity,
     shi_loadingcap = _shi_loadingcap, shi_model = _shi_model,
     shi_line = _shi_line, shi_picture = _shi_picture
-    WHERE (shi_id = _shi_id);
-   RETURN _shi_id;
+    WHERE (shi_id = _shi_id)
+   returning shi_id into ret_id;
+   return ret_id;
 END;
 $$ LANGUAGE plpgsql;
 
 
---------Modificar Cruise-----------------
+--------Modificar Cruise(ruta)-----------------
 
-CREATE OR REPLACE FUNCTION ModifyCruiseDepartureDate( 
+CREATE OR REPLACE FUNCTION ModifyCruise( 
     _cru_id integer,
+    _shi_id integer,
     _cru_departuredate TIMESTAMP,
     _cru_arivaldate TIMESTAMP,
+    _loc_arrival integer,
+    _loc_departure integer,
     _cru_price DECIMAL
     )
 RETURNS integer AS
 $$
+declare
+    ret_id integer;
 BEGIN
 
    UPDATE Cruise SET cru_departuredate= _cru_departuredate,
-   cru_arrivaldate = _cru_arivaldate, cru_price = _cru_price
-    WHERE (cru_id = _cru_id);
+   cru_shi_fk = _shi_id, cru_arrivaldate = _cru_arivaldate, 
+   cru_loc_arrival = _loc_arrival, cru_loc_departure = _loc_departure, 
+   cru_price = _cru_price
+    WHERE (cru_id = _cru_id)
+   returning cru_id into ret_id;
    RETURN _cru_id;
 END;
 $$ LANGUAGE plpgsql;
@@ -730,23 +796,46 @@ $$
     FROM Ship WHERE shi_id = _shi_id;
 $$;
 --------Consultar Cruise-----------------
+--devuelve una tabla con los datos de una ruta dado su id
 
-CREATE OR REPLACE FUNCTION GetCruise(_cru_id integer)
+CREATE OR REPLACE FUNCTION GetCruisers(ship_id integer)
 RETURNS TABLE
   (id integer,
-   ship VARCHAR(30),
-   departure_date VARCHAR(30),
-   arrival_date VARCHAR(30),
-   price VARCHAR(30)
+   ship integer,
+   departure_date TIMESTAMP,
+   arrival_date TIMESTAMP,
+   price DECIMAL,
+   arrival_loc integer,
+   departure_loc integer
   )
 AS
 $$
-BEGIN
+BEGIN 
     RETURN QUERY SELECT
-    cru_id, cru_shi_fk, cru_departuredate, cru_arrivaldate, cru_price
-    FROM Cruise WHERE cru_id = _cru_id;
+    cru_id, cru_shi_fk, cru_departuredate, cru_arrivaldate, cru_price, cru_loc_departure, cru_loc_arrival
+    FROM Cruise 
+    WHERE cru_shi_fk = ship_id;
+
+    
 END;
 $$ LANGUAGE plpgsql;
+
+-- CREATE OR REPLACE FUNCTION GetCruiseByLocation(_cru_id integer)
+-- RETURNS TABLE
+--   (id integer,
+--    ship VARCHAR(30),
+--    departure_date TIMESTAMP,
+--    arrival_date TIMESTAMP,
+--    price DECIMAL
+--   )
+-- AS
+-- $$
+-- BEGIN
+--     RETURN QUERY SELECT
+--     c.cru_id, s.shi_name, c.cru_departuredate, c.cru_arrivaldate, c.cru_price
+--     FROM Cruise c, Ship s WHERE c.cru_id = _cru_id and s.shi_id = c.cru_shi_fk;
+-- END;
+-- $$ LANGUAGE plpgsql;
 ---------Retorna todos los Cruceros--------
 CREATE OR REPLACE FUNCTION GetAllShip()
 RETURNS TABLE
@@ -756,13 +845,14 @@ RETURNS TABLE
    capacity_people integer,
    capacity_tonnes integer,
    model VARCHAR(30),
-   cruise_line VARCHAR(30)
+   cruise_line VARCHAR(30),
+   picture VARCHAR
   )
 AS
 $$
 BEGIN
     RETURN QUERY SELECT
-    shi_id, shi_name, shi_isactive, shi_capacity, shi_loadingcap, shi_model, shi_line
+    shi_id, shi_name, shi_isactive, shi_capacity, shi_loadingcap, shi_model, shi_line,shi_picture
     FROM Ship;
 END;
 $$ LANGUAGE plpgsql;
