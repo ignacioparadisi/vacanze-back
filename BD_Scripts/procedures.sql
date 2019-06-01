@@ -1249,18 +1249,55 @@ $$ LANGUAGE plpgsql;
 
 ------------------------------------ grupo 10 ---------------------------------
 
-CREATE OR REPLACE FUNCTION GetTravels(userId INTEGER) 
+-- DROP FUNCTION GetTravels(BIGINT);
+CREATE OR REPLACE FUNCTION GetTravels(userId BIGINT) 
 RETURNS TABLE (
 	travel_id INTEGER,
 	travel_name VARCHAR,
-	travel_description VARCHAR
+	travel_init DATE,
+	travel_end DATE,
+	travel_description VARCHAR,
+  travel_userId INTEGER
 ) AS $$
 BEGIN
 	RETURN QUERY 
-
-	SELECT tra_id, tra_name, tra_descr FROM travel WHERE tra_use_fk = userId ;
+	SELECT tra_id, tra_name, tra_ini, tra_end, tra_descr, tra_use_fk FROM travel WHERE tra_use_fk = userId;
 END; $$ 
 LANGUAGE plpgsql;
+
+-- DROP FUNCTION GetLocationsByTravel(BIGINT);
+CREATE OR REPLACE FUNCTION GetLocationsByTravel(travelId BIGINT)
+RETURNS TABLE (
+	locationId INTEGER, 
+	locationCity VARCHAR
+) AS $$
+BEGIN
+RETURN QUERY
+	SELECT TL.tl_loc_fk, L.loc_city
+	FROM TRA_LOC TL
+	INNER JOIN public.LOCATION L ON TL.tl_loc_fk = L.loc_id
+	WHERE TL.tl_tra_fk = travelId; 
+END; $$
+LANGUAGE plpgsql;  
+
+CREATE OR REPLACE FUNCTION AddTravel(
+	travelName VARCHAR,  
+	travelInit VARCHAR,
+	travelEnd VARCHAR,
+  travelDescription VARCHAR,
+	userId BIGINT)
+RETURNS BIGINT AS
+$$
+DECLARE
+	travelId BIGINT;
+BEGIN
+	INSERT INTO Travel(tra_name, tra_ini, tra_end, tra_descr, tra_use_fk)
+	VALUES(travelName, to_date(travelInit,'YYYY-MM-DD'), to_date(travelEnd,'YYYY-MM-DD'), travelDescription, userId) RETURNING tra_id INTO travelId;
+	RETURN travelId;
+END;
+$$
+LANGUAGE 'plpgsql';
+
 
 ------------------------------------fin de grupo 10---------------------------------
 
