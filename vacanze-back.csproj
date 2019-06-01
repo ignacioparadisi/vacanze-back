@@ -22,8 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="LogicLayer\Grupo2" />
-    <Folder Include="Persistence\Grupo2" />
     <Folder Include="VacanzeApi\Common\Exceptions\Grupo13\" />
 
     <Folder Include="VacanzeApi\LogicLayer" />
