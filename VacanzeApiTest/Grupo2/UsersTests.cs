@@ -143,6 +143,25 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
             Assert.Throws<UserNotFoundException>(() => UserRepository.GetUserById(100));
         }
 
+        [Test]
+        public void ModifyUserDbTest()
+        {
+            var user = UserRepository.AddUser(UserTest);
+            user.Email = "Francisco";
+            long id = UserRepository.UpdateUser(user, (int) user.Id);
+            Assert.AreEqual(user.Id, id);
+        }
+
+        [Test]
+        public void ModifyUserResponseTest()
+        {
+            var controller = new UsersController();
+            ActionResult<User> user = controller.Post(UserTest);
+            user.Value.Name = "Francisco";
+            ActionResult<long> id = controller.Put((int) user.Value.Id, user.Value);
+            Assert.AreEqual(user.Value.Id, id.Value);
+        }
+
         [TearDown]
         public void DeleteUserTest()
         {
