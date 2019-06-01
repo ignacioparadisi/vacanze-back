@@ -161,7 +161,7 @@ BEGIN
 	RETURN QUERY SELECT
 	fli_id, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, fli_loc_arrival, fli_pla_fk
 	FROM public.Flight WHERE _id = fli_id;
-END;
+END; 
 
 $BODY$;
 
