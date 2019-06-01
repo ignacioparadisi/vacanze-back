@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Cors;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
@@ -8,7 +9,9 @@ using Newtonsoft.Json;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
+    [EnableCors("MyPolicy")]
     [ApiController]
     public class AutoController:ControllerBase
     {

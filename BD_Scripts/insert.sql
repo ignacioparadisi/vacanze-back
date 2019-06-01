@@ -192,11 +192,19 @@ VALUES ('8654826', 'cargador@vacanze.com', 'Salazar', 'Marcos', MD5('cargador123
 INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
 VALUES ('20766589', 'cliente@vacanze.com', 'Martinez', 'Carlos', MD5('cliente123'));
 
-INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (2, 1);
+INSERT INTO USERS (use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES ('23613704', 'larry.page@vacanze.com', 'Page', 'Larry', MD5('google'));
+
+INSERT INTO USERS (use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES ('23613704', 'reggaebob@vacanze.com', 'Marley', 'Bob', MD5('jah'));
+
+INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (2, 1 );
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (3, 2);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (4, 3);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (5, 4);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (1, 5);
+INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (1, 6);
+INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (1, 7);
 
 
 ------- grupo 6 ----------
@@ -232,6 +240,7 @@ INSERT INTO public.Plane(
 --------------Grupo 8 ---------------------------------
 INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'concordia', 100, 1000, 'Modelo1','Linea1', '1.jpg' );
 INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'Lmao', 500, 2000, 'Modelo2','Linea2', '3.jpg' );
+
 
 --------------Grupo 13---------------------------------
 INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
@@ -271,3 +280,26 @@ INSERT INTO public.Res_Aut(ra_pickupdate, ra_returndate,ra_timestamp,ra_use_fk, 
 values ('02/03/2019', '02/07/2019','02/03/2019', 1, 4);
 INSERT INTO public.Res_Aut(ra_pickupdate, ra_returndate,ra_timestamp,ra_use_fk, ra_aut_fk)
 values ('02/03/2019', '02/09/2019','02/03/2019', 1, 1);
+
+------- grupo 10 ----------
+
+-- Cliente Generico --
+INSERT INTO Travel(tra_name, tra_descr, tra_use_fk, tra_ini, tra_end)
+VALUES ('Surf Trip', 'Surf trip arroud Vnzla', 5, '2019-06-10', '2019-07-10');
+INSERT INTO Travel(tra_name, tra_descr, tra_use_fk, tra_ini, tra_end)
+VALUES ('Family', 'Sushi Vacation', 5, '2019-08-10', '2019-09-10');
+-- Cliente Larry Page -- 
+INSERT INTO Travel(tra_name, tra_descr, tra_use_fk, tra_ini, tra_end)
+VALUES ('Business Trip', 'About businnes, I am busy', 6, '2019-10-10', '2019-11-10');
+
+-- Surf Trip --
+INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (1,37); -- La Guaira
+INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (1,65); -- Puerto Cabello
+INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (1,76); -- Carupano
+INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (1,56); -- Puerto La Cruz
+-- Sushi Vacation -- 
+INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (2,143); -- Tokyo
+INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (2,158); -- Osaka
+
+
+
