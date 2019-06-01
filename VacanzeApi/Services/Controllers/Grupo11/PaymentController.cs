@@ -59,13 +59,13 @@ namespace vacanze_back.Controllers
         /// </summary>
         /// <returns>lista de metodos de pagos</returns>
         [HttpGet]
-        [Route("id/{id}/type/{type}")]
-        public ActionResult<List<Payment>> GetPayment_Order(long id, int type)
+        [Route("id/{idAuto}/{idRoo}/{idRes}/{idCru}")]
+        public ActionResult<List<Payment>> GetPayment_Order(long idAuto,long idRoo,long idRes, long idCru)
         {
 
             try
             {
-                var lPayments = PaymentRepository.GetInfoOrder(id,type);
+                var lPayments = PaymentRepository.GetInfoOrder(idAuto,idRoo,idRes,idCru);
 
                 if (lPayments != null && lPayments.Count > 0)
                 {
@@ -92,7 +92,7 @@ namespace vacanze_back.Controllers
 
         [HttpPost]
         [Route("")]
-        public ActionResult<List<Payment>> AddPayment([FromForm] Bill bill)
+        public ActionResult<List<Payment>> AddPayment([FromBody] Bill bill)
         {
 
             try

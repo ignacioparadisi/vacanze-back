@@ -11,13 +11,13 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo11
     {
 
 
-        public static List<Order> GetInfoOrder(long id, int type)
+        public static List<Order> GetInfoOrder(long idAuto, long idRoo, long idRes, long idCru)
         {
             DataTable _table;
              var _oListOrder = new List<Order>();
             try
             {
-                 _table = PgConnection.Instance.ExecuteFunction("getinfoorder(@id,@type)", id, type);
+                 _table = PgConnection.Instance.ExecuteFunction("getinfoorderAll(@idAuto,@idRoo,@idRes,@idCru)", idAuto,idRoo,idRes,idCru);
 
                 for (int i = 0; i < _table.Rows.Count; i++)
                 {
@@ -48,10 +48,11 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo11
         public static List<Payment> GetPaymentMethod()
         {
             var oPayment = new List<Payment>();
-            oPayment.Add(new Payment(1, "TDC", true));
-            oPayment.Add(new Payment(2, "EFECTIVO", true));
-            oPayment.Add(new Payment(3, "TRANSFER", true));
-            oPayment.Add(new Payment(4, "TDB", true));
+            oPayment.Add(new Payment(1, "CREDITO", true));
+            oPayment.Add(new Payment(2, "DEBITO", true));
+            oPayment.Add(new Payment(3, "TRANSFERENCIA", true));
+            oPayment.Add(new Payment(4, "EFECTIVO", true));
+          
 
 
             return oPayment;
