@@ -20,6 +20,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
             List<Travel> travels = new List<Travel>();
             try{
                 travels = TravelRepository.GetTravels(userId);
+            }catch(UserNotFoundException ex){
+                return BadRequest(ex.Message);
             }catch(WithoutExistenceOfTravelsException ex){
                 return BadRequest(ex.Message);
             }catch(Exception ex){
@@ -49,6 +51,21 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
                 return Ok(travel);
             }catch(NameRequiredException ex){
                 return BadRequest(ex.Message);
+            }catch(Exception ex){
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Consumes("application/json")]
+        [HttpPost("{travelId}/locations")]
+        public IActionResult AddLocationsToTravel(long travelId, [FromBody] List<Location> locations){
+            Boolean saved = false;
+            try{
+                saved = TravelRepository.AddLocationsToTravel(travelId, locations);
+                if(saved){
+                    return Ok("Las ciudades fueron agregadas satisfactoriamente");
+                }
+                return Ok(saved);
             }catch(Exception ex){
                 return BadRequest(ex.Message);
             }

@@ -5,6 +5,8 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo10;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo10;
 using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo2;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
 {
@@ -21,6 +23,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
         public static List<Travel> GetTravels(long userId){
             List<Travel> listOfTravels = new List<Travel>();
             try{
+                User user = UserRepository.GetUserById((int)userId);    
                 PgConnection pgConnection = PgConnection.Instance;
                 DataTable dataTable = pgConnection.ExecuteFunction("GetTravels(@userId)", userId);
                 if( dataTable.Rows.Count > 0){
@@ -70,7 +73,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
                         locationsByTravel.Add(location);    
                     }
                 }else{
-                    //Throw Exception
+                    //Throw Exception travel id exist
                 }
             }catch(DatabaseException){
 
@@ -115,10 +118,31 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
             return id;
         }
         
-        public static long AddLocationToTravel(long travelId, List<Location> locations){
-            long id = 0;
-            
-            return id;
+        public static Boolean AddLocationsToTravel(long travelId, List<Location> locations){
+            Boolean saved = false;
+            try{
+                // Validate travel id exist
+                    //Throw exception
+                PgConnection pgConnection = PgConnection.Instance;
+                DataTable dataTable;
+                foreach( Location location in locations ){
+                    // Validate location exist
+                        //throw exception
+                    dataTable = pgConnection.ExecuteFunction("AddLocationToTravel(@travelId, @locationId)",
+                        travelId, location.Id);
+                    if(!(saved = Convert.ToBoolean(dataTable.Rows[0][0]))){
+                        // throw exception
+                    }
+                    
+                }
+            }catch(DatabaseException ex){
+                throw new Exception(ex.Message);
+            }catch(InvalidStoredProcedureSignatureException ex){
+                throw new Exception(ex.Message);
+            }finally{
+
+            }
+            return saved;
         }
 
 

@@ -1280,6 +1280,7 @@ RETURN QUERY
 END; $$
 LANGUAGE plpgsql;  
 
+--DROP FUNCTION AddTravel(VARCHAR, VARCHAR, VARCHAR, VARCHAR, BIGINT);
 CREATE OR REPLACE FUNCTION AddTravel(
 	travelName VARCHAR,  
 	travelInit VARCHAR,
@@ -1296,6 +1297,23 @@ BEGIN
 	RETURN travelId;
 END;
 $$
+LANGUAGE 'plpgsql';
+
+-- DROP FUNCTION AddLocationToTravel(BIGINT, INTEGER);
+CREATE OR REPLACE FUNCTION AddLocationToTravel(
+	travelId BIGINT, 
+	locationId INTEGER	
+)
+RETURNS BOOLEAN AS $$
+BEGIN	
+	INSERT INTO tra_loc (tl_tra_fk, tl_loc_fk)
+	VALUES (travelId, locationId);
+	IF FOUND THEN
+		RETURN TRUE;
+	ELSE
+		RETURN FALSE;
+	END IF;
+END; $$
 LANGUAGE 'plpgsql';
 
 
