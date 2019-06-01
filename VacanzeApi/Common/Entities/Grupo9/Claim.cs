@@ -16,7 +16,14 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo9
             _description = description;
             _status = status;
         }
-     
+
+        public Claim(int id, string title, string description, string status) : base(id)
+        {
+            _title = title;
+            _description = description;
+            _status = status;
+        }
+
         public Claim(int id, string title, string description, string status, int idEquipaje) : base(id)
         {
             _title = title;
