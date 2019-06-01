@@ -79,7 +79,14 @@ namespace vacanze_back.VacanzeApiTest.Grupo7
 			Assert.True( restaurantList.Count() > 0);
 		}
 
-        [Test]
+		[Test, Order(5)]
+		public void GetRestaurantByCityTest()
+		{ 
+			restaurantList = RestaurantRepository.GetRestaurantsByCity(3);
+			Assert.True( restaurantList.Count() > 0);
+		}
+
+        [Test, Order(6)]
 		public void DeleteRestaurantTest()
 		{   
             var deletedid = RestaurantRepository.DeleteRestaurant(Convert.ToInt32(id));
