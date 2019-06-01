@@ -107,6 +107,20 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo12
                 return "0";
         } 
 
+        public int GetIDLocation(string name_city){
+            var res=new FlightRes();
+            var table=new DataTable();
+            try{
+                table=PgConnection.Instance.ExecuteFunction("GetIDLocation(@name_city)",name_city);
+                res._id_city=Convert.ToInt32(table.Rows[0][0].ToString());
+                return res._id_city;
+            }catch(InvalidStoredProcedureSignatureException){
+
+                throw new InvalidStoredProcedureSignatureException("Tienes un error en el Stored Procedure");
+            
+            }
+            
+        }
 
         public void ValidateReservationFlight(int id_flight,int num_pas){
             int cont=0;

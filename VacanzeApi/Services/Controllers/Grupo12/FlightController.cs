@@ -57,6 +57,25 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
 
         }
 
+         [Route("~/api/id-return-city/{name_city_i}/{name_city_v}")] 
+        // GET api/list-reservation-flight
+        [HttpGet("{name_city_i}/{name_city_v}")]
+        public ActionResult<IEnumerable<int>> Get(string name_city_i,string name_city_v){
+            try{
+                List<int> lis_id=new List<int>();
+                FlightResConnection con=new FlightResConnection();
+                int id_locationI = con.GetIDLocation(name_city_i);
+                int id_locationV = con.GetIDLocation(name_city_v);
+                lis_id.Add(id_locationI);
+                lis_id.Add(id_locationV);
+                return lis_id;
+            }catch(Exception ){
+
+                 return StatusCode(404, "Error");
+            }
+
+        }
+
          [Route("~/api/delete-reservation-flight/{id_res}")] 
         // GET api/list-reservation
         [HttpDelete("{id_res}")]

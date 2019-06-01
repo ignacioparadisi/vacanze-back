@@ -1381,11 +1381,15 @@ RETURNS TABLE (id_res INTEGER,precio INTEGER,fecha_ida VARCHAR,fecha_vuelta VARC
   END;
   $$ LANGUAGE plpgsql;
 
-
-
-
-
-
+--Devolver id ciudad
+CREATE OR REPLACE FUNCTION GetIDLocation(name_city VARCHAR) 
+RETURNS TABLE (id INTEGER) AS $$
+  BEGIN
+     RETURN QUERY SELECT loc.loc_id
+     FROM location as loc 
+     where loc.loc_city=name_city; 
+  END;   
+  $$ LANGUAGE plpgsql;
 
 ---------En configuracion-------------------------------------------
   --retornar la suma de todas las reservas de un vuelo
