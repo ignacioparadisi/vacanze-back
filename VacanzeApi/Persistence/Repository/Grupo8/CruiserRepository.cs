@@ -50,8 +50,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
             var model = table.Rows[0][5].ToString();
             var line = table.Rows[0][6].ToString();
             var picture = table.Rows[0][7].ToString();
-            Console.WriteLine(name);
-            Cruiser cruiser = new Cruiser(id, name, status, capacity, loadingShipCap, model, line, picture);
+            var cruiser = new Cruiser(id, name, status, capacity, loadingShipCap, model, line, picture);
             return cruiser;
         }
 
@@ -123,11 +122,16 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
         }
         public static int AddLayover(Layover layover)
         {
-            var table = PgConnection.Instance.ExecuteFunction(
-                "AddCruise(@cruiserId,@departureDate,@arrivalDate,@price,@LocDeparture,@locArrival)", layover.CruiserId, layover.DepartureDate,layover.ArrivalDate,layover.Price,layover.LocDeparture,layover.LocArrival);
-            var id = Convert.ToInt32(table.Rows[0][0]);
-            return id;
-        }
+                var cruiserTable = PgConnection.Instance.ExecuteFunction("GetShip(@ship_id)", layover.CruiserId);
+                if (cruiserTable.Rows.Count == 0)
+                {
+                    throw new CruiserNotFoundException("Crucero no encontrado");
+                }
+                var table = PgConnection.Instance.ExecuteFunction(
+                    "AddCruise(@cruiserId,@departureDate,@arrivalDate,@price,@LocDeparture,@locArrival)", layover.CruiserId, layover.DepartureDate,layover.ArrivalDate,layover.Price,layover.LocDeparture,layover.LocArrival);
+                var id = Convert.ToInt32(table.Rows[0][0]);
+                return id;
+            }
         public static int DeleteLayover(int id)
         {
             try
