@@ -28,7 +28,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             automobile.setId(7);
             User user = new User(3, 99, "NameTest", "LastTest", "EmailTest");
             reservation.Automobile = automobile;
-            reservation.User = user;
+          //  reservation.User = user;
             reservation.Fk_user = 2;
             reservation.Id = 27;
            // reservation.User.Id = 3;

@@ -9,6 +9,7 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo5;
+using vacanze_back.VacanzeApi.Common.Exceptions;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
 {
@@ -18,6 +19,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
         const String SP_AVAILABLE = "m13_getavailableautomobilereservations('01/03/2019', '01/05/2019')";
         const String SP_FIND = "m13_findByResAutId(@_id)";
         const String SP_ADD = "m13_addautomobilereservation(@_checkin,@_checkout,@_use_fk,@_ra_aut_fk)";
+        const String SP_UPDATE = "";
         const String SP_DELETE = "m13_deleteautomobilereservation(@_id)";
         const String SP_ALL_BY_USER_ID = "m13_getresautomobilebyuserid(@_id)";
         private Auto _automobile;
@@ -162,6 +164,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             }
         }
 
+        /** <summary>Trae de la BD, las reservas de automoviles de un usuario</summary>
+         * <param name="user_id">El id del usuario que posee las reservas</param>
+         */
         public List<Entity> GetAllByUserId(int user_id)
         {
             List<Entity> reservationAutomobileList = new List<Entity>();
@@ -198,6 +203,35 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             {
             }
             return reservationAutomobileList;
+        }
+
+        /** <summary>Actualiza en la BD, la reservacion de automovil</summary>
+         * <param name="entity">La reserva a actualizar</param>
+         */
+        public void Update(Entity entity)
+        {
+            try
+            {
+                ReservationAutomobile reservation = (ReservationAutomobile)entity;
+
+                var table = PgConnection.Instance.ExecuteFunction(
+                    SP_UPDATE,
+                    (int)reservation.Id,
+                    reservation.CheckIn,
+                    reservation.CheckOut,
+                    reservation.Automobile,
+                    reservation.Fk_user
+                );
+            }
+            catch (DatabaseException ex)
+            {
+
+                Console.WriteLine(ex.ToString());
+                throw new Exception("Ups, a ocurrido un error al conectarse a la base de datos", ex);
+            }
+            finally
+            {
+            }
         }
     }
 

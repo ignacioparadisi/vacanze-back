@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
+using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo6;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
@@ -18,6 +19,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
         const String SP_FIND = "m13_findbyroomreservationid(@_id)";
         const String SP_AVAILABLE = "m13_getAvailableRooms(@_checkin, @_checkout)";
         const String SP_ADD_RESERVATION = "m13_addRoomReservation(@_checkin, @_checkout,@_use_fk,@_hot_fk)";
+        const String SP_UPDATE = "";
         const String SP_DELETE_RESERVATION = "m13_deleteRoomReservation(@_rooid)";
         const String SP_ALL_BY_USER_ID = "m13_getresroobyuserandroomid(@_id)";
         const String SP_ADD_PAYMENT = "";
@@ -29,7 +31,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             _reservationRoom = (ReservationRoom)e;
         }
 
-        /** <summary>Trae de la BD, las reservas de habitacion</summary>
+        /** <summary>
+         * Trae de la BD, las reservas de habitacion
+         * </summary>
          */
         public List<Entity> GetRoomReservations()
         {
@@ -71,7 +75,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             }
         }
 
-        /** <summary>Busca en la BD, la reserva que posee el identificador suministrado</summary>
+        /** <summary>
+         * Busca en la BD, la reserva que posee el identificador suministrado
+         * </summary>
          * <param name="id">El identificador de la entidad reserva de habitacion a buscar</param>
          */
         public Entity Find(int id)
@@ -148,7 +154,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
        }
        */
 
-        /** <summary>Inserta en la BD, la reservacion de habitacion que es suministrada</summary> 
+        /** <summary>
+         * Inserta en la BD, la reservacion de habitacion que es suministrada
+         * </summary> 
          * <param name="reservation">La reservacion a agregar en la BD</param>
          */
         //Falta el user
@@ -170,7 +178,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             }
         }
 
-        /** <summary>Borra de la BD, la reservacion que es suministrada</summary>
+        /** <summary>
+         * Borra de la BD, la reservacion que es suministrada
+         * </summary>
          * <param name="entity">La entidad reservacion a borrar de la BD</param>
          */
         public void Delete(Entity entity)
@@ -190,6 +200,11 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             }
         }
 
+        /** <summary>
+         * Trae de la BD, las reservas de habitacion del id del usuario suministrado
+         * </summary>
+         * <param name="user_id">El id del usuario que posee las reservas de habitacion</param>
+         */
         public List<Entity> GetAllByUserId(int user_id)
         {
             List<Entity> reservationAutomobileList = new List<Entity>();
@@ -225,6 +240,37 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             {
             }
             return reservationAutomobileList;
+        }
+
+        /** <summary>
+         * Actualiza en la BD, la reservacion de habitacion
+         * </summary>
+         * <param name="entity">La reserva a actualizar</param>
+         */
+        public static void Update(Entity entity)
+        {
+            try
+            {
+                ReservationRoom reservation = (ReservationRoom)entity;
+
+                var table = PgConnection.Instance.ExecuteFunction(
+                    SP_UPDATE,
+                    (int)reservation.Id,
+                    reservation.CheckIn,
+                    reservation.CheckOut,
+                    reservation.Hotel,
+                    reservation.Fk_user
+                );
+            }
+            catch (DatabaseException ex)
+            {
+
+                Console.WriteLine(ex.ToString());
+                throw new Exception("Ups, a ocurrido un error al conectarse a la base de datos", ex);
+            }
+            finally
+            {
+            }
         }
 
     }
