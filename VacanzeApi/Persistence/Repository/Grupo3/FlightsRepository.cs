@@ -329,8 +329,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
             flight.price = Convert.ToDouble(table.Rows[i][2]);
             flight.departure = table.Rows[i][3].ToString();
             flight.arrival = table.Rows[i][4].ToString();
-            flight.loc_arrival = LocationRepository.GetLocationById(Convert.ToInt32(table.Rows[i][5]));
-            flight.loc_departure = LocationRepository.GetLocationById(Convert.ToInt32(table.Rows[i][6]));
+            flight.loc_departure = LocationRepository.GetLocationById(Convert.ToInt32(table.Rows[i][5]));
+            flight.loc_arrival = LocationRepository.GetLocationById(Convert.ToInt32(table.Rows[i][6]));
 
             return flight;
 
