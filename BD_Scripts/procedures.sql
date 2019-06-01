@@ -885,13 +885,13 @@ AS
 $$
 BEGIN
     RETURN QUERY SELECT
-    cla_id, cla_title,cla_descr, cla_status bag_id
-    FROM Claim, baggage WHERE cla_id = _cla_id and cla_id= bag_cla_fk ;
+    cla_id, cla_title,cla_descr, cla_status, bag_id
+    FROM Claim, baggage WHERE cla_id = _cla_id and cla_id= bag_cla_fk;
 END;
 $$ LANGUAGE plpgsql;
 
 --------------------------CONSULTAR RECLAMO POR DOCUMENTO -------------------------
-CCREATE OR REPLACE FUNCTION GetClaimDocument(_users_document_id varchar(30))
+CREATE OR REPLACE FUNCTION GetClaimDocument(_users_document_id varchar(30))
 RETURNS TABLE
   (id integer,
    title VARCHAR(30),
