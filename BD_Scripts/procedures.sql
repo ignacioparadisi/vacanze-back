@@ -305,6 +305,21 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION GetUserById(user_id INTEGER)
+  RETURNS TABLE
+          (id integer,
+           documentId VARCHAR(50),
+           name VARCHAR(50),
+           lastname VARCHAR(50),
+           email VARCHAR(50))
+AS
+$$
+BEGIN
+  RETURN QUERY SELECT use_id, use_document_id, use_name, use_last_name, use_email
+               FROM Users WHERE use_id = user_id;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION AddUser(doc_id VARCHAR(20),
                                         name VARCHAR(30),
                                         lastname VARCHAR(30),
@@ -321,8 +336,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION AddUser_Role(rol_id INTEGER,
-                                             use_id INTEGER)
+CREATE OR REPLACE FUNCTION AddUser_Role(rol_id BIGINT, use_id BIGINT)
   RETURNS INTEGER AS
 $$
 DECLARE
@@ -342,6 +356,43 @@ DECLARE
 BEGIN
   DELETE FROM Users WHERE use_email = email_id RETURNING use_id INTO id;
   RETURN id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION DeleteUserById(user_id BIGINT)
+RETURNS BIGINT AS 
+    $$ 
+    DECLARE id BIGINT;
+        BEGIN
+        DELETE FROM Users WHERE use_id = user_id RETURNING user_id INTO id;
+        RETURN id;
+        END;
+    $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION DeleteUser_Role(user_id INTEGER)
+  RETURNS BIGINT AS
+$$
+DECLARE id INTEGER;
+BEGIN
+  DELETE FROM User_Role WHERE usr_id = user_id RETURNING usr_id INTO id;
+  RETURN id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION ModifyUser(id INTEGER,
+                                      doc_id VARCHAR(20),
+                                      name VARCHAR(30),
+                                      lastname VARCHAR(30),
+                                      email VARCHAR(30))
+  RETURNS integer AS
+$$
+DECLARE
+  user_id integer;
+BEGIN
+  UPDATE Users SET Use_name = name, Use_last_name = lastname, Use_document_id = doc_id, Use_email = email
+  WHERE use_id = id
+        RETURNING use_id INTO user_id;
+  RETURN user_id;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1237,18 +1288,55 @@ $$ LANGUAGE plpgsql;
 
 ------------------------------------ grupo 10 ---------------------------------
 
-CREATE OR REPLACE FUNCTION GetTravels(userId INTEGER) 
+-- DROP FUNCTION GetTravels(BIGINT);
+CREATE OR REPLACE FUNCTION GetTravels(userId BIGINT) 
 RETURNS TABLE (
 	travel_id INTEGER,
 	travel_name VARCHAR,
-	travel_description VARCHAR
+	travel_init DATE,
+	travel_end DATE,
+	travel_description VARCHAR,
+  travel_userId INTEGER
 ) AS $$
 BEGIN
 	RETURN QUERY 
-
-	SELECT tra_id, tra_name, tra_descr FROM travel WHERE tra_use_fk = userId ;
+	SELECT tra_id, tra_name, tra_ini, tra_end, tra_descr, tra_use_fk FROM travel WHERE tra_use_fk = userId;
 END; $$ 
 LANGUAGE plpgsql;
+
+-- DROP FUNCTION GetLocationsByTravel(BIGINT);
+CREATE OR REPLACE FUNCTION GetLocationsByTravel(travelId BIGINT)
+RETURNS TABLE (
+	locationId INTEGER, 
+	locationCity VARCHAR
+) AS $$
+BEGIN
+RETURN QUERY
+	SELECT TL.tl_loc_fk, L.loc_city
+	FROM TRA_LOC TL
+	INNER JOIN public.LOCATION L ON TL.tl_loc_fk = L.loc_id
+	WHERE TL.tl_tra_fk = travelId; 
+END; $$
+LANGUAGE plpgsql;  
+
+CREATE OR REPLACE FUNCTION AddTravel(
+	travelName VARCHAR,  
+	travelInit VARCHAR,
+	travelEnd VARCHAR,
+  travelDescription VARCHAR,
+	userId BIGINT)
+RETURNS BIGINT AS
+$$
+DECLARE
+	travelId BIGINT;
+BEGIN
+	INSERT INTO Travel(tra_name, tra_ini, tra_end, tra_descr, tra_use_fk)
+	VALUES(travelName, to_date(travelInit,'YYYY-MM-DD'), to_date(travelEnd,'YYYY-MM-DD'), travelDescription, userId) RETURNING tra_id INTO travelId;
+	RETURN travelId;
+END;
+$$
+LANGUAGE 'plpgsql';
+
 
 ------------------------------------fin de grupo 10---------------------------------
 
@@ -1304,3 +1392,20 @@ CREATE OR REPLACE FUNCTION modifyReservationPayment(pay INTEGER,reservation INTE
   $$ LANGUAGE plpgsql;
 
 -----------------------------------fin grupo 14-----------------------------------------------------------
+
+------Grupo1-----------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION LoginRepository(Email varchar(20),Password VARCHAR(50)) RETURNS table (use_id integer,use_name varchar(50),use_last_name varchar(30),usr_rol_id integer)AS $BODY$
+        BEGIN
+		RETURN QUERY
+                select USERS.use_id,USERS.use_name,USERS.use_last_name,User_Role.usr_rol_id from USERS,User_Role WHERE USERS.use_email=$1 and (USERS.use_password=MD5($2) or USERS.use_password=$2) and USERS.use_id=User_Role.usr_use_id;
+        END;
+$BODY$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION RecoveryPass(Email varchar(20)) RETURNS table (use_name varchar(50),use_lastname varchar(30),use_password varchar(50))AS $BODY$
+        BEGIN
+		UPDATE Users set use_password=(SELECT md5(random()::text)) where USERS.use_email=$1;
+		RETURN QUERY
+          select USERS.use_name,USERS.use_last_name,USERS.use_password from USERS WHERE USERS.use_email=$1 ;
+        END
+$BODY$ LANGUAGE plpgsql;
+---------------------------------finGrupo1---------------------------------------------------------------------------
