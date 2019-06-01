@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo4;
 using vacanze_back.VacanzeApi.Common.Exceptions;
-using vacanze_back.VacanzeApi.Persistence.Grupo4;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo4;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo4
 {
@@ -19,9 +19,20 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo4
           // GET api/values
           //se usara para consultar por pasaporte
           [HttpGet]
-          public string Get()
+          public ActionResult<IEnumerable<Baggage>> Get()
           {
-               return "hola";
+               var Baggages = new List<Baggage>();
+               try
+               {
+                    Baggages = BaggageRepository.GetBaggage();
+               }
+               catch (DatabaseException e)
+               {
+
+                    return BadRequest("Error al Obtener los equipajes" + e);
+               }
+
+               return Baggages;
           }
 
           // GET api/values/5
