@@ -651,7 +651,19 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION DeleteLocation(_id integer)
+    RETURNS integer AS
+$$
+DECLARE
+    RET_ID INTEGER;
+BEGIN
 
+    DELETE
+    FROM location
+    WHERE (loc_id = _id) returning loc_id into RET_ID;
+    return RET_ID;
+END;
+$$ LANGUAGE plpgsql;
 
 
 

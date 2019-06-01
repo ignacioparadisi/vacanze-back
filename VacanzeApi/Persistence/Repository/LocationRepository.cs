@@ -51,7 +51,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
             var country = row[2].ToString();
             return new Location(id, country, city);
         }
-        
+
         public static int AddLocation(Location location)
         {
             // TODO: try / catch DatabseException y retornar algo tipo SaveHotelException
@@ -62,6 +62,12 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
             );
             var savedId = Convert.ToInt32(table.Rows[0][0]);
             return savedId;
+        }
+
+        public static void DeleteLocation(int id)
+        {
+            // TODO: Handle Exceptions
+            PgConnection.Instance.ExecuteFunction("DeleteLocation(@_id)", id);
         }
     }
 }
