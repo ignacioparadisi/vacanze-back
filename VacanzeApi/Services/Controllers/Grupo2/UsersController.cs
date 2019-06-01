@@ -23,9 +23,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             {
                 users = UserRepository.GetEmployees();
             }
-            catch (DatabaseException)
+            catch (DatabaseException e)
             {
-                return BadRequest("Error obteniendo los empleados");
+                return BadRequest(e.Message);
             }
             return users;
         }
@@ -78,16 +78,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public ActionResult<long> Put(int id, [FromBody] User user)
+        public ActionResult<int> Put(int id, [FromBody] User user)
         {
-            long user_id;
+            int user_id;
             try
             {
+                user.Validate(true);
                 user_id = UserRepository.UpdateUser(user, id);
                 UserRepository.DeleteUser_Role(id);
-                foreach (var roles in user.Roles)
+                foreach (var role in user.Roles)
                 {
-                    UserRepository.AddUser_Role(user.Id, roles.Id);
+                    UserRepository.AddUser_Role(id, role.Id);
                 }
 
                 return user_id;
@@ -97,15 +98,15 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             {
                 return BadRequest(e.Message);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest("Error del servidor");
+                return BadRequest(e.Message);
             }
         }
 
         // DELETE api/users/1
         [HttpDelete("{id}")]
-        public ActionResult<long> Delete(long id)
+        public ActionResult<int> Delete(int id)
         {
             try
             {

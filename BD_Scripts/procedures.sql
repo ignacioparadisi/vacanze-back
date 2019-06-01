@@ -262,7 +262,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION GetRolesForUser(user_id bigint)
+CREATE OR REPLACE FUNCTION GetRolesForUser(user_id INTEGER)
     RETURNS TABLE
             (id integer,
              nombre VARCHAR(50)
@@ -336,7 +336,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION AddUser_Role(rol_id BIGINT, use_id BIGINT)
+CREATE OR REPLACE FUNCTION AddUser_Role(use_id INTEGER, rol_id INTEGER)
   RETURNS INTEGER AS
 $$
 DECLARE
@@ -359,10 +359,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION DeleteUserById(user_id BIGINT)
-RETURNS BIGINT AS 
+CREATE OR REPLACE FUNCTION DeleteUserById(user_id INTEGER)
+RETURNS INTEGER AS 
     $$ 
-    DECLARE id BIGINT;
+    DECLARE id INTEGER;
         BEGIN
         DELETE FROM Users WHERE use_id = user_id RETURNING user_id INTO id;
         RETURN id;
@@ -370,7 +370,7 @@ RETURNS BIGINT AS
     $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION DeleteUser_Role(user_id INTEGER)
-  RETURNS BIGINT AS
+  RETURNS INTEGER AS
 $$
 DECLARE id INTEGER;
 BEGIN
