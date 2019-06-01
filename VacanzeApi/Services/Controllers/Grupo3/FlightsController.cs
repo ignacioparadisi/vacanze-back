@@ -111,10 +111,30 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
         {
             try
             {
-                Console.WriteLine(departure);
-                Console.WriteLine(arrival);
-                Console.WriteLine(departuredate);
                 var result = FlightRepository.GetOutboundFlights(departure, arrival, departuredate);
+                return Ok(result.ToList());
+            }
+            catch (DbErrorException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        /// <summary> GET api/outbounds/departure/arrival/departuredate</summary>
+        /// <param name="departure">Ciudad de salida del vuelor</param>
+        /// <param name="arrival">Ciudad de llegada del vuelo</param>
+        /// <param name="departuredate">Fecha de salida del vuelo</param>
+        /// <returns>ActionResult con resultado de la query</returns>
+        [HttpGet("roundtripflights/{departure}/{arrival}/{departuredate}/{arrivaldate}")]
+        public ActionResult<IEnumerable<Entity>> GetRoundTripFlights(int departure, int arrival, string departuredate, string arrivaldate)
+        {
+            try
+            {
+                var result = FlightRepository.GetRoundTripFlights(departure, arrival, departuredate, arrivaldate);
                 return Ok(result.ToList());
             }
             catch (DbErrorException ex)
