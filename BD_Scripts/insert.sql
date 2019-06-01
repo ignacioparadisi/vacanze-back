@@ -218,6 +218,33 @@ VALUES (1, 'Prueba 1', 30, 4, true, 'Alguna direccion, algun lugar', 234.5, null
        (3, 'Prueba 3', 40, 2, true, 'Alguna direccion, algun lugar', 500.5, null, '+58 4253 2732',
         null, 5, 10);
 
+INSERT INTO hotel (hot_name, hot_room_qty, hot_room_capacity, hot_is_active,
+                   hot_address_specs, hot_room_price, hot_website, hot_phone, hot_picture,
+                   hot_stars, hot_loc_fk)
+VALUES  ('Posada Los Caracas', 8, 6, true, 'Playa la Punta', 150.5, null, null, null, 3, 37),
+		('Hotel Tanaguarena', 8, 6, true, 'Al frente de playa escondida', 400.5, null, null, null, 4, 37),
+		('Posada Los Cocos', 8, 6, true, 'Playa Los Cocos', 400.5, null, null, null, 3, 37),
+		('Hotel Otro País', 8, 6, true, 'Playa Otro País', 400.5, null, null, null, 3, 37),
+		('Pelua Surf Hotel', 8, 6, true, 'Playa Pelua papa, la original', 400.5, null, null, null, 3, 37),
+		('Posada Anare', 8, 6, true, '...', 400.5, null, null, null, 3, 37),
+		('Secret Spot Hotel', 8, 6, true, 'Secret Spot La Guaira', 400.5, null, null, null, 3, 37),
+        ('Puerto Cabello Surf House', 12, 4, true, 'El Palito', 225.5, null, '+58 414 1100085', null, 4, 65),
+        ('Carabobo Surfer', 12, 4, true, '...', 225.5, null, '+58 414 1100085', null, 4, 65),
+        ('Carabobo Hotel', 12, 4, true, '...', 225.5, null, '+58 414 1100085', null, 4, 65),
+        ('Posada De Doña Barbara', 12, 4, true, 'Arepera Doña Barbara', 225.5, null, '+58 414 1100085', null, 4, 76),
+        ('Carupano Hotel', 12, 4, true, '...', 225.5, null, '+58 414 1100085', null, 5, 65),
+        ('Purto Hotel', 12, 4, true, 'Puerto', 225.5, null, '+58 414 1100085', null, 4, 56),
+        ('Posada Puerto La Cruz', 12, 4, true, 'Puerto', 225.5, null, '+58 414 1100085', null, 4, 65),
+        ('Tokyo Hotel', 12, 4, true, 'Rock Band', 225.5, null, '+58 414 1100085', null, 4, 143),
+        ('Tokyo Sushi', 12, 4, true, 'Sushi Sushi', 225.5, null, '+58 414 1100085', null, 4, 143),
+        ('Osaka Hotel', 12, 4, true, '...', 225.5, null, '+58 414 1100085', null, 4, 143),
+        ('Hotel Gioli', 12, 4, true, 'San Ignacio', 270.5, null, '+58 414 1100085', null, 4, 29),
+		('Hotel Dallas', 12, 4, true, 'Chacaito', 300.5, null, '+58 414 1100085', null, 4, 29),
+		('Hotel Renasence', 12, 4, true, 'Los Palos Grandes', 5000.5, null, '+58 414 1100085', null, 4, 29),
+		('Hotel Caracas', 12, 4, true, 'Caracas', 225.5, null, '+58 414 1100085', null, 4, 29),
+		('Hotel Oxford', 12, 4, true, 'Oxford', 2100.5, null, '+58 414 1100085', null, 4, 127),
+		('Sydney Hotel', 12, 4, true, 'Sydney', 1300.5, null, '+58 414 1100085', null, 4, 78),
+		('Gold Coast Hotel', 12, 4, true, 'Sydney', 2125.5, null, '+58 414 1100085', null, 4, 78);
 
 -------------------------------Grupo 3---------------------------------------------------
 INSERT INTO public.Plane(
@@ -251,6 +278,7 @@ VALUES ('Family', 'Sushi Vacation', 5, '2019-08-10', '2019-09-10');
 -- Cliente Larry Page -- 
 INSERT INTO Travel(tra_name, tra_descr, tra_use_fk, tra_ini, tra_end)
 VALUES ('Business Trip', 'About businnes, I am busy', 6, '2019-10-10', '2019-11-10');
+-- Cliente Bob Marley -- 
 
 -- Surf Trip --
 INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (1,37); -- La Guaira
@@ -260,5 +288,9 @@ INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (1,56); -- Puerto La Cruz
 -- Sushi Vacation -- 
 INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (2,143); -- Tokyo
 INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (2,158); -- Osaka
+-- Bussines Trip --
+INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (3,127); -- Oxford
+INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (3,78); -- Sydney
+INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (3,29); -- Caracas
 
 
