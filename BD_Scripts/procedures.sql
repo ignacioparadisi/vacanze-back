@@ -1371,3 +1371,20 @@ CREATE OR REPLACE FUNCTION modifyReservationPayment(pay INTEGER,reservation INTE
   $$ LANGUAGE plpgsql;
 
 -----------------------------------fin grupo 14-----------------------------------------------------------
+
+------Grupo1-----------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION LoginRepository(Email varchar(20),Password VARCHAR(50)) RETURNS table (use_id integer,use_name varchar(50),use_last_name varchar(30),usr_rol_id integer)AS $BODY$
+        BEGIN
+		RETURN QUERY
+                select USERS.use_id,USERS.use_name,USERS.use_last_name,User_Role.usr_rol_id from USERS,User_Role WHERE USERS.use_email=$1 and (USERS.use_password=MD5($2) or USERS.use_password=$2) and USERS.use_id=User_Role.usr_use_id;
+        END;
+$BODY$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION RecoveryPass(Email varchar(20)) RETURNS table (use_name varchar(50),use_lastname varchar(30),use_password varchar(50))AS $BODY$
+        BEGIN
+		UPDATE Users set use_password=(SELECT md5(random()::text)) where USERS.use_email=$1;
+		RETURN QUERY
+          select USERS.use_name,USERS.use_last_name,USERS.use_password from USERS WHERE USERS.use_email=$1 ;
+        END
+$BODY$ LANGUAGE plpgsql;
+---------------------------------finGrupo1---------------------------------------------------------------------------
