@@ -97,19 +97,26 @@ namespace vacanze_back.Controllers
 
             try
             {
-                var id = PaymentRepository.AddPayment(bill);
+                var oResp = PaymentRepository.PayProcessResponse();
 
-                if (id > 0)
+                if (oResp.Item1 == 0)
                 {
-                    return Ok("Se ha registrado con exito");
+                    var id = PaymentRepository.AddPayment(bill);
+                    if (id > 0)
+                    {
+                        return Ok("Se ha registrado con exito");
+
+                    }
+                    else
+                    {
+                        return NotFound("Ocurrio un error insertando el pago");
+                    }
 
                 }
                 else
                 {
-                    return NotFound("Ocurrio un error insertando el pago");
+                    return StatusCode(StatusCodes.Status402PaymentRequired, oResp);
                 }
-
-
 
             }
             catch (DatabaseException e)
@@ -135,6 +142,7 @@ namespace vacanze_back.Controllers
 
                 if (oResp.Item1 == 0)
                 {
+
                    return Ok(oResp);
                 }
                 else
