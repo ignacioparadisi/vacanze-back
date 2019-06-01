@@ -72,8 +72,26 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 
         // PUT api/values/5    //ACTUALIZAR UN RECURSO
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public ActionResult<Entity> Put([FromBody] ReservationRoom entity)
         {
+            try
+            {
+                ReservationRoomRepository repository = new ReservationRoomRepository();
+                ReservationRoom reservation = (ReservationRoom)repository.Find((int)entity.Id);
+
+                repository.Update(entity);
+
+                return Ok(new { Message = "Editado" });
+            }
+            /*    catch (DbErrorException ex)
+                {
+                    return BadRequest(new { Message = ex.Message });
+                }*/
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
         }
 
         // DELETE api/values/5 //BORRAR

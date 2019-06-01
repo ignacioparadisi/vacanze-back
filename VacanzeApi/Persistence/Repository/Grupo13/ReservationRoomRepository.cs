@@ -247,7 +247,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
          * </summary>
          * <param name="entity">La reserva a actualizar</param>
          */
-        public static void Update(Entity entity)
+        public void Update(Entity entity)
         {
             try
             {

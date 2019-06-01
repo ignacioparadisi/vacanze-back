@@ -75,7 +75,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 
         // PUT api/values/5    //ACTUALIZAR UN RECURSO
         [HttpPut("{id}")]
-        public ActionResult<Entity> Put([FromBody] Entity entity)
+        public ActionResult<Entity> Put([FromBody] ReservationAutomobile entity)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 
                 repository.Update(entity);
 
-                return Ok(new { Message = "¡Vuelo editado con éxito!" });
+                return Ok(new { Message = "Editado" });
             }
         /*    catch (DbErrorException ex)
             {

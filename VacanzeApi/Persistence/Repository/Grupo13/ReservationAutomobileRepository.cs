@@ -104,12 +104,15 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                 {
                     var pickup = Convert.ToDateTime(table.Rows[i][1]);
                     var returndate = Convert.ToDateTime(table.Rows[i][2]);
-                    var userid = Convert.ToInt64(table.Rows[i][4]);
-                    var autfk = Convert.ToInt64(table.Rows[i][5]);
+                    var userid = (int)Convert.ToInt64(table.Rows[i][4]);
+                    var aut_fk = (int)Convert.ToInt64(table.Rows[i][5]);
                    // var payfk = Convert.ToInt64(table.Rows[i][5]);
                     _reservation = new ReservationAutomobile(id,pickup,returndate);
-                  //  _reservation.User.Id = userid;
-                  //  _reservation.Automobile.Id = autfk;
+                    _reservation.Fk_user = userid;
+                    _reservation.Automobile = ConnectAuto.ConsultforId(aut_fk).ElementAt(0);
+
+                    //  _reservation.User.Id = userid;
+                    //  _reservation.Automobile.Id = autfk;
                     //Falta Payment
                 }
                 return _reservation;
