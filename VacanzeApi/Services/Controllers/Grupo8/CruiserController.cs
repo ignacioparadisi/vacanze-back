@@ -143,55 +143,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (LayoverNotFoundException e)
             {
+                int [] lay = new int [0];
                 ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                return Ok(layovers);
-            }
-            catch (DatabaseException e)
-            {
-                ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                return BadRequest(errorMessage);
-            }
-        }
-        [HttpPost("{cruiserId}/Layover")]
-        public ActionResult<Layover> PostLayover([FromBody] Layover layover)
-        {
-            try
-            {
-                layover.Validate();
-                var id = CruiserRepository.AddLayover(layover);
-                var savedLayover = new Layover(id, layover.CruiserId, layover.DepartureDate, layover.ArrivalDate,
-                    layover.Price,
-                    layover.LocDeparture, layover.LocArrival);
-                return Ok(savedLayover);
-            }
-            catch (InvalidAttributeException e)
-            {
-                var errorMsg = new ErrorMessage(e.Message);
-                return BadRequest(errorMsg);
-            }
-            catch (CruiserNotFoundException e)
-            {
-                var errorMsg = new ErrorMessage(e.Message);
-                return BadRequest(errorMsg);
-            }
-            catch (DatabaseException e)
-            {
-                ErrorMessage errorMsg = new ErrorMessage(e.Message);
-                return BadRequest(errorMsg);
-            }
-        }
-        [HttpDelete("Layover/{layoverId}")]
-        public ActionResult<int> DeleteLayover(int layoverId)
-        {
-            try
-            {
-                var deletedId = CruiserRepository.DeleteLayover(layoverId);
-                return Ok(new {id = deletedId});
-            }
-            catch (LayoverNotFoundException e)
-            {
-                ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                return BadRequest(errorMessage);
+                return Ok(new {layovers = lay});
             }
             catch (DatabaseException e)
             {
