@@ -69,7 +69,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
                     foreach (DataRow dataRow in dataTable.Rows){
                         Location location = new Location();
                         location.Id = Convert.ToInt32(dataRow[0]);
-                        location.Country = dataRow[1].ToString();
+                        location.City = dataRow[1].ToString();
+                        location.Country = dataRow[2].ToString();
                         locationsByTravel.Add(location);    
                     }
                 }else{

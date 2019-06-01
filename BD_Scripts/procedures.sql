@@ -1269,11 +1269,12 @@ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION GetLocationsByTravel(travelId BIGINT)
 RETURNS TABLE (
 	locationId INTEGER, 
-	locationCity VARCHAR
+	locationCity VARCHAR,
+  locationCountry VARCHAR
 ) AS $$
 BEGIN
 RETURN QUERY
-	SELECT TL.tl_loc_fk, L.loc_city
+	SELECT TL.tl_loc_fk, L.loc_city, L.loc_country
 	FROM TRA_LOC TL
 	INNER JOIN public.LOCATION L ON TL.tl_loc_fk = L.loc_id
 	WHERE TL.tl_tra_fk = travelId; 
