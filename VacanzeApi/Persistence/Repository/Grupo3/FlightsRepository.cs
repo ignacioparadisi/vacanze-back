@@ -15,11 +15,12 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
         static string ADD_FLIGHT =
         "addflight( @_plane, @_price, @_departure,@_arrival, @_loc_arrival, @_loc_departure )";
         static string GET_FLIGTS_BY_DATE = "getflightsbydate(@_begin, @_end)";
-        static string GET_FLIGHTS_BY_LOCATION = "getflightsbylocation(@_arrival, @_departure)";
+        static string GET_FLIGHTS_BY_LOCATION = "getflightsbylocation(@_departure, @_arrival)";
         static string FIND_FLIGHT = "findflight(@_id)";
         static string UPDATE_FLIGHT =
         "updateflight(@_id, @_plane, @_price, @_departure, @_arrival, @_loc_departure, @_loc_arrival)";
         static string DELETE_FLIGHT = "deleteflight(@_id)";
+        static string GET_OUTBOUND_FLIGHTS = "getOutBoundFlights(@_loc_departure, @_loc_arrival, @_departure)";
 
 
         /// <summary>Devuelve lista de vuelos de la DB</summary>
@@ -226,6 +227,44 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
 
                     Flight flight = GetRow(table,i);
 
+                    flights.Add(flight);
+                }
+
+                return flights;
+            }
+            catch (DatabaseException ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw new DbErrorException("Ups, a ocurrido un error al conectarse a la base de datos", ex);
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+            finally
+            {
+            }
+        }
+
+        /// <summary>Busca por ciudad de salida y llegada y determinada fecha de salida</summary>
+        /// <param name="departure">Ciudad de salida del vuelor</param>
+        /// <param name="arrival">Ciudad de llegada del vuelo</param>
+        /// <param name="departuredate">Fecha de salida del vuelo</param>
+        /// <returns> List<Entity> con el resultado de la query</returns>
+        public static List<Entity> GetOutboundFlights(int departure, int arrival, string departuredate)
+        {
+            try
+            {
+                var table = PgConnection.Instance.ExecuteFunction(GET_OUTBOUND_FLIGHTS, departure, arrival, departuredate);
+                List<Entity> flights = new List<Entity>();
+
+                for (var i = 0; i < table.Rows.Count; i++)
+                {
+
+                    Flight flight = GetRow(table,i);
+                    Console.WriteLine("MENSAJEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+                    //Console.WriteLine(ex.ToString());
                     flights.Add(flight);
                 }
 

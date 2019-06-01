@@ -25,11 +25,15 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
                 || flight.loc_arrival == null || flight.loc_departure == null)
                 throw new ValidationErrorException("Debe llenar todos los campos");
 
+            if( flight.loc_departure.Id == flight.loc_arrival.Id ){
+                throw new ValidationErrorException("El lugar de salida y destino no puede ser el mismo");
+            }    
+
             DateTime arrivalDate= DateTime.ParseExact(flight.arrival, "MM-dd-yyyy HH:mm:ss",null);
             DateTime departureDate= DateTime.ParseExact(flight.departure, "MM-dd-yyyy HH:mm:ss",null);
 
             if (plane == null)
-                throw new ValidationErrorException("El seleccionado avión no existe");
+                throw new ValidationErrorException("El avión seleccionado no existe");
 
             if( DateTime.Compare(departureDate, arrivalDate) > 0 ){
                 throw new ValidationErrorException("La fecha de salida no puede ser mayor a la de llegada");

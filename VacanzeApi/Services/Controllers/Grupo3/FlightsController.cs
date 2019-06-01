@@ -101,6 +101,32 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
             }
         }
 
+        /// <summary> GET api/outbounds/departure/arrival/departuredate</summary>
+        /// <param name="departure">Ciudad de salida del vuelor</param>
+        /// <param name="arrival">Ciudad de llegada del vuelo</param>
+        /// <param name="departuredate">Fecha de salida del vuelo</param>
+        /// <returns>ActionResult con resultado de la query</returns>
+        [HttpGet("outbounds/{departure}/{arrival}/{departuredate}")]
+        public ActionResult<IEnumerable<Entity>> GetOutboundFlights(int departure, int arrival, string departuredate)
+        {
+            try
+            {
+                Console.WriteLine(departure);
+                Console.WriteLine(arrival);
+                Console.WriteLine(departuredate);
+                var result = FlightRepository.GetOutboundFlights(departure, arrival, departuredate);
+                return Ok(result.ToList());
+            }
+            catch (DbErrorException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         /// <summary>POST api/flights</summary>
         /// <param name="flight">Parametro tipo Flight con el vuelo a agregar</param>
         /// <returns>ActionResult con mensaje de exito si se agrego de manera exitosa</returns>
@@ -146,7 +172,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
                     throw new ValidationErrorException("El vuelo a editar no existe");
                 }
  
-                FlightValidator validator = new FlightValidator(f);
+                FlightValidator validator = new FlightValidator(flight);
 
 
                 validator.Validate();
