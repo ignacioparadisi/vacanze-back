@@ -71,5 +71,36 @@ namespace vacanze_back.VacanzeApiTest.Grupo3
             List<Entity> flights = FlightRepository.GetByDate("12-11-2020","12-30-2020");
             Assert.True(flights.Count() > 0);
         }
+
+        [Test, Order(6)]
+        public void GetByLocationFlightTest()
+        {
+            List<Entity> flights = FlightRepository.GetByLocation(testflight.loc_departure.Id,testflight.loc_arrival.Id);
+            Assert.True(flights.Count() > 0);
+        }
+
+        [Test, Order(7)]
+        public void GetOutboundFlightTest()
+        {
+            List<Entity> flights = FlightRepository.GetOutboundFlights(testflight.loc_departure.Id,testflight.loc_arrival.Id
+            ,testflight.departure);
+            Assert.True(flights.Count() > 0);
+        }
+
+        [Test, Order(8)]
+        public void GetRoundTripFlightTest()
+        {
+            List<Entity> flights = FlightRepository.GetRoundTripFlights(testflight.loc_departure.Id,testflight.loc_arrival.Id
+            ,testflight.departure,testflight.arrival);
+            Assert.True(flights.Count() > 0);
+        }
+
+        [Test, Order(9)]
+        public void DeleteFlightTest()
+        {
+            FlightRepository.Delete(new Flight(id));
+            Entity flight = FlightRepository.Find(id);
+            Assert.That(flight, Is.Null);
+        }
     }
 }
