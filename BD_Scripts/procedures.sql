@@ -342,6 +342,23 @@ RETURNS BIGINT AS
         END;
     $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION ModifyUser(id INTEGER,
+                                      doc_id VARCHAR(20),
+                                      name VARCHAR(30),
+                                      lastname VARCHAR(30),
+                                      email VARCHAR(30))
+  RETURNS integer AS
+$$
+DECLARE
+  user_id integer;
+BEGIN
+  UPDATE Users SET Use_name = name, Use_last_name = lastname, Use_document_id = doc_id, Use_email = email
+  WHERE use_id = id
+        RETURNING use_id INTO user_id;
+  RETURN user_id;
+END;
+$$ LANGUAGE plpgsql;
+
 ------- grupo 6 ----------
 CREATE OR REPLACE FUNCTION AddHotel(name VARCHAR(100),
                                     amountOfRooms INTEGER,
