@@ -46,7 +46,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
                     using (var client = new MailKit.Net.Smtp.SmtpClient())
                     {
                         client.Connect("smtp.gmail.com", 587, false);
-                        client.Authenticate("vacanzeucab@gmail.com", "desarrollo1-");
+                        client.Authenticate("hombrehealth111@gmail.com", "_Gx123456");
                         client.Send(message);
                         client.Disconnect(true);
                         client.Dispose();
