@@ -76,6 +76,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
 
         }
 
+        
+
          [Route("~/api/delete-reservation-flight/{id_res}")] 
         // GET api/list-reservation
         [HttpDelete("{id_res}")]
@@ -94,20 +96,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
 
         }
 
-        /* [Route("~/api/id-return-pas/{_id_res}")] 
-        // GET api/id-return-pas/{_id_res}
-        [HttpGet("{_id_res}")]
-        public ActionResult<IEnumerable<int>> Get(int _id_res){
-            try{
-                FlightResConnection con=new FlightResConnection();
-                int id_location = con.SumIDPasenger(_id_res);    
-                 
-            }catch(Exception ){
-
-                 return StatusCode(404, "Error");
-            }
-
-        }*/
+        
 
         
        
