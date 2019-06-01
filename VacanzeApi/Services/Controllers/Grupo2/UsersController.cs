@@ -23,9 +23,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             {
                 users = UserRepository.GetEmployees();
             }
-            catch (DatabaseException)
+            catch (DatabaseException e)
             {
-                return BadRequest("Error obteniendo los empleados");
+                return BadRequest("Error obteniendo los usuarios");
             }
             return users;
         }
@@ -40,9 +40,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
                 user = UserRepository.GetUserById(id);
                 user.Roles = RoleRepository.GetRolesForUser(id);
             }
-            catch (Exception e)
+            catch (GeneralException e)
             {
                 return BadRequest(e.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Error de servidor");
             }
             return user;
         }
@@ -56,51 +60,65 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
                 user.Validate();
                 UserRepository.VerifyEmail(user.Email);
                 user = UserRepository.AddUser(user);
-                foreach(var roles in user.Roles)
+                foreach (var roles in user.Roles)
                 {
                     UserRepository.AddUser_Role(user.Id, roles.Id);
                 }
             }
-            catch (Exception e)
+            catch (GeneralException e)
             {
                 return BadRequest(e.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Error agregando al usuario");
             }
             return user;
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public ActionResult<long> Put(int id, [FromBody] User user)
+        public ActionResult<int> Put(int id, [FromBody] User user)
         {
-            long user_id;
+            int user_id;
             try
             {
+                user.Validate(true);
                 user_id = UserRepository.UpdateUser(user, id);
                 UserRepository.DeleteUser_Role(id);
-                foreach(var roles in user.Roles)
+                foreach (var role in user.Roles)
                 {
-                    UserRepository.AddUser_Role(user.Id, roles.Id);
+                    UserRepository.AddUser_Role(id, role.Id);
                 }
+
                 return user_id;
-                
+
+            }
+            catch (GeneralException e)
+            {
+                return BadRequest(e.Message);
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest("Error actualizando al usuario");
             }
         }
 
         // DELETE api/users/1
         [HttpDelete("{id}")]
-        public ActionResult<long> Delete(long id)
+        public ActionResult<int> Delete(int id)
         {
             try
             {
                 return UserRepository.DeleteUserById(id);
             }
-            catch (Exception e)
+            catch (GeneralException e)
             {
                 return BadRequest(e.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Error eliminando al usuario");
             }
         }
     }

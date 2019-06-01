@@ -147,8 +147,8 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         public void ModifyUserDbTest()
         {
             var user = UserRepository.AddUser(UserTest);
-            user.Email = "Francisco";
-            long id = UserRepository.UpdateUser(user, (int) user.Id);
+            user.Name = "Francisco";
+            long id = UserRepository.UpdateUser(user, user.Id);
             Assert.AreEqual(user.Id, id);
         }
 
@@ -158,7 +158,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
             var controller = new UsersController();
             ActionResult<User> user = controller.Post(UserTest);
             user.Value.Name = "Francisco";
-            ActionResult<long> id = controller.Put((int) user.Value.Id, user.Value);
+            ActionResult<int> id = controller.Put(user.Value.Id, user.Value);
             Assert.AreEqual(user.Value.Id, id.Value);
         }
 

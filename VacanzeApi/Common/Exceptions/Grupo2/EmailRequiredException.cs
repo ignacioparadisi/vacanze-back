@@ -2,7 +2,7 @@ using System;
 
 namespace vacanze_back.VacanzeApi.Common.Exceptions
 {
-    public class EmailRequiredException : Exception
+    public class EmailRequiredException : GeneralException
     {
         public EmailRequiredException() : base()
         {
