@@ -885,7 +885,7 @@ AS
 $$
 BEGIN
     RETURN QUERY SELECT
-    cla_id, cla_title,cla_descr, cla_status bag_id
+    cla_id, cla_title,cla_descr, cla_status ,bag_id
     FROM Claim, baggage WHERE cla_id = _cla_id and cla_id= bag_cla_fk ;
 END;
 $$ LANGUAGE plpgsql;
