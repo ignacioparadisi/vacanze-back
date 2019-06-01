@@ -25,7 +25,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             }
             catch (DatabaseException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest("Error obteniendo los usuarios");
             }
             return users;
         }
@@ -71,7 +71,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             }
             catch (Exception)
             {
-                return BadRequest("Error del servidor");
+                return BadRequest("Error agregando al usuario");
             }
             return user;
         }
@@ -100,7 +100,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return BadRequest("Error actualizando al usuario");
             }
         }
 
@@ -118,7 +118,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             }
             catch (Exception)
             {
-                return BadRequest("Error del servidor");
+                return BadRequest("Error eliminando al usuario");
             }
         }
     }
