@@ -79,6 +79,74 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
             }
         }
 
+        /// <summary> GET api/flights/begin/end</summary>
+        /// <param name="begin">Rango menor de la fecha a buscar</param>
+        /// <param name="end">Rango mayor de la fecha a buscar</param>
+        /// <returns>ActionResult con resultado de la query</returns>
+        [HttpGet("locations/{departure}/{arrival}")]
+        public ActionResult<IEnumerable<Entity>> GetByLocation(int departure, int arrival)
+        {
+            try
+            {
+                var result = FlightRepository.GetByLocation(departure, arrival);
+                return Ok(result.ToList());
+            }
+            catch (DbErrorException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        /// <summary> GET api/outbounds/departure/arrival/departuredate</summary>
+        /// <param name="departure">Ciudad de salida del vuelor</param>
+        /// <param name="arrival">Ciudad de llegada del vuelo</param>
+        /// <param name="departuredate">Fecha de salida del vuelo</param>
+        /// <returns>ActionResult con resultado de la query</returns>
+        [HttpGet("outbounds/{departure}/{arrival}/{departuredate}")]
+        public ActionResult<IEnumerable<Entity>> GetOutboundFlights(int departure, int arrival, string departuredate)
+        {
+            try
+            {
+                var result = FlightRepository.GetOutboundFlights(departure, arrival, departuredate);
+                return Ok(result.ToList());
+            }
+            catch (DbErrorException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        /// <summary> GET api/outbounds/departure/arrival/departuredate</summary>
+        /// <param name="departure">Ciudad de salida del vuelor</param>
+        /// <param name="arrival">Ciudad de llegada del vuelo</param>
+        /// <param name="departuredate">Fecha de salida del vuelo</param>
+        /// <returns>ActionResult con resultado de la query</returns>
+        [HttpGet("roundtripflights/{departure}/{arrival}/{departuredate}/{arrivaldate}")]
+        public ActionResult<IEnumerable<Entity>> GetRoundTripFlights(int departure, int arrival, string departuredate, string arrivaldate)
+        {
+            try
+            {
+                var result = FlightRepository.GetRoundTripFlights(departure, arrival, departuredate, arrivaldate);
+                return Ok(result.ToList());
+            }
+            catch (DbErrorException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         /// <summary>POST api/flights</summary>
         /// <param name="flight">Parametro tipo Flight con el vuelo a agregar</param>
         /// <returns>ActionResult con mensaje de exito si se agrego de manera exitosa</returns>
@@ -124,7 +192,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
                     throw new ValidationErrorException("El vuelo a editar no existe");
                 }
  
-                FlightValidator validator = new FlightValidator(f);
+                FlightValidator validator = new FlightValidator(flight);
 
 
                 validator.Validate();

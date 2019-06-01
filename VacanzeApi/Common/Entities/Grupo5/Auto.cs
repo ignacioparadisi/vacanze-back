@@ -2,15 +2,15 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo5
 {
     public class Auto
     {
-        private int _id;
-        private string _make;
-        private string _model;
-        private int _capacity;
-        private bool _isActive;
-        private string _licence;
-        private float _price;
-        private int _place;
-        private string _picture;
+        public int _id;
+        public string _make;
+        public string _model;
+        public int _capacity;
+        public bool _isActive;
+        public string _licence;
+        public float _price;
+        public int _place;
+        public string _picture;
         
         public Auto (string make , string model , int capacity, bool isactive ,string licence , float price , string picture, int place)
         {
