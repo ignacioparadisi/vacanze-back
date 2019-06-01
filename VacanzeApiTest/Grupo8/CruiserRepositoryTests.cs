@@ -71,8 +71,8 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
         {
             var cruiserid = CruiserRepository.AddCruiser(cruiser);
             Cruiser toUpdateCruiser = new Cruiser(cruiserid,"Updatedcruiser",false,1,1,"updatedmodel","updatedline","updatedpicture");
-            var updatedCuiser = CruiserRepository.UpdateCruiser(toUpdateCruiser);
-            Assert.AreEqual(toUpdateCruiser,updatedCuiser);
+            var updatedCruiser = CruiserRepository.UpdateCruiser(toUpdateCruiser);
+            Assert.AreEqual(toUpdateCruiser,updatedCruiser);
         }
         [Test]
         public void ModifyCruiserNotFoundTest()

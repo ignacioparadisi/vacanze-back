@@ -1,4 +1,5 @@
 using System;
+using Newtonsoft.Json;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
@@ -13,7 +14,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
         public int LocDeparture { get;}
         public int LocArrival { get;}
 
-
+        [JsonConstructor]
         public Layover(int id, int cruiserId, string departureDate,string arrivalDate, double price, int locDeparture,
             int locArrival)
         {

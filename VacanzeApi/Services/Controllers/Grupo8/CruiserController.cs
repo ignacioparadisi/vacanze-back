@@ -42,8 +42,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         {
             try
             {
-                Cruiser cruiser = CruiserRepository.GetCruiser(id);
-
+                var cruiser = CruiserRepository.GetCruiser(id);
                 return Ok(cruiser);
             }
             catch (CruiserNotFoundException e)
@@ -154,17 +153,23 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
         }
         [HttpPost("{cruiserId}/Layover")]
-        public ActionResult<Cruiser> PostLayover([FromBody] Layover layover)
+        public ActionResult<Layover> PostLayover([FromBody] Layover layover)
         {
             try
             {
                 layover.Validate();
                 var id = CruiserRepository.AddLayover(layover);
-                var savedLayover = new Layover(id,layover.CruiserId,layover.DepartureDate,layover.ArrivalDate,layover.Price,
-                    layover.LocDeparture,layover.LocArrival);
+                var savedLayover = new Layover(id, layover.CruiserId, layover.DepartureDate, layover.ArrivalDate,
+                    layover.Price,
+                    layover.LocDeparture, layover.LocArrival);
                 return Ok(savedLayover);
             }
             catch (InvalidAttributeException e)
+            {
+                var errorMsg = new ErrorMessage(e.Message);
+                return BadRequest(errorMsg);
+            }
+            catch (CruiserNotFoundException e)
             {
                 var errorMsg = new ErrorMessage(e.Message);
                 return BadRequest(errorMsg);
@@ -181,7 +186,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             try
             {
                 var deletedId = CruiserRepository.DeleteLayover(layoverId);
-                return Ok(deletedId);
+                return Ok(new {id = deletedId});
             }
             catch (LayoverNotFoundException e)
             {

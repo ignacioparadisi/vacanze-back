@@ -643,13 +643,14 @@ RETURNS TABLE
    capacity_people integer,
    capacity_tonnes integer,
    model VARCHAR(30),
-   cruise_line VARCHAR(30)
+   cruise_line VARCHAR(30),
+   picture VARCHAR
   )
 AS
 $$
 BEGIN
     RETURN QUERY SELECT
-    shi_id, shi_name, shi_isactive, shi_capacity, shi_loadingcap, shi_model, shi_line
+    shi_id, shi_name, shi_isactive, shi_capacity, shi_loadingcap, shi_model, shi_line,shi_picture
     FROM Ship WHERE shi_id = _shi_id;
 END;
 $$ LANGUAGE plpgsql;
