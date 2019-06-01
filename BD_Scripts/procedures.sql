@@ -17,13 +17,15 @@ CREATE OR REPLACE FUNCTION public.addflight(
     VOLATILE 
     
 AS $BODY$
-
+DECLARE
+  _fli_id INTEGER;
 BEGIN
 
    INSERT INTO Flight(fli_price ,fli_departureDate, fli_arrivalDate, fli_pla_fk,fli_loc_departure, fli_loc_arrival)
     VALUES
-    (_price, TO_TIMESTAMP(_departure,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone, TO_TIMESTAMP(_arrival,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone, _plane, _loc_departure, _loc_arrival);
-   RETURN 1;
+    (_price, TO_TIMESTAMP(_departure,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone, TO_TIMESTAMP(_arrival,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone, _plane, _loc_departure, _loc_arrival)
+	RETURNING fli_id into _fli_id;
+   RETURN _fli_id;
 END;
 
 $BODY$;
