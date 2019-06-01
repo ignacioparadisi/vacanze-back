@@ -10,7 +10,7 @@ using vacanze_back.VacanzeApi.Services.Controllers.Grupo3;
 namespace vacanze_back.VacanzeApiTest.Grupo3
 {
     [TestFixture]
-    public class FlightsTest
+    public class FlightsRepositoryTest
     {
         private Flight testflight;
         int id;
