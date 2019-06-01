@@ -548,7 +548,20 @@ BEGIN
  RETURN ret_id;
 END;
 $$ LANGUAGE plpgsql;
-
+-------Update Cruiser Status--------------------
+CREATE OR REPLACE FUNCTION UpdateShipStatus(
+_shi_id integer,
+_status boolean
+)
+returns integer AS
+$$
+declare 
+ret_id integer;
+begin
+update ship set shi_isactive = _status where shi_id = _shi_id returning shi_id into ret_id;
+return ret_id;
+END;
+$$ LANGUAGE plpgsql;
 -------Agregar Crucero(ruta)--------------------
 
 CREATE OR REPLACE FUNCTION AddCruise( 

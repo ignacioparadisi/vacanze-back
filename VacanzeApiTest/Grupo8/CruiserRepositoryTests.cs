@@ -1,14 +1,9 @@
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using NUnit.Framework;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
-using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo8;
-using vacanze_back.VacanzeApi.Services.Controllers.Grupo8;
 
 namespace vacanze_back.VacanzeApiTest.Grupo8
 {
@@ -85,6 +80,58 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
         public void ModifyCruiserNullParameterTest()
         {
             Assert.Throws<NullCruiserException>(() => CruiserRepository.UpdateCruiser(null));
+        }
+
+        [Test]
+        public void AddLayoverTest()
+        {
+            var addedcruiser = CruiserRepository.AddCruiser(cruiser);
+            var layover = new Layover(addedcruiser,Convert.ToDateTime("2019-01-01"), Convert.ToDateTime("2019-01-02"),2000,1,2);
+            var addedLayover = CruiserRepository.AddLayover(layover);
+            addedLayover.Id = 0;
+            Assert.AreEqual(layover,addedLayover);
+        }
+        [Test]
+        public void AddlayoverCruiserNotFoundTest()
+        {
+            var layover = new Layover(-1,Convert.ToDateTime("2019-01-01"), Convert.ToDateTime("2019-01-02"),2000,1,2);
+            Assert.Throws<CruiserNotFoundException>(() => CruiserRepository.AddLayover(layover));
+        }
+        [Test]
+        public void DeleteLayoverTest()
+        {
+            var cruiserId = CruiserRepository.AddCruiser(cruiser);
+            var layover = new Layover(cruiserId,Convert.ToDateTime("2019-01-01"), Convert.ToDateTime("2019-01-02"),2000,1,2);
+            var addedLayover = CruiserRepository.AddLayover(layover);
+            var deletedId = CruiserRepository.DeleteLayover(addedLayover.Id);
+            Assert.AreEqual(addedLayover.Id,deletedId);
+        }
+
+        [Test]
+        public void DeletedLayoverFailedTest()
+        {
+            Assert.Throws<LayoverNotFoundException>(() => CruiserRepository.DeleteLayover(-1));
+        }
+
+        [Test]
+
+        public void GetLayoversTest()
+        {
+            List<Layover> layoversList= new List<Layover>();
+            var cruiserId = CruiserRepository.AddCruiser(cruiser);
+            var layover1 = new Layover(cruiserId,Convert.ToDateTime("2019-01-01"), Convert.ToDateTime("2019-01-02"),2000,1,2);
+            var layover2 = new Layover(cruiserId,Convert.ToDateTime("2019-01-01"), Convert.ToDateTime("2019-01-02"),2000,1,2);
+            var addedLayover1 = CruiserRepository.AddLayover(layover1);
+            var addedLayover2 = CruiserRepository.AddLayover(layover2);
+            layoversList.Add(addedLayover1);
+            layoversList.Add(addedLayover2);
+            List<Layover> getLayoverList = CruiserRepository.GetLayovers(cruiserId);
+            Assert.AreEqual(layoversList.Count,getLayoverList.Count);
+        }
+        [Test]
+        public void GetLayoversNotFoundTest()
+        {
+            Assert.Throws<LayoverNotFoundException>(() => CruiserRepository.GetLayovers(-1));
         }
     }
 }

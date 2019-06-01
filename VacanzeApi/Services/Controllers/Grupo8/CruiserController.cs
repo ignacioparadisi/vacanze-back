@@ -132,7 +132,26 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 return BadRequest(errorMessage);
             }
         }
-
+        [HttpPut("{id}/{status}")]
+        public ActionResult<int> DeleteCruiser(int id,bool status)
+        {
+            try
+            {
+                var updatedid = CruiserRepository.UpdateCruiserstatus(id,status);
+                return Ok(new {id = updatedid});
+            }
+            catch (CruiserNotFoundException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
+            }
+            catch (DatabaseException e)
+            {
+                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
+            }
+        }
+        
         [HttpGet("{cruiserId}/Layover")]
         public ActionResult<IEnumerable<Layover>> GetLayovers(int cruiserId)
         {
@@ -158,11 +177,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             try
             {
                 layover.Validate();
-                var id = CruiserRepository.AddLayover(layover);
-                var savedLayover = new Layover(id, layover.CruiserId, layover.DepartureDate, layover.ArrivalDate,
-                    layover.Price,
-                    layover.LocDeparture, layover.LocArrival);
-                return Ok(savedLayover);
+                var addedLayover= CruiserRepository.AddLayover(layover);
+                return Ok(addedLayover);
             }
             catch (InvalidAttributeException e)
             {
