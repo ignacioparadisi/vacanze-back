@@ -101,7 +101,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
         public static List<Layover> GetLayovers(int cruiserId)
         {
             List<Layover> layovers = new List<Layover>();
-                var table = PgConnection.Instance.ExecuteFunction("getCruise(@cruiserId)", cruiserId);
+                var table = PgConnection.Instance.ExecuteFunction("getCruisers(@cruiserId)", cruiserId);
                 if (table.Rows.Count == 0)
                 {
                     throw new LayoverNotFoundException("No se encontraron rutas para este crucero");
@@ -110,11 +110,11 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
                 for (int i = 0; i < table.Rows.Count; i++)
                 {
                     var id = Convert.ToInt32(table.Rows[i][0]);
-                    var departureDate = Convert.ToString(table.Rows[i][1]);
-                    var arrivalDate = Convert.ToString(table.Rows[i][2]);
-                    var price = Convert.ToDouble(table.Rows[i][3]);
-                    var locDeparture = Convert.ToString(table.Rows[i][4]);
-                    var locArrival = Convert.ToString(table.Rows[i][5]);
+                    var departureDate = Convert.ToString(table.Rows[i][2]);
+                    var arrivalDate = Convert.ToString(table.Rows[i][3]);
+                    var price = Convert.ToDouble(table.Rows[i][4]);
+                    var locDeparture = Convert.ToInt32(table.Rows[i][5]);
+                    var locArrival = Convert.ToInt32(table.Rows[i][6]);
                     Layover layover = new Layover(id,cruiserId,departureDate, arrivalDate, price, locDeparture, locArrival);
                     layovers.Add(layover);
                 }

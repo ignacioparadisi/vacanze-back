@@ -11,12 +11,12 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
         public string DepartureDate { get;}
         public string ArrivalDate { get;}
         public double Price { get;}
-        public string LocDeparture { get;}
-        public string LocArrival { get;}
+        public int LocDeparture { get;}
+        public int LocArrival { get;}
 
         [JsonConstructor]
-        public Layover(int id, int cruiserId, string departureDate,string arrivalDate, double price, string locDeparture,
-            string locArrival)
+        public Layover(int id, int cruiserId, string departureDate,string arrivalDate, double price, int locDeparture,
+            int locArrival)
         {
             Id = id;
             CruiserId = cruiserId;
@@ -26,8 +26,8 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
             LocDeparture = locDeparture;
             LocArrival = locArrival;
         }
-        public Layover(int cruiserId,string departureDate,string arrivalDate, double price, string locDeparture,
-            string locArrival)
+        public Layover(int cruiserId,string departureDate,string arrivalDate, double price, int locDeparture,
+            int locArrival)
         {   
             CruiserId = cruiserId;
             DepartureDate = departureDate;
@@ -46,13 +46,13 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
             {
                 throw new InvalidAttributeException("Departure Date is required");
             }
-            if (LocDeparture == null)
+            if (LocDeparture == 0)
             {
-                throw  new InvalidAttributeException("Departure location is required");
+                throw  new InvalidAttributeException("Departure location id is required");
             }
-            if (LocArrival == null)
+            if (LocArrival == 0)
             {
-                throw new InvalidAttributeException("Arrival Location is required");
+                throw new InvalidAttributeException("Arrival Location id is required");
             }
         }
     }
