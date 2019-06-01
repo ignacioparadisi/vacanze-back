@@ -8,8 +8,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\**" />
+    <Compile Remove="Entities\**" />
+    <Compile Remove="LogicLayer\**" />
+    <Compile Remove="VacanzeApi\LogicLayer\**" />
+    <Content Remove="Controllers\**" />
+    <Content Remove="Entities\**" />
+    <Content Remove="LogicLayer\**" />
+    <Content Remove="VacanzeApi\LogicLayer\**" />
+    <EmbeddedResource Remove="Controllers\**" />
+    <EmbeddedResource Remove="Entities\**" />
+    <EmbeddedResource Remove="LogicLayer\**" />
+    <EmbeddedResource Remove="VacanzeApi\LogicLayer\**" />
+    <None Remove="Controllers\**" />
+    <None Remove="Entities\**" />
+    <None Remove="LogicLayer\**" />
+    <None Remove="VacanzeApi\LogicLayer\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MailKit" Version="2.1.5.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
 
     <PackageReference Include="Npgsql" Version="4.0.6" />
 
@@ -23,8 +44,6 @@
 
   <ItemGroup>
     <Folder Include="VacanzeApi\Common\Exceptions\Grupo13\" />
-
-    <Folder Include="VacanzeApi\LogicLayer" />
 
   </ItemGroup>
 
