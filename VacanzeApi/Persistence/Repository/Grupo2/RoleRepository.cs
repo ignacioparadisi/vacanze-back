@@ -4,8 +4,15 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
 {
+    //<summary> 
+    //Clase que Realiza las Operaciones Contra la Tabla Roles.
+    //</summary>
     public class RoleRepository
     {
+        //<summary>
+        //Método que Consulta Todos los Roles Existentes en Base de Datos.
+        //</summary>
+        //<returns>Una lista de Roles.</returns>
         public static List<Role> GetRoles()
         {
             var roles = new List<Role>();
@@ -20,7 +27,12 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
 
             return roles;
         }
-
+        
+        //<summary>
+        //Método que Consulta los Roles Corresponden a un Determinado Usuario.
+        //</summary>
+        //<param name="userId">Id del Usuario a Consultar.</param>
+        //<returns>Una lista de Roles.</returns>
         public static List<Role> GetRolesForUser(long userId)
         {
             var roles = new List<Role>();
