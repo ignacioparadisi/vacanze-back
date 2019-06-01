@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -51,10 +52,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
             Name = name;
             Lastname = lastname;
             Email = email;
-            if (!string.IsNullOrEmpty(password))
-            {
-                Password = Encryptor.Encrypt(password);
-            }
+            Password = password;
         }
         
         /// <summary>
@@ -63,6 +61,8 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         /// <returns>Mensaje de error que se envia al frontend en caso de que haya algun error</returns>
         public void Validate()
         {
+            var isClient = false;
+            
             if (DocumentId <= 0)
             {
                 throw new NotValidDocumentIdException("La cédula de identidad no es válida");
@@ -96,7 +96,28 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
 
             foreach (var role in Roles)
             {
+                if (role.Id == 1)
+                {
+                    isClient = true;
+                }
                 role.Validate();
+            }
+            
+            if (!string.IsNullOrEmpty(Password))
+            {
+                Password = Encryptor.Encrypt(Password);
+            }
+            else
+            {
+                if (!isClient)
+                {
+                    Password = Name.ToLower()[0] + Lastname.ToLower()[0] + DocumentId.ToString();
+                    Password = Encryptor.Encrypt(Password);
+                }
+                else
+                {
+                    throw new PasswordRequiredException("La contraseña es requerida");
+                }
             }
         }
     }
