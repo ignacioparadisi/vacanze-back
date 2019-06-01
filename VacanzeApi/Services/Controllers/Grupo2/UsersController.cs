@@ -69,11 +69,27 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
         }
 
         // PUT api/values/5
-//        [HttpPut("{id}")]
-//        public void Put(int id, [FromBody] string value)
-//        {
-//        }
-//
+        [HttpPut("{id}")]
+        public ActionResult<long> Put(int id, [FromBody] User user)
+        {
+            long user_id;
+            try
+            {
+                user_id = UserRepository.UpdateUser(user, id);
+                UserRepository.DeleteUser_Role(id);
+                foreach(var roles in user.Roles)
+                {
+                    UserRepository.AddUser_Role(user.Id, roles.Id);
+                }
+                return user_id;
+                
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         // DELETE api/users/1
         [HttpDelete("{id}")]
         public ActionResult<long> Delete(long id)

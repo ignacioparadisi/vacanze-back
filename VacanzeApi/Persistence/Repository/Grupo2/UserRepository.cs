@@ -99,5 +99,24 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
 
             return Convert.ToInt64(userId);
         }
+
+        public static void DeleteUser_Role(int id)
+        {
+            var table = PgConnection.Instance.ExecuteFunction("DeleteUser_Role(@user_id)", id);
+        }
+        
+        // - MARK: UPDATE
+        public static long UpdateUser(User user, int id)
+        {
+            var table = PgConnection.Instance
+                .ExecuteFunction("ModifyUser(@id, @doc_id, @name, @lastname, @email)",
+                id, user.DocumentId.ToString(), user.Name, user.Lastname, user.Email);
+            var userId = table.Rows[0][0];
+            if (userId == DBNull.Value)
+            {
+                throw new UserNotFoundException("El usuario no se encuentra registrado.");
+            }
+            return Convert.ToInt64(userId);  
+        }
     }
 }
