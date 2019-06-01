@@ -342,6 +342,16 @@ RETURNS BIGINT AS
         END;
     $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION DeleteUser_Role(user_id INTEGER)
+  RETURNS BIGINT AS
+$$
+DECLARE id INTEGER;
+BEGIN
+  DELETE FROM User_Role WHERE usr_id = user_id RETURNING usr_id INTO id;
+  RETURN id;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION ModifyUser(id INTEGER,
                                       doc_id VARCHAR(20),
                                       name VARCHAR(30),
