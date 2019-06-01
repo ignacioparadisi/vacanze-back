@@ -40,9 +40,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
                 user = UserRepository.GetUserById(id);
                 user.Roles = RoleRepository.GetRolesForUser(id);
             }
-            catch (Exception e)
+            catch (GeneralException e)
             {
                 return BadRequest(e.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Error de servidor");
             }
             return user;
         }
@@ -56,14 +60,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
                 user.Validate();
                 UserRepository.VerifyEmail(user.Email);
                 user = UserRepository.AddUser(user);
-                foreach(var roles in user.Roles)
+                foreach (var roles in user.Roles)
                 {
                     UserRepository.AddUser_Role(user.Id, roles.Id);
                 }
             }
-            catch (Exception e)
+            catch (GeneralException e)
             {
                 return BadRequest(e.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Error del servidor");
             }
             return user;
         }
@@ -77,16 +85,21 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             {
                 user_id = UserRepository.UpdateUser(user, id);
                 UserRepository.DeleteUser_Role(id);
-                foreach(var roles in user.Roles)
+                foreach (var roles in user.Roles)
                 {
                     UserRepository.AddUser_Role(user.Id, roles.Id);
                 }
+
                 return user_id;
-                
+
             }
-            catch (Exception e)
+            catch (GeneralException e)
             {
                 return BadRequest(e.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Error del servidor");
             }
         }
 
@@ -98,9 +111,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             {
                 return UserRepository.DeleteUserById(id);
             }
-            catch (Exception e)
+            catch (GeneralException e)
             {
                 return BadRequest(e.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Error del servidor");
             }
         }
     }
