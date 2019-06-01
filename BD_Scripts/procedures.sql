@@ -891,7 +891,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 --------------------------CONSULTAR RECLAMO POR DOCUMENTO -------------------------
-CCREATE OR REPLACE FUNCTION GetClaimDocument(_users_document_id varchar(30))
+CREATE OR REPLACE FUNCTION GetClaimDocument(_users_document_id varchar(30))
 RETURNS TABLE
   (id integer,
    title VARCHAR(30),
