@@ -6,7 +6,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
 {
     public class Cruiser
     {
-            public int Id { get; }
+            public int Id { get; set; }
             public string Name { get; }
             public bool Status { get; }
             public int Capacity { get; }

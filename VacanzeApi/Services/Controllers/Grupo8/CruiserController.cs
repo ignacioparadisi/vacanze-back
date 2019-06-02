@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -96,9 +97,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 ErrorMessage errorMessage = new ErrorMessage(e.Message);
                 return BadRequest(errorMessage);
             }
-            catch (NullCruiserException e)
+            catch (NullReferenceException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                ErrorMessage errorMessage = new ErrorMessage("Trying to send null cruiser reference");
                 return BadRequest(errorMessage);
             }
             catch (DatabaseException e)
@@ -107,6 +108,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 return BadRequest(errorMessage);
             }
         }
+        
 
         [HttpDelete("{id}")]
         public ActionResult<int> DeleteCruiser(int id)
@@ -127,26 +129,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 return BadRequest(errorMessage);
             }
         }
-        [HttpPut("{id}/{status}")]
-        public ActionResult<int> DeleteCruiser(int id,bool status)
-        {
-            try
-            {
-                var updatedid = CruiserRepository.UpdateCruiserstatus(id,status);
-                return Ok(new {id = updatedid});
-            }
-            catch (CruiserNotFoundException e)
-            {
-                ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                return BadRequest(errorMessage);
-            }
-            catch (DatabaseException e)
-            {
-                ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                return BadRequest(errorMessage);
-            }
-        }
         
+
         [HttpGet("{cruiserId}/Layover")]
         public ActionResult<IEnumerable<Layover>> GetLayovers(int cruiserId)
         {
@@ -161,6 +145,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 return BadRequest(errorMessage);
             }
         }
+        
+        
         [HttpPost("{cruiserId}/Layover")]
         public ActionResult<Layover> PostLayover([FromBody] Layover layover)
         {
@@ -186,6 +172,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 return BadRequest(errorMsg);
             }
         }
+        
+        
         [HttpDelete("Layover/{layoverId}")]
         public ActionResult<int> DeleteLayover(int layoverId)
         {
@@ -205,6 +193,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 return BadRequest(errorMessage);
             }
         }
+        
+        
         [HttpGet("{departure}/{arrival}/Layover")]
         public ActionResult<IEnumerable<Layover>> GetLayoverByLoc(int departure, int arrival)
         {

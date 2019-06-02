@@ -128,10 +128,5 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
             List<Layover> getLayoverList = CruiserRepository.GetLayovers(cruiserId);
             Assert.AreEqual(layoversList.Count,getLayoverList.Count);
         }
-        [Test]
-        public void GetLayoversNotFoundTest()
-        {
-            Assert.Throws<LayoverNotFoundException>(() => CruiserRepository.GetLayovers(-1));
-        }
     }
 }
