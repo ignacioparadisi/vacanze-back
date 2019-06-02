@@ -1,3 +1,18 @@
+------ Consulta de los lugares ------
+
+CREATE OR REPLACE FUNCTION GetLocations()
+RETURNS TABLE
+  (id integer,
+   city VARCHAR(30),
+   country VARCHAR(30))
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT
+    LOC_ID, LOC_CITY, LOC_COUNTRY
+    FROM LOCATION;
+END;
+$$ LANGUAGE plpgsql;
 -------------------------------Grupo 3---------------------------------
 -- FUNCTION: public.addflight(integer, double precision, character varying, character varying, integer, integer)
 
@@ -1153,7 +1168,7 @@ $$ LANGUAGE plpgsql;
 
 ------------------------------------FIN DEL GRUPO 9--------------------------------
 
------------------------------------Grupo 5 ------------------------------------------------
+---------------------------------INICIO DEL GRUPO 5 -------------------------------------
 -------------AGREGAR AUTO-----------------
 
 CREATE OR REPLACE FUNCTION 
@@ -1397,21 +1412,7 @@ UPDATE automobile
 	RETURN _id;
 END;
 $$ LANGUAGE plpgsql;
------- Consulta de los lugares ------
 
-CREATE OR REPLACE FUNCTION GetLocations()
-RETURNS TABLE
-  (id integer,
-   city VARCHAR(30),
-   country VARCHAR(30))
-AS
-$$
-BEGIN
-    RETURN QUERY SELECT
-    LOC_ID, LOC_CITY, LOC_COUNTRY
-    FROM LOCATION;
-END;
-$$ LANGUAGE plpgsql;
 ----------------------------------------- consulta de ciudades-----------------------------------
 
 CREATE OR REPLACE FUNCTION GetCity()
@@ -1428,7 +1429,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-------------------------fin de grupo 5-------------------------------------------
+------------------------FIN DEL GRUPO 5 ------------------------------------------------------
 
 ------------------------------------inicio de grupo 7---------------------------------
 
