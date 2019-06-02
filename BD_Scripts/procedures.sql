@@ -1201,10 +1201,12 @@ CREATE OR REPLACE FUNCTION modifyReservationPayment(pay INTEGER,reservation INTE
 -----------------------------------fin grupo 14-----------------------------------------------------------
 
 ------Grupo1-----------------------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION LoginRepository(Email varchar(20),Password VARCHAR(50)) RETURNS table (use_id integer,use_name varchar(50),use_last_name varchar(30),usr_rol_id integer)AS $BODY$
+CREATE OR REPLACE FUNCTION LoginRepository(Email varchar(20),Password VARCHAR(50)) RETURNS table (use_id integer,use_name varchar(50),use_last_name varchar(30),usr_rol_id integer,rol_name varchar(30))AS $BODY$
         BEGIN
 		RETURN QUERY
-                select USERS.use_id,USERS.use_name,USERS.use_last_name,User_Role.usr_rol_id from USERS,User_Role WHERE USERS.use_email=$1 and (USERS.use_password=MD5($2) or USERS.use_password=$2) and USERS.use_id=User_Role.usr_use_id;
+                select USERS.use_id,USERS.use_name,USERS.use_last_name,User_Role.usr_rol_id,Role.rol_name from USERS,User_Role,Role WHERE USERS.use_email=$1 and (USERS.use_password=MD5($2) or 
+				USERS.use_password=$2) and USERS.use_id=User_Role.usr_use_id and
+				Role.rol_id=User_Role.usr_rol_id;
         END;
 $BODY$ LANGUAGE plpgsql;
 

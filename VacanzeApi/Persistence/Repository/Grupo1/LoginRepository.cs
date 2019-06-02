@@ -21,7 +21,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo1
                 var roles = new List<Role>();
                 for (var i = 0; i < view.Rows.Count; i++)
                 {
-                    Role objRol = new Role(i, view.Rows[i][3].ToString());
+                    Role objRol = new Role(Convert.ToInt32(view.Rows[i][3]), view.Rows[i][4].ToString());
                     roles.Add(objRol);
                 }
                 var user = new User(Id, 000, Name, LastName, Email, Password, roles);
