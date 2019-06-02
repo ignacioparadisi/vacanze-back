@@ -259,12 +259,7 @@ VALUES('Chevrolet','Silverado',5,false,69.8,'aa15ab2','auto10.jpg',5);
 --------------Grupo 8 ---------------------------------------------
 INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'concordia', 100, 1000, 'Modelo1','Linea1', '1.jpg' );
 INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'Lmao', 500, 2000, 'Modelo2','Linea2', '3.jpg' );
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,2,'2019/2/11','2019/2/12',2000,1,2);
-=======
->>>>>>> e67a4a748ad2c388d0f483ad0d6252db2dd71367
 
 -------------Grupo 9 ------------------------------------
 INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('Mi primer reclamo','perdi mi maleta negra, nunca aparecio cuando llegue a mi destino','ABIERTO');
