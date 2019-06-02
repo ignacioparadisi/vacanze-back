@@ -171,33 +171,6 @@ ALTER FUNCTION public.findflight(integer)
     OWNER TO vacanza;
 
 
-
--- FUNCTION: public.findflight(integer)
-
--- DROP FUNCTION public.findflight(integer);
-
-CREATE OR REPLACE FUNCTION public.findflight(
-	_id integer)
-    RETURNS TABLE(id integer, price numeric, departuredate timestamp, arrivaldate timestamp, loc_arrival integer, loc_departure integer, pla_fk integer) 
-    LANGUAGE 'plpgsql'
-
-    COST 100
-    VOLATILE 
-    ROWS 1000
-AS $BODY$
-
-BEGIN
-	RETURN QUERY SELECT
-	fli_id, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_arrival, fli_loc_departure, fli_pla_fk
-	FROM public.Flight WHERE _id = fli_id;
-END;
-
-$BODY$;
-
-ALTER FUNCTION public.findflight(integer)
-    OWNER TO vacanza;
-
-
 -- FUNCTION: public.getflights()
 
 -- DROP FUNCTION public.getflights();
