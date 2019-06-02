@@ -67,6 +67,7 @@ namespace vacanze_back.VacanzeApi.Persistence
             }
             catch (Exception e)
             {
+                Console.WriteLine(e);
                 throw new DatabaseException(
                     $"Error ejecutando funcion: {functionSignature}.{Environment.NewLine}{e.Message}");
             }
