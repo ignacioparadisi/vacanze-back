@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
+using vacanze_back.VacanzeApi.Common;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo2;
@@ -12,110 +13,134 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
     [TestFixture]
     public class UsersTests
     {
-        private User _userTest;
-        private int _id;
+        private UsersController _usersController;
+        private User _user;
+        private List<int> _insertedUsers;
 
         [SetUp]
         public void SetUp()
         {
+            _usersController = new UsersController();
+            _insertedUsers = new List<int>();
             var roles = new List<Role>();
             roles.Add(new Role(1,"Cliente"));
-            _userTest = new User(0, 23456789, "Pedro", "Perez",
+            _user = new User(0, 23456789, "Pedro", "Perez",
                 "cliente1@vacanze.com", "12345678", roles);
-            // UserRepository.AddUser(_userTest);
+        }
+        
+        [TearDown]
+        public void TearDown()
+        {
+            foreach (var id in _insertedUsers)
+            {
+                UserRepository.DeleteUserById(id);
+            }
+            _insertedUsers.Clear();
         }
         
         [Test]
-        public void AddUserDbTest()
-        {
-            var user = UserRepository.AddUser(_userTest);
-            Assert.True(user.Id > 0);
-        }
-
-        [Test]
         public void DeleteUserByIdTest()
         {
-            var user = UserRepository.AddUser(_userTest);
+            var user = UserRepository.AddUser(_user);
             var id = UserRepository.DeleteUserById(user.Id);
             Assert.AreEqual(id, user.Id);
         }
 
+        [Test]
+        public void DeleteUserById_UserNotFoundException()
+        {
+            Assert.Throws<UserNotFoundException>(() => { UserRepository.DeleteUserById(0); });
+        }
         
-        [Test]
-        public void GetEmployeesFromDbTest()
-        {
-            var roles = new List<Role>();
-            roles.Add(new Role(3, "Checkin"));
-            _userTest.Roles = roles;
-            UserRepository.AddUser(_userTest);
-            List<User> users = UserRepository.GetEmployees();
-            Assert.AreNotEqual(0, users.Count);
-        }
-
-        [Test]
-        public void GetEmployeesResponseTest()
-        {
-            var controller = new UsersController();
-            ActionResult<IEnumerable<User>> users = controller.GetEmployees();
-            Assert.AreNotEqual(0, users.Value.Count());
-        }
-
         [Test]
         public void NotValidDocumentIdExceptionTest()
         {
-            var roles = new List<Role>();
-            roles.Add(new Role(2, "Checkin"));
-            var user = new User(0, 0, "Nombre", "Apellido", 
-                "usuario@vacanza.com", "12345678", roles);
-            Assert.Throws<NotValidDocumentIdException>(() => { user.Validate(); });
+            _user.DocumentId = 0;
+            Assert.Throws<NotValidDocumentIdException>(() => { _user.Validate(); });
         }
         
         [Test]
-        public void NameRequiredExceptionTest()
+        public void NameRequiredException_NullTest()
         {
-            var roles = new List<Role>();
-            roles.Add(new Role(1, "Checkin"));
-            var user = new User(0, 12345678, null, "Apellido", 
-                "usuario@vacanza.com", "12345678", roles);
-            Assert.Throws<NameRequiredException>(() => { user.Validate(); });
+            _user.Name = null;
+            Assert.Throws<NameRequiredException>(() => { _user.Validate(); });
         }
         
         [Test]
-        public void LastnameRequiredExceptionTest()
+        public void NameRequiredException_EmptyTest()
         {
-            var roles = new List<Role>();
-            roles.Add(new Role(1, "Checkin"));
-            var user = new User(0, 12345678, "Nombre", null, 
-                "usuario@vacanza.com", "12345678", roles);
-            Assert.Throws<LastnameRequiredException>(() => { user.Validate(); });
+            _user.Name = "";
+            Assert.Throws<NameRequiredException>(() => { _user.Validate(); });
         }
         
         [Test]
-        public void EmailRequiredExceptionTest()
+        public void NameRequiredException_WhiteSpaceTest()
         {
-            var roles = new List<Role>();
-            roles.Add(new Role(1, "Checkin"));
-            var user = new User(0, 12345678, "Nombre", "Apellido", 
-                null, "12345678", roles);
-            Assert.Throws<EmailRequiredException>(() => { user.Validate(); });
+            _user.Name = " ";
+            Assert.Throws<NameRequiredException>(() => { _user.Validate(); });
+        }
+        
+        [Test]
+        public void LastnameRequiredException_NullTest()
+        {
+            _user.Lastname = null;
+            Assert.Throws<LastnameRequiredException>(() => { _user.Validate(); });
+        }
+        
+        [Test]
+        public void LastnameRequiredException_EmptyTest()
+        {
+            _user.Lastname = "";
+            Assert.Throws<LastnameRequiredException>(() => { _user.Validate(); });
+        }
+        
+        [Test]
+        public void LastnameRequiredException_WhiteSpaceTest()
+        {
+            _user.Lastname = " ";
+            Assert.Throws<LastnameRequiredException>(() => { _user.Validate(); });
+        }
+        
+        [Test]
+        public void EmailRequiredException_NullTest()
+        {
+            _user.Email = null;
+            Assert.Throws<EmailRequiredException>(() => { _user.Validate(); });
+        }
+        
+        [Test]
+        public void EmailRequiredException_EmptyTest()
+        {
+            _user.Email = "";
+            Assert.Throws<EmailRequiredException>(() => { _user.Validate(); });
+        }
+        
+        [Test]
+        public void EmailRequiredException_WhiteSpaceTest()
+        {
+            _user.Email = " ";
+            Assert.Throws<EmailRequiredException>(() => { _user.Validate(); });
         }
         
         [Test]
         public void NotValidEmailExceptionTest()
         {
-            var roles = new List<Role>();
-            roles.Add(new Role(1, "Checkin"));
-            var user = new User(0, 12345678, "Nombre", "Apellido", 
-                "correo", "12345678", roles);
-            Assert.Throws<NotValidEmailException>(() => { user.Validate(); });
+            _user.Email = "email";
+            Assert.Throws<NotValidEmailException>(() => { _user.Validate(); });
         }
         
         [Test]
-        public void RoleRequiredExceptionTest()
+        public void RoleRequiredException_NullTest()
         {
-            var user = new User(12345678, "Nombre", "Apellido", 
-                "usuario@vacanze.com", "12345678");
-            Assert.Throws<RoleRequiredException>(() => { user.Validate(); });
+            _user.Roles = null;
+            Assert.Throws<RoleRequiredException>(() => { _user.Validate(); });
+        }
+        
+        [Test]
+        public void RoleRequiredException_EmptyTest()
+        {
+            _user.Roles = new List<Role>();
+            Assert.Throws<RoleRequiredException>(() => { _user.Validate(); });
         }
         
         [Test]
@@ -123,64 +148,423 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         {
             var roles = new List<Role>();
             roles.Add(new Role(-1, "Checkin"));
-            var user = new User(0, 12345678, "Nombre", "Apellido", 
-                "usuario@vacanza.com", "12345678", roles);
-            Assert.Throws<NotValidIdException>(() => { user.Validate(); });
+            _user.Roles = roles;
+            Assert.Throws<NotValidIdException>(() => { _user.Validate(); });
+        }
+
+        [Test]
+        public void AdminAndMoreRolesExceptionTest()
+        {
+            var roles = new List<Role>();
+            roles.Add(new Role(Role.ADMIN, "Administrador"));
+            roles.Add(new Role(Role.CLAIM, "Reclamo"));
+            _user.Roles = roles;
+            Assert.Throws<AdminAndMoreRolesException>(() => { _user.Validate(); });
+        }
+
+        [Test]
+        public void ValidateSuccessfullyTest()
+        {
+            Assert.IsTrue(_user.Validate());
+        }
+
+        [Test]
+        public void PasswordRequiredException_NullTest()
+        {
+            _user.Password = null;
+            Assert.Throws<PasswordRequiredException>(() => { _user.EncryptOrCreatePassword(); });
         }
         
         [Test]
-        public void AddUserResponseTest()
+        public void PasswordRequiredException_EmptyTest()
         {
-            var controller = new UsersController();
-            ActionResult<User> user = controller.Post(_userTest);
-            Assert.True(user.Value.Id > 0);
+            _user.Password = "";
+            Assert.Throws<PasswordRequiredException>(() => { _user.EncryptOrCreatePassword(); });
+        }
+        
+        [Test]
+        public void PasswordRequiredException_WhiteSpaceTest()
+        {
+            _user.Password = "  ";
+            Assert.Throws<PasswordRequiredException>(() => { _user.EncryptOrCreatePassword(); });
         }
 
         [Test]
-        public void RepeatedEmailTest()
+        public void EncryptClientPasswordTest()
         {
-            var user = UserRepository.AddUser(_userTest);
-            Assert.Throws<RepeatedEmailException>(() => UserRepository.VerifyEmail("cliente1@vacanze.com"));
+            _user.EncryptOrCreatePassword();
+            Assert.AreEqual("25d55ad283aa400af464c76d713c07ad", _user.Password);
         }
 
         [Test]
-        public void GetUserTest()
+        public void EncryptEmployeePasswordTest()
         {
-            var controller = new UsersController();
-            ActionResult<User> user = controller.Get(1);
-            Assert.True((user.Value.Id == 1) && (user.Value.Roles.Count > 0));
+            var roles = new List<Role>();
+            roles.Add(new Role(Role.CARRIER, "Cargador"));
+            _user.Roles = roles;
+            _user.EncryptOrCreatePassword();
+            var userPassword = _user.Name.Trim().ToLower()[0] + _user.Lastname.Trim().ToLower()[0] + _user.DocumentId.ToString();
+            var encrpytedPassword = Encryptor.Encrypt(userPassword);
+            Assert.AreEqual(encrpytedPassword, _user.Password);
+        }
+        
+        [Test]
+        public void AddUserTest()
+        {
+            var user = UserRepository.AddUser(_user);
+            _insertedUsers.Add(user.Id);
+            Assert.True(user.Id > 0);
         }
 
         [Test]
-        public void UserNotFoundTest()
+        public void AddUser_NotValidDocumentIdExceptionTest()
         {
-            Assert.Throws<UserNotFoundException>(() => UserRepository.GetUserById(100));
+            _user.DocumentId = 0;
+            Assert.Throws<NotValidDocumentIdException>(() => { UserRepository.AddUser(_user); });
         }
 
         [Test]
-        public void ModifyUserDbTest()
+        public void AddUser_NotValidNameException_NullTest()
         {
-            var user = UserRepository.AddUser(_userTest);
+            _user.Name = null;
+            Assert.Throws<NameRequiredException>(() => { UserRepository.AddUser(_user); });
+        }
+        
+        [Test]
+        public void AddUser_NotValidNameException_EmptyTest()
+        {
+            _user.Name = "";
+            Assert.Throws<NameRequiredException>(() => { UserRepository.AddUser(_user); });
+        }
+        
+        [Test]
+        public void AddUser_NotValidNameException_WhiteSpaceTest()
+        {
+            _user.Name = " ";
+            Assert.Throws<NameRequiredException>(() => { UserRepository.AddUser(_user); });
+        }
+        
+        [Test]
+        public void AddUser_NotValidLastNameException_NullTest()
+        {
+            _user.Lastname = null;
+            Assert.Throws<LastnameRequiredException>(() => { UserRepository.AddUser(_user); });
+        }
+        
+        [Test]
+        public void AddUser_NotValidLastNameException_EmptyTest()
+        {
+            _user.Lastname = "";
+            Assert.Throws<LastnameRequiredException>(() => { UserRepository.AddUser(_user); });
+        }
+        
+        [Test]
+        public void AddUser_NotValidLastNameException_WhiteSpaceTest()
+        {
+            _user.Lastname = " ";
+            Assert.Throws<LastnameRequiredException>(() => { UserRepository.AddUser(_user); });
+        }
+        
+        [Test]
+        public void AddUser_EmailRequiredException_NullTest()
+        {
+            _user.Email = null;
+            Assert.Throws<EmailRequiredException>(() => { UserRepository.AddUser(_user); });
+        }
+        
+        [Test]
+        public void AddUser_EmailRequiredException_EmptyTest()
+        {
+            _user.Email = "";
+            Assert.Throws<EmailRequiredException>(() => { UserRepository.AddUser(_user); });
+        }
+        
+        [Test]
+        public void AddUser_EmailRequiredException_WhiteSpaceTest()
+        {
+            _user.Email = " ";
+            Assert.Throws<EmailRequiredException>(() => { UserRepository.AddUser(_user); });
+        }
+        
+        [Test]
+        public void AddUser_NotValidEmailExceptionTest()
+        {
+            _user.Email = "email";
+            Assert.Throws<NotValidEmailException>(() => { UserRepository.AddUser(_user); });
+        }
+        
+        [Test]
+        public void AddUser_RoleRequiredException_NullTest()
+        {
+            _user.Roles = null;
+            Assert.Throws<RoleRequiredException>(() => { UserRepository.AddUser(_user); });
+        }
+        
+        [Test]
+        public void AddUser_RoleRequiredException_EmptyTest()
+        {
+            _user.Roles = new List<Role>();
+            Assert.Throws<RoleRequiredException>(() => { UserRepository.AddUser(_user); });
+        }
+        
+        [Test]
+        public void AddUser_NotValidRoleExceptionTest()
+        {
+            var roles = new List<Role>();
+            roles.Add(new Role(-1, "Checkin"));
+            _user.Roles = roles;
+            Assert.Throws<NotValidIdException>(() => { UserRepository.AddUser(_user); });
+        }
+
+        [Test]
+        public void AddUser_AdminAndMoreRolesExceptionTest()
+        {
+            var roles = new List<Role>();
+            roles.Add(new Role(Role.ADMIN, "Administrador"));
+            roles.Add(new Role(Role.CLAIM, "Reclamo"));
+            _user.Roles = roles;
+            Assert.Throws<AdminAndMoreRolesException>(() => { UserRepository.AddUser(_user); });
+        }
+        
+        [Test]
+        public void AddUser_VerifyEmailTest()
+        {
+            var user = UserRepository.AddUser(_user);
+            _insertedUsers.Add(user.Id);
+            Assert.Throws<RepeatedEmailException>(() => UserRepository.VerifyEmail(_user.Email));
+        }
+
+        [Test]
+        public void AddUser_PasswordRequiredException_NullTest()
+        {
+            _user.Password = null;
+            Assert.Throws<PasswordRequiredException>(() => { UserRepository.AddUser(_user); });
+        }
+        
+        [Test]
+        public void AddUser_PasswordRequiredException_EmptyTest()
+        {
+            _user.Password = "";
+            Assert.Throws<PasswordRequiredException>(() => { UserRepository.AddUser(_user); });
+        }
+        
+        [Test]
+        public void AddUser_PasswordRequiredException_WhiteSpaceTest()
+        {
+            _user.Password = "  ";
+            Assert.Throws<PasswordRequiredException>(() => { UserRepository.AddUser(_user); });
+        }
+
+        [Test]
+        public void GetEmployeesTest()
+        {
+            var roles = new List<Role>();
+            roles.Add(new Role(3, "Checkin"));
+            _user.Roles = roles;
+            var user = UserRepository.AddUser(_user);
+            _insertedUsers.Add(user.Id);
+            List<User> users = UserRepository.GetEmployees();
+            Assert.AreNotEqual(0, users.Count);
+        }
+
+        [Test]
+        public void GetUserByIdTest()
+        {
+            var user = UserRepository.AddUser(_user);
+            _insertedUsers.Add(user.Id);
+            var savedUser = UserRepository.GetUserById(user.Id);
+            Assert.AreEqual(user, savedUser);
+        }
+
+        [Test]
+        public void GetUserById_UserNotFoundExceptionTest()
+        {
+            Assert.Throws<UserNotFoundException>(() => { UserRepository.GetUserById(0); });
+        }
+
+        [Test]
+        public void UpdateUserTest()
+        { 
+            var user = UserRepository.AddUser(_user);
+            _insertedUsers.Add(user.Id);
             user.Name = "Francisco";
-            long id = UserRepository.UpdateUser(user, user.Id);
-            Assert.AreEqual(user.Id, id);
+            int userId = UserRepository.UpdateUser(user, user.Id);
+            Assert.AreEqual(user.Id, userId);
         }
 
         [Test]
-        public void ModifyUserResponseTest()
+        public void UpdateUser_UserNotFoundExceptionTest()
         {
-            var controller = new UsersController();
-            ActionResult<User> user = controller.Post(_userTest);
-            user.Value.Name = "Francisco";
-            ActionResult<int> id = controller.Put(user.Value.Id, user.Value);
-            Assert.AreEqual(user.Value.Id, id.Value);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            UserRepository.DeleteUserByEmail("cliente1@vacanze.com");
+            Assert.Throws<UserNotFoundException>(() => { UserRepository.UpdateUser(_user, 0); });
         }
         
+        [Test]
+        public void UpdateUser_NotValidDocumentIdExceptionTest()
+        {
+            _user.DocumentId = 0;
+            Assert.Throws<NotValidDocumentIdException>(() => { UserRepository.UpdateUser(_user, _user.Id); });
+        }
+
+        [Test]
+        public void UpdateUser_NotValidNameException_NullTest()
+        {
+            _user.Name = null;
+            Assert.Throws<NameRequiredException>(() => { UserRepository.UpdateUser(_user, _user.Id); });
+        }
+        
+        [Test]
+        public void UpdateUser_NotValidNameException_EmptyTest()
+        {
+            _user.Name = "";
+            Assert.Throws<NameRequiredException>(() => { UserRepository.UpdateUser(_user, _user.Id); });
+        }
+        
+        [Test]
+        public void UpdateUser_NotValidNameException_WhiteSpaceTest()
+        {
+            _user.Name = " ";
+            Assert.Throws<NameRequiredException>(() => { UserRepository.UpdateUser(_user, _user.Id); });
+        }
+        
+        [Test]
+        public void UpdateUser_NotValidLastNameException_NullTest()
+        {
+            _user.Lastname = null;
+            Assert.Throws<LastnameRequiredException>(() => { UserRepository.UpdateUser(_user, _user.Id); });
+        }
+        
+        [Test]
+        public void UpdateUser_NotValidLastNameException_EmptyTest()
+        {
+            _user.Lastname = "";
+            Assert.Throws<LastnameRequiredException>(() => { UserRepository.UpdateUser(_user, _user.Id); });
+        }
+        
+        [Test]
+        public void UpdateUser_NotValidLastNameException_WhiteSpaceTest()
+        {
+            _user.Lastname = " ";
+            Assert.Throws<LastnameRequiredException>(() => { UserRepository.UpdateUser(_user, _user.Id); });
+        }
+        
+        [Test]
+        public void UpdateUser_EmailRequiredException_NullTest()
+        {
+            _user.Email = null;
+            Assert.Throws<EmailRequiredException>(() => { UserRepository.UpdateUser(_user, _user.Id); });
+        }
+        
+        [Test]
+        public void UpdateUser_EmailRequiredException_EmptyTest()
+        {
+            _user.Email = "";
+            Assert.Throws<EmailRequiredException>(() => { UserRepository.UpdateUser(_user, _user.Id); });
+        }
+        
+        [Test]
+        public void UpdateUser_EmailRequiredException_WhiteSpaceTest()
+        {
+            _user.Email = " ";
+            Assert.Throws<EmailRequiredException>(() => { UserRepository.UpdateUser(_user, _user.Id); });
+        }
+        
+        [Test]
+        public void UpdateUser_NotValidEmailExceptionTest()
+        {
+            _user.Email = "email";
+            Assert.Throws<NotValidEmailException>(() => { UserRepository.UpdateUser(_user, _user.Id); });
+        }
+        
+        [Test]
+        public void UpdateUser_RoleRequiredException_NullTest()
+        {
+            _user.Roles = null;
+            Assert.Throws<RoleRequiredException>(() => { UserRepository.UpdateUser(_user, _user.Id); });
+        }
+        
+        [Test]
+        public void UpdateUser_RoleRequiredException_EmptyTest()
+        {
+            _user.Roles = new List<Role>();
+            Assert.Throws<RoleRequiredException>(() => { UserRepository.UpdateUser(_user, _user.Id); });
+        }
+        
+        [Test]
+        public void UpdateUser_NotValidRoleExceptionTest()
+        {
+            var roles = new List<Role>();
+            roles.Add(new Role(-1, "Checkin"));
+            _user.Roles = roles;
+            Assert.Throws<NotValidIdException>(() => { UserRepository.UpdateUser(_user, _user.Id); });
+        }
+
+        [Test]
+        public void UpdateUser_AdminAndMoreRolesExceptionTest()
+        {
+            var roles = new List<Role>();
+            roles.Add(new Role(Role.ADMIN, "Administrador"));
+            roles.Add(new Role(Role.CLAIM, "Reclamo"));
+            _user.Roles = roles;
+            Assert.Throws<AdminAndMoreRolesException>(() => { UserRepository.UpdateUser(_user, _user.Id); });
+        }
+        
+        [Test]
+        public void UpdateUser_VerifyEmailTest()
+        {
+            var user = UserRepository.AddUser(_user);
+            _insertedUsers.Add(user.Id);
+            _user.Id = 0;
+            Assert.Throws<RepeatedEmailException>(() => UserRepository.VerifyEmail(_user.Email, _user.Id));
+        }
+
+//        [Test]
+//        public void GetEmployeesResponseTest()
+//        {
+//            var controller = new UsersController();
+//            ActionResult<IEnumerable<User>> users = controller.GetEmployees();
+//            Assert.AreNotEqual(0, users.Value.Count());
+//        }
+//
+//        [Test]
+//        public void AddUserResponseTest()
+//        {
+//            var controller = new UsersController();
+//            ActionResult<User> user = controller.Post(_user);
+//            Assert.True(user.Value.Id > 0);
+//        }
+//
+//        [Test]
+//        public void GetUserTest()
+//        {
+//            var controller = new UsersController();
+//            ActionResult<User> user = controller.Get(1);
+//            Assert.True((user.Value.Id == 1) && (user.Value.Roles.Count > 0));
+//        }
+//
+//        [Test]
+//        public void UserNotFoundTest()
+//        {
+//            Assert.Throws<UserNotFoundException>(() => UserRepository.GetUserById(100));
+//        }
+//
+//        [Test]
+//        public void ModifyUserDbTest()
+//        {
+//            var user = UserRepository.AddUser(_user);
+//            user.Name = "Francisco";
+//            long id = UserRepository.UpdateUser(user, user.Id);
+//            Assert.AreEqual(user.Id, id);
+//        }
+//
+//        [Test]
+//        public void ModifyUserResponseTest()
+//        {
+//            var controller = new UsersController();
+//            ActionResult<User> user = controller.Post(_user);
+//            user.Value.Name = "Francisco";
+//            ActionResult<int> id = controller.Put(user.Value.Id, user.Value);
+//            Assert.AreEqual(user.Value.Id, id.Value);
+//        }
+
     }
 }

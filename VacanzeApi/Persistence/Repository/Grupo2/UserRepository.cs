@@ -39,12 +39,14 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
         /// Verifica en la base de datos que no exista un usuario con el email
         /// </summary>
         /// <param name="email">Email que se quiere verificar en la base de datos</param>
+        /// <param name="id">El id del usuario (en caso de que sea actualizar) para que no actualice su email
+        /// por uno ya existente pero que lo deje guardar su propio correo</param>
         /// <exception cref="RepeatedEmailException">Si el correo existe, se devuelve esta exception
         /// porque no pueden haber correos repetidos</exception>
-        public static void VerifyEmail(string email)
+        public static void VerifyEmail(string email, int id = 0)
         {
-            var table = PgConnection.Instance.ExecuteFunction("GetUserByEmail(@email_id)",
-                email);
+            var table = PgConnection.Instance.ExecuteFunction("GetUserByEmail(@email_id, @user_id)",
+                email, id);
             if (table.Rows.Count > 0)
                 throw new RepeatedEmailException("El Email Ingresado ya Existe");
         }
@@ -70,7 +72,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
             var email = table.Rows[0][4].ToString();
             user = new User(user_id, documentId, name, lastname, email);
             
-            // TODO: Falta agregarle los roles
+            var roles = RoleRepository.GetRolesForUser(id);
+            user.Roles = roles;
 
             return user;
         }
@@ -86,15 +89,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
         {
             user.Validate();
             VerifyEmail(user.Email);
-            var isClient = false;
-            foreach (var role in user.Roles)
-            {
-                if (role.Id == Role.CLIENT)
-                {
-                    isClient = true;
-                }
-            }
-            user.EncryptPassword(isClient);
+            user.EncryptOrCreatePassword();
             var table = PgConnection.Instance.
                 ExecuteFunction("AddUser(@doc_id, @email, @lastname, @name, @password)",
                     user.DocumentId.ToString(), user.Email, user.Lastname, user.Name, user.Password);
@@ -168,6 +163,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
         public static int UpdateUser(User user, int id)
         {
             user.Validate();
+            VerifyEmail(user.Email, id);
             var table = PgConnection.Instance
                 .ExecuteFunction("ModifyUser(@id, @doc_id, @name, @lastname, @email)",
                 id, user.DocumentId.ToString(), user.Name, user.Lastname, user.Email);

@@ -351,7 +351,7 @@ $$
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION GetUserByEmail(email_id VARCHAR(30))
+CREATE OR REPLACE FUNCTION GetUserByEmail(email_id VARCHAR(30), user_id INTEGER)
   RETURNS TABLE
           (id integer,
            documentId VARCHAR(50),
@@ -362,7 +362,7 @@ AS
 $$
 BEGIN
   RETURN QUERY SELECT use_id, use_document_id, use_name, use_last_name, use_email
-               FROM Users WHERE use_email = email_id;
+               FROM Users WHERE use_email = email_id AND use_id <> user_id;
 END;
 $$ LANGUAGE plpgsql;
 

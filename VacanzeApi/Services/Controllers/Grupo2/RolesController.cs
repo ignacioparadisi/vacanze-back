@@ -31,7 +31,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
                 return BadRequest("Error al Obtener Roles");
             }
 
-            return roles;
+            return Ok(roles);
         }
     }
 }

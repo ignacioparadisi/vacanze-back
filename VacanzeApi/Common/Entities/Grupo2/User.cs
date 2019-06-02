@@ -18,15 +18,49 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         public string Name;
         public string Password;
         public List<Role> Roles;
+        public override bool Equals(object obj)
+        {
+            var user = (User) obj;
+            return Id == user.Id
+                   && DocumentId == user.DocumentId
+                   && Email == user.Email
+                   && Lastname == user.Lastname
+                   && Name == user.Name
+                   && Password == user.Password
+                   && RolesAreEqual(user);
+        }
+
+        private bool RolesAreEqual(User user)
+        {
+            foreach (var role in Roles)
+            {
+                var isEqual = false;
+                foreach (var userRole in user.Roles)
+                {
+                    if (userRole.Equals(role))
+                    {
+                        isEqual = true;
+                        break;
+                    }
+                }
+
+                if (isEqual)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
         public User(int id, long documentId, string name, string lastname, string email,
             string password, List<Role> roles)
         {
-            Id = Id;
+            Id = id;
             DocumentId = documentId;
-            Name = name;
-            Lastname = lastname;
-            Email = email;
+            Name = name.Trim();
+            Lastname = lastname.Trim();
+            Email = email.Trim();
             Password = password;
             Roles = roles;
         }
@@ -35,9 +69,10 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         {
             Id = id;
             DocumentId = documentId;
-            Name = name;
-            Lastname = lastname;
+            Name = name.Trim();
+            Lastname = lastname.Trim();
             Email = email;
+            Password = "";
         }
 
         /// <summary>
@@ -52,9 +87,9 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         public User(long documentId, string name, string lastname, string email, string password)
         {
             DocumentId = documentId;
-            Name = name;
-            Lastname = lastname;
-            Email = email;
+            Name = name.Trim();
+            Lastname = lastname.Trim();
+            Email = email.Trim();
             Password = password;
         }
 
@@ -65,24 +100,23 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         /// <returns>Mensaje de error que se envia al frontend en caso de que haya algun error</returns>
         public bool Validate()
         {
-            var isClient = false;
 
             if (DocumentId <= 0)
             {
                 throw new NotValidDocumentIdException("La cédula de identidad no es válida");
             }
 
-            if (string.IsNullOrEmpty(Name))
+            if (string.IsNullOrEmpty(Name) || string.IsNullOrWhiteSpace(Name))
             {
                 throw new NameRequiredException("El nombre es requerido");
             }
 
-            if (string.IsNullOrEmpty(Lastname))
+            if (string.IsNullOrEmpty(Lastname) || string.IsNullOrWhiteSpace(Lastname))
             {
                 throw new LastnameRequiredException("El apellido es requerido");
             }
 
-            if (string.IsNullOrEmpty(Email))
+            if (string.IsNullOrEmpty(Email) || string.IsNullOrWhiteSpace(Email))
             {
                 throw new EmailRequiredException("El correo electrónico es requerido");
             }
@@ -118,23 +152,29 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         /// <param name="isClient">Define si el usuario es un cliente o un empleado</param>
         /// <exception cref="PasswordRequiredException">Excepción retornada si el usuario es cliente
         /// y envía una contraseña nula o vacía</exception>
-        public void EncryptPassword(bool isClient)
+        public void EncryptOrCreatePassword()
         {
-            if (!string.IsNullOrEmpty(Password))
+            var isClient = false;
+            foreach (var role in Roles)
+            {
+                if (role.Id == Role.CLIENT)
+                {
+                    isClient = true;
+                }
+            }
+            
+            if (!isClient)
+            {
+                Password = Name.Trim().ToLower()[0] + Lastname.Trim().ToLower()[0] + DocumentId.ToString();
+                Password = Encryptor.Encrypt(Password);
+            }
+            else if (!string.IsNullOrEmpty(Password) && !string.IsNullOrWhiteSpace(Password))
             {
                 Password = Encryptor.Encrypt(Password);
             }
             else
             {
-                if (!isClient)
-                {
-                    Password = Name.Trim().ToLower()[0] + Lastname.Trim().ToLower()[0] + DocumentId.ToString();
-                    Password = Encryptor.Encrypt(Password);
-                }
-                else
-                {
-                    throw new PasswordRequiredException("La contraseña es requerida");
-                }
+                throw new PasswordRequiredException("La contraseña es requerida");
             }
         }
     }
