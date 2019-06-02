@@ -10,7 +10,7 @@ using System;
 namespace vacanze_back.VacanzeApiTest.Grupo7
 {
 	[TestFixture]
-	public class RestaurantTest
+	public class RestaurantRepositoryTest
 	{
 		RestaurantsController controller;
 		Restaurant res;
