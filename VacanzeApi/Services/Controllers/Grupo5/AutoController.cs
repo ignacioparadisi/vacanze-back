@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Cors;
 using System.Linq;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Localization;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
+using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo5;
 using Newtonsoft.Json;
 
@@ -25,21 +28,40 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
                 var result= ConnectAuto.Agregar(auto);
                 return Ok(JsonConvert.SerializeObject(result));
             }
+            catch (DatabaseException )
+			{            
+				return StatusCode(500,"no se pudo registrar el automovil {DB}");
+			}
+			catch (InvalidStoredProcedureSignatureException )
+			{
+				return StatusCode(500,"no se pudo registrar el automovil {ISPS}");
+			}
             catch (IndexOutOfRangeException)
             {
-                return StatusCode(500,"no se registro carro");
-            }/*;*/
+                return StatusCode(500,"no se pudo registrar el automovil {IOoR}");
+            }
+            
         }
         /*https://localhost:5001/api/Auto/eliminar/2*/
         [HttpGet("eliminar/{i}")]
         public IActionResult delete(int i)
         {
-            var result= ConnectAuto.DeleteAuto(i);
-              if (result.Equals(-1))
+            try 
             {
-                return StatusCode(500, "El automovil no existe");
+                var result= ConnectAuto.DeleteAuto(i);
+                return Ok("eliminado exitosamente");
+            } 
+            catch (DatabaseException )
+            {
+                /*List<Auto> AutoList =ConnectAuto.ConsultforId(i);
+                if (AutoList.Rows.Count < 1){return StatusCode(500,"no se pudo eliminar el automovil {DB}");}
+                else{*/return StatusCode(500,"no se pudo eliminar el automovil {DB}");//}
             }
-            return StatusCode(200, "Eliminado satisfactoriamente");
+            catch (InvalidStoredProcedureSignatureException )
+			{
+				return StatusCode(500,"no se pudo eliminar el automovil {ISPS}");
+            }
+
         }
         /*https://localhost:5001/api/Auto/consultarforall/2 
          result = isactive */ 
@@ -49,11 +71,19 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
             try
             { 
                 List<Auto> AutoList =ConnectAuto.consultforall(place,result,license,capacity);
-                return Ok(JsonConvert.SerializeObject(AutoList));
+                return Ok(AutoList.ToList());
             }
-            catch (IndexOutOfRangeException)
+            catch (IndexOutOfRangeException )
             {
-                return StatusCode(500,"No hay auto registrados");
+                return StatusCode(500,"No hay automoviles registrados {cfa-ISPS}");
+            }
+            catch (DatabaseException )
+            {
+                return StatusCode(500,"No hay automoviles registrados {cfa-ISPS}");
+            }
+            catch (InvalidStoredProcedureSignatureException )
+            {
+                return StatusCode(500,"No hay automoviles registrados {cfa-ISPS}");
             }
         }
         /*https://localhost:5001/api/Auto/consultforplace/1 */
@@ -63,11 +93,19 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
             try
             {    
                 List<Auto> AutoList =ConnectAuto.ConsultforPlace(id);
-                return Ok(JsonConvert.SerializeObject(AutoList));
+                return Ok(AutoList.ToList());
             }
-            catch (IndexOutOfRangeException)
+            catch (IndexOutOfRangeException )
             {
-                return StatusCode(500,"No hay auto registrados");
+                return StatusCode(500,"No hay automoviles registrados {cfp-ISPS}");
+            }
+            catch (DatabaseException )
+            {
+                return StatusCode(500,"No hay automoviles registrados {cfp-ISPS}");
+            }
+            catch (InvalidStoredProcedureSignatureException )
+            {
+                return StatusCode(500,"No hay automoviles registrados {cfp-ISPS}");
             }
         }
         /*https://localhost:5001/api/Auto/consult/67 */
@@ -79,9 +117,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
                 List<Auto> AutoList =ConnectAuto.ConsultforId(id);
                 return Ok(AutoList.ToList());    
             }
-            catch (IndexOutOfRangeException)
+            catch (IndexOutOfRangeException )
             {
-                return Ok("no hay autos registrados");
+                return StatusCode(500,"No hay automoviles registrados {c-DB}");
+            }
+            catch (DatabaseException )
+            {
+                return StatusCode(500,"No hay automoviles registrados {c-DB}");
+            }
+            catch (InvalidStoredProcedureSignatureException )
+            {
+                return StatusCode(500,"No hay automoviles registrados {c-ISPS}");
             }
         }
         /*https://localhost:5001/api/Auto/consultplaceStatus/1/true*/
@@ -91,11 +137,19 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
             try
             {    
                 List<Auto> AutoList =ConnectAuto.ConsultforPlaceandStatu(place,status);
-                return Ok(JsonConvert.SerializeObject(AutoList));
+                return Ok(AutoList.ToList());
             }
-            catch (IndexOutOfRangeException)
+            catch (IndexOutOfRangeException )
             {
-                return StatusCode(500,"No hay auto registrados");
+                return StatusCode(500,"No hay automoviles registrados {cps-IOoR}");
+            }
+            catch (DatabaseException )
+            {
+                return StatusCode(500,"No hay automoviles registrados {cps-DB}");
+            }
+            catch (InvalidStoredProcedureSignatureException )
+            {
+                return StatusCode(500,"No hay automoviles registrados {cps-ISPS}");
             }
         }
 		/*https://localhost:5001/api/Auto/modificar/2/cambio/cambio/532/false/cambio/12345/cambio/2 */
@@ -109,10 +163,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
                 var result= ConnectAuto.ModifyAuto(auto);
                 return Ok(JsonConvert.SerializeObject(result));
             }
-            catch (IndexOutOfRangeException)
+            catch (IndexOutOfRangeException )
             {
-                return StatusCode(500,"no se registro carro");
+                return StatusCode(500,"no se pudo modificar el automovil {IOoR}");
             }
+            catch (DatabaseException )
+            {
+                return StatusCode(500,"no se pudo modificar el automovil {DB}");
+            }
+			catch (InvalidStoredProcedureSignatureException )
+			{
+				return StatusCode(500,"no se pudo modificar el automovil {ISPS}");
+			}
         }
     }
 }
