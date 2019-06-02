@@ -86,7 +86,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
         public void AddLayoverTest()
         {
             var addedcruiser = CruiserRepository.AddCruiser(cruiser);
-            var layover = new Layover(addedcruiser,Convert.ToDateTime("2019-01-01"), Convert.ToDateTime("2019-01-02"),2000,1,2);
+            var layover = new Layover(addedcruiser,Convert.ToString("2019-01-01"), Convert.ToString("2019-01-02"),2000,1,2);
             var addedLayover = CruiserRepository.AddLayover(layover);
             addedLayover.Id = 0;
             Assert.AreEqual(layover,addedLayover);
@@ -94,14 +94,14 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
         [Test]
         public void AddlayoverCruiserNotFoundTest()
         {
-            var layover = new Layover(-1,Convert.ToDateTime("2019-01-01"), Convert.ToDateTime("2019-01-02"),2000,1,2);
+            var layover = new Layover(-1,Convert.ToString("2019-01-01"), Convert.ToString("2019-01-02"),2000,1,2);
             Assert.Throws<CruiserNotFoundException>(() => CruiserRepository.AddLayover(layover));
         }
         [Test]
         public void DeleteLayoverTest()
         {
             var cruiserId = CruiserRepository.AddCruiser(cruiser);
-            var layover = new Layover(cruiserId,Convert.ToDateTime("2019-01-01"), Convert.ToDateTime("2019-01-02"),2000,1,2);
+            var layover = new Layover(cruiserId,Convert.ToString("2019-01-01"), Convert.ToString("2019-01-02"),2000,1,2);
             var addedLayover = CruiserRepository.AddLayover(layover);
             var deletedId = CruiserRepository.DeleteLayover(addedLayover.Id);
             Assert.AreEqual(addedLayover.Id,deletedId);
@@ -119,8 +119,8 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
         {
             List<Layover> layoversList= new List<Layover>();
             var cruiserId = CruiserRepository.AddCruiser(cruiser);
-            var layover1 = new Layover(cruiserId,Convert.ToDateTime("2019-01-01"), Convert.ToDateTime("2019-01-02"),2000,1,2);
-            var layover2 = new Layover(cruiserId,Convert.ToDateTime("2019-01-01"), Convert.ToDateTime("2019-01-02"),2000,1,2);
+            var layover1 = new Layover(cruiserId,Convert.ToString("2019-01-01"), Convert.ToString("2019-01-02"),2000,1,2);
+            var layover2 = new Layover(cruiserId,Convert.ToString("2019-01-01"), Convert.ToString("2019-01-02"),2000,1,2);
             var addedLayover1 = CruiserRepository.AddLayover(layover1);
             var addedLayover2 = CruiserRepository.AddLayover(layover2);
             layoversList.Add(addedLayover1);

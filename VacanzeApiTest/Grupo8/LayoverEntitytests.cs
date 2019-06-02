@@ -14,19 +14,19 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
         [Test]
         public void NullCruiserIdTest()
         {
-            var layover = new Layover(0,Convert.ToDateTime("2019-01-01"), Convert.ToDateTime("2019-01-02"),2000,1,2);
+            var layover = new Layover(0,"2019-01-01","2019-01-02",2000,1,2);
             Assert.Throws<InvalidAttributeException>(() => layover.Validate());
         }
         [Test]
         public void NullLocDepartureTest()
         {
-            var layover = new Layover(1,Convert.ToDateTime("2019-01-01"), Convert.ToDateTime("2019-01-02"),2000,0,2);
+            var layover = new Layover(1,"2019-01-01", "2019-01-02",2000,0,2);
             Assert.Throws<InvalidAttributeException>(() => layover.Validate());
         }
         [Test]
         public void NullLocArrivalTest()
         {
-            var layover = new Layover(1,Convert.ToDateTime("2019-01-01"), Convert.ToDateTime("2019-01-02"),2000,1,0);
+            var layover = new Layover(1,"2019-01-01", "2019-01-02",2000,1,0);
             Assert.Throws<InvalidAttributeException>(() => layover.Validate());
         }
     }

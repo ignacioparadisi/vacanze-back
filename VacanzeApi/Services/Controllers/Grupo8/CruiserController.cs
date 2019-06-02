@@ -24,11 +24,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 var cruiserList = CruiserRepository.GetCruisers();
                 return Ok(cruiserList);
             }
-            catch (CruiserNotFoundException e)
-            {
-                ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                return BadRequest(errorMessage);
-            }
             catch (DatabaseException e)
             {
                 ErrorMessage errorMessage = new ErrorMessage(e.Message);
@@ -159,12 +154,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             {
                 var layovers = CruiserRepository.GetLayovers(cruiserId);
                 return Ok(layovers);
-            }
-            catch (LayoverNotFoundException e)
-            {
-                int [] lay = new int [0];
-                ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                return Ok(new {layovers = lay});
             }
             catch (DatabaseException e)
             {
