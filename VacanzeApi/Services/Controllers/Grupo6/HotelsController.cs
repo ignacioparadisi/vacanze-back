@@ -88,5 +88,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
                 return new BadRequestObjectResult(new ErrorMessage(e.Message));
             }
         }
+
+        [HttpGet("{hotelId}/image")]
+        public string GetHotelImage([FromRoute] int hotelId)
+        {
+            return HotelRepository.GetHotelImage(hotelId);
+        }
     }
 }

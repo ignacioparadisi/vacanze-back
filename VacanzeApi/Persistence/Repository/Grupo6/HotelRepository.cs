@@ -120,6 +120,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
         /// <returns>Objeto Hotel con los campos actualizados</returns>
         /// <exception cref="RequiredAttributeException">Algun atributo requerido estaba como null</exception>
         /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
+        /// <exception cref="DatabaseException">
+        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la bse de
+        ///     datos
+        /// </exception>
         public static Hotel UpdateHotel(int id, Hotel newData)
         {
             HotelValidator.Validate(newData);
@@ -140,6 +144,21 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
                 newData.Location.Id
             );
             return GetHotelById(id);
+        }
+
+        /// <summary>
+        ///     Devuelve la imagen en base64 del hotel.
+        /// </summary>
+        /// <param name="id">Id del hotel del que se quiere su imagen</param>
+        /// <returns>Imagen en base64</returns>
+        /// <exception cref="DatabaseException">
+        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la bse de
+        ///     datos
+        /// </exception>
+        public static string GetHotelImage(int id)
+        {
+            var result = PgConnection.Instance.ExecuteFunction("GetHotelImage(@p_id)", id);
+            return result.Rows[0][0].ToString();
         }
 
         /// <summary>
@@ -182,7 +201,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
                 .WithPhone(phone)
                 .WithWebsite(website)
                 .WithStars(stars)
-                .WithBase64Picture(picture)
+                .WithPictureUrl(picture)
                 .LocatedAt(LocationRepository.GetLocationById(locationId))
                 .WithStatus(isActive)
                 .WithAddressDescription(addressSpecs)
