@@ -2057,4 +2057,17 @@ $BODY$;
 ALTER FUNCTION public.m13_getresroobyuserandroomid(integer)
     OWNER TO vacanza;
 
+--AVAILABILITY HOTEL
+CREATE OR REPLACE FUNCTION getAvailableRoomsBasedOnReservationByHotelId(
+    IN _hot_id integer, OUT disponibles int)
+AS $$
+BEGIN
+disponibles := (SELECT ((Select hot_room_qty FROM hotel where hot_id = _hot_id)
+    - (SELECT COUNT(rr_hot_fk) FROM res_roo where rr_hot_fk=_hot_id  and rr_checkoutdate>=CURRENT_TIMESTAMP)
+) AS "Habitaciones Disponibles");
+
+END;
+
+$$ LANGUAGE plpgsql;
+
 ----------------------------------FIN Grupo 13 Room Reservations-------------------------------------------
