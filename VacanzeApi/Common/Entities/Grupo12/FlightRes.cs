@@ -54,6 +54,15 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo12{
         }
 
 
+        
+         /* public FlightRes(int id,string seatNum,string timestamp,int numPas,
+         int id_user,int id_fli, int id_pay ):base(0){
+*/
+           
+            
+        //}
+
+
 
 
     }

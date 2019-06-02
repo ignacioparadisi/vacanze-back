@@ -37,12 +37,16 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo12
         public List<FlightRes> GetReservationFlight(int id){
             var FlightList = new List<FlightRes>();
             var table = new DataTable();
+            var table2 = new DataTable();
            try{ 
                   
                 table = PgConnection.Instance.ExecuteFunction("getReservationFlight(@rf_use_fk)",id);
+
                 
                 for (var i = 0; i < table.Rows.Count; i++){
-
+                    table2 = PgConnection.Instance.ExecuteFunction("GetNameLocation(@_id_city)",
+                    Convert.ToInt32(table.Rows[i][13].ToString()));
+                    
                     int id_fli = Convert.ToInt32(table.Rows[i][0].ToString());
                     string seatNum = Convert.ToString(table.Rows[i][1].ToString());
                     string timeStam = Convert.ToString(table.Rows[i][2].ToString());
@@ -50,8 +54,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo12
                     int rf_use = Convert.ToInt32(table.Rows[i][4].ToString());
                     int rf_pay = Convert.ToInt32(table.Rows[i][5].ToString());
                     int rf_fli = Convert.ToInt32(table.Rows[i][6].ToString());
-                    var reservation_flight = new FlightRes(id_fli,seatNum,timeStam,numPas,rf_use,rf_pay,rf_fli);
-                    FlightList.Add(reservation_flight);
+                    //var reservation_flight = new FlightRes(id_fli,seatNum,timeStam,numPas,rf_use,rf_pay,rf_fli);
+                    //FlightList.Add(reservation_flight);
                 
                 }
                 return FlightList;
@@ -176,9 +180,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo12
             var table1= new DataTable();
             var res=new FlightRes();
             try{
-
+                
                 table1=PgConnection.Instance.ExecuteFunction("getSum(@idflight)",_id_fli);
                 res._sum_pas=Convert.ToInt32(table1.Rows[0][0].ToString());
+                 Console.WriteLine(res._sum_pas);
                 int cont=res._sum_pas;
                 string seat="";
                 if(numseat!=0){

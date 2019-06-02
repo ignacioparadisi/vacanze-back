@@ -1693,14 +1693,24 @@ END;
 $$ 
 LANGUAGE plpgsql;
 ---Devuelve la cantidad de asientos reservados
-CREATE OR REPLACE FUNCTION getSum(idflight INTEGER)RETURNS integer AS $$  
+CREATE OR REPLACE FUNCTION public.getsum(idflight integer)
+  RETURNS integer AS
+$BODY$  
 DECLARE sum Integer;
 BEGIN
  SELECT SUM(rf_num_ps) FROM res_fli as f WHERE f.rf_fli_fk=idflight into sum ;
- return sum;
+
+	IF(sum>0) then
+	  return sum;
+	END IF; 	
+	
+ return 0;
 END;
-$$ 
-LANGUAGE plpgsql;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION public.getsum(integer)
+  OWNER TO postgres;
 
 --Devolver id ciudad
 CREATE OR REPLACE FUNCTION GetIDLocation(name_city VARCHAR) 
