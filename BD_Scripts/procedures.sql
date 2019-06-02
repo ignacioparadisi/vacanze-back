@@ -1412,6 +1412,21 @@ BEGIN
     FROM LOCATION;
 END;
 $$ LANGUAGE plpgsql;
+----------------------------------------- consulta de ciudades-----------------------------------
+
+CREATE OR REPLACE FUNCTION GetCity()
+    RETURNS TABLE
+            (
+                id integer,
+                city VARCHAR(30)
+               
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY select loc_id,loc_city from location;
+END;
+$$ LANGUAGE plpgsql;
 
 ------------------------fin de grupo 5-------------------------------------------
 
@@ -1683,6 +1698,42 @@ CREATE OR REPLACE FUNCTION modifyReservationPayment(pay INTEGER,reservation INTE
   END;
   $$ LANGUAGE plpgsql;
 
+--SP para traerme la cantidad de personas que ya han reservado en el restaurant seleccionado
+CREATE OR REPLACE FUNCTION getAvailability(_res_id INTEGER, _res_date VARCHAR) RETURNS INTEGER AS $$
+  DECLARE 
+  available INTEGER;
+  total INTEGER;
+  capacity INTEGER;
+  BEGIN
+    SELECT SUM(rr_num_ppl) FROM RES_REST 
+    WHERE rr_res_fk = _res_id
+    AND rr_date = TO_TIMESTAMP(_res_date, 'yyyy-mm-dd hh24:mi')
+    INTO available;
+
+    SELECT res_capacity FROM RESTAURANT
+    WHERE RES_ID = _res_id
+    INTO capacity;
+    
+    total = capacity - available;
+	  IF total > 0 THEN 
+		  RAISE NOTICE 'dentro del if';
+		  RETURN total;
+	  END IF;
+	  RETURN 0;
+  END;
+  $$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION getAvailabilityRest(_res_id INTEGER) RETURNS INTEGER AS $$
+  DECLARE capaityRest INTEGER;
+  BEGIN
+    SELECT res_capacity FROM RESTAURANT
+    WHERE RES_ID = _res_id
+    INTO capaityRest;
+
+    RETURN capaityRest;
+  END;
+  $$ LANGUAGE plpgsql;
 -----------------------------------fin grupo 14-----------------------------------------------------------
 
 ------Grupo1-----------------------------------------------------------------------------------------------
