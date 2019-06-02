@@ -255,6 +255,7 @@ INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('LOST','maleta azu
 INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('LOST','maleta vinotinto con logo de la FVF',4);
 INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('LOST','maleta rosada con dibujos de niña',1);
 
+
 ------- grupo 10 ----------
 
 -- Cliente Generico --

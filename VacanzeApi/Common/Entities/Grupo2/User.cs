@@ -9,8 +9,9 @@ using vacanze_back.VacanzeApi.Common.Exceptions;
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
 {
-    public class User : Entity
+    public class User
     {
+        public int Id;
         public long DocumentId;
         public string Email;
         public string Lastname;
@@ -18,9 +19,10 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         public string Password;
         public List<Role> Roles;
 
-        public User(long id, long documentId, string name, string lastname, string email,
-            string password, List<Role> roles) : base(id)
+        public User(int id, long documentId, string name, string lastname, string email,
+            string password, List<Role> roles)
         {
+            Id = Id;
             DocumentId = documentId;
             Name = name;
             Lastname = lastname;
@@ -29,8 +31,9 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
             Roles = roles;
         }
 
-        public User(long id, long documentId, string name, string lastname, string email) : base(id)
+        public User(int id, long documentId, string name, string lastname, string email)
         {
+            Id = id;
             DocumentId = documentId;
             Name = name;
             Lastname = lastname;
@@ -46,7 +49,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         /// <param name="email">Correo electrónico del usuario</param>
         /// <param name="password">Contraseña del usuario</param>
         [JsonConstructor]
-        public User(long documentId, string name, string lastname, string email, string password) : base(0)
+        public User(long documentId, string name, string lastname, string email, string password)
         {
             DocumentId = documentId;
             Name = name;
@@ -54,23 +57,23 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
             Email = email;
             Password = password;
         }
-        
+
         /// <summary>
         /// Verifica todos los atributos del usuario para verificar que sean válidos
         /// </summary>
         /// <returns>Mensaje de error que se envia al frontend en caso de que haya algun error</returns>
-        public void Validate()
+        public void Validate(bool update = false)
         {
             var isClient = false;
-            
+
             if (DocumentId <= 0)
             {
                 throw new NotValidDocumentIdException("La cédula de identidad no es válida");
             }
-            
+
             if (string.IsNullOrEmpty(Name))
             {
-                throw new NameRequiredException("El nombre es requerido"); 
+                throw new NameRequiredException("El nombre es requerido");
             }
 
             if (string.IsNullOrEmpty(Lastname))
@@ -96,13 +99,25 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
 
             foreach (var role in Roles)
             {
-                if (role.Id == 1)
+                role.Validate();
+                if (role.Id == Role.CLIENT)
                 {
                     isClient = true;
                 }
-                role.Validate();
+                else if (role.Id == Role.ADMIN && Roles.Count > 1)
+                {
+                    throw new AdminAndMoreRolesException("El administrador no puede tener otros roles");
+                }
             }
-            
+
+            if (!update)
+            {
+                EncryptPassword(isClient);
+            }
+        }
+
+        private void EncryptPassword(bool isClient)
+        {
             if (!string.IsNullOrEmpty(Password))
             {
                 Password = Encryptor.Encrypt(Password);
