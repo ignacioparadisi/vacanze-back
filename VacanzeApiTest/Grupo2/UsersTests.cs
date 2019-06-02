@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 using vacanze_back.VacanzeApi.Common;
@@ -507,7 +506,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
             _user.Roles = roles;
             Assert.Throws<AdminAndMoreRolesException>(() => { UserRepository.UpdateUser(_user, _user.Id); });
         }
-        
+
         [Test]
         public void UpdateUser_VerifyEmailTest()
         {
@@ -516,55 +515,5 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
             _user.Id = 0;
             Assert.Throws<RepeatedEmailException>(() => UserRepository.VerifyEmail(_user.Email, _user.Id));
         }
-
-//        [Test]
-//        public void GetEmployeesResponseTest()
-//        {
-//            var controller = new UsersController();
-//            ActionResult<IEnumerable<User>> users = controller.GetEmployees();
-//            Assert.AreNotEqual(0, users.Value.Count());
-//        }
-//
-//        [Test]
-//        public void AddUserResponseTest()
-//        {
-//            var controller = new UsersController();
-//            ActionResult<User> user = controller.Post(_user);
-//            Assert.True(user.Value.Id > 0);
-//        }
-//
-//        [Test]
-//        public void GetUserTest()
-//        {
-//            var controller = new UsersController();
-//            ActionResult<User> user = controller.Get(1);
-//            Assert.True((user.Value.Id == 1) && (user.Value.Roles.Count > 0));
-//        }
-//
-//        [Test]
-//        public void UserNotFoundTest()
-//        {
-//            Assert.Throws<UserNotFoundException>(() => UserRepository.GetUserById(100));
-//        }
-//
-//        [Test]
-//        public void ModifyUserDbTest()
-//        {
-//            var user = UserRepository.AddUser(_user);
-//            user.Name = "Francisco";
-//            long id = UserRepository.UpdateUser(user, user.Id);
-//            Assert.AreEqual(user.Id, id);
-//        }
-//
-//        [Test]
-//        public void ModifyUserResponseTest()
-//        {
-//            var controller = new UsersController();
-//            ActionResult<User> user = controller.Post(_user);
-//            user.Value.Name = "Francisco";
-//            ActionResult<int> id = controller.Put(user.Value.Id, user.Value);
-//            Assert.AreEqual(user.Value.Id, id.Value);
-//        }
-
     }
 }

@@ -47,7 +47,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             try
             {
                 user = UserRepository.GetUserById(id);
-                user.Roles = RoleRepository.GetRolesForUser(id);
             }
             catch (GeneralException e)
             {
