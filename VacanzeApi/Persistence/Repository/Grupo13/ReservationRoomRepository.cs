@@ -49,9 +49,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                     var returndate = Convert.ToDateTime(table.Rows[i][2]);
                     var timestamp = Convert.ToDateTime(table.Rows[i][3]);
                     //var fk_hotel = Convert.ToInt32(table.Rows[i][4]);
-                    var use_id = (int) Convert.ToInt64(table.Rows[i][5]);
-                   // var payment = Convert.ToInt64(table.Rows[i][6]);
-                    
+                    var use_id = (int)Convert.ToInt64(table.Rows[i][5]);
+                    // var payment = Convert.ToInt64(table.Rows[i][6]);
+
                     ReservationRoom roomRes = new ReservationRoom(id, pickup, returndate);
                     roomRes.Hotel = HotelRepository.GetHotelById(Convert.ToInt32(table.Rows[i][4]));
                     roomRes.Fk_user = use_id;
@@ -85,7 +85,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             try
             {
                 var table = PgConnection.Instance.ExecuteFunction(SP_FIND, id);
-                
+
                 for (int i = 0; i < table.Rows.Count; i++)
                 {
                     var id2 = Convert.ToInt64(table.Rows[i][0]);
@@ -118,28 +118,31 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
         /** Method GetAvailableRoomReservations()
          * Returns all room reservations from the system which are available within the range of dates that were passed.
          */
-/*
-       public int GetAvailableRoomReservations(int id)
-       {
-           try
-           {
-               int available = PgConnection.Instance.ExecuteFunction(SP_AVAILABLE, id);
-               return available;
-           }
-           catch (NpgsqlException e)
-           {
-               e.ToString();
-           }
-           catch (Exception e)
-           {
-               e.ToString();
-           }
-           finally
-           {
-                return null;
-           }
-       }
-       */
+
+        public int GetAvailableRoomReservations(int id)
+        {
+            int available = 0;
+            try
+            {
+                var table = PgConnection.Instance.ExecuteFunction(SP_AVAILABLE, id);
+                
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    available = (int)Convert.ToInt64(table.Rows[i][0]);
+                }
+                return available;
+            }
+            catch (NpgsqlException e)
+            {
+                e.ToString();
+            }
+            catch (Exception e)
+            {
+                e.ToString();
+            }
+            return available;
+        }
+
 
         /** <summary>
          * Inserta en la BD, la reservacion de habitacion que es suministrada
@@ -158,7 +161,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                         reservation.Fk_user,
                         (int)reservation.Hotel.Id);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
                 throw;
@@ -174,7 +177,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
         {
             try
             {
-                ReservationRoom reservation = (ReservationRoom) entity;
+                ReservationRoom reservation = (ReservationRoom)entity;
                 var table = PgConnection.Instance.ExecuteFunction(
                    SP_DELETE_RESERVATION,
                    (int)reservation.Id
@@ -205,10 +208,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                     var pickup = Convert.ToDateTime(table.Rows[i][1]);
                     var returndate = Convert.ToDateTime(table.Rows[i][2]);
                     //current timestamp
-                  //  var timestamp = Convert.ToDateTime(table.Rows[i][3]);
+                    //  var timestamp = Convert.ToDateTime(table.Rows[i][3]);
                     var hotfk = (int)Convert.ToInt64(table.Rows[i][3]);
 
-                    ReservationRoom reservation = new ReservationRoom(id,pickup,returndate);
+                    ReservationRoom reservation = new ReservationRoom(id, pickup, returndate);
                     reservation.Hotel = HotelRepository.GetHotelById(hotfk);
                     reservation.Fk_user = user_id;
                     reservationAutomobileList.Add(reservation);
@@ -246,7 +249,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                     reservation.CheckOut,
                     reservation.Fk_user,
                     (int)reservation.Hotel.Id,
-                   (int) reservation.Id     
+                   (int)reservation.Id
                 );
             }
             catch (DatabaseException ex)
