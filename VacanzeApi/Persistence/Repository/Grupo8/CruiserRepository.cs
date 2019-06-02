@@ -43,7 +43,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
             var table = PgConnection.Instance.ExecuteFunction("GetShip(@ship_id)", ship_id);
             if (table.Rows.Count == 0)
             {
-                throw new CruiserNotFoundException("Crucero no FOUND");
+                throw new CruiserNotFoundException("Crucero no encontrado");
             }
 
             var id = Convert.ToInt32(table.Rows[0][0]);
@@ -85,7 +85,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
             }
             catch (InvalidCastException)
             {
-                throw new CruiserNotFoundException("Crucero no FOUND");
+                throw new CruiserNotFoundException("Crucero no encontrado");
             }
         }
 
@@ -99,7 +99,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
             }
             catch (InvalidCastException)
             {
-                throw new CruiserNotFoundException("Crucero no FOUND");
+                throw new CruiserNotFoundException("Crucero no encontrado");
             }
         }
 

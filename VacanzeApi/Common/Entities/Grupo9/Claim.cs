@@ -36,14 +36,14 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo9
         {
             _title = title;
             _description = description;
-            _status = "OPEN";
+            _status = "ABIERTO";
         }
 
         public void Validate(){
             //excepcion para no permitir guardar otro valores que no sean el indicado
             if (_status != null)
             {
-                if (_status != "OPEN" && _status != "CLOSE")
+                if (_status != "ABIERTO" && _status != "CERRADO")
                 {
                     throw new AttributeValueException("El atributo status no permite el valor ingresado");
                 }

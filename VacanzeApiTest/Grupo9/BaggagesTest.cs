@@ -34,7 +34,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 		[Test,  Order(2)]
 		public void GetBaggagestatusTest()
 		{
-			Baggage =controller.GetStatus("LOST");
+			Baggage =controller.GetStatus("EXTRAVIADO");
 			response = Baggage.Value.Count();
 			Assert.True(response >1);		
 		}
@@ -50,17 +50,17 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 		[Test,  Order(4)]
 		public void PutBaggageStatusTest()
 		{
-			Baggage cs = new Baggage(1,"","LOST");
+			Baggage cs = new Baggage(1,"","EXTRAVIADO");
 			controller.Put(5,cs);
 		    ActionResult<IEnumerable<Baggage>> enumerable = controller.Get(5);			
 			Baggage[] baggage = enumerable.Value.ToArray();
-			Assert.AreEqual(baggage[0]._status, "LOST");
+			Assert.AreEqual(baggage[0]._status, "EXTRAVIADO");
 		}
 
 		[Test, Order(5)]
 		public void NullBaggageExceptionModifyBaggageStatusTest()
 		{
-			var p= new Baggage(1,"UNITARIA","LOST");
+			var p= new Baggage(1,"UNITARIA","EXTRAVIADO");
 
 			Assert.Throws<NullBaggageException>(() => conec.ModifyBaggageStatus(0,p));
 		}
