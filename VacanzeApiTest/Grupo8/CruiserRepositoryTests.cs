@@ -1,32 +1,34 @@
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using NUnit.Framework;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
-using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo8;
-using vacanze_back.VacanzeApi.Services.Controllers.Grupo8;
 
 namespace vacanze_back.VacanzeApiTest.Grupo8
 {
     [TestFixture]
     public class CruiserRepositoryTests
     {
-        private Cruiser cruiser;
-
+        private Cruiser _cruiser;
+        private List<int> _addedCruiserList;
         [SetUp]
         public void Setup()
         {
-            cruiser = new Cruiser("concordia", true, 100, 1000, "Model1", "Line1", "Picture.jpg");
+            _cruiser = new Cruiser("concordia", true, 100, 1000, "Model1", "Line1", "Picture.jpg");
+            _addedCruiserList = new List<int>();
         }
-
+        [TearDown]
+        public void TearDown()
+        {
+            foreach (var cruiserId in _addedCruiserList) CruiserRepository.DeleteCruiser(cruiserId);
+            _addedCruiserList.Clear();
+        }
         [Test]
         public void GetCruisersTest()
         {
-            var addedcruiser = CruiserRepository.AddCruiser(cruiser);
+            var addedCruiserId = CruiserRepository.AddCruiser(_cruiser);
+            _addedCruiserList.Add(addedCruiserId);
             List<Cruiser> cruisersList = CruiserRepository.GetCruisers();
             Assert.True(cruisersList.Count > 0);
         }
@@ -34,16 +36,18 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
         [Test]
         public void AddCruiserTest()
         {
-            var addedcruiser = CruiserRepository.AddCruiser(cruiser);
-            Assert.AreNotEqual(0,  addedcruiser);
+            var addedCruiserId = CruiserRepository.AddCruiser(_cruiser);
+            _addedCruiserList.Add(addedCruiserId);
+            Assert.AreNotEqual(0,  addedCruiserId);
         }
 
         [Test]
         public void GetCruiserTest()
         {
-            var cruiserId = CruiserRepository.AddCruiser(cruiser);
-            var getCruiser = CruiserRepository.GetCruiser(cruiserId);
-            Assert.AreEqual(cruiserId, getCruiser.Id);
+            var addedCruiserId = CruiserRepository.AddCruiser(_cruiser);
+            _addedCruiserList.Add(addedCruiserId);
+            var getCruiser = CruiserRepository.GetCruiser(addedCruiserId);
+            Assert.AreEqual(addedCruiserId, getCruiser.Id);
         }
 
         [Test]
@@ -55,7 +59,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
         [Test]
         public void DeleteCruiserTest()
         {
-            var cruiserId = CruiserRepository.AddCruiser(cruiser);
+            var cruiserId = CruiserRepository.AddCruiser(_cruiser);
             var deletedId = CruiserRepository.DeleteCruiser(cruiserId);
             Assert.AreEqual(cruiserId,deletedId);
         }
@@ -69,10 +73,11 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
         [Test]
         public void ModifyCruiserTest()
         {
-            var cruiserid = CruiserRepository.AddCruiser(cruiser);
-            Cruiser toUpdateCruiser = new Cruiser(cruiserid,"Updatedcruiser",false,1,1,"updatedmodel","updatedline","updatedpicture");
-            var updatedCuiser = CruiserRepository.UpdateCruiser(toUpdateCruiser);
-            Assert.AreEqual(toUpdateCruiser,updatedCuiser);
+            var addedCruiserId = CruiserRepository.AddCruiser(_cruiser);
+            _addedCruiserList.Add(addedCruiserId);
+            Cruiser toUpdateCruiser = new Cruiser(addedCruiserId,"Updatedcruiser",false,1,1,"updatedmodel","updatedline","updatedpicture");
+            var updatedCruiser = CruiserRepository.UpdateCruiser(toUpdateCruiser);
+            Assert.AreEqual(toUpdateCruiser,updatedCruiser);
         }
         [Test]
         public void ModifyCruiserNotFoundTest()
@@ -85,6 +90,56 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
         public void ModifyCruiserNullParameterTest()
         {
             Assert.Throws<NullCruiserException>(() => CruiserRepository.UpdateCruiser(null));
+        }
+
+        [Test]
+        public void AddLayoverTest()
+        {
+            var addedCruiserId = CruiserRepository.AddCruiser(_cruiser);
+            _addedCruiserList.Add(addedCruiserId);
+            var layover = new Layover(addedCruiserId,Convert.ToString("2019-01-01"), Convert.ToString("2019-01-02"),2000,1,2);
+            var addedLayover = CruiserRepository.AddLayover(layover);
+            addedLayover.Id = 0;
+            Assert.AreEqual(layover,addedLayover);
+        }
+        [Test]
+        public void AddlayoverCruiserNotFoundTest()
+        {
+            var layover = new Layover(-1,Convert.ToString("2019-01-01"), Convert.ToString("2019-01-02"),2000,1,2);
+            Assert.Throws<CruiserNotFoundException>(() => CruiserRepository.AddLayover(layover));
+        }
+        [Test]
+        public void DeleteLayoverTest()
+        {
+            var addedCruiserId = CruiserRepository.AddCruiser(_cruiser);
+            _addedCruiserList.Add(addedCruiserId);
+            var layover = new Layover(addedCruiserId,Convert.ToString("2019-01-01"), Convert.ToString("2019-01-02"),2000,1,2);
+            var addedLayover = CruiserRepository.AddLayover(layover);
+            var deletedId = CruiserRepository.DeleteLayover(addedLayover.Id);
+            Assert.AreEqual(addedLayover.Id,deletedId);
+        }
+
+        [Test]
+        public void DeletedLayoverFailedTest()
+        {
+            Assert.Throws<LayoverNotFoundException>(() => CruiserRepository.DeleteLayover(-1));
+        }
+
+        [Test]
+
+        public void GetLayoversTest()
+        {
+            List<Layover> layoversList= new List<Layover>();
+            var addedCruiserId = CruiserRepository.AddCruiser(_cruiser);
+            _addedCruiserList.Add(addedCruiserId);
+            var layover1 = new Layover(addedCruiserId,Convert.ToString("2019-01-01"), Convert.ToString("2019-01-02"),2000,1,2);
+            var layover2 = new Layover(addedCruiserId,Convert.ToString("2019-01-01"), Convert.ToString("2019-01-02"),2000,1,2);
+            var addedLayover1 = CruiserRepository.AddLayover(layover1);
+            var addedLayover2 = CruiserRepository.AddLayover(layover2);
+            layoversList.Add(addedLayover1);
+            layoversList.Add(addedLayover2);
+            List<Layover> getLayoverList = CruiserRepository.GetLayovers(addedCruiserId);
+            Assert.AreEqual(layoversList.Count,getLayoverList.Count);
         }
     }
 }
