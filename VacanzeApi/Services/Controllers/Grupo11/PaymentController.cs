@@ -32,6 +32,7 @@ namespace vacanze_back.Controllers
 
                 if (lPayments!=null && lPayments.Count > 0)
                 {
+                    //Si la lista viene llena
                     return Ok(lPayments);
                 }
                 else
@@ -54,12 +55,16 @@ namespace vacanze_back.Controllers
         }
 
 
+       
+        [HttpGet]
+        [Route("id/{id}/type/{type}")]
+
         /// <summary>
         /// Get que consulta metodos de pagos precargados estaticamente
         /// </summary>
-        /// <returns>lista de metodos de pagos</returns>
-        [HttpGet]
-        [Route("id/{id}/type/{type}")]
+        /// <param name="id">Número de identificación.</param>
+        /// <param name="type">Tipo de orden.</param>
+        /// <returns>Lista de métodos de pagos</returns>
         public ActionResult<List<Payment>> GetPayment_Order(long id, int type)
         {
 
