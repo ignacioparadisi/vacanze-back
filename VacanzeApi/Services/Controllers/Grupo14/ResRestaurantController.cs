@@ -20,14 +20,16 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 	{
       
 		[HttpPost]
-		public ActionResult<string> Post([FromBody] reservationRestaurant resAux)
+		public ActionResult<int> Post([FromBody] reservationRestaurant resAux)
 		{            
 			try{		 
-				ResRestaurantRepository conec= new ResRestaurantRepository();
+				
 				Restaurant_res reserva= new Restaurant_res(resAux.fecha_res, resAux.cant_people, resAux.date, resAux.user_id, resAux.rest_id);
 				Console.WriteLine("Antes de llamar al repository");
-                conec.addReservation(reserva);
-				return Ok("Agregado correctamente");
+                var id = ResRestaurantRepository.addReservation(reserva);
+				Console.WriteLine("Write en el controlador");
+				Console.WriteLine(id);
+				return Ok(id);
 			}catch (DatabaseException)
 			{            
                 Console.WriteLine("Estoy en el databaseException");
