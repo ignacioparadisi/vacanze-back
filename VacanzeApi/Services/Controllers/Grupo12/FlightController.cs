@@ -26,18 +26,15 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
             try{
                 DateTime dat1 = new DateTime();
                 FlightResConnection con=new FlightResConnection();
-                FlightRes f=new FlightRes(flight._seatNum,
-                dat1.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                string seat=con.conSeatNum(flight._numPas,flight._id_fli);
+                FlightRes f=new FlightRes(seat,
+                dat1.ToString(),
                 flight._numPas,flight._id_user,flight._id_fli);
                 int i = con.AddReservationFlight(f);
                 return StatusCode(200, "Se agrego satisfactoriamente id:"+i);
-            
-            }catch(Exception e){
-                Console.WriteLine(e);
-                 return StatusCode(404, "Error");
-            
+            }catch(Exception ex){
+                return BadRequest(ex.Message);
             }
-
         }
 
 
@@ -129,6 +126,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
                 return null;
             }
         }
+
+       
 
         
 

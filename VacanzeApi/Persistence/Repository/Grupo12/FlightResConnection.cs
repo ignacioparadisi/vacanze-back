@@ -74,7 +74,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo12
                
             var i=PgConnection.Instance.ExecuteFunction
             ("deletereservationflight(@id_reservation)",id_reservation);
-            Console.WriteLine("--------------->",i);
+          
             }catch(DBFailedException e){
 
                 throw new DBFailedException("Tienes un error en la base de datos",e);
@@ -102,7 +102,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo12
             
         }
 
-
+        
         public List<ListRes> GetFlightValidate(int id_city_i,int id_city_v,string date_i,int numpas){
             int cont=0;
             var ListRes = new List<ListRes>();
@@ -136,11 +136,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo12
                     listres._sum_pas=Convert.ToInt32(table2.Rows[0][0].ToString());
                     listres._sum_capacity= Convert.ToInt32(table3.Rows[0][0].ToString());
                     
-                    
                     cont=listres._sum_capacity-listres._sum_pas;
                    
                      if(cont>=numpas){
-                         
+                         Console.WriteLine(cont);
                         listres._id=Convert.ToInt32(table1.Rows[i][0].ToString());
                         listres._price=Convert.ToInt32(table1.Rows[i][1].ToString());
                         listres._priceupdate=Convert.ToInt32(table1.Rows[i][1].ToString())*numpas;
@@ -148,10 +147,13 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo12
                         listres._seatavailable=cont;
                         listres._name_country_i=table4.Rows[0][2].ToString();
                         listres._name_country_V=table5.Rows[0][2].ToString();
+                        listres._name_city_i=table4.Rows[0][1].ToString();
+                        listres._name_city_V=table5.Rows[0][1].ToString();
                          
                          var listreservationflight = new ListRes( listres._id,listres._price,
                         listres._priceupdate,listres._dateI,listres._name_country_i,
-                        listres._name_country_V,listres._seatavailable);
+                        listres._name_country_V,listres._seatavailable,listres._name_city_i,
+                        listres._name_city_V);
                          
                         ListRes.Add(listreservationflight);
                         cont=0;
@@ -170,8 +172,30 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo12
            
 
         }
+        public string conSeatNum(int numseat,int _id_fli){
+            var table1= new DataTable();
+            var res=new FlightRes();
+            try{
 
+                table1=PgConnection.Instance.ExecuteFunction("getSum(@idflight)",_id_fli);
+                res._sum_pas=Convert.ToInt32(table1.Rows[0][0].ToString());
+                int cont=res._sum_pas;
+                string seat="";
+                if(numseat!=0){
+                    for (int i = 0; i < numseat; i++){
+                        cont=cont+1;
+                        seat+="A-"+cont+",";
+                    }
+                }else{
+                    return "0";
+                }
+                return seat;    
+            }catch(InvalidStoredProcedureSignatureException){
 
+                throw new InvalidStoredProcedureSignatureException("Tienes un error en el Stored Procedure");
+            
+            }
+        }
 
 
 
