@@ -15,7 +15,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
 
         public Flight flight { get; set; }
 
-        /// <summary>Metodo que valida la informacion del vuelo a agregar</summary>
+        /// <summary>Metodo que valida la información del vuelo a agregar</summary>
         public void Validate()
         {
             
@@ -26,6 +26,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
 
             var plane = (Airplane) AirplanesRepository.Find(flight.plane.Id);
 
+            if (plane == null)
+                throw new ValidationErrorException("The plane you selected does not exist");
+
+
             if( flight.loc_departure.Id == flight.loc_arrival.Id ){
                 throw new ValidationErrorException("The departure city and the arrival city cannot be the same");
             }    
@@ -34,12 +38,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
             DateTime departureDate= DateTime.ParseExact(flight.departure, "MM-dd-yyyy HH:mm:ss",null);
             TimeSpan hours = arrivalDate - departureDate;
 
-            if( hours.TotalHours > plane.autonomy){
+            if( hours.TotalHours > plane.autonomy ){
                 throw new ValidationErrorException("The autonomy of the plane is not enough to make this flight");
             }
 
-            if (plane == null)
-                throw new ValidationErrorException("The plane you selected does not exist");
 
             if( DateTime.Compare(departureDate, arrivalDate) > 0 ){
                 throw new ValidationErrorException("The departure date cannot be greater than the arrival date");

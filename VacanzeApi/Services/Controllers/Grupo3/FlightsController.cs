@@ -231,8 +231,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
                     throw new ValidationErrorException("The flight you want to edit does not exist");
                 }
 
-                FlightValidator validator = new FlightValidator(f);
-
+                
                 FlightRepository.Delete(f);
 
                 return Ok(new { Message = "Flight deleted succesfully!" });
