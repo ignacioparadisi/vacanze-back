@@ -15,6 +15,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
     public class UsersController : ControllerBase
     {
         // GET api/users
+        /// <summary>
+        /// Obtiene solo los usuarios empleados
+        /// </summary>
+        /// <returns>Devuelve una lista de usuarios que son empleados</returns>
         [HttpGet]
         public ActionResult<IEnumerable<User>> GetEmployees()
         {
@@ -30,7 +34,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             return users;
         }
 
-        // GET api/values/5
+        // GET api/users/5
+        /// <summary>
+        /// Busca un usuario con el id especificado
+        /// </summary>
+        /// <param name="id">Id del usuario que se desea buscar</param>
+        /// <returns>Un usuario que corresponde al id especificado</returns>
         [HttpGet("{id}")]
         public ActionResult<User> Get(int id)
         {
@@ -52,13 +61,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
         }
 
         // POST api/users
+        /// <summary>
+        /// Manda a guardar el usuario en la base de datos
+        /// </summary>
+        /// <param name="user">Usuario que se desea guardar</param>
+        /// <returns>Retorna el usuario almacenado</returns>
         [HttpPost]
         public ActionResult<User> Post([FromBody] User user)
         {
             try
             {
-                user.Validate();
-                UserRepository.VerifyEmail(user.Email);
+                // user.Validate();
+                // TODO: Mover verify email a AddUser()
                 user = UserRepository.AddUser(user);
                 foreach (var roles in user.Roles)
                 {
@@ -76,14 +90,20 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             return user;
         }
 
-        // PUT api/values/5
+        // PUT api/users/5
+        /// <summary>
+        /// Manda a actualizar el usuario en la base de datos
+        /// </summary>
+        /// <param name="id">Id del usuario que se desea actualizar</param>
+        /// <param name="user">Información del usuario actualizada</param>
+        /// <returns>Retorna el usuario actualizado</returns>
         [HttpPut("{id}")]
+        // TODO: Retornar el usuario actualizado
         public ActionResult<int> Put(int id, [FromBody] User user)
         {
             int user_id;
             try
             {
-                user.Validate(true);
                 user_id = UserRepository.UpdateUser(user, id);
                 UserRepository.DeleteUser_Role(id);
                 foreach (var role in user.Roles)
@@ -105,6 +125,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
         }
 
         // DELETE api/users/1
+        /// <summary>
+        /// Manda a eliminar un usario por su id de la base de datos
+        /// </summary>
+        /// <param name="id">Id del usuario que se desea eliminar</param>
+        /// <returns>Retorna el id del usuario que fue eliminado</returns>
         [HttpDelete("{id}")]
         public ActionResult<int> Delete(int id)
         {

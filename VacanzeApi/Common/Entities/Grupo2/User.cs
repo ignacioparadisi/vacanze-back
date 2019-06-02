@@ -59,10 +59,11 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         }
 
         /// <summary>
-        /// Verifica todos los atributos del usuario para verificar que sean válidos
+        /// Verifica que todos los atributos del usuario sean válidos
         /// </summary>
+        /// <returns>Retorna true si todos los atributos son válidos</returns>
         /// <returns>Mensaje de error que se envia al frontend en caso de que haya algun error</returns>
-        public void Validate(bool update = false)
+        public bool Validate()
         {
             var isClient = false;
 
@@ -100,23 +101,24 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
             foreach (var role in Roles)
             {
                 role.Validate();
-                if (role.Id == Role.CLIENT)
-                {
-                    isClient = true;
-                }
-                else if (role.Id == Role.ADMIN && Roles.Count > 1)
+                if (role.Id == Role.ADMIN && Roles.Count > 1)
                 {
                     throw new AdminAndMoreRolesException("El administrador no puede tener otros roles");
                 }
             }
 
-            if (!update)
-            {
-                EncryptPassword(isClient);
-            }
+            return true;
         }
 
-        private void EncryptPassword(bool isClient)
+        /// <summary>
+        /// Encripta la contraseña del usuario. Si es cliente verifica que no sea nula, si es empleado,
+        /// genera una contraseña concatenando la primera letra del nombre, la primera letra del apellido
+        /// y el número de cédula
+        /// </summary>
+        /// <param name="isClient">Define si el usuario es un cliente o un empleado</param>
+        /// <exception cref="PasswordRequiredException">Excepción retornada si el usuario es cliente
+        /// y envía una contraseña nula o vacía</exception>
+        public void EncryptPassword(bool isClient)
         {
             if (!string.IsNullOrEmpty(Password))
             {
@@ -126,7 +128,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
             {
                 if (!isClient)
                 {
-                    Password = Name.ToLower()[0] + Lastname.ToLower()[0] + DocumentId.ToString();
+                    Password = Name.Trim().ToLower()[0] + Lastname.Trim().ToLower()[0] + DocumentId.ToString();
                     Password = Encryptor.Encrypt(Password);
                 }
                 else

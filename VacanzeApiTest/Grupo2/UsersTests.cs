@@ -12,22 +12,44 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
     [TestFixture]
     public class UsersTests
     {
-        private User UserTest;
+        private User _userTest;
+        private int _id;
 
         [SetUp]
-        public void CreateUserTest()
+        public void SetUp()
         {
             var roles = new List<Role>();
             roles.Add(new Role(1,"Cliente"));
-            UserTest = new User(0, 23456789, "Pedro", "Perez", 
+            _userTest = new User(0, 23456789, "Pedro", "Perez",
                 "cliente1@vacanze.com", "12345678", roles);
+            // UserRepository.AddUser(_userTest);
         }
+        
+        [Test]
+        public void AddUserDbTest()
+        {
+            var user = UserRepository.AddUser(_userTest);
+            Assert.True(user.Id > 0);
+        }
+
+        [Test]
+        public void DeleteUserByIdTest()
+        {
+            var user = UserRepository.AddUser(_userTest);
+            var id = UserRepository.DeleteUserById(user.Id);
+            Assert.AreEqual(id, user.Id);
+        }
+
         
         [Test]
         public void GetEmployeesFromDbTest()
         {
+            var roles = new List<Role>();
+            roles.Add(new Role(3, "Checkin"));
+            _userTest.Roles = roles;
+            UserRepository.AddUser(_userTest);
             List<User> users = UserRepository.GetEmployees();
-            Assert.AreNotEqual(0, users.Count());
+            Assert.AreNotEqual(0, users.Count);
         }
 
         [Test]
@@ -42,7 +64,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         public void NotValidDocumentIdExceptionTest()
         {
             var roles = new List<Role>();
-            roles.Add(new Role(1, "Checkin"));
+            roles.Add(new Role(2, "Checkin"));
             var user = new User(0, 0, "Nombre", "Apellido", 
                 "usuario@vacanza.com", "12345678", roles);
             Assert.Throws<NotValidDocumentIdException>(() => { user.Validate(); });
@@ -105,26 +127,19 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
                 "usuario@vacanza.com", "12345678", roles);
             Assert.Throws<NotValidIdException>(() => { user.Validate(); });
         }
-
-        [Test]
-        public void AddUserDbTest()
-        {
-            var user = UserRepository.AddUser(UserTest);
-            Assert.True(user.Id > 0);
-        }
-
+        
         [Test]
         public void AddUserResponseTest()
         {
             var controller = new UsersController();
-            ActionResult<User> user = controller.Post(UserTest);
+            ActionResult<User> user = controller.Post(_userTest);
             Assert.True(user.Value.Id > 0);
         }
 
         [Test]
         public void RepeatedEmailTest()
         {
-            var user = UserRepository.AddUser(UserTest);
+            var user = UserRepository.AddUser(_userTest);
             Assert.Throws<RepeatedEmailException>(() => UserRepository.VerifyEmail("cliente1@vacanze.com"));
         }
 
@@ -139,14 +154,13 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         [Test]
         public void UserNotFoundTest()
         {
-            var controller = new UsersController();
             Assert.Throws<UserNotFoundException>(() => UserRepository.GetUserById(100));
         }
 
         [Test]
         public void ModifyUserDbTest()
         {
-            var user = UserRepository.AddUser(UserTest);
+            var user = UserRepository.AddUser(_userTest);
             user.Name = "Francisco";
             long id = UserRepository.UpdateUser(user, user.Id);
             Assert.AreEqual(user.Id, id);
@@ -156,14 +170,14 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         public void ModifyUserResponseTest()
         {
             var controller = new UsersController();
-            ActionResult<User> user = controller.Post(UserTest);
+            ActionResult<User> user = controller.Post(_userTest);
             user.Value.Name = "Francisco";
             ActionResult<int> id = controller.Put(user.Value.Id, user.Value);
             Assert.AreEqual(user.Value.Id, id.Value);
         }
 
         [TearDown]
-        public void DeleteUserTest()
+        public void TearDown()
         {
             UserRepository.DeleteUserByEmail("cliente1@vacanze.com");
         }
