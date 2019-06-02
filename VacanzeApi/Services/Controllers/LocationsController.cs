@@ -33,7 +33,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
             {
                 LocationRepository.GetLocationById(countryId);
             }
-            catch (EntityNotFoundException)
+            catch (LocationNotFoundException)
             {
                 return NotFound($"Location with id {countryId} not found");
             }

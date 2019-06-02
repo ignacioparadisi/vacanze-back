@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Exceptions;
-using vacanze_back.VacanzeApi.Persistence.Repository;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo6;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
@@ -15,7 +16,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
     [ApiController]
     public class HotelsController : ControllerBase
     {
-        // GET api/hotels/[?location={location_id}]
         [HttpGet]
         public ActionResult<IEnumerable<Hotel>> Get([FromQuery] int location = -1)
         {
@@ -29,9 +29,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         {
             try
             {
-                return HotelRepository.GetHotelById(hotelId);
+                return Ok(HotelRepository.GetHotelById(hotelId));
             }
-            catch (EntityNotFoundException)
+            catch (HotelNotFoundException)
             {
                 return NotFound();
             }
@@ -44,18 +44,55 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         {
             try
             {
-                LocationRepository.GetLocationById(hotel.Location.Id);
+                var idFromDatabase = HotelRepository.AddHotel(hotel);
+                return CreatedAtAction("Get", "hotels",
+                    HotelRepository.GetHotelById(idFromDatabase));
             }
-            catch (EntityNotFoundException)
+            catch (RequiredAttributeException e)
             {
-                ModelState.AddModelError("Location",
-                    $"Invalid location ID {hotel.Location.Id} (Not found)");
-                return new BadRequestObjectResult(ModelState);
+                return new BadRequestObjectResult(new ErrorMessage(e.Message));
             }
+            catch (InvalidAttributeException e)
+            {
+                return new BadRequestObjectResult(new ErrorMessage(e.Message));
+            }
+        }
 
-            var idFromDatabase = HotelRepository.AddHotel(hotel);
-            return CreatedAtAction("Get", "hotels",
-                HotelRepository.GetHotelById(idFromDatabase));
+        [HttpDelete("{id}", Name = "DeleteHotel")]
+        public ActionResult Delete([FromRoute] int id)
+        {
+            HotelRepository.DeleteHotel(id);
+            return Ok();
+        }
+
+        [HttpPut("{hotelId}", Name = "UpdateHotel")]
+        public ActionResult<Hotel> Update([FromRoute] int hotelId, [FromBody] Hotel dataToUpdate)
+        {
+            try
+            {
+                HotelRepository.GetHotelById(hotelId);
+                var updated = HotelRepository.UpdateHotel(hotelId, dataToUpdate);
+                return Ok(updated);
+            }
+            catch (HotelNotFoundException)
+            {
+                return new NotFoundObjectResult(
+                    new ErrorMessage($"Hotel con id {hotelId} no conseguido"));
+            }
+            catch (RequiredAttributeException e)
+            {
+                return new BadRequestObjectResult(new ErrorMessage(e.Message));
+            }
+            catch (InvalidAttributeException e)
+            {
+                return new BadRequestObjectResult(new ErrorMessage(e.Message));
+            }
+        }
+
+        [HttpGet("{hotelId}/image")]
+        public string GetHotelImage([FromRoute] int hotelId)
+        {
+            return HotelRepository.GetHotelImage(hotelId);
         }
     }
 }

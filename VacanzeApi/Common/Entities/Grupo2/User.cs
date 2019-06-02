@@ -9,8 +9,9 @@ using vacanze_back.VacanzeApi.Common.Exceptions;
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
 {
-    public class User : Entity
+    public class User
     {
+        public int Id;
         public long DocumentId;
         public string Email;
         public string Lastname;
@@ -18,22 +19,24 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         public string Password;
         public List<Role> Roles;
 
-        public User(long id, long documentId, string name, string lastname, string email,
-            string password, List<Role> roles) : base(id)
+        public User(int id, long documentId, string name, string lastname, string email,
+            string password, List<Role> roles)
         {
+            Id = id;
             DocumentId = documentId;
-            Name = name;
-            Lastname = lastname;
-            Email = email;
+            Name = name.Trim();
+            Lastname = lastname.Trim();
+            Email = email.Trim();
             Password = password;
             Roles = roles;
         }
 
-        public User(long id, long documentId, string name, string lastname, string email) : base(id)
+        public User(int id, long documentId, string name, string lastname, string email)
         {
+            Id = id;
             DocumentId = documentId;
-            Name = name;
-            Lastname = lastname;
+            Name = name.Trim();
+            Lastname = lastname.Trim();
             Email = email;
         }
 
@@ -46,39 +49,39 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         /// <param name="email">Correo electrónico del usuario</param>
         /// <param name="password">Contraseña del usuario</param>
         [JsonConstructor]
-        public User(long documentId, string name, string lastname, string email, string password) : base(0)
+        public User(long documentId, string name, string lastname, string email, string password)
         {
             DocumentId = documentId;
-            Name = name;
-            Lastname = lastname;
-            Email = email;
+            Name = name.Trim();
+            Lastname = lastname.Trim();
+            Email = email.Trim();
             Password = password;
         }
-        
+
         /// <summary>
-        /// Verifica todos los atributos del usuario para verificar que sean válidos
+        /// Verifica que todos los atributos del usuario sean válidos
         /// </summary>
+        /// <returns>Retorna true si todos los atributos son válidos</returns>
         /// <returns>Mensaje de error que se envia al frontend en caso de que haya algun error</returns>
-        public void Validate()
+        public bool Validate()
         {
-            var isClient = false;
-            
+
             if (DocumentId <= 0)
             {
                 throw new NotValidDocumentIdException("La cédula de identidad no es válida");
             }
-            
-            if (string.IsNullOrEmpty(Name))
+
+            if (string.IsNullOrEmpty(Name) || string.IsNullOrWhiteSpace(Name))
             {
-                throw new NameRequiredException("El nombre es requerido"); 
+                throw new NameRequiredException("El nombre es requerido");
             }
 
-            if (string.IsNullOrEmpty(Lastname))
+            if (string.IsNullOrEmpty(Lastname) || string.IsNullOrWhiteSpace(Lastname))
             {
                 throw new LastnameRequiredException("El apellido es requerido");
             }
 
-            if (string.IsNullOrEmpty(Email))
+            if (string.IsNullOrEmpty(Email) || string.IsNullOrWhiteSpace(Email))
             {
                 throw new EmailRequiredException("El correo electrónico es requerido");
             }
@@ -96,28 +99,47 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
 
             foreach (var role in Roles)
             {
-                if (role.Id == 1)
+                role.Validate();
+                if (role.Id == Role.ADMIN && Roles.Count > 1)
+                {
+                    throw new AdminAndMoreRolesException("El administrador no puede tener otros roles");
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Encripta la contraseña del usuario. Si es cliente verifica que no sea nula, si es empleado,
+        /// genera una contraseña concatenando la primera letra del nombre, la primera letra del apellido
+        /// y el número de cédula
+        /// </summary>
+        /// <param name="isClient">Define si el usuario es un cliente o un empleado</param>
+        /// <exception cref="PasswordRequiredException">Excepción retornada si el usuario es cliente
+        /// y envía una contraseña nula o vacía</exception>
+        public void EncryptOrCreatePassword()
+        {
+            var isClient = false;
+            foreach (var role in Roles)
+            {
+                if (role.Id == Role.CLIENT)
                 {
                     isClient = true;
                 }
-                role.Validate();
             }
             
-            if (!string.IsNullOrEmpty(Password))
+            if (!isClient)
+            {
+                Password = Name.Trim().ToLower()[0] + Lastname.Trim().ToLower()[0] + DocumentId.ToString();
+                Password = Encryptor.Encrypt(Password);
+            }
+            else if (!string.IsNullOrEmpty(Password) && !string.IsNullOrWhiteSpace(Password))
             {
                 Password = Encryptor.Encrypt(Password);
             }
             else
             {
-                if (!isClient)
-                {
-                    Password = Name.ToLower()[0] + Lastname.ToLower()[0] + DocumentId.ToString();
-                    Password = Encryptor.Encrypt(Password);
-                }
-                else
-                {
-                    throw new PasswordRequiredException("La contraseña es requerida");
-                }
+                throw new PasswordRequiredException("La contraseña es requerida");
             }
         }
     }

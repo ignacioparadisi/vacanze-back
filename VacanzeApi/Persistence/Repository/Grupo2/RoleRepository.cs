@@ -19,7 +19,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
             var table = PgConnection.Instance.ExecuteFunction("GetRoles()");
             for (var i = 0; i < table.Rows.Count; i++)
             {
-                var id = Convert.ToInt64(table.Rows[i][0]);
+                var id = Convert.ToInt32(table.Rows[i][0]);
                 var name = table.Rows[i][1].ToString();
                 var role = new Role(id, name);
                 roles.Add(role);
@@ -33,13 +33,13 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
         //</summary>
         //<param name="userId">Id del Usuario a Consultar.</param>
         //<returns>Una lista de Roles.</returns>
-        public static List<Role> GetRolesForUser(long userId)
+        public static List<Role> GetRolesForUser(int userId)
         {
             var roles = new List<Role>();
             var table = PgConnection.Instance.ExecuteFunction("GetRolesForUser(@userId)", userId);
             for (var i = 0; i < table.Rows.Count; i++)
             {
-                var id = Convert.ToInt64(table.Rows[i][0]);
+                var id = Convert.ToInt32(table.Rows[i][0]);
                 var name = table.Rows[i][1].ToString();
                 var role = new Role(id, name);
                 roles.Add(role);

@@ -14,6 +14,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
     public class RolesController : ControllerBase
     {
         // GET api/values
+        /// <summary>
+        /// Obtienes los roles disponibles
+        /// </summary>
+        /// <returns>Una lista de roles</returns>
         [HttpGet]
         public ActionResult<IEnumerable<Role>> GetRoles()
         {
@@ -27,7 +31,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
                 return BadRequest("Error al Obtener Roles");
             }
 
-            return roles;
+            return Ok(roles);
         }
     }
 }
