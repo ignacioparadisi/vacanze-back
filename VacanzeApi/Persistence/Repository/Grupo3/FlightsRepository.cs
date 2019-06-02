@@ -45,7 +45,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
             catch (DatabaseException ex)
             {
                 Console.WriteLine(ex.ToString());
-                throw new DbErrorException("Ups, a ocurrido un error al conectarse a la base de datos", ex);
+                throw new DbErrorException("Oops, there was an error with the data base", ex);
             }
             catch (System.Exception ex)
             {
@@ -60,7 +60,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
 
         /// <summary>Agrega vuelo a la DB</summary>
         /// <param name="entity">Entidad con vuelo a agregar a la DB</param>
-        public static void Add(Entity entity)
+        public static int Add(Entity entity)
         {
             try
             {
@@ -70,13 +70,20 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
                     ADD_FLIGHT,
                     (int)flight.plane.Id, flight.price, flight.departure, flight.arrival, flight.loc_departure.Id, flight.loc_arrival.Id
                 );
+
+                if (table.Rows.Count > 0){
+                    return Convert.ToInt32(table.Rows[0][0]);
+                }
+
+                return 0;
+
             }
             catch (DatabaseException ex)
             {
 
                 Console.WriteLine(ex.ToString());
                 Console.WriteLine(ex.Message);
-                throw new DbErrorException("Ups, a ocurrido un error al conectarse a la base de datos", ex);
+                throw new DbErrorException("Oops, there was an error with the data base", ex);
             }
             finally
             {
@@ -100,7 +107,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
             {
 
                 Console.WriteLine(ex.ToString());
-                throw new DbErrorException("Ups, a ocurrido un error al conectarse a la base de datos", ex);
+                throw new DbErrorException("Oops, there was an error with the data base", ex);
             }
             finally
             {
@@ -126,7 +133,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
             {
 
                 Console.WriteLine(ex.ToString());
-                throw new DbErrorException("Ups, a ocurrido un error al conectarse a la base de datos", ex);
+                throw new DbErrorException("Oops, there was an error with the data base", ex);
             }
             finally
             {
@@ -163,7 +170,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
             catch (DatabaseException ex)
             {
                 Console.WriteLine(ex.ToString());
-                throw new DbErrorException("Ups, a ocurrido un error al conectarse a la base de datos", ex);
+                throw new DbErrorException("Oops, there was an error with the data base", ex);
             }
             catch (System.Exception)
             {
@@ -200,7 +207,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
             catch (DatabaseException ex)
             {
                 Console.WriteLine(ex.ToString());
-                throw new DbErrorException("Ups, a ocurrido un error al conectarse a la base de datos", ex);
+                throw new DbErrorException("Oops, there was an error with the data base", ex);
             }
             catch (System.Exception ex)
             {
@@ -236,7 +243,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
             catch (DatabaseException ex)
             {
                 Console.WriteLine(ex.ToString());
-                throw new DbErrorException("Ups, a ocurrido un error al conectarse a la base de datos", ex);
+                throw new DbErrorException("Oops, there was an error with the data base", ex);
             }
             catch (System.Exception ex)
             {
@@ -272,7 +279,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
             catch (DatabaseException ex)
             {
                 Console.WriteLine(ex.ToString());
-                throw new DbErrorException("Ups, a ocurrido un error al conectarse a la base de datos", ex);
+                throw new DbErrorException("Oops, there was an error with the data base", ex);
             }
             catch (System.Exception ex)
             {
@@ -309,7 +316,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo3
             catch (DatabaseException ex)
             {
                 Console.WriteLine(ex.ToString());
-                throw new DbErrorException("Ups, a ocurrido un error al conectarse a la base de datos", ex);
+                throw new DbErrorException("Oops, there was an error with the data base", ex);
             }
             catch (System.Exception ex)
             {
