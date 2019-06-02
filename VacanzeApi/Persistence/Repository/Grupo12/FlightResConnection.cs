@@ -12,22 +12,16 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo12
     public class  FlightResConnection 
     {
 
-        public void AddReservationFlight(Entity entity){
-            
+        public int AddReservationFlight(Entity entity){
+            var table = new DataTable();
             var resflight=(FlightRes) entity; 
             try{
-                
-               //ValidateReservationFlight(resflight._id_fli,resflight._numPas);
-             //   if(tag){
-                   PgConnection.Instance.ExecuteFunction(
-                    "AddReservationFlight(@seatNum,@tim,@numPas,@id_user,@pay,@id_fli)",
-                    resflight._seatNum,resflight._timestamp,resflight._numPas,
-                    resflight._id_user,resflight._id_pay,resflight._id_fli);
-                    
-               // }else{
-                   // return false;
-               // }
-                
+                table=PgConnection.Instance.ExecuteFunction(
+                "AddReservationFlight(@seatNum,@tim,@numPas,@id_user,@id_fli)",
+                resflight._seatNum,resflight._timestamp,resflight._numPas,
+                resflight._id_user,resflight._id_fli);
+                resflight._id_user=Convert.ToInt32(table.Rows[0][0].ToString());
+                return resflight._id_user;
             } catch(DBFailedException e){
             
                 throw new DBFailedException("Tienes un error en la base de datos",e);

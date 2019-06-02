@@ -1326,17 +1326,18 @@ LANGUAGE plpgsql;
 ------------------------------------------------------------------------------------
 --Agregar Reserva de Vuelo
 CREATE OR REPLACE FUNCTION AddReservationFlight(seatNum VARCHAR,tim VARCHAR,numPas INTEGER,
-id_user INTEGER,pay INTEGER,id_fli INTEGER)
- RETURNS INTEGER AS $$
+id_user INTEGER,id_fli INTEGER)
+  RETURNS INTEGER AS $$
   DECLARE 
-    res_res_fli_id INTEGER;
-BEGIN
-	INSERT INTO res_fli(rf_seatnum,rf_timestamp,rf_num_ps,rf_use_fk,rf_pay_fk,rf_fli_fk)
-	VALUES(seatNum,TO_TIMESTAMP(tim, 'yyyy-mm-dd hh24:mi'),numPas,id_user,pay,id_fli);
-    RETURN res_res_fli_id;
-END;	
-$$ 
-LANGUAGE plpgsql;
+    ref_res_id INTEGER;
+  
+  BEGIN
+    INSERT INTO res_fli(rf_seatnum,rf_timestamp,rf_num_ps,rf_use_fk,rf_fli_fk)
+      VALUES(seatNum,TO_TIMESTAMP(tim, 'yyyy-mm-dd hh24:mi'),numPas,id_user,id_fli)RETURNING rf_id INTO ref_res_id;
+    
+    RETURN ref_res_id;
+  END;
+  $$ LANGUAGE plpgsql;
 
 --Cancelar Reservar de Vuelo
 CREATE OR  REPLACE FUNCTION deleteReservationFlight(id_reservation INTEGER) RETURNS INTEGER AS $$

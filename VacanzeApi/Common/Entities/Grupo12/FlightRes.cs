@@ -42,10 +42,15 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo12{
             
         }
 
-        public FlightRes(int id,int price,int priceu):base(id){
-            _id=id;
-            _price=price;
-            _priceupdate=priceu;
+         public FlightRes(string seatNum,string timestamp,int numPas,int id_user,int id_fli ):base(0){
+
+            _seatNum=seatNum;
+            _timestamp=timestamp;
+            _numPas=numPas;
+            _id_user=id_user;
+            _id_fli=id_fli;
+           
+            
         }
 
 
