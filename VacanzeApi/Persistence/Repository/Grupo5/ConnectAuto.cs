@@ -4,6 +4,7 @@ using Npgsql;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Entities;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo5
 {
@@ -54,6 +55,22 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo5
                 AutoList.Add(auto);
             }
             return AutoList;
+        }
+
+
+           public static List<Location> GetCity(){
+            var CityList = new List<Location>();
+            string command="GetCity ()";
+            var table = PgConnection.Instance.ExecuteFunction(command);
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                var id = Convert.ToInt32(table.Rows[i][0]);
+                var city = table.Rows[i][1].ToString();
+                Location location=new Location (id,city,"null");
+                
+                CityList.Add(location);
+            }
+            return CityList;
         }
         public static List<Auto> consultforall(int _place , string _result , string _license , int _capacity)
         {

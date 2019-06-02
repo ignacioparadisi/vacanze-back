@@ -1412,6 +1412,21 @@ BEGIN
     FROM LOCATION;
 END;
 $$ LANGUAGE plpgsql;
+----------------------------------------- consulta de ciudades-----------------------------------
+
+CREATE OR REPLACE FUNCTION GetCity()
+    RETURNS TABLE
+            (
+                id integer,
+                city VARCHAR(30)
+               
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY select loc_id,loc_city from location;
+END;
+$$ LANGUAGE plpgsql;
 
 ------------------------fin de grupo 5-------------------------------------------
 

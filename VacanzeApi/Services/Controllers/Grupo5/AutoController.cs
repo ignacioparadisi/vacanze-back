@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
+using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo5;
 using Newtonsoft.Json;
@@ -26,7 +27,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
             {
                 Auto auto = new Auto(make,model,capacity,status,licence,price,picture,place);
                 var result= ConnectAuto.Agregar(auto);
-                return Ok(JsonConvert.SerializeObject(result));
+                return Ok("auto registrado exitosamente");
             }
             catch (DatabaseException )
 			{            
@@ -176,5 +177,20 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
 				return StatusCode(500,"no se pudo modificar el automovil {ISPS}");
 			}
         }
+
+
+        [HttpGet("getcity")]
+        public  ActionResult<IEnumerable<Location>> GetCity( )
+        {
+            try
+            {    
+                List<Location> locationList =ConnectAuto.GetCity();
+                return Ok(locationList.ToList());    
+            }
+            catch (IndexOutOfRangeException )
+            {
+                return StatusCode(500,"No hay automoviles registrados {c-DB}");
+            }
+            }
     }
 }
