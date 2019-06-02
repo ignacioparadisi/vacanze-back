@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
 {
@@ -13,40 +14,28 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
         /// </summary>
         /// <param name="hotel">Datos a ser guardados</param>
         /// <returns>ID del registro del hotel creado en la base de datos</returns>
-        /// <exception cref="SaveHotelException">
-        ///     Lanzada cuando ocurre algun fallo guardando el hotel,
-        ///     indicando que no se logro guardar
-        /// </exception>
+        /// <exception cref="RequiredAttributeException">Algun atributo requerido estaba como null</exception>
+        /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
         public static int AddHotel(Hotel hotel)
         {
-            try
-            {
-                var table = PgConnection.Instance.ExecuteFunction(
-                    "addhotel(@name, @amountOfRooms, @capacityPerRoom, @active, @addressSpecs, " +
-                    "@roomPrice, @website, @phone, @picture, @stars, @location)",
-                    hotel.Name,
-                    hotel.AmountOfRooms,
-                    hotel.RoomCapacity,
-                    hotel.IsActive,
-                    hotel.AddressSpecification,
-                    hotel.PricePerRoom,
-                    hotel.Website ?? "",
-                    hotel.Phone ?? "",
-                    hotel.Picture ?? "",
-                    hotel.Stars,
-                    hotel.Location.Id
-                );
-                var savedId = Convert.ToInt32(table.Rows[0][0]);
-                return savedId;
-            }
-            catch (DatabaseException e)
-            {
-                throw new SaveHotelException(e.Message);
-            }
-            catch (Exception)
-            {
-                throw new SaveHotelException();
-            }
+            HotelValidator.Validate(hotel);
+            var table = PgConnection.Instance.ExecuteFunction(
+                "addhotel(@name, @amountOfRooms, @capacityPerRoom, @active, @addressSpecs, " +
+                "@roomPrice, @website, @phone, @picture, @stars, @location)",
+                hotel.Name,
+                hotel.AmountOfRooms,
+                hotel.RoomCapacity,
+                hotel.IsActive,
+                hotel.AddressSpecification,
+                hotel.PricePerRoom,
+                hotel.Website ?? "",
+                hotel.Phone ?? "",
+                hotel.Picture ?? "",
+                hotel.Stars,
+                hotel.Location.Id
+            );
+            var savedId = Convert.ToInt32(table.Rows[0][0]);
+            return savedId;
         }
 
         /// <summary>
@@ -109,22 +98,13 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
         ///     Metodo para eliminar un hotel permanentemente.
         /// </summary>
         /// <param name="id">ID del hotel a eliminar</param>
-        /// <exception cref="DeleteHotelException">Lanzada cuando ocurre algun fallo eliminando el hotel</exception>
+        /// <exception cref="DatabaseException">
+        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la bse de
+        ///     datos
+        /// </exception>
         public static void DeleteHotel(int id)
         {
-            try
-            {
-                PgConnection.Instance.ExecuteFunction("DeleteHotel(@id)", id);
-            }
-            catch (DatabaseException)
-            {
-                throw new DeleteHotelException(
-                    $"Database error while trying to delete hotel {id}");
-            }
-            catch (Exception)
-            {
-                throw new DeleteHotelException($"Unknown error while deleting hotel {id}.");
-            }
+            PgConnection.Instance.ExecuteFunction("DeleteHotel(@id)", id);
         }
 
         /// <summary>
@@ -138,8 +118,11 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
         ///     el objeto completo y valido, sin cambiar los atributos que no quieras actualizar.
         /// </param>
         /// <returns>Objeto Hotel con los campos actualizados</returns>
+        /// <exception cref="RequiredAttributeException">Algun atributo requerido estaba como null</exception>
+        /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
         public static Hotel UpdateHotel(int id, Hotel newData)
         {
+            HotelValidator.Validate(newData);
             PgConnection.Instance.ExecuteFunction(
                 "updatehotel(@_id, @name, @amountOfRooms, @capacityPerRoom, @active, @addressSpecs, " +
                 "@roomPrice, @website, @phone, @picture, @stars, @location)",

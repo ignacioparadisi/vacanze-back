@@ -88,7 +88,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
 
         public Hotel Build()
         {
-            _hotel.Validate();
+            HotelValidator.Validate(_hotel);
             return _hotel;
         }
     }

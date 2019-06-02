@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 using vacanze_back.VacanzeApi.Persistence.Repository;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo6;
 
@@ -41,7 +42,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         [Test]
         public void AddHotel_HotelWithInvalidLocation_ExceptionThrown()
         {
-            Assert.Throws<SaveHotelException>(() =>
+            Assert.Throws<InvalidAttributeException>(() =>
             {
                 _hotel.Location.Id = 99999;
                 HotelRepository.AddHotel(_hotel);
