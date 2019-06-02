@@ -18,40 +18,6 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         public string Name;
         public string Password;
         public List<Role> Roles;
-        public override bool Equals(object obj)
-        {
-            var user = (User) obj;
-            return Id == user.Id
-                   && DocumentId == user.DocumentId
-                   && Email == user.Email
-                   && Lastname == user.Lastname
-                   && Name == user.Name
-                   && Password == user.Password
-                   && RolesAreEqual(user);
-        }
-
-        private bool RolesAreEqual(User user)
-        {
-            foreach (var role in Roles)
-            {
-                var isEqual = false;
-                foreach (var userRole in user.Roles)
-                {
-                    if (userRole.Equals(role))
-                    {
-                        isEqual = true;
-                        break;
-                    }
-                }
-
-                if (isEqual)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
 
         public User(int id, long documentId, string name, string lastname, string email,
             string password, List<Role> roles)
@@ -72,7 +38,6 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
             Name = name.Trim();
             Lastname = lastname.Trim();
             Email = email;
-            Password = "";
         }
 
         /// <summary>

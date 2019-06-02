@@ -15,11 +15,6 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         public string Name { get; set; }
         // Id del rol 
         public int Id { get; set; }
-        public override bool Equals(object obj)
-        {
-            var role = (Role) obj;
-            return Id == role.Id && Name == role.Name;
-        }
 
         public Role(int id, string name)
         {

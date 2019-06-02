@@ -31,7 +31,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             {
                 return BadRequest("Error obteniendo los usuarios");
             }
-            return Ok(users);
+            return users;
         }
 
         // GET api/users/5
@@ -57,7 +57,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             {
                 return BadRequest("Error de servidor");
             }
-            return Ok(user);
+            return user;
         }
 
         // POST api/users
@@ -85,7 +85,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             {
                 return BadRequest("Error agregando al usuario");
             }
-            return Ok(user);
+            return user;
         }
 
         // PUT api/users/5
@@ -109,7 +109,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
                     UserRepository.AddUser_Role(id, role.Id);
                 }
 
-                return Ok(user_id);
+                return user_id;
 
             }
             catch (GeneralException e)
@@ -133,7 +133,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
         {
             try
             {
-                return Ok(UserRepository.DeleteUserById(id));
+                return UserRepository.DeleteUserById(id);
             }
             catch (GeneralException e)
             {

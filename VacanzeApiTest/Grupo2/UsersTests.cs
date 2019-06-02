@@ -373,7 +373,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
             var user = UserRepository.AddUser(_user);
             _insertedUsers.Add(user.Id);
             var savedUser = UserRepository.GetUserById(user.Id);
-            Assert.AreEqual(user, savedUser);
+            Assert.AreEqual(user.Id, savedUser.Id);
         }
 
         [Test]
