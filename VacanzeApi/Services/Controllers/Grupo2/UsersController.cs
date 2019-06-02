@@ -31,11 +31,21 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
         }
 
         // GET api/values/5
-//        [HttpGet("{id}")]
-//        public ActionResult<string> Get(int id)
-//        {
-//            return "value";
-//        }
+        [HttpGet("{id}")]
+        public ActionResult<User> Get(int id)
+        {
+            User user;
+            try
+            {
+                user = UserRepository.GetUserById(id);
+                user.Roles = RoleRepository.GetRolesForUser(id);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            return user;
+        }
 
         // POST api/users
         [HttpPost]
@@ -53,21 +63,45 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             }
             catch (Exception e)
             {
-                BadRequest(e.Message);
+                return BadRequest(e.Message);
             }
             return user;
         }
 
         // PUT api/values/5
-//        [HttpPut("{id}")]
-//        public void Put(int id, [FromBody] string value)
-//        {
-//        }
-//
-//        // DELETE api/values/5
-//        [HttpDelete("{id}")]
-//        public void Delete(int id)
-//        {
-//        }
+        [HttpPut("{id}")]
+        public ActionResult<long> Put(int id, [FromBody] User user)
+        {
+            long user_id;
+            try
+            {
+                user_id = UserRepository.UpdateUser(user, id);
+                UserRepository.DeleteUser_Role(id);
+                foreach(var roles in user.Roles)
+                {
+                    UserRepository.AddUser_Role(user.Id, roles.Id);
+                }
+                return user_id;
+                
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        // DELETE api/users/1
+        [HttpDelete("{id}")]
+        public ActionResult<long> Delete(long id)
+        {
+            try
+            {
+                return UserRepository.DeleteUserById(id);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

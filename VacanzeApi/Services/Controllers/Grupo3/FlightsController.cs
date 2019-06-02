@@ -79,6 +79,28 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
             }
         }
 
+        /// <summary> GET api/flights/begin/end</summary>
+        /// <param name="begin">Rango menor de la fecha a buscar</param>
+        /// <param name="end">Rango mayor de la fecha a buscar</param>
+        /// <returns>ActionResult con resultado de la query</returns>
+        [HttpGet("locations/{departure}/{arrival}")]
+        public ActionResult<IEnumerable<Entity>> GetByLocation(int departure, int arrival)
+        {
+            try
+            {
+                var result = FlightRepository.GetByLocation(departure, arrival);
+                return Ok(result.ToList());
+            }
+            catch (DbErrorException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         /// <summary>POST api/flights</summary>
         /// <param name="flight">Parametro tipo Flight con el vuelo a agregar</param>
         /// <returns>ActionResult con mensaje de exito si se agrego de manera exitosa</returns>
