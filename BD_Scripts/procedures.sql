@@ -799,6 +799,8 @@ BEGIN
     DELETE FROM Ship 
     WHERE (shi_id = _shi_id)
     returning shi_id into ret_id;
+    DELETE FROM Cruise
+    WHERE (cru_shi_fk = _shi_id);
    return ret_id;
 END;
 $$ LANGUAGE plpgsql;
