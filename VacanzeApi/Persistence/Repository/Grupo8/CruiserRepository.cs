@@ -49,7 +49,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
         }
 
         public static int AddCruiser(Cruiser cruiser)
-        {
+        {    
             var table = PgConnection.Instance.ExecuteFunction(
                 "AddShip(@name,@capacity,@loadingcap,@model,@line,@picture)", cruiser.Name, cruiser.Capacity,
                 cruiser.LoadingShipCap, cruiser.Model, cruiser.Line, cruiser.Picture);
@@ -73,20 +73,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
                 throw new NullCruiserException("El crucero no puede ser null");
             }
             catch (InvalidCastException)
-            {
-                throw new CruiserNotFoundException("Crucero no encontrado");
-            }
-        }
-
-        public static int UpdateCruiserstatus(int cruiserId, bool status)
-        {
-            try
-            {
-                var table = PgConnection.Instance.ExecuteFunction("UpdateShipStatus(@cruiserid,@status)",cruiserId,status);
-                var updatedId = Convert.ToInt32(table.Rows[0][0]);
-                return updatedId;
-
-            }catch (InvalidCastException)
             {
                 throw new CruiserNotFoundException("Crucero no encontrado");
             }
@@ -135,7 +121,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
                 var id = Convert.ToInt32(table.Rows[0][0]);
                 layover.Id = id;
                 return layover;
-            }
+        }
         public static int DeleteLayover(int id)
         {
             try
