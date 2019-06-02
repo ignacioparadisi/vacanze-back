@@ -42,7 +42,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 		{
 			cs.title = "Probando";
 			cs.description = "Esta es mi descripcion";
-			cs.status = "ABIERTO";
+			cs.status = "OPEN";
 
 			int rows = controller.Get();
 			controller.Post(2, cs);
@@ -53,12 +53,12 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 		public void GetClaimEspecificTest()
 		{
 			ActionResult<IEnumerable<Claim>> enumerable = controller.Get(0);
-			Claim claimList = enumerable.Value.ToList().Find(x => (x._title.Equals("Probando") && x._description.Equals("Esta es mi descripcion") && x._status.Equals("ABIERTO")) );
+			Claim claimList = enumerable.Value.ToList().Find(x => (x._title.Equals("Probando") && x._description.Equals("Esta es mi descripcion") && x._status.Equals("OPEN")) );
 
 			//response = claimList.Value.Count();
 			Assert.AreEqual("Probando", claimList._title);
 			Assert.AreEqual("Esta es mi descripcion", claimList._description);
-			Assert.AreEqual("ABIERTO", claimList._status);
+			Assert.AreEqual("OPEN", claimList._status);
 		}
 
 		[Test,Order(4) ]
@@ -74,28 +74,28 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 			Claim[] claim = enumerable.Value.ToArray();
 			Assert.AreEqual(claim[0]._title, "Despues del put");
 			Assert.AreEqual(claim[0]._description,"descripcion despues");
-			Assert.AreEqual(claim[0]._status,"ABIERTO");
+			Assert.AreEqual(claim[0]._status,"OPEN");
 
 		}
 
 		[Test,Order(5) ]
 		public void PutClaimStatusTest()
 		{
-			cs.status = "CERRADO";
+			cs.status = "CLOSE";
 			ActionResult<IEnumerable<Claim>> enumerable = controller.Get(0);
 			Claim claimList = enumerable.Value.ToList().Find(x => x._title.Equals("Despues del put") && x._description.Equals("descripcion despues"));
 
 			controller.Put(Convert.ToInt32(claimList.Id), cs);
 			enumerable = controller.Get(Convert.ToInt32(claimList.Id));
 			Claim[] claim = enumerable.Value.ToArray();
-			Assert.AreEqual(claim[0]._status, "CERRADO");
+			Assert.AreEqual(claim[0]._status, "CLOSE");
 
 		}
 
 		[Test, Order(6)]
 		public void GetClaimStatusTest()
 		{
-			claim = controller.GetStatus("CERRADO");
+			claim = controller.GetStatus("CLOSE");
 			response = claim.Value.Count();
 			Assert.True(response > 0);
 		}
@@ -130,7 +130,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 		[Test,Order(10)]
 		public void NullClaimExceptionModifyTitleTest()
 		{
-			var p = new Claim("PROBANDO", "UNITARIA", "CERRADO");
+			var p = new Claim("PROBANDO", "UNITARIA", "CLOSE");
 
 			Assert.Throws<NullClaimException>(() => conec.ModifyClaimTitle(-1, p));
 		}
@@ -138,7 +138,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 		[Test, Order(11)]
 		public void NullClaimExceptionModifyStatusTest()
 		{
-			var p = new Claim("PROBANDO", "UNITARIA", "CERRADO");
+			var p = new Claim("PROBANDO", "UNITARIA", "CLOSE");
 
 			Assert.Throws<NullClaimException>(() => conec.ModifyClaimStatus(-1, p));
 		}
@@ -153,14 +153,14 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 		[Test, Order(13)]
 		public void ValidateLengTitleClaimTest()
 		{
-			Claim c = new Claim("validaaxedededdededededdedendod3dd3dd3d33", "mi test", "ABIERTO");
+			Claim c = new Claim("validaaxedededdededededdedendod3dd3dd3d33", "mi test", "OPEN");
 			Assert.Throws<AttributeSizeException>((() => c.Validate()));
 		}
 
 		[Test,Order(14)]
 		public void ValidatePutClaimTest()
 		{
-			Claim c = new Claim("valida", "mi test", "ABIERTO");
+			Claim c = new Claim("valida", "mi test", "OPEN");
 			Assert.Throws<AttributeValueException>((() => c.ValidatePut()));
 		}
 

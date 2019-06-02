@@ -815,10 +815,10 @@ DECLARE
 BEGIN
 
    INSERT INTO Claim(cla_title, cla_descr, cla_status) VALUES
-   ( _cla_title, _cla_description, 'ABIERTO')RETURNING cla_ID INTO _cla_ID;
+   ( _cla_title, _cla_description, 'OPEN')RETURNING cla_ID INTO _cla_ID;
 	
     if (_cla_ID is not null)then 
-	    update BAGGAGE set bag_status = 'EXTRAVIADO' , bag_cla_fk= _cla_id where bag_id = _bag_id;
+	    update BAGGAGE set bag_status = 'LOST' , bag_cla_fk= _cla_id where bag_id = _bag_id;
 	  end if;
    RETURN _cla_ID;
 END;
@@ -831,11 +831,11 @@ CREATE OR REPLACE FUNCTION ModifyClaimStatus(
 RETURNS integer AS
 $$
 BEGIN
-	if(_cla_status ='CERRADO') then
-	  UPDATE BAGGAGE set bag_status='ENCONTRADO' where bag_cla_fk= _cla_id;
+	if(_cla_status ='CLOSE') then
+	  UPDATE BAGGAGE set bag_status='FOUND' where bag_cla_fk= _cla_id;
 	end if;
-	if(_cla_status = 'ABIERTO') then
-	  UPDATE BAGGAGE set bag_status='EXTRAVIADO' where bag_cla_fk= _cla_id;
+	if(_cla_status = 'OPEN') then
+	  UPDATE BAGGAGE set bag_status='LOST' where bag_cla_fk= _cla_id;
 	end if;
   UPDATE Claim SET cla_status= _cla_status
   WHERE (cla_id = _cla_id);
@@ -984,7 +984,7 @@ $$
 DECLARE
     _cla_ID INTEGER;
 BEGIN
-	if(_bag_status = 'RECLAMADO') then
+	if(_bag_status = 'RECLAIMED') then
    UPDATE Baggage SET bag_status = _bag_status 
    WHERE (bag_id = _BAG_ID) RETURNING bag_cla_fk INTO _cla_ID;
 
