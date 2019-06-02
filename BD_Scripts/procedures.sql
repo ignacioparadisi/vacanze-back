@@ -366,7 +366,7 @@ $$
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION GetUserByEmail(email_id VARCHAR(30))
+CREATE OR REPLACE FUNCTION GetUserByEmail(email_id VARCHAR(30), user_id INTEGER)
   RETURNS TABLE
           (id integer,
            documentId VARCHAR(50),
@@ -377,7 +377,7 @@ AS
 $$
 BEGIN
   RETURN QUERY SELECT use_id, use_document_id, use_name, use_last_name, use_email
-               FROM Users WHERE use_email = email_id;
+               FROM Users WHERE use_email = email_id AND use_id <> user_id;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -506,7 +506,7 @@ RETURNS TABLE
    pricePerRoom DECIMAL,
    website VARCHAR(100),
    phone VARCHAR(20),
-   picture VARCHAR,
+   picture text,
    stars INTEGER,
    location INTEGER
   )
@@ -522,7 +522,7 @@ BEGIN
                         H.hot_room_price,
                         H.hot_website,
                         H.hot_phone,
-                        H.HOT_PICTURE,
+                        '/hotels/' || H.HOT_ID || '/image' picture,
                         H.HOT_STARS,
                         H.hot_loc_fk
                  FROM Hotel AS H;
@@ -541,7 +541,7 @@ CREATE OR REPLACE FUNCTION GetHotelById(p_id INTEGER)
                 pricePerRoom DECIMAL,
                 website VARCHAR(100),
                 phone VARCHAR(20),
-                picture VARCHAR,
+                picture text,
                 stars INTEGER,
                 location INTEGER
             )
@@ -557,7 +557,7 @@ BEGIN
                         H.hot_room_price,
                         H.hot_website,
                         H.hot_phone,
-                        H.HOT_PICTURE,
+                        '/hotels/' || H.HOT_ID || '/image' picture,
                         H.HOT_STARS,
                         H.hot_loc_fk
                  FROM Hotel AS H
@@ -577,7 +577,7 @@ CREATE OR REPLACE FUNCTION GetHotelsByCity(city_id integer)
                 pricePerRoom DECIMAL,
                 website VARCHAR(100),
                 phone VARCHAR(20),
-                picture VARCHAR,
+                picture text,
                 stars INTEGER,
                 location INTEGER
             )
@@ -593,7 +593,7 @@ BEGIN
                         H.hot_room_price,
                         H.hot_website,
                         H.hot_phone,
-                        H.HOT_PICTURE,
+                        '/hotels/' || H.HOT_ID || '/image' picture,
                         H.HOT_STARS,
                         H.hot_loc_fk
                  FROM Hotel AS H, LOCATION L
@@ -624,7 +624,7 @@ CREATE OR REPLACE FUNCTION UpdateHotel(_id INTEGER,
                 pricePerRoom DECIMAL,
                 website VARCHAR(100),
                 phone VARCHAR(20),
-                picture VARCHAR,
+                picture text,
                 stars INTEGER,
                 location INTEGER
             )
@@ -645,6 +645,19 @@ BEGIN
         hot_loc_fk        = _location
     WHERE hot_id = _id;
     return query select * from gethotelbyid(_id);
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION GetHotelImage(p_id INTEGER)
+    RETURNS VARCHAR AS
+$$
+DECLARE
+    img VARCHAR;
+BEGIN
+    SELECT hot_picture
+    FROM Hotel
+    WHERE hot_id = p_id INTO img;
+    return img;
 END;
 $$ LANGUAGE plpgsql;
 
