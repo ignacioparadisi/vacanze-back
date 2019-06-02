@@ -47,13 +47,28 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo4
           [HttpGet("{tipo}/{id}")]
           public ActionResult<string> Get(string tipo, int id)
           {
-               return "tipo::" + tipo + id;
+
+               try
+               {
+                    BaggageRepository.DeleteBaggage(id);
+               }
+               catch (DatabaseException e)
+               {
+
+                    return BadRequest("Error al Eliminar equipaje" + e);
+               }
+
+               return "exito  en eliminar equipaje :" + id;
+
           }
+
+
           // Post api/Claim/
 
           [HttpPost]
           public ActionResult<string> Post([FromBody] string prueba)
           {
+
                return "exito " + prueba;
 
           }
