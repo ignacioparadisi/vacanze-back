@@ -613,6 +613,53 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION UpdateHotel(_id INTEGER,
+                                       _name VARCHAR(100),
+                                       _amountOfRooms INTEGER,
+                                       _capacityPerRoom INTEGER,
+                                       _active BOOLEAN,
+                                       _addressSpecs VARCHAR(200),
+                                       _roomPrice DECIMAL,
+                                       _website VARCHAR,
+                                       _phone VARCHAR,
+                                       _picture VARCHAR,
+                                       _stars INTEGER,
+                                       _location INTEGER)
+    RETURNS TABLE
+            (
+                id integer,
+                name VARCHAR(100),
+                roomQuantity INTEGER,
+                roomCapacity INTEGER,
+                isActive BOOLEAN,
+                addressSpecs VARCHAR(200),
+                pricePerRoom DECIMAL,
+                website VARCHAR(100),
+                phone VARCHAR(20),
+                picture VARCHAR,
+                stars INTEGER,
+                location INTEGER
+            )
+AS
+$$
+BEGIN
+    UPDATE hotel
+    SET hot_name          = _name,
+        hot_room_qty      = _amountOfRooms,
+        hot_room_capacity = _capacityPerRoom,
+        hot_is_active     = _active,
+        hot_address_specs = _addressSpecs,
+        hot_room_price    = _roomPrice,
+        hot_website       = _website,
+        hot_phone         = _phone,
+        hot_picture       = _picture,
+        hot_stars         = _stars,
+        hot_loc_fk        = _location
+    WHERE hot_id = _id;
+    return query select * from gethotelbyid(_id);
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION GetLocationById(p_id INTEGER)
     RETURNS TABLE
             (
@@ -662,6 +709,51 @@ BEGIN
                  WHERE L.LOC_COUNTRY = L1.LOC_COUNTRY;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION AddLocation(city VARCHAR(30),
+                                        country VARCHAR(30))
+    RETURNS integer AS
+$$
+DECLARE
+    dest_id INTEGER;
+BEGIN
+    INSERT INTO LOCATION (loc_city, loc_country) VALUES (city,country) RETURNING LOC_ID INTO dest_id;
+    RETURN dest_id;
+END;
+$$ LANGUAGE plpgsql;
+
+---DELETE HOTEL---
+CREATE OR REPLACE FUNCTION DeleteHotel(_HOT_ID integer)
+RETURNS integer AS
+$$
+DECLARE
+ RET_ID INTEGER;
+BEGIN
+
+    DELETE FROM HOTEL 
+    WHERE (HOT_ID = _HOT_ID)
+    returning HOT_ID into RET_ID;
+   return RET_ID;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION DeleteLocation(_id integer)
+    RETURNS integer AS
+$$
+DECLARE
+    RET_ID INTEGER;
+BEGIN
+
+    DELETE
+    FROM location
+    WHERE (loc_id = _id) returning loc_id into RET_ID;
+    return RET_ID;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+
 ------------------------------------ grupo 8 --------------------------------------
 
 ---------Agregar Ship-------------------
