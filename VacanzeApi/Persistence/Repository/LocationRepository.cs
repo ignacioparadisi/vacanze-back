@@ -54,7 +54,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
 
         public static int AddLocation(Location location)
         {
-            // TODO: try / catch DatabseException y retornar algo tipo SaveHotelException
             var table = PgConnection.Instance.ExecuteFunction(
                 "AddLocation(@city, @country)",
                 location.City,
@@ -66,7 +65,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
 
         public static void DeleteLocation(int id)
         {
-            // TODO: Handle Exceptions
             PgConnection.Instance.ExecuteFunction("DeleteLocation(@_id)", id);
         }
     }
