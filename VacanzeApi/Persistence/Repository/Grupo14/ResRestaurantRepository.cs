@@ -1,9 +1,11 @@
 using System;
 using System.Data;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo14;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo14;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo14{
     public class ResRestaurantRepository{
@@ -18,6 +20,15 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo14{
             Console.WriteLine(reserva.date);
             Console.WriteLine(reserva.user_id);
             Console.WriteLine(reserva.rest_id);
+            var availability = PgConnection.Instance.ExecuteFunction("getAvailability(@res_id, @res_date)",
+            reserva.rest_id, reserva.fecha_res);
+            var id = Convert.ToInt32(availability.Rows[0][0].ToString());
+
+            Console.WriteLine(id);
+
+            if(id <=0){
+                throw new AvailabilityException("Sorry, not availability at this hour");
+            }
             var resRest = PgConnection.Instance.ExecuteFunction(
             "addreservationrestaurant(@fecha, @people, @fecha_reservacion, @userId, @restaurantId)",
             reserva.fecha_res,reserva.cant_people, reserva.date, reserva.user_id, reserva.rest_id);

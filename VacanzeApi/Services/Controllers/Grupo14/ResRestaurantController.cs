@@ -2,8 +2,12 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Localization;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo14;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo14;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo14;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
@@ -33,6 +37,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 			{
                 Console.WriteLine("Estoy en el InvalidStoredProcedureSignatureException");
 				return StatusCode(500);
+			}
+			catch(AvailabilityException e){
+				ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
 			}
 
 		}
