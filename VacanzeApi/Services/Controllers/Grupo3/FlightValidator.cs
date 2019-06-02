@@ -18,21 +18,31 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
         /// <summary>Metodo que valida la informacion del vuelo a agregar</summary>
         public void Validate()
         {
+            
+            if (flight.plane == null || flight.arrival == null || flight.departure == null ||
+                flight.price == null || flight.loc_arrival == null || flight.loc_departure == null){
+                    throw new ValidationErrorException("All fields must be filled");
+            }
+
             var plane = (Airplane) AirplanesRepository.Find(flight.plane.Id);
 
-            if (flight.plane == null || flight.arrival == null || flight.departure == null ||
-                flight.price == null
-                || flight.loc_arrival == null || flight.loc_departure == null)
-                throw new ValidationErrorException("Debe llenar todos los campos");
+            if( flight.loc_departure.Id == flight.loc_arrival.Id ){
+                throw new ValidationErrorException("The departure city and the arrival city cannot be the same");
+            }    
 
             DateTime arrivalDate= DateTime.ParseExact(flight.arrival, "MM-dd-yyyy HH:mm:ss",null);
             DateTime departureDate= DateTime.ParseExact(flight.departure, "MM-dd-yyyy HH:mm:ss",null);
+            TimeSpan hours = arrivalDate - departureDate;
+
+            if( hours.TotalHours > plane.autonomy){
+                throw new ValidationErrorException("The autonomy of the plane is not enough to make this flight");
+            }
 
             if (plane == null)
-                throw new ValidationErrorException("El seleccionado avión no existe");
+                throw new ValidationErrorException("The plane you selected does not exist");
 
             if( DateTime.Compare(departureDate, arrivalDate) > 0 ){
-                throw new ValidationErrorException("La fecha de salida no puede ser mayor a la de llegada");
+                throw new ValidationErrorException("The departure date cannot be greater than the arrival date");
             }
 
         }

@@ -6,16 +6,16 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
 {
     public class Layover
     {
-        public int Id { get; set; }
+        public int Id { get; }
         public int CruiserId { get;}
-        public DateTime DepartureDate { get;}
-        public DateTime ArrivalDate { get;}
+        public string DepartureDate { get;}
+        public string ArrivalDate { get;}
         public decimal Price { get;}
         public int LocDeparture { get;}
         public int LocArrival { get;}
 
         [JsonConstructor]
-        public Layover(int id, int cruiserId, DateTime departureDate,DateTime arrivalDate, decimal price, int locDeparture,
+        public Layover(int id, int cruiserId, string departureDate,string arrivalDate, decimal price, int locDeparture,
             int locArrival)
         {
             Id = id;
@@ -26,7 +26,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
             LocDeparture = locDeparture;
             LocArrival = locArrival;
         }
-        public Layover(int cruiserId,DateTime departureDate,DateTime arrivalDate, decimal price, int locDeparture,
+        public Layover(int cruiserId,string departureDate,string arrivalDate, decimal price, int locDeparture,
             int locArrival)
         {   
             CruiserId = cruiserId;
@@ -38,11 +38,15 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
         }
         public void Validate()
         {
-            if (CruiserId <= 0)
+            if (string.IsNullOrEmpty(ArrivalDate))
             {
-                throw  new InvalidAttributeException("Cruiser id is required");
+                throw new InvalidAttributeException("Arrival Date is required");
             }
-            if (LocDeparture <= 0)
+            if (string.IsNullOrEmpty(DepartureDate))
+            {
+                throw new InvalidAttributeException("Departure Date is required");
+            }
+            if (LocDeparture == 0)
             {
                 throw  new InvalidAttributeException("Departure location id is required");
             }

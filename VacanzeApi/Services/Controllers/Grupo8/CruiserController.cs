@@ -162,8 +162,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (LayoverNotFoundException e)
             {
+                int [] lay = new int [0];
                 ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                return BadRequest(errorMessage);
+                return Ok(new {layovers = lay});
             }
             catch (DatabaseException e)
             {

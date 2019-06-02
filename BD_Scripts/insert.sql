@@ -192,11 +192,19 @@ VALUES ('8654826', 'cargador@vacanze.com', 'Salazar', 'Marcos', MD5('cargador123
 INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
 VALUES ('20766589', 'cliente@vacanze.com', 'Martinez', 'Carlos', MD5('cliente123'));
 
-INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (2, 1);
+INSERT INTO USERS (use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES ('23613704', 'larry.page@vacanze.com', 'Page', 'Larry', MD5('google'));
+
+INSERT INTO USERS (use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES ('23613704', 'reggaebob@vacanze.com', 'Marley', 'Bob', MD5('jah'));
+
+INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (2, 1 );
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (3, 2);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (4, 3);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (5, 4);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (1, 5);
+INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (1, 6);
+INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (1, 7);
 
 
 ------- grupo 6 ----------
@@ -232,4 +240,45 @@ INSERT INTO public.Plane(
 --------------Grupo 8 ---------------------------------
 INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'concordia', 100, 1000, 'Modelo1','Linea1', '1.jpg' );
 INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'Lmao', 500, 2000, 'Modelo2','Linea2', '3.jpg' );
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,2,'2019/2/11','2019/2/12',2000,1,2);
+=======
+>>>>>>> e67a4a748ad2c388d0f483ad0d6252db2dd71367
+
+-------------Grupo 9 ------------------------------------
+INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('Mi primer reclamo','perdi mi maleta negra, nunca aparecio cuando llegue a mi destino','ABIERTO');
+INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('equipaje de mano','deje en el asiento de el avion mi equipaje de mano es color rojo con puntos negros','ABIERTO');
+INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('equipaje dejado en la sala de espera ','Hola, deje mi equipaje en la sala de espera del aeropuerto intermacional de maiquetia, era un bolso pequeno aproximadamente de 30 cm','ABIERTO');
+INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('mi vuelo se retraso','Buenas noches, mi vuelo se retraso pero el personal me comenta que mi equipaje lo mandaron a otro avion pero no saben en cual. Les agradezco pronta respuesta','ABIERTO');
+
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ) VALUES('EXTRAVIADO','maleta negra para mi prueba unitaria');
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ) VALUES('EXTRAVIADO','maleta negra');
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','maleta roja con puntos negros',2);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','maleta pequeña aproximadamente 20 kg color negra',3);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','maleta azul tamaño medio',4);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','maleta vinotinto con logo de la FVF',4);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','maleta rosada con dibujos de niña',1);
+
+------- grupo 10 ----------
+
+-- Cliente Generico --
+INSERT INTO Travel(tra_name, tra_descr, tra_use_fk, tra_ini, tra_end)
+VALUES ('Surf Trip', 'Surf trip arroud Vnzla', 5, '2019-06-10', '2019-07-10');
+INSERT INTO Travel(tra_name, tra_descr, tra_use_fk, tra_ini, tra_end)
+VALUES ('Family', 'Sushi Vacation', 5, '2019-08-10', '2019-09-10');
+-- Cliente Larry Page -- 
+INSERT INTO Travel(tra_name, tra_descr, tra_use_fk, tra_ini, tra_end)
+VALUES ('Business Trip', 'About businnes, I am busy', 6, '2019-10-10', '2019-11-10');
+
+-- Surf Trip --
+INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (1,37); -- La Guaira
+INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (1,65); -- Puerto Cabello
+INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (1,76); -- Carupano
+INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (1,56); -- Puerto La Cruz
+-- Sushi Vacation -- 
+INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (2,143); -- Tokyo
+INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (2,158); -- Osaka
+
 Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,2,'2019/2/11','2019/2/12',2000,1,2);

@@ -8,8 +8,8 @@ CREATE OR REPLACE FUNCTION public.addflight(
 	_price double precision,
 	_departure character varying,
 	_arrival character varying,
-	_loc_arrival integer,
-	_loc_departure integer)
+  _loc_departure integer,
+	_loc_arrival integer)
     RETURNS integer
     LANGUAGE 'plpgsql'
 
@@ -17,13 +17,15 @@ CREATE OR REPLACE FUNCTION public.addflight(
     VOLATILE 
     
 AS $BODY$
-
+DECLARE
+  _fli_id INTEGER;
 BEGIN
 
-   INSERT INTO Flight(fli_price ,fli_departureDate, fli_arrivalDate, fli_pla_fk, fli_loc_arrival,
-					 fli_loc_departure) VALUES
-    (_price, TO_TIMESTAMP(_departure,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone, TO_TIMESTAMP(_arrival,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone, _plane, _loc_arrival, _loc_departure);
-   RETURN 1;
+   INSERT INTO Flight(fli_price ,fli_departureDate, fli_arrivalDate, fli_pla_fk,fli_loc_departure, fli_loc_arrival)
+    VALUES
+    (_price, TO_TIMESTAMP(_departure,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone, TO_TIMESTAMP(_arrival,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone, _plane, _loc_departure, _loc_arrival)
+	RETURNING fli_id into _fli_id;
+   RETURN _fli_id;
 END;
 
 $BODY$;
@@ -37,13 +39,13 @@ ALTER FUNCTION public.addflight(integer, double precision, character varying, ch
 
 -- DROP FUNCTION public.updateflight(integer, integer, double precision, date, date, integer, integer);
 CREATE OR REPLACE FUNCTION public.updateflight( 
-    _id integer,
-   _plane integer,
+  _id integer,
+  _plane integer,
 	_price double precision,
 	_departure character varying,
 	_arrival character varying,
-	_loc_arrival integer,
-	_loc_departure integer)
+	_loc_departure integer,
+  _loc_arrival integer)
     RETURNS integer
     LANGUAGE 'plpgsql'
 
@@ -149,7 +151,7 @@ ALTER FUNCTION public.findplane(integer)
 
 CREATE OR REPLACE FUNCTION public.findflight(
 	_id integer)
-    RETURNS TABLE(id integer, price numeric, departuredate timestamp, arrivaldate timestamp, loc_arrival integer, loc_departure integer, pla_fk integer) 
+    RETURNS TABLE(id integer, price numeric, departuredate timestamp, arrivaldate timestamp, loc_departure integer, loc_arrival integer, pla_fk integer) 
     LANGUAGE 'plpgsql'
 
     COST 100
@@ -159,9 +161,9 @@ AS $BODY$
 
 BEGIN
 	RETURN QUERY SELECT
-	fli_id, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_arrival, fli_loc_departure, fli_pla_fk
+	fli_id, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, fli_loc_arrival, fli_pla_fk
 	FROM public.Flight WHERE _id = fli_id;
-END;
+END; 
 
 $BODY$;
 
@@ -220,14 +222,73 @@ $BODY$;
 ALTER FUNCTION public.getflightsbydate(char varying, char varying)
     OWNER TO vacanza;
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: public.getOutBoundFlights(integer, integer, timestamp without time zone)
+
+-- DROP FUNCTION public.getOutBoundFlights(integer, integer, timestamp without time zone);
+
+CREATE OR REPLACE FUNCTION public.getOutBoundFlights(  
+	_departure integer,
+	_arrival integer,
+  _departuredate char varying)
+    RETURNS TABLE(id integer, plane integer, price numeric, departuredate timestamp without time zone, arrivaldate timestamp without time zone, locdeparture integer, locarrival integer) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+	RETURN QUERY SELECT
+  fli_id, fli_pla_fk, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, fli_loc_arrival
+	FROM public.Flight WHERE fli_departuredate::date = _departuredate::timestamp without time zone  and fli_loc_departure = _departure and fli_loc_arrival = _arrival;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.getOutBoundFlights(integer, integer, char varying)
+    OWNER TO vacanza; 
+
+
+-- FUNCTION: public.getRounTripFlights(integer, integer, timestamp without time zone, timestamp without time zone)
+
+-- DROP FUNCTION public.getRounTripFlights(integer, integer, timestamp without time zone, timestamp without time zone);
+
+CREATE OR REPLACE FUNCTION public.getRounTripFlights(  
+	_departure integer,
+	_arrival integer,
+  _departuredate char varying,
+  _arrivaldate char varying)
+    RETURNS TABLE(id integer, plane integer, price numeric, departuredate timestamp without time zone, arrivaldate timestamp without time zone, locdeparture integer, locarrival integer) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+	RETURN QUERY SELECT
+  fli_id, fli_pla_fk, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, fli_loc_arrival
+	FROM public.Flight WHERE fli_departuredate::date = _departuredate::timestamp without time zone and fli_arrivaldate::date = _arrivaldate::timestamp without time zone 
+  and fli_loc_departure = _departure and fli_loc_arrival = _arrival;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.getRounTripFlights(integer, integer, char varying, char varying)
+    OWNER TO vacanza; 
+
 
 -- FUNCTION: public.getflightsbylocation(integer, integer)
 
 -- DROP FUNCTION public.getflightsbylocation(integer, integer);
 
 CREATE OR REPLACE FUNCTION public.getflightsbylocation(
-	_arrival integer,
-	_departure integer)
+  _departure integer,
+	_arrival integer
+  )
     RETURNS TABLE(id integer, plane integer, price numeric, departuredate timestamp without time zone, arrivaldate timestamp without time zone, locdeparture integer, locarrival integer) 
     LANGUAGE 'plpgsql'
 
@@ -262,7 +323,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION GetRolesForUser(user_id bigint)
+CREATE OR REPLACE FUNCTION GetRolesForUser(user_id INTEGER)
     RETURNS TABLE
             (id integer,
              nombre VARCHAR(50)
@@ -305,6 +366,21 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION GetUserById(user_id INTEGER)
+  RETURNS TABLE
+          (id integer,
+           documentId VARCHAR(50),
+           name VARCHAR(50),
+           lastname VARCHAR(50),
+           email VARCHAR(50))
+AS
+$$
+BEGIN
+  RETURN QUERY SELECT use_id, use_document_id, use_name, use_last_name, use_email
+               FROM Users WHERE use_id = user_id;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION AddUser(doc_id VARCHAR(20),
                                         name VARCHAR(30),
                                         lastname VARCHAR(30),
@@ -321,8 +397,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION AddUser_Role(rol_id INTEGER,
-                                             use_id INTEGER)
+CREATE OR REPLACE FUNCTION AddUser_Role(use_id INTEGER, rol_id INTEGER)
   RETURNS INTEGER AS
 $$
 DECLARE
@@ -342,6 +417,41 @@ DECLARE
 BEGIN
   DELETE FROM Users WHERE use_email = email_id RETURNING use_id INTO id;
   RETURN id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION DeleteUserById(user_id INTEGER)
+RETURNS INTEGER AS 
+    $$ 
+    DECLARE id INTEGER;
+        BEGIN
+        DELETE FROM Users WHERE use_id = user_id RETURNING user_id INTO id;
+        RETURN id;
+        END;
+    $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION DeleteUser_Role(user_id INTEGER)
+  RETURNS TABLE (use_id INTEGER) AS
+$$
+BEGIN
+  RETURN QUERY DELETE FROM User_Role WHERE usr_use_id = user_id RETURNING usr_use_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION ModifyUser(id INTEGER,
+                                      doc_id VARCHAR(20),
+                                      name VARCHAR(30),
+                                      lastname VARCHAR(30),
+                                      email VARCHAR(30))
+  RETURNS integer AS
+$$
+DECLARE
+  user_id integer;
+BEGIN
+  UPDATE Users SET Use_name = name, Use_last_name = lastname, Use_document_id = doc_id, Use_email = email
+  WHERE use_id = id
+        RETURNING use_id INTO user_id;
+  RETURN user_id;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -476,6 +586,53 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION UpdateHotel(_id INTEGER,
+                                       _name VARCHAR(100),
+                                       _amountOfRooms INTEGER,
+                                       _capacityPerRoom INTEGER,
+                                       _active BOOLEAN,
+                                       _addressSpecs VARCHAR(200),
+                                       _roomPrice DECIMAL,
+                                       _website VARCHAR,
+                                       _phone VARCHAR,
+                                       _picture VARCHAR,
+                                       _stars INTEGER,
+                                       _location INTEGER)
+    RETURNS TABLE
+            (
+                id integer,
+                name VARCHAR(100),
+                roomQuantity INTEGER,
+                roomCapacity INTEGER,
+                isActive BOOLEAN,
+                addressSpecs VARCHAR(200),
+                pricePerRoom DECIMAL,
+                website VARCHAR(100),
+                phone VARCHAR(20),
+                picture VARCHAR,
+                stars INTEGER,
+                location INTEGER
+            )
+AS
+$$
+BEGIN
+    UPDATE hotel
+    SET hot_name          = _name,
+        hot_room_qty      = _amountOfRooms,
+        hot_room_capacity = _capacityPerRoom,
+        hot_is_active     = _active,
+        hot_address_specs = _addressSpecs,
+        hot_room_price    = _roomPrice,
+        hot_website       = _website,
+        hot_phone         = _phone,
+        hot_picture       = _picture,
+        hot_stars         = _stars,
+        hot_loc_fk        = _location
+    WHERE hot_id = _id;
+    return query select * from gethotelbyid(_id);
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION GetLocationById(p_id INTEGER)
     RETURNS TABLE
             (
@@ -525,6 +682,51 @@ BEGIN
                  WHERE L.LOC_COUNTRY = L1.LOC_COUNTRY;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION AddLocation(city VARCHAR(30),
+                                        country VARCHAR(30))
+    RETURNS integer AS
+$$
+DECLARE
+    dest_id INTEGER;
+BEGIN
+    INSERT INTO LOCATION (loc_city, loc_country) VALUES (city,country) RETURNING LOC_ID INTO dest_id;
+    RETURN dest_id;
+END;
+$$ LANGUAGE plpgsql;
+
+---DELETE HOTEL---
+CREATE OR REPLACE FUNCTION DeleteHotel(_HOT_ID integer)
+RETURNS integer AS
+$$
+DECLARE
+ RET_ID INTEGER;
+BEGIN
+
+    DELETE FROM HOTEL 
+    WHERE (HOT_ID = _HOT_ID)
+    returning HOT_ID into RET_ID;
+   return RET_ID;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION DeleteLocation(_id integer)
+    RETURNS integer AS
+$$
+DECLARE
+    RET_ID INTEGER;
+BEGIN
+
+    DELETE
+    FROM location
+    WHERE (loc_id = _id) returning loc_id into RET_ID;
+    return RET_ID;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+
 ------------------------------------ grupo 8 --------------------------------------
 
 ---------Agregar Ship-------------------
@@ -566,11 +768,11 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION AddCruise( 
   _cru_shi_fk INTEGER,
-  _cru_departuredate TIMESTAMP,
-  _cru_arrivaldate TIMESTAMP,
+  _cru_departuredate VARCHAR,
+  _cru_arrivaldate VARCHAR,
   _cru_price DECIMAL,
-  _cru_loc_arrival INTEGER,
-  _cru_loc_departure INTEGER
+  _cru_loc_departure INTEGER,
+  _cru_loc_arrival INTEGER
   ) 
 RETURNS integer AS
 $$
@@ -580,7 +782,7 @@ BEGIN
 
    INSERT INTO Cruise(cru_id, cru_shi_fk, cru_departuredate, cru_arrivaldate, cru_price,
                        cru_loc_arrival, cru_loc_departure ) VALUES
-    (default, _cru_shi_fk, _cru_departuredate, _cru_arrivaldate, _cru_price, _cru_loc_arrival, _cru_loc_departure )
+    (default, _cru_shi_fk, TO_TIMESTAMP(_cru_departuredate, 'yyyy-mm-dd hh24:mi'), TO_TIMESTAMP(_cru_arrivaldate, 'yyyy-mm-dd hh24:mi'), _cru_price, _cru_loc_arrival, _cru_loc_departure )
     RETURNING cru_id INTO ret_id;
    RETURN ret_id;
 END;
@@ -647,10 +849,10 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION ModifyCruise( 
     _cru_id integer,
     _shi_id integer,
-    _cru_departuredate TIMESTAMP,
-    _cru_arivaldate TIMESTAMP,
-    _loc_arrival integer,
+    _cru_departuredate VARCHAR,
+    _cru_arivaldate VARCHAR,
     _loc_departure integer,
+    _loc_arrival integer,
     _cru_price DECIMAL
     )
 RETURNS TABLE
@@ -664,8 +866,8 @@ RETURNS TABLE
   )AS
 $$
 BEGIN
-   UPDATE Cruise SET cru_departuredate= _cru_departuredate,
-   cru_shi_fk = _shi_id, cru_arrivaldate = _cru_arivaldate, 
+   UPDATE Cruise SET cru_departuredate= TO_TIMESTAMP(_cru_departuredate, 'yyyy-mm-dd hh24:mi'),
+   cru_shi_fk = _shi_id, cru_arrivaldate = TO_TIMESTAMP(_cru_arrivaldate, 'yyyy-mm-dd hh24:mi'), 
    cru_loc_arrival = _loc_arrival, cru_loc_departure = _loc_departure, 
    cru_price = _cru_price
     WHERE (cru_id = _cru_id);
@@ -800,84 +1002,138 @@ END;
 $$ LANGUAGE plpgsql;
 ------------------------------------fin de grupo 8---------------------------------
 
--- grupo 9 -----------------------------------------
--------------AGREGAR Claim-----------------
 
+------------------------------------ grupo 9 ----------------------------------------
+
+--------------------------------------AGREGAR RECLAMO----------------------------------
 CREATE OR REPLACE FUNCTION AddClaim(
     _cla_title VARCHAR(20), 
-    _cla_description VARCHAR(30)
+    _cla_description VARCHAR(30),
+	  _bag_id int
     ) 
 RETURNS integer AS
 $$
+DECLARE
+    _cla_ID INTEGER;
 BEGIN
 
    INSERT INTO Claim(cla_title, cla_descr, cla_status) VALUES
-    ( _cla_title, _cla_description, 'ABIERTO');
-   RETURN currval('SEQ_Claim');
+   ( _cla_title, _cla_description, 'ABIERTO')RETURNING cla_ID INTO _cla_ID;
+	
+    if (_cla_ID is not null)then 
+	    update BAGGAGE set bag_status = 'EXTRAVIADO' , bag_cla_fk= _cla_id where bag_id = _bag_id;
+	  end if;
+   RETURN _cla_ID;
 END;
 $$ LANGUAGE plpgsql;
 
----------MODIFICAR Reclamo-----------------
+----------------------------------------MODIFICAR RECLAMO -----------------------------
 CREATE OR REPLACE FUNCTION ModifyClaimStatus( 
     _cla_id integer,
     _cla_status VARCHAR(35))
 RETURNS integer AS
 $$
 BEGIN
-
-   UPDATE Claim SET cla_status= _cla_status
-    WHERE (cla_id = _cla_id);
-   RETURN _cla_id;
+	if(_cla_status ='CERRADO') then
+	  UPDATE BAGGAGE set bag_status='ENCONTRADO' where bag_cla_fk= _cla_id;
+	end if;
+	if(_cla_status = 'ABIERTO') then
+	  UPDATE BAGGAGE set bag_status='EXTRAVIADO' where bag_cla_fk= _cla_id;
+	end if;
+  UPDATE Claim SET cla_status= _cla_status
+  WHERE (cla_id = _cla_id);
+  RETURN _cla_id;
 END;
 $$ LANGUAGE plpgsql;
--- modificar el titulo del reclam y la descripcion
+
+----------------------- MODIFICAR TITUO Y DESCRIPCION DEL RECLAMO --------------------
 CREATE OR REPLACE FUNCTION ModifyClaimTitle( 
 	_cla_id integer,
-    _cla_title VARCHAR(35),
-	_cla_descr VARCHAR(30))
+  _cla_title VARCHAR(35),
+	_cla_descr VARCHAR(35))
 RETURNS integer AS
 $$
 BEGIN
 
-   UPDATE Claim SET cla_title= _cla_title, cla_descr= _cla_descr
+  UPDATE Claim SET cla_title= _cla_title, cla_descr= _cla_descr
 	WHERE (cla_id = _cla_id);
-   RETURN _cla_id;
+  RETURN _cla_id;
 END;
 $$ LANGUAGE plpgsql;
--------------------------------------ELIMAR Reclamo-----------------------------
 
+-------------------------------------ELIMAR RECLAMO-----------------------------
 CREATE OR REPLACE FUNCTION DeleteClaim(_cla_id integer)
 RETURNS integer AS
 $$
 BEGIN
-
-    DELETE FROM Claim 
-    WHERE (cla_id = _cla_id);
-    RETURN _cla_id;
+	Update BAGGAGE set bag_cla_fk= null where bag_cla_fk=_cla_id;
+  
+  DELETE FROM Claim 
+  WHERE (cla_id = _cla_id);
+  
+  RETURN _cla_id;
 END;
 $$ LANGUAGE plpgsql;
---------------------------CONSULTAR Claim--------------------
+
+--------------------------CONSULTAR RECLAMO ------------------------------------
 CREATE OR REPLACE FUNCTION GetClaim(_cla_id integer)
 RETURNS TABLE
   (id integer,
    title VARCHAR(30),
    descr VARCHAR(30),
-   status VARCHAR(30)
+   status VARCHAR(30),
+   idEquipaje integer
   )
 AS
 $$
 BEGIN
     RETURN QUERY SELECT
-    cla_id, cla_title,cla_descr, cla_status
-    FROM Claim WHERE cla_id = _cla_id;
+    cla_id, cla_title,cla_descr, cla_status ,bag_id
+    FROM Claim, baggage WHERE cla_id = _cla_id and cla_id= bag_cla_fk ;
 END;
 $$ LANGUAGE plpgsql;
 
---------------------------CONSULTAR Claim--------------------
-CREATE OR REPLACE FUNCTION GetClaimBaggage(_cla_id integer)
+--------------------------CONSULTAR RECLAMO POR DOCUMENTO -------------------------
+CREATE OR REPLACE FUNCTION GetClaimDocument(_users_document_id varchar(30))
 RETURNS TABLE
   (id integer,
    title VARCHAR(30),
+   descr VARCHAR(30),
+   status VARCHAR(30),
+   idEquipaje integer
+  )
+AS
+$$
+BEGIN    
+    RETURN QUERY SELECT 
+    cla_id, cla_title,cla_descr, cla_status , bag_id from claim, Baggage , res_fli, users
+    where bag_res_fli_fk =rf_id and rf_use_fk =use_id  and use_document_id=_users_document_id
+    and bag_cla_fk=cla_id; 
+END;
+$$ LANGUAGE plpgsql;
+
+---------------------- CONSULTAR RECLAMO SEGUN ESTATUS -------------------------
+CREATE OR REPLACE FUNCTION GetClaimStatus(_cla_status varchar(30))
+RETURNS TABLE
+  (id integer,
+   title VARCHAR(30),
+   descr VARCHAR(30),
+   status VARCHAR(30),
+   idEquipaje integer
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT
+    cla_id, cla_title,cla_descr, cla_status, bag_id
+    FROM Claim, baggage WHERE cla_status = _cla_status and cla_id= bag_cla_fk ;
+END;
+$$ LANGUAGE plpgsql;
+
+--------------------------CONSULTAR EQUIPAJE POR SERIAL-------------------------
+CREATE OR REPLACE FUNCTION GetBaggage(_BAG_ID integer)
+RETURNS TABLE
+  (id integer,
    descr VARCHAR(30),
    status VARCHAR(30)
   )
@@ -885,16 +1141,31 @@ AS
 $$
 BEGIN
     RETURN QUERY SELECT
-    cla_id, cla_title,cla_descr, cla_status
-    FROM Claim WHERE cla_id = _cla_id;
+    BAG_ID, bag_descr, bag_status
+    FROM BAGGAGE WHERE BAG_ID = _BAG_ID;
 END;
 $$ LANGUAGE plpgsql;
 
---------------------------CONSULTAR Claim--------------------
-CREATE OR REPLACE FUNCTION GetClaimDocumentPasaport(_cla_id integer)
+--------------------------CONSULTAR EQUIPAJE POR DOCUMENTO -------------------------
+CREATE OR REPLACE FUNCTION GetBaggageDocumentPasaport(_users_document_id varchar(30))
 RETURNS TABLE
   (id integer,
-   title VARCHAR(30),
+   descr VARCHAR(30),
+   status VARCHAR(30)
+  )
+AS
+$$
+BEGIN    
+    RETURN QUERY SELECT 
+    bag_id, bag_descr, bag_status from Baggage , res_fli, users
+    where bag_res_fli_fk =rf_id and rf_use_fk =use_id  and use_document_id=_users_document_id;
+END;
+$$ LANGUAGE plpgsql;
+
+------------------- CONSUTAR EQUIPAJE SEGUN ESTATUS------------------------------------
+CREATE OR REPLACE FUNCTION GetBaggageStatus(_bag_status varchar(30))
+RETURNS TABLE
+  (id integer,
    descr VARCHAR(30),
    status VARCHAR(30)
   )
@@ -902,31 +1173,37 @@ AS
 $$
 BEGIN
     RETURN QUERY SELECT
-    cla_id, cla_title,cla_descr, cla_status
-    FROM Claim WHERE cla_id = _cla_id;
+    BAG_id, BAG_descr, BAG_status
+    FROM Baggage WHERE BAG_status = _bag_status;
 END;
 $$ LANGUAGE plpgsql;
 
---------------------------CONSULTAR Claim--------------------
-CREATE OR REPLACE FUNCTION GetClaimDocumentCedula(_cla_id integer)
-RETURNS TABLE
-  (id integer,
-   title VARCHAR(30),
-   descr VARCHAR(30),
-   status VARCHAR(30)
-  )
-AS
+---------------------------- MODIFICAR ESTATUS DE EQUIPAJE -----------------------
+CREATE OR REPLACE FUNCTION modifyBaggagestatus( 
+    _bag_id integer,
+    _bag_status VARCHAR(30))
+RETURNS integer AS
 $$
+DECLARE
+    _cla_ID INTEGER;
 BEGIN
-    RETURN QUERY SELECT
-    cla_id, cla_title,cla_descr, cla_status
-    FROM Claim WHERE cla_id = _cla_id;
+	if(_bag_status = 'RECLAMADO') then
+   UPDATE Baggage SET bag_status = _bag_status 
+   WHERE (bag_id = _BAG_ID) RETURNING bag_cla_fk INTO _cla_ID;
+
+   if(_cla_ID is not null) then
+         UPDATE Baggage SET bag_cla_fk = null 
+         WHERE (bag_id = _BAG_ID);
+  
+         delete FROM CLAIM where cla_ID= _cla_ID;
+   end if;
+   RETURN _BAG_ID;
+  end if;
+
 END;
 $$ LANGUAGE plpgsql;
 
-
-
-------------------------------------fin de grupo 9---------------------------------
+------------------------------------FIN DEL GRUPO 9--------------------------------
 
 -----------------------------------Grupo 5 ------------------------------------------------
 -------------AGREGAR AUTO-----------------
@@ -1192,7 +1469,32 @@ $$ LANGUAGE plpgsql;
 
 ------------------------------------inicio de grupo 7---------------------------------
 
---------------------------CONSULTAR Restaurant--------------------
+CREATE OR REPLACE FUNCTION GetRestaurant(_res_id integer)
+RETURNS TABLE
+  (id integer,
+   name VARCHAR(100),
+   capacity INTEGER,
+   isActive BOOLEAN,
+   qualify DECIMAL,
+   specialty VARCHAR(30),
+   price DECIMAL,
+   businessName VARCHAR(30),
+   picture VARCHAR,
+   description VARCHAR(30),
+   phone VARCHAR(30),
+   location INTEGER,
+   address VARCHAR(30)
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT
+    R.res_id, R.res_name, R.res_capacity , R.res_isactive, R.res_qualify ,R.res_specialty,R.res_price, R.res_businessname, R.res_picture, R.res_descr, R.res_tlf, R.res_loc_fk, R.res_address_specs
+    FROM Restaurant AS R WHERE R.res_id = _res_id;
+END;
+$$ LANGUAGE plpgsql;
+
+--------------------------CONSULTAR Restaurants--------------------
 
 CREATE OR REPLACE FUNCTION GetRestaurants()
 RETURNS TABLE
@@ -1246,22 +1548,139 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql; 
 
+--------------------------Consultar restaurants por ciudad--------------------
+
+CREATE OR REPLACE FUNCTION GetRestaurantsByCity(sent_location integer)
+RETURNS TABLE
+  (id integer,
+   name VARCHAR(100),
+   capacity INTEGER,
+   isActive BOOLEAN,
+   qualify DECIMAL,
+   specialty VARCHAR(30),
+   price DECIMAL,
+   businessName VARCHAR(30),
+   picture VARCHAR,
+   description VARCHAR(30),
+   phone VARCHAR(30),
+   location INTEGER,
+   address VARCHAR(30)
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT
+    R.res_id, R.res_name, R.res_capacity , R.res_isactive, R.res_qualify ,R.res_specialty,R.res_price, R.res_businessname, R.res_picture, R.res_descr, R.res_tlf, R.res_loc_fk, R.res_address_specs
+    FROM Restaurant AS R
+	WHERE R.res_loc_fk = sent_location;
+END;
+$$ LANGUAGE plpgsql;
+
+--------------------------Borrar Restaurant--------------------
+
+CREATE OR REPLACE FUNCTION DeleteRestaurant(id integer)
+RETURNS INTEGER AS
+$$
+DECLARE
+    FOUND_ID INTEGER;
+BEGIN
+	SELECT Count(res_id) into FOUND_ID 
+	FROM Restaurant 
+	WHERE (res_id = id);
+	IF (FOUND_ID = 0) THEN
+		RETURN null;
+	END IF;
+	
+    DELETE FROM Restaurant 
+    WHERE (res_id = id);
+	RETURN id;
+
+END;
+$$ LANGUAGE plpgsql;
+
+--------------------------Actualizar Restaurant--------------------
+
+CREATE OR REPLACE FUNCTION ModifyRestaurant( 
+   id integer,
+   name VARCHAR(100),
+   capacity INTEGER,
+   isActive BOOLEAN,
+   qualify DECIMAL,
+   specialty VARCHAR(30),
+   price DECIMAL,
+   businessName VARCHAR(30),
+   picture VARCHAR,
+   description VARCHAR(30),
+   phone VARCHAR(30),
+   location INTEGER,
+   address VARCHAR(30))
+RETURNS integer AS
+$$
+BEGIN
+
+   UPDATE Restaurant SET res_name = name, 
+   res_capacity = capacity, res_isactive = isActive, res_qualify = qualify ,
+   res_specialty = specialty, res_price = price, res_businessname = businessName, 
+   res_picture = picture, res_descr = description, res_tlf = phone, res_loc_fk = location, 
+   res_address_specs = address
+    WHERE (res_id = id);
+   RETURN id;
+END;
+$$ LANGUAGE plpgsql;
+
 ------------------------------------fin de grupo 7---------------------------------
 
 ------------------------------------ grupo 10 ---------------------------------
 
-CREATE OR REPLACE FUNCTION GetTravels(userId INTEGER) 
+-- DROP FUNCTION GetTravels(BIGINT);
+CREATE OR REPLACE FUNCTION GetTravels(userId BIGINT) 
 RETURNS TABLE (
 	travel_id INTEGER,
 	travel_name VARCHAR,
-	travel_description VARCHAR
+	travel_init DATE,
+	travel_end DATE,
+	travel_description VARCHAR,
+  travel_userId INTEGER
 ) AS $$
 BEGIN
 	RETURN QUERY 
-
-	SELECT tra_id, tra_name, tra_descr FROM travel WHERE tra_use_fk = userId ;
+	SELECT tra_id, tra_name, tra_ini, tra_end, tra_descr, tra_use_fk FROM travel WHERE tra_use_fk = userId;
 END; $$ 
 LANGUAGE plpgsql;
+
+-- DROP FUNCTION GetLocationsByTravel(BIGINT);
+CREATE OR REPLACE FUNCTION GetLocationsByTravel(travelId BIGINT)
+RETURNS TABLE (
+	locationId INTEGER, 
+	locationCity VARCHAR
+) AS $$
+BEGIN
+RETURN QUERY
+	SELECT TL.tl_loc_fk, L.loc_city
+	FROM TRA_LOC TL
+	INNER JOIN public.LOCATION L ON TL.tl_loc_fk = L.loc_id
+	WHERE TL.tl_tra_fk = travelId; 
+END; $$
+LANGUAGE plpgsql;  
+
+CREATE OR REPLACE FUNCTION AddTravel(
+	travelName VARCHAR,  
+	travelInit VARCHAR,
+	travelEnd VARCHAR,
+  travelDescription VARCHAR,
+	userId BIGINT)
+RETURNS BIGINT AS
+$$
+DECLARE
+	travelId BIGINT;
+BEGIN
+	INSERT INTO Travel(tra_name, tra_ini, tra_end, tra_descr, tra_use_fk)
+	VALUES(travelName, to_date(travelInit,'YYYY-MM-DD'), to_date(travelEnd,'YYYY-MM-DD'), travelDescription, userId) RETURNING tra_id INTO travelId;
+	RETURN travelId;
+END;
+$$
+LANGUAGE 'plpgsql';
+
 
 ------------------------------------fin de grupo 10---------------------------------
 
@@ -1317,3 +1736,20 @@ CREATE OR REPLACE FUNCTION modifyReservationPayment(pay INTEGER,reservation INTE
   $$ LANGUAGE plpgsql;
 
 -----------------------------------fin grupo 14-----------------------------------------------------------
+
+------Grupo1-----------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION LoginRepository(Email varchar(20),Password VARCHAR(50)) RETURNS table (use_id integer,use_name varchar(50),use_last_name varchar(30),usr_rol_id integer)AS $BODY$
+        BEGIN
+		RETURN QUERY
+                select USERS.use_id,USERS.use_name,USERS.use_last_name,User_Role.usr_rol_id from USERS,User_Role WHERE USERS.use_email=$1 and (USERS.use_password=MD5($2) or USERS.use_password=$2) and USERS.use_id=User_Role.usr_use_id;
+        END;
+$BODY$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION RecoveryPass(Email varchar(20)) RETURNS table (use_name varchar(50),use_lastname varchar(30),use_password varchar(50))AS $BODY$
+        BEGIN
+		UPDATE Users set use_password=(SELECT md5(random()::text)) where USERS.use_email=$1;
+		RETURN QUERY
+          select USERS.use_name,USERS.use_last_name,USERS.use_password from USERS WHERE USERS.use_email=$1 ;
+        END
+$BODY$ LANGUAGE plpgsql;
+---------------------------------finGrupo1---------------------------------------------------------------------------
