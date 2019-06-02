@@ -14,5 +14,11 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
         public string Picture { get; set; }
         public int Stars { get; set; }
         public Location Location { get; set; }
+        public int AvailableRooms { get; set; } = -1;
+
+        public bool ShouldSerializeAvailableRooms()
+        {
+            return AvailableRooms > -1;
+        }
     }
 }
