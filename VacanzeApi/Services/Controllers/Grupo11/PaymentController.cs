@@ -32,6 +32,7 @@ namespace vacanze_back.Controllers
 
                 if (lPayments!=null && lPayments.Count > 0)
                 {
+                    //Si la lista viene llena
                     return Ok(lPayments);
                 }
                 else
@@ -53,6 +54,10 @@ namespace vacanze_back.Controllers
 
         }
 
+
+       
+        [HttpGet]
+        [Route("id/{id}/type/{type}")]
 
         /// <summary>
         /// Get que consulta metodos de pagos precargados estaticamente
