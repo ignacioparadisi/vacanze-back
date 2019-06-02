@@ -1767,3 +1767,197 @@ CREATE OR REPLACE FUNCTION RecoveryPass(Email varchar(20)) RETURNS table (use_na
         END
 $BODY$ LANGUAGE plpgsql;
 ---------------------------------finGrupo1---------------------------------------------------------------------------
+
+
+----------------------------------- grupo 11-----------------------------------------------------------
+
+
+--SP QUE AÑADE PAGO REGISTRADO
+CREATE OR REPLACE FUNCTION addPayment(_paymetMethod varchar(50), _pay_total Double Precision)
+
+RETURNS integer
+
+AS $$
+DECLARE id integer;
+BEGIN
+INSERT INTO public.payment(
+            pay_method,
+            pay_total, 
+            pay_timestamp)
+ VALUES    (_paymetMethod, 
+            _pay_total, 
+            CURRENT_TIMESTAMP )
+            RETURNING pay_id INTO id;
+            RETURN id;
+END       
+$$  LANGUAGE plpgsql;
+
+
+--SP QUE TRAE LISTA DE ORDENES
+-- Function: public.getinfoorder(bigint, integer)
+
+-- DROP FUNCTION public.getinfoorder(bigint, integer);
+
+CREATE OR REPLACE FUNCTION getinfoorder(
+    IN _id bigint,
+    IN _tipo integer)
+  RETURNS TABLE(id integer,
+   descrip character varying,
+    image character varying,
+	brand character varying,
+	qty double precision,
+	price double precision,
+	price_total double precision) AS
+$BODY$
+BEGIN
+	IF _tipo = 0 
+	THEN
+
+	 RETURN QUERY
+		SELECT 
+		RA_ID AS ID,
+		AUT_PICTURE AS IMAGE,
+		AUT_MAKE AS DESCRIP,
+		AUT_MODEL AS BRAND,
+		DATE_PART('day',RA_RETURNDATE - RA_PICKUPDATE) AS QTY,
+		cast(AUT_PRICE as double precision) AS PRICE,
+		AUT_PRICE * DATE_PART('day',RA_RETURNDATE - RA_PICKUPDATE) AS PRICE_TOTAL
+		FROM RES_AUT 
+		INNER JOIN AUTOMOBILE ON RA_AUT_FK = AUT_ID
+		WHERE RA_ID = _id;
+		
+	ELSIF _tipo = 1 
+	THEN
+	
+	 RETURN QUERY
+		SELECT 
+		RC_ID AS ID,
+		SHI_PICTURE AS IMAGE,
+		SHI_NAME AS DESCRIP,
+		SHI_MODEL AS BRAND,
+		DATE_PART('day',CRU_ARRIVALDATE - CRU_DEPARTUREDATE) AS QTY,
+		cast(CRU_PRICE as double precision) AS PRICE,
+		CRU_PRICE * DATE_PART('day',CRU_ARRIVALDATE - CRU_DEPARTUREDATE) AS PRICE_TOTAL
+		FROM RES_CRU 
+		INNER JOIN CRUISE ON CRU_ID = RC_CRU_FK
+		INNER JOIN SHIP ON CRU_SHI_FK = CRU_ID
+		WHERE RC_ID = _id;
+
+		ELSIF _tipo = 2
+	THEN
+	
+	 RETURN QUERY
+		SELECT 
+		RA_ID AS ID,
+		AUT_PICTURE AS IMAGE,
+		AUT_MAKE AS DESCRIP,
+		AUT_MODEL AS BRAND,
+		DATE_PART('day',RA_RETURNDATE - RA_PICKUPDATE) AS QTY,
+		cast(AUT_PRICE as double precision) AS PRICE,
+		AUT_PRICE * DATE_PART('day',RA_RETURNDATE - RA_PICKUPDATE) AS PRICE_TOTAL
+		FROM RES_AUT 
+		INNER JOIN AUTOMOBILE ON RA_AUT_FK = AUT_ID
+		WHERE RA_ID = _id;
+
+		ELSIF _tipo = 3
+	THEN
+	
+	 RETURN QUERY
+		SELECT 
+		RR_ID 		 AS ID,
+		RES_PICTURE 	 AS IMAGE,
+		RES_NAME    	 AS DESCRIP,
+		RES_BUSINESSNAME AS BRAND,
+		cast('1' as double precision)  		 AS QTY,
+		cast(RES_PRICE as double precision) AS PRICE,
+		cast(RES_PRICE as double precision) AS PRICE_TOTAL
+		FROM RES_REST 
+		INNER JOIN RESTAURANT ON RR_RES_FK = RES_ID
+		WHERE RR_ID = _id;
+
+	END IF;
+END
+$BODY$
+  LANGUAGE plpgsql 
+  -- select * from getinfoorder(3,3)
+
+  --SP QUE TRAE LISTA DE ORDENES VERSION 2 MEJORADA
+
+-- DROP FUNCTION public.getinfoorderAll(bigint, bigint,bigint,bigint);
+
+CREATE OR REPLACE FUNCTION getinfoorderAll(
+    IN _idAuto bigint,
+    IN _idRoo bigint,
+    IN _idRes bigint,
+    IN _idCru bigint)
+  RETURNS TABLE(id integer,
+   descrip character varying,
+    image character varying,
+	brand character varying,
+	qty double precision,
+	price double precision,
+	price_total double precision) AS
+$BODY$
+BEGIN
+
+	 RETURN QUERY
+		SELECT 
+		RA_ID AS ID,
+		CAST('Automobil: ' || AUT_MAKE AS character varying ) AS DESCRIP,
+		AUT_PICTURE AS IMAGE,
+		AUT_MODEL AS BRAND,
+		DATE_PART('day',RA_RETURNDATE - RA_PICKUPDATE) AS QTY,
+		cast(AUT_PRICE as double precision) AS PRICE,
+		AUT_PRICE * DATE_PART('day',RA_RETURNDATE - RA_PICKUPDATE) AS PRICE_TOTAL
+		FROM RES_AUT 
+		INNER JOIN AUTOMOBILE ON RA_AUT_FK = AUT_ID
+		WHERE RA_ID = _idAuto
+		
+		UNION ALL	
+		SELECT 
+		RR_ID AS ID,
+		CAST('Habitacion: ' || hot_name AS character varying ) AS DESCRIP,
+		hot_picture AS IMAGE,
+		hot_website AS BRAND,
+		DATE_PART('day',RR_CHECKOUTDATE - RR_CHECKINDATE) AS QTY,
+		cast(hot_room_price as double precision) AS PRICE,
+		hot_room_price * DATE_PART('day',RR_CHECKOUTDATE - RR_CHECKINDATE) AS PRICE_TOTAL
+		FROM RES_ROO
+		INNER JOIN hotel ON rr_hot_fk = hot_id
+		WHERE RR_ID = _idRoo
+		
+		UNION ALL
+		SELECT 
+		RR_ID 		 AS ID,
+		CAST('Resaturante: ' || RES_NAME AS character varying ) AS DESCRIP,
+		RES_PICTURE 	 AS IMAGE,
+		RES_BUSINESSNAME AS BRAND,
+		cast('1' as double precision)  		 AS QTY,
+		cast(RES_PRICE as double precision) AS PRICE,
+		cast(RES_PRICE as double precision) AS PRICE_TOTAL
+		FROM RES_REST 
+		INNER JOIN RESTAURANT ON RR_RES_FK = RES_ID
+		WHERE RR_ID = _idRes
+
+		UNION ALL
+		SELECT 
+		RC_ID AS ID,
+		CAST('Crucero ' || SHI_NAME AS character varying ) AS DESCRIP,
+		SHI_PICTURE AS IMAGE,
+		SHI_MODEL AS BRAND,
+		DATE_PART('day',CRU_ARRIVALDATE - CRU_DEPARTUREDATE) AS QTY,
+		cast(CRU_PRICE as double precision) AS PRICE,
+		CRU_PRICE * DATE_PART('day',CRU_ARRIVALDATE - CRU_DEPARTUREDATE) AS PRICE_TOTAL
+		FROM RES_CRU 
+		INNER JOIN CRUISE ON CRU_ID = RC_CRU_FK
+		INNER JOIN SHIP ON CRU_SHI_FK = CRU_ID
+		WHERE RC_ID = _idCru;
+
+END
+$BODY$
+  LANGUAGE plpgsql 
+  -- select * from getinfoorderAll(3,3,3,3)
+
+
+
+-----------------------------------fin grupo 11-----------------------------------------------------------
