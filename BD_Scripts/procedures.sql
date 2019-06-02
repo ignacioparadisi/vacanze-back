@@ -8,8 +8,8 @@ CREATE OR REPLACE FUNCTION public.addflight(
 	_price double precision,
 	_departure character varying,
 	_arrival character varying,
-	_loc_arrival integer,
-	_loc_departure integer)
+  _loc_departure integer,
+	_loc_arrival integer)
     RETURNS integer
     LANGUAGE 'plpgsql'
 
@@ -17,13 +17,15 @@ CREATE OR REPLACE FUNCTION public.addflight(
     VOLATILE 
     
 AS $BODY$
-
+DECLARE
+  _fli_id INTEGER;
 BEGIN
 
-   INSERT INTO Flight(fli_price ,fli_departureDate, fli_arrivalDate, fli_pla_fk, fli_loc_arrival,
-					 fli_loc_departure) VALUES
-    (_price, TO_TIMESTAMP(_departure,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone, TO_TIMESTAMP(_arrival,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone, _plane, _loc_arrival, _loc_departure);
-   RETURN 1;
+   INSERT INTO Flight(fli_price ,fli_departureDate, fli_arrivalDate, fli_pla_fk,fli_loc_departure, fli_loc_arrival)
+    VALUES
+    (_price, TO_TIMESTAMP(_departure,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone, TO_TIMESTAMP(_arrival,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone, _plane, _loc_departure, _loc_arrival)
+	RETURNING fli_id into _fli_id;
+   RETURN _fli_id;
 END;
 
 $BODY$;
@@ -37,13 +39,13 @@ ALTER FUNCTION public.addflight(integer, double precision, character varying, ch
 
 -- DROP FUNCTION public.updateflight(integer, integer, double precision, date, date, integer, integer);
 CREATE OR REPLACE FUNCTION public.updateflight( 
-    _id integer,
-   _plane integer,
+  _id integer,
+  _plane integer,
 	_price double precision,
 	_departure character varying,
 	_arrival character varying,
-	_loc_arrival integer,
-	_loc_departure integer)
+	_loc_departure integer,
+  _loc_arrival integer)
     RETURNS integer
     LANGUAGE 'plpgsql'
 
@@ -149,7 +151,7 @@ ALTER FUNCTION public.findplane(integer)
 
 CREATE OR REPLACE FUNCTION public.findflight(
 	_id integer)
-    RETURNS TABLE(id integer, price numeric, departuredate timestamp, arrivaldate timestamp, loc_arrival integer, loc_departure integer, pla_fk integer) 
+    RETURNS TABLE(id integer, price numeric, departuredate timestamp, arrivaldate timestamp, loc_departure integer, loc_arrival integer, pla_fk integer) 
     LANGUAGE 'plpgsql'
 
     COST 100
@@ -159,9 +161,9 @@ AS $BODY$
 
 BEGIN
 	RETURN QUERY SELECT
-	fli_id, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_arrival, fli_loc_departure, fli_pla_fk
+	fli_id, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, fli_loc_arrival, fli_pla_fk
 	FROM public.Flight WHERE _id = fli_id;
-END;
+END; 
 
 $BODY$;
 
@@ -247,14 +249,73 @@ $BODY$;
 ALTER FUNCTION public.getflightsbydate(char varying, char varying)
     OWNER TO vacanza;
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: public.getOutBoundFlights(integer, integer, timestamp without time zone)
+
+-- DROP FUNCTION public.getOutBoundFlights(integer, integer, timestamp without time zone);
+
+CREATE OR REPLACE FUNCTION public.getOutBoundFlights(  
+	_departure integer,
+	_arrival integer,
+  _departuredate char varying)
+    RETURNS TABLE(id integer, plane integer, price numeric, departuredate timestamp without time zone, arrivaldate timestamp without time zone, locdeparture integer, locarrival integer) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+	RETURN QUERY SELECT
+  fli_id, fli_pla_fk, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, fli_loc_arrival
+	FROM public.Flight WHERE fli_departuredate::date = _departuredate::timestamp without time zone  and fli_loc_departure = _departure and fli_loc_arrival = _arrival;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.getOutBoundFlights(integer, integer, char varying)
+    OWNER TO vacanza; 
+
+
+-- FUNCTION: public.getRounTripFlights(integer, integer, timestamp without time zone, timestamp without time zone)
+
+-- DROP FUNCTION public.getRounTripFlights(integer, integer, timestamp without time zone, timestamp without time zone);
+
+CREATE OR REPLACE FUNCTION public.getRounTripFlights(  
+	_departure integer,
+	_arrival integer,
+  _departuredate char varying,
+  _arrivaldate char varying)
+    RETURNS TABLE(id integer, plane integer, price numeric, departuredate timestamp without time zone, arrivaldate timestamp without time zone, locdeparture integer, locarrival integer) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+	RETURN QUERY SELECT
+  fli_id, fli_pla_fk, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, fli_loc_arrival
+	FROM public.Flight WHERE fli_departuredate::date = _departuredate::timestamp without time zone and fli_arrivaldate::date = _arrivaldate::timestamp without time zone 
+  and fli_loc_departure = _departure and fli_loc_arrival = _arrival;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.getRounTripFlights(integer, integer, char varying, char varying)
+    OWNER TO vacanza; 
+
 
 -- FUNCTION: public.getflightsbylocation(integer, integer)
 
 -- DROP FUNCTION public.getflightsbylocation(integer, integer);
 
 CREATE OR REPLACE FUNCTION public.getflightsbylocation(
-	_arrival integer,
-	_departure integer)
+  _departure integer,
+	_arrival integer
+  )
     RETURNS TABLE(id integer, plane integer, price numeric, departuredate timestamp without time zone, arrivaldate timestamp without time zone, locdeparture integer, locarrival integer) 
     LANGUAGE 'plpgsql'
 
