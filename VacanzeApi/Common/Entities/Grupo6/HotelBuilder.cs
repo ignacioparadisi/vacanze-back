@@ -56,9 +56,9 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
             return this;
         }
 
-        public HotelBuilder WithBase64Picture(string base64Image)
+        public HotelBuilder WithPictureUrl(string imageUrl)
         {
-            _hotel.Picture = base64Image;
+            _hotel.Picture = imageUrl;
             return this;
         }
 
@@ -88,7 +88,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
 
         public Hotel Build()
         {
-            _hotel.Validate();
+            HotelValidator.Validate(_hotel);
             return _hotel;
         }
     }

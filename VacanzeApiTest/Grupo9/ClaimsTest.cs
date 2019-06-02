@@ -114,11 +114,10 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 			//se pone un id que exista en la bd por lo menos el 7 
 			ActionResult<IEnumerable<Claim>> enumerable = controller.Get(0);
 			Claim claimList = enumerable.Value.ToList().Find(x =>(x._title.Equals("Despues del put") && x._description.Equals("descripcion despues")) );
-
+			int rows = controller.Get();
 			controller.Delete(Convert.ToInt32(claimList.Id));
-			claim = controller.Get(Convert.ToInt32(claimList.Id));
-			response = claim.Value.Count();
-			Assert.AreEqual(0, response);
+			int rowsresponse = controller.Get();
+			Assert.AreEqual(rows-1, rowsresponse);
 		}
 
 		[Test, Order(9)]
