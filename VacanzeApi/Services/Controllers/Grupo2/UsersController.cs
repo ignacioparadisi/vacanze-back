@@ -98,7 +98,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             {
                 return BadRequest(e.Message);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return BadRequest("Error actualizando al usuario");
             }
