@@ -42,9 +42,4 @@
     <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="VacanzeApi\Common\Exceptions\Grupo13\" />
-
-  </ItemGroup>
-
 </Project>

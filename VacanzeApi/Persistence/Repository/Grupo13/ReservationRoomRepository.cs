@@ -17,7 +17,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
     {
         const String SP_SELECT = "m13_getResRooms()";
         const String SP_FIND = "m13_findbyroomreservationid(@_id)";
-        const String SP_AVAILABLE = "m13_getAvailableRooms(@_checkin, @_checkout)"; //Este no lo tenemos
+        const String SP_AVAILABLE = "getAvailableRoomsBasedOnReservationByHotelId(@_id)";
         const String SP_ADD_RESERVATION = "m13_addRoomReservation(@_checkin, @_checkout,@_use_fk,@_hot_fk)";
         const String SP_UPDATE = "m13_updatehotelreservation(@_checkin,@_checkout,@_use_fk,@_hot_fk,@_id)";
         const String SP_DELETE_RESERVATION = "m13_deleteRoomReservation(@_rooid)";
@@ -118,25 +118,13 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
         /** Method GetAvailableRoomReservations()
          * Returns all room reservations from the system which are available within the range of dates that were passed.
          */
-        /*
-       public List<Entity> GetAvailableRoomReservations(DateTime checkIn, DateTime checkOut)
+/*
+       public int GetAvailableRoomReservations(int id)
        {
-           List<Entity> roomReservationList = new List<Entity>();
            try
            {
-               Connect();
-               StoredProcedure(SP_AVAILABLE);
-               AddParameter("_checkin", checkIn);
-               AddParameter("_checkout", checkOut);
-               ExecuteReader();
-               for (int i = 0; i < numberRecords; i++)
-               {
-                   ReservationRoom roomRes = new ReservationRoom(GetInt(i, 0), GetBool(i, 1), GetDateTime(i, 2), GetDateTime(i, 3));
-                   roomRes.Room = (Room)_roomConnection.FindRoom(GetInt(i, 4));
-
-                   roomReservationList.Add(roomRes);
-               }
-               return roomReservationList;
+               int available = PgConnection.Instance.ExecuteFunction(SP_AVAILABLE, id);
+               return available;
            }
            catch (NpgsqlException e)
            {
@@ -148,9 +136,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
            }
            finally
            {
-               Disconnect();
+                return null;
            }
-           return roomReservationList;
        }
        */
 

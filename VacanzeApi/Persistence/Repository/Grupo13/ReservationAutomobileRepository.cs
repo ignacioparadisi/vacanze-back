@@ -10,6 +10,7 @@ using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo5;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo13;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
 {
@@ -92,7 +93,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             return reservationAutomobileList;
         }
 
-        /** <summary>Busca en la BD, la reserva que posee el identificador suministrado</summary>
+        /** <summary>
+         * Busca en la BD, la reserva que posee el identificador suministrado
+         * </summary>
          * <param name="id">El identificador de la entidad reserva de automovil a buscar</param>
          */
         public Entity Find(int id)
@@ -116,6 +119,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                     //Falta Payment
                 }
                 return _reservation;
+            }
+            catch (AutomobileReservationNotFoundException e)
+            {
+                throw new AutomobileReservationNotFoundException(id);
             }
             catch (NpgsqlException e)
             {
