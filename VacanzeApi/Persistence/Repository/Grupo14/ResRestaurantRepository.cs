@@ -55,7 +55,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo14{
         }
     
          
-        public List<Restaurant_res> getResRestaurant(int user){
+        public static List<Restaurant_res> getResRestaurant(int user){
 
             var ReservationList = new List<Restaurant_res>();
             var table = PgConnection.Instance.ExecuteFunction("getResRestaurant(@userId)",user);

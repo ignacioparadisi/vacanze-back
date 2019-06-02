@@ -47,15 +47,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 
 		}
 
-		[HttpGet("{userid}")]
-		public ActionResult<IEnumerable<Restaurant_res>> Get(int userid){
+		//GET /ResRestaurant/{id}
+		[HttpGet("{id}")]
+		public ActionResult<IEnumerable<Restaurant_res>> Get(int id){
 			try{
-				Console.WriteLine(userid);
-				ResRestaurantRepository conec= new ResRestaurantRepository();
-				List<Restaurant_res> resRestaurantList = conec.getResRestaurant(userid);
-                Console.WriteLine("Fuera del SP");
-                Console.WriteLine(resRestaurantList.ToArray());
-				return resRestaurantList; 
+				Console.WriteLine(id);
+				return ResRestaurantRepository.getResRestaurant(id);
 			}
             catch (DatabaseException ){            
 				return StatusCode(500);
@@ -83,7 +80,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 
 		}
 
-		//api/Clain/status/5
+		
 		[HttpPut("{resRestId}")]
 		public ActionResult<string> Put(int resRestId, reservationRestaurant resAux)
 		{
