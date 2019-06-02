@@ -2,8 +2,12 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Localization;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo14;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo14;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo14;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
@@ -16,14 +20,16 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 	{
       
 		[HttpPost]
-		public ActionResult<string> Post([FromBody] reservationRestaurant resAux)
+		public ActionResult<int> Post([FromBody] reservationRestaurant resAux)
 		{            
 			try{		 
-				ResRestaurantRepository conec= new ResRestaurantRepository();
+				
 				Restaurant_res reserva= new Restaurant_res(resAux.fecha_res, resAux.cant_people, resAux.date, resAux.user_id, resAux.rest_id);
 				Console.WriteLine("Antes de llamar al repository");
-                conec.addReservation(reserva);
-				return Ok("Agregado correctamente");
+                var id = ResRestaurantRepository.addReservation(reserva);
+				Console.WriteLine("Write en el controlador");
+				Console.WriteLine(id);
+				return Ok(id);
 			}catch (DatabaseException)
 			{            
                 Console.WriteLine("Estoy en el databaseException");
@@ -33,6 +39,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 			{
                 Console.WriteLine("Estoy en el InvalidStoredProcedureSignatureException");
 				return StatusCode(500);
+			}
+			catch(AvailabilityException e){
+				ErrorMessage errorMessage = new ErrorMessage(e.Message);
+                return BadRequest(errorMessage);
 			}
 
 		}
