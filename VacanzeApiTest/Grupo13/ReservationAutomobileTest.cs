@@ -59,7 +59,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             Assert.AreNotEqual(j, i);
         }
         
-        /*
+
         [Test]
         public void DeleteReservationAutomobileTest()
         {
@@ -68,6 +68,6 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             List<Entity> reservationslater = _connection.GetAutomobileReservations();
             Assert.Greater(reservations.Count(),reservationslater.Count());
         }
-        */
+
     }
 }

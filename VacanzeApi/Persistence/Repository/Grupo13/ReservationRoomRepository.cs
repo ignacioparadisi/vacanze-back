@@ -17,7 +17,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
     {
         const String SP_SELECT = "m13_getResRooms()";
         const String SP_FIND = "m13_findbyroomreservationid(@_id)";
-        const String SP_AVAILABLE = "m13_getAvailableRooms(@_checkin, @_checkout)";
+        const String SP_AVAILABLE = "m13_getAvailableRooms(@_checkin, @_checkout)"; //Este no lo tenemos
         const String SP_ADD_RESERVATION = "m13_addRoomReservation(@_checkin, @_checkout,@_use_fk,@_hot_fk)";
         const String SP_UPDATE = "m13_updatehotelreservation(@_checkin,@_checkout,@_use_fk,@_hot_fk,@_id)";
         const String SP_DELETE_RESERVATION = "m13_deleteRoomReservation(@_rooid)";
