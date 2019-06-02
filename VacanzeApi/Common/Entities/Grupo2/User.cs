@@ -22,11 +22,11 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         public User(int id, long documentId, string name, string lastname, string email,
             string password, List<Role> roles)
         {
-            Id = Id;
+            Id = id;
             DocumentId = documentId;
-            Name = name;
-            Lastname = lastname;
-            Email = email;
+            Name = name.Trim();
+            Lastname = lastname.Trim();
+            Email = email.Trim();
             Password = password;
             Roles = roles;
         }
@@ -35,8 +35,8 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         {
             Id = id;
             DocumentId = documentId;
-            Name = name;
-            Lastname = lastname;
+            Name = name.Trim();
+            Lastname = lastname.Trim();
             Email = email;
         }
 
@@ -52,36 +52,36 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         public User(long documentId, string name, string lastname, string email, string password)
         {
             DocumentId = documentId;
-            Name = name;
-            Lastname = lastname;
-            Email = email;
+            Name = name.Trim();
+            Lastname = lastname.Trim();
+            Email = email.Trim();
             Password = password;
         }
 
         /// <summary>
-        /// Verifica todos los atributos del usuario para verificar que sean válidos
+        /// Verifica que todos los atributos del usuario sean válidos
         /// </summary>
+        /// <returns>Retorna true si todos los atributos son válidos</returns>
         /// <returns>Mensaje de error que se envia al frontend en caso de que haya algun error</returns>
-        public void Validate(bool update = false)
+        public bool Validate()
         {
-            var isClient = false;
 
             if (DocumentId <= 0)
             {
                 throw new NotValidDocumentIdException("La cédula de identidad no es válida");
             }
 
-            if (string.IsNullOrEmpty(Name))
+            if (string.IsNullOrEmpty(Name) || string.IsNullOrWhiteSpace(Name))
             {
                 throw new NameRequiredException("El nombre es requerido");
             }
 
-            if (string.IsNullOrEmpty(Lastname))
+            if (string.IsNullOrEmpty(Lastname) || string.IsNullOrWhiteSpace(Lastname))
             {
                 throw new LastnameRequiredException("El apellido es requerido");
             }
 
-            if (string.IsNullOrEmpty(Email))
+            if (string.IsNullOrEmpty(Email) || string.IsNullOrWhiteSpace(Email))
             {
                 throw new EmailRequiredException("El correo electrónico es requerido");
             }
@@ -100,39 +100,46 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
             foreach (var role in Roles)
             {
                 role.Validate();
-                if (role.Id == Role.CLIENT)
-                {
-                    isClient = true;
-                }
-                else if (role.Id == Role.ADMIN && Roles.Count > 1)
+                if (role.Id == Role.ADMIN && Roles.Count > 1)
                 {
                     throw new AdminAndMoreRolesException("El administrador no puede tener otros roles");
                 }
             }
 
-            if (!update)
-            {
-                EncryptPassword(isClient);
-            }
+            return true;
         }
 
-        private void EncryptPassword(bool isClient)
+        /// <summary>
+        /// Encripta la contraseña del usuario. Si es cliente verifica que no sea nula, si es empleado,
+        /// genera una contraseña concatenando la primera letra del nombre, la primera letra del apellido
+        /// y el número de cédula
+        /// </summary>
+        /// <param name="isClient">Define si el usuario es un cliente o un empleado</param>
+        /// <exception cref="PasswordRequiredException">Excepción retornada si el usuario es cliente
+        /// y envía una contraseña nula o vacía</exception>
+        public void EncryptOrCreatePassword()
         {
-            if (!string.IsNullOrEmpty(Password))
+            var isClient = false;
+            foreach (var role in Roles)
+            {
+                if (role.Id == Role.CLIENT)
+                {
+                    isClient = true;
+                }
+            }
+            
+            if (!isClient)
+            {
+                Password = Name.Trim().ToLower()[0] + Lastname.Trim().ToLower()[0] + DocumentId.ToString();
+                Password = Encryptor.Encrypt(Password);
+            }
+            else if (!string.IsNullOrEmpty(Password) && !string.IsNullOrWhiteSpace(Password))
             {
                 Password = Encryptor.Encrypt(Password);
             }
             else
             {
-                if (!isClient)
-                {
-                    Password = Name.ToLower()[0] + Lastname.ToLower()[0] + DocumentId.ToString();
-                    Password = Encryptor.Encrypt(Password);
-                }
-                else
-                {
-                    throw new PasswordRequiredException("La contraseña es requerida");
-                }
+                throw new PasswordRequiredException("La contraseña es requerida");
             }
         }
     }

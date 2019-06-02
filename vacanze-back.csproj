@@ -20,6 +20,10 @@
     <None Remove="Controllers\**" />
     <None Remove="Entities\**" />
     <None Remove="LogicLayer\**" />
+    <Compile Remove="Persistence\**" />
+    <EmbeddedResource Remove="Persistence\**" />
+    <None Remove="Persistence\**" />
+    <Content Remove="Persistence\**" />
   </ItemGroup>
 
   <ItemGroup>

@@ -351,7 +351,7 @@ $$
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION GetUserByEmail(email_id VARCHAR(30))
+CREATE OR REPLACE FUNCTION GetUserByEmail(email_id VARCHAR(30), user_id INTEGER)
   RETURNS TABLE
           (id integer,
            documentId VARCHAR(50),
@@ -362,7 +362,7 @@ AS
 $$
 BEGIN
   RETURN QUERY SELECT use_id, use_document_id, use_name, use_last_name, use_email
-               FROM Users WHERE use_email = email_id;
+               FROM Users WHERE use_email = email_id AND use_id <> user_id;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -491,7 +491,7 @@ RETURNS TABLE
    pricePerRoom DECIMAL,
    website VARCHAR(100),
    phone VARCHAR(20),
-   picture VARCHAR,
+   picture text,
    stars INTEGER,
    location INTEGER
   )
@@ -507,7 +507,7 @@ BEGIN
                         H.hot_room_price,
                         H.hot_website,
                         H.hot_phone,
-                        H.HOT_PICTURE,
+                        '/hotels/' || H.HOT_ID || '/image' picture,
                         H.HOT_STARS,
                         H.hot_loc_fk
                  FROM Hotel AS H;
@@ -526,7 +526,7 @@ CREATE OR REPLACE FUNCTION GetHotelById(p_id INTEGER)
                 pricePerRoom DECIMAL,
                 website VARCHAR(100),
                 phone VARCHAR(20),
-                picture VARCHAR,
+                picture text,
                 stars INTEGER,
                 location INTEGER
             )
@@ -542,7 +542,7 @@ BEGIN
                         H.hot_room_price,
                         H.hot_website,
                         H.hot_phone,
-                        H.HOT_PICTURE,
+                        '/hotels/' || H.HOT_ID || '/image' picture,
                         H.HOT_STARS,
                         H.hot_loc_fk
                  FROM Hotel AS H
@@ -562,7 +562,7 @@ CREATE OR REPLACE FUNCTION GetHotelsByCity(city_id integer)
                 pricePerRoom DECIMAL,
                 website VARCHAR(100),
                 phone VARCHAR(20),
-                picture VARCHAR,
+                picture text,
                 stars INTEGER,
                 location INTEGER
             )
@@ -578,7 +578,7 @@ BEGIN
                         H.hot_room_price,
                         H.hot_website,
                         H.hot_phone,
-                        H.HOT_PICTURE,
+                        '/hotels/' || H.HOT_ID || '/image' picture,
                         H.HOT_STARS,
                         H.hot_loc_fk
                  FROM Hotel AS H, LOCATION L
@@ -609,7 +609,7 @@ CREATE OR REPLACE FUNCTION UpdateHotel(_id INTEGER,
                 pricePerRoom DECIMAL,
                 website VARCHAR(100),
                 phone VARCHAR(20),
-                picture VARCHAR,
+                picture text,
                 stars INTEGER,
                 location INTEGER
             )
@@ -630,6 +630,19 @@ BEGIN
         hot_loc_fk        = _location
     WHERE hot_id = _id;
     return query select * from gethotelbyid(_id);
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION GetHotelImage(p_id INTEGER)
+    RETURNS VARCHAR AS
+$$
+DECLARE
+    img VARCHAR;
+BEGIN
+    SELECT hot_picture
+    FROM Hotel
+    WHERE hot_id = p_id INTO img;
+    return img;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1737,10 +1750,12 @@ CREATE OR REPLACE FUNCTION getAvailabilityRest(_res_id INTEGER) RETURNS INTEGER 
 -----------------------------------fin grupo 14-----------------------------------------------------------
 
 ------Grupo1-----------------------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION LoginRepository(Email varchar(20),Password VARCHAR(50)) RETURNS table (use_id integer,use_name varchar(50),use_last_name varchar(30),usr_rol_id integer)AS $BODY$
+CREATE OR REPLACE FUNCTION LoginRepository(Email varchar(20),Password VARCHAR(50)) RETURNS table (use_id integer,use_name varchar(50),use_last_name varchar(30),usr_rol_id integer,rol_name varchar(30))AS $BODY$
         BEGIN
 		RETURN QUERY
-                select USERS.use_id,USERS.use_name,USERS.use_last_name,User_Role.usr_rol_id from USERS,User_Role WHERE USERS.use_email=$1 and (USERS.use_password=MD5($2) or USERS.use_password=$2) and USERS.use_id=User_Role.usr_use_id;
+                select USERS.use_id,USERS.use_name,USERS.use_last_name,User_Role.usr_rol_id,Role.rol_name from USERS,User_Role,Role WHERE USERS.use_email=$1 and (USERS.use_password=MD5($2) or 
+				USERS.use_password=$2) and USERS.use_id=User_Role.usr_use_id and
+				Role.rol_id=User_Role.usr_rol_id;
         END;
 $BODY$ LANGUAGE plpgsql;
 
