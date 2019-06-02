@@ -169,6 +169,33 @@ ALTER FUNCTION public.findflight(integer)
     OWNER TO vacanza;
 
 
+
+-- FUNCTION: public.findflight(integer)
+
+-- DROP FUNCTION public.findflight(integer);
+
+CREATE OR REPLACE FUNCTION public.findflight(
+	_id integer)
+    RETURNS TABLE(id integer, price numeric, departuredate timestamp, arrivaldate timestamp, loc_arrival integer, loc_departure integer, pla_fk integer) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+	RETURN QUERY SELECT
+	fli_id, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_arrival, fli_loc_departure, fli_pla_fk
+	FROM public.Flight WHERE _id = fli_id;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.findflight(integer)
+    OWNER TO vacanza;
+
+
 -- FUNCTION: public.getflights()
 
 -- DROP FUNCTION public.getflights();
@@ -1264,7 +1291,32 @@ $$ LANGUAGE plpgsql;
 
 ------------------------------------inicio de grupo 7---------------------------------
 
---------------------------CONSULTAR Restaurant--------------------
+CREATE OR REPLACE FUNCTION GetRestaurant(_res_id integer)
+RETURNS TABLE
+  (id integer,
+   name VARCHAR(100),
+   capacity INTEGER,
+   isActive BOOLEAN,
+   qualify DECIMAL,
+   specialty VARCHAR(30),
+   price DECIMAL,
+   businessName VARCHAR(30),
+   picture VARCHAR,
+   description VARCHAR(30),
+   phone VARCHAR(30),
+   location INTEGER,
+   address VARCHAR(30)
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT
+    R.res_id, R.res_name, R.res_capacity , R.res_isactive, R.res_qualify ,R.res_specialty,R.res_price, R.res_businessname, R.res_picture, R.res_descr, R.res_tlf, R.res_loc_fk, R.res_address_specs
+    FROM Restaurant AS R WHERE R.res_id = _res_id;
+END;
+$$ LANGUAGE plpgsql;
+
+--------------------------CONSULTAR Restaurants--------------------
 
 CREATE OR REPLACE FUNCTION GetRestaurants()
 RETURNS TABLE
@@ -1317,6 +1369,86 @@ BEGIN
     RETURN DEST_ID;
 END;
 $$ LANGUAGE plpgsql; 
+
+--------------------------Consultar restaurants por ciudad--------------------
+
+CREATE OR REPLACE FUNCTION GetRestaurantsByCity(sent_location integer)
+RETURNS TABLE
+  (id integer,
+   name VARCHAR(100),
+   capacity INTEGER,
+   isActive BOOLEAN,
+   qualify DECIMAL,
+   specialty VARCHAR(30),
+   price DECIMAL,
+   businessName VARCHAR(30),
+   picture VARCHAR,
+   description VARCHAR(30),
+   phone VARCHAR(30),
+   location INTEGER,
+   address VARCHAR(30)
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT
+    R.res_id, R.res_name, R.res_capacity , R.res_isactive, R.res_qualify ,R.res_specialty,R.res_price, R.res_businessname, R.res_picture, R.res_descr, R.res_tlf, R.res_loc_fk, R.res_address_specs
+    FROM Restaurant AS R
+	WHERE R.res_loc_fk = sent_location;
+END;
+$$ LANGUAGE plpgsql;
+
+--------------------------Borrar Restaurant--------------------
+
+CREATE OR REPLACE FUNCTION DeleteRestaurant(id integer)
+RETURNS INTEGER AS
+$$
+DECLARE
+    FOUND_ID INTEGER;
+BEGIN
+	SELECT Count(res_id) into FOUND_ID 
+	FROM Restaurant 
+	WHERE (res_id = id);
+	IF (FOUND_ID = 0) THEN
+		RETURN null;
+	END IF;
+	
+    DELETE FROM Restaurant 
+    WHERE (res_id = id);
+	RETURN id;
+
+END;
+$$ LANGUAGE plpgsql;
+
+--------------------------Actualizar Restaurant--------------------
+
+CREATE OR REPLACE FUNCTION ModifyRestaurant( 
+   id integer,
+   name VARCHAR(100),
+   capacity INTEGER,
+   isActive BOOLEAN,
+   qualify DECIMAL,
+   specialty VARCHAR(30),
+   price DECIMAL,
+   businessName VARCHAR(30),
+   picture VARCHAR,
+   description VARCHAR(30),
+   phone VARCHAR(30),
+   location INTEGER,
+   address VARCHAR(30))
+RETURNS integer AS
+$$
+BEGIN
+
+   UPDATE Restaurant SET res_name = name, 
+   res_capacity = capacity, res_isactive = isActive, res_qualify = qualify ,
+   res_specialty = specialty, res_price = price, res_businessname = businessName, 
+   res_picture = picture, res_descr = description, res_tlf = phone, res_loc_fk = location, 
+   res_address_specs = address
+    WHERE (res_id = id);
+   RETURN id;
+END;
+$$ LANGUAGE plpgsql;
 
 ------------------------------------fin de grupo 7---------------------------------
 
