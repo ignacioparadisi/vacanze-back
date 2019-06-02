@@ -6,7 +6,6 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
-using vacanze_back.VacanzeApi.Persistence.Repository;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo6;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
@@ -45,16 +44,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         {
             try
             {
-                hotel.Validate();
-                LocationRepository.GetLocationById(hotel.Location.Id);
                 var idFromDatabase = HotelRepository.AddHotel(hotel);
                 return CreatedAtAction("Get", "hotels",
                     HotelRepository.GetHotelById(idFromDatabase));
-            }
-            catch (LocationNotFoundException)
-            {
-                return new BadRequestObjectResult(
-                    new ErrorMessage($"Location con id {hotel.Location?.Id} no conseguido"));
             }
             catch (RequiredAttributeException e)
             {
@@ -78,8 +70,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         {
             try
             {
-                dataToUpdate.Validate();
-                LocationRepository.GetLocationById(dataToUpdate.Location.Id);
                 HotelRepository.GetHotelById(hotelId);
                 var updated = HotelRepository.UpdateHotel(hotelId, dataToUpdate);
                 return Ok(updated);
@@ -89,11 +79,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
                 return new NotFoundObjectResult(
                     new ErrorMessage($"Hotel con id {hotelId} no conseguido"));
             }
-            catch (LocationNotFoundException)
-            {
-                return new BadRequestObjectResult(
-                    new ErrorMessage($"Location con id {dataToUpdate.Location.Id} no conseguido"));
-            }
             catch (RequiredAttributeException e)
             {
                 return new BadRequestObjectResult(new ErrorMessage(e.Message));
@@ -102,6 +87,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
             {
                 return new BadRequestObjectResult(new ErrorMessage(e.Message));
             }
+        }
+
+        [HttpGet("{hotelId}/image")]
+        public string GetHotelImage([FromRoute] int hotelId)
+        {
+            return HotelRepository.GetHotelImage(hotelId);
         }
     }
 }
