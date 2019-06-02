@@ -3,13 +3,22 @@ using System.Collections.Generic;
 using System.Data;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
 {
     public static class HotelRepository
     {
+        /// <summary>
+        ///     Metodo para persistir un Hotel.
+        /// </summary>
+        /// <param name="hotel">Datos a ser guardados</param>
+        /// <returns>ID del registro del hotel creado en la base de datos</returns>
+        /// <exception cref="RequiredAttributeException">Algun atributo requerido estaba como null</exception>
+        /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
         public static int AddHotel(Hotel hotel)
         {
+            HotelValidator.Validate(hotel);
             var table = PgConnection.Instance.ExecuteFunction(
                 "addhotel(@name, @amountOfRooms, @capacityPerRoom, @active, @addressSpecs, " +
                 "@roomPrice, @website, @phone, @picture, @stars, @location)",
@@ -19,9 +28,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
                 hotel.IsActive,
                 hotel.AddressSpecification,
                 hotel.PricePerRoom,
-                hotel.Website,
-                hotel.Phone,
-                hotel.Picture,
+                hotel.Website ?? "",
+                hotel.Phone ?? "",
+                hotel.Picture ?? "",
                 hotel.Stars,
                 hotel.Location.Id
             );
@@ -29,6 +38,14 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
             return savedId;
         }
 
+        /// <summary>
+        ///     Metodo para obtener todos los hoteles guardados.
+        /// </summary>
+        /// <returns>Lista de hoteles</returns>
+        /// <exception cref="DatabaseException">
+        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la bse de
+        ///     datos
+        /// </exception>
         public static List<Hotel> GetHotels()
         {
             var table = PgConnection.Instance.ExecuteFunction("getHotels()");
@@ -38,14 +55,36 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
             return hotelList;
         }
 
+        /// <summary>
+        ///     Metodo para obtener objeto Hotel correspondiente a los datos guardados para el ID recibido.
+        /// </summary>
+        /// <param name="id">ID del hotel del cual se quiere un objeto</param>
+        /// <returns>Objeto Hotel correspondiente al ID recibido</returns>
+        /// <exception cref="HotelNotFoundException">Lanzada si no existe un Hotel para el ID recibido</exception>
+        /// <exception cref="DatabaseException">
+        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la bse de
+        ///     datos
+        /// </exception>
         public static Hotel GetHotelById(int id)
         {
             var resultTable = PgConnection.Instance.ExecuteFunction("GetHotelById(@p_id)", id);
             if (resultTable.Rows.Count == 0)
-                throw new EntityNotFoundException($"Hotel with id {id} not found");
+                throw new HotelNotFoundException(id);
             return ExtractHotelFromRow(resultTable.Rows[0]);
         }
 
+        /// <summary>
+        ///     Metodo para listar hoteles por Location.
+        /// </summary>
+        /// <param name="city">ID del Location de donde se quiere conocer sus hoteles</param>
+        /// <returns>
+        ///     Lista de hoteles ubicados en la ciudad recibida, si no hay hoteles en la ciudad, la lista
+        ///     estaria vacia
+        /// </returns>
+        /// <exception cref="DatabaseException">
+        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la bse de
+        ///     datos
+        /// </exception>
         public static List<Hotel> GetHotelsByCity(int city)
         {
             var table = PgConnection.Instance.ExecuteFunction("GetHotelsByCity(@city_id)", city);
@@ -55,6 +94,89 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
             return hotelList;
         }
 
+        /// <summary>
+        ///     Metodo para eliminar un hotel permanentemente.
+        /// </summary>
+        /// <param name="id">ID del hotel a eliminar</param>
+        /// <exception cref="DatabaseException">
+        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la bse de
+        ///     datos
+        /// </exception>
+        public static void DeleteHotel(int id)
+        {
+            PgConnection.Instance.ExecuteFunction("DeleteHotel(@id)", id);
+        }
+
+        /// <summary>
+        ///     Metodo para actualizar los datos de un hotel.
+        /// </summary>
+        /// <param name="id">ID del hotel a actualizar</param>
+        /// <param name="newData">
+        ///     Objeto Hotel de donde se obtendran los datos para la actualizacion.
+        ///     Este objeto debe pasar la validacion del metodo <see cref="Hotel.Validate()" />
+        ///     de manera que si solo se quiere actualizar un par de campos, igual se debe que mandar
+        ///     el objeto completo y valido, sin cambiar los atributos que no quieras actualizar.
+        /// </param>
+        /// <returns>Objeto Hotel con los campos actualizados</returns>
+        /// <exception cref="RequiredAttributeException">Algun atributo requerido estaba como null</exception>
+        /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
+        /// <exception cref="DatabaseException">
+        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la bse de
+        ///     datos
+        /// </exception>
+        public static Hotel UpdateHotel(int id, Hotel newData)
+        {
+            HotelValidator.Validate(newData);
+            PgConnection.Instance.ExecuteFunction(
+                "updatehotel(@_id, @name, @amountOfRooms, @capacityPerRoom, @active, @addressSpecs, " +
+                "@roomPrice, @website, @phone, @picture, @stars, @location)",
+                id,
+                newData.Name,
+                newData.AmountOfRooms,
+                newData.RoomCapacity,
+                newData.IsActive,
+                newData.AddressSpecification,
+                newData.PricePerRoom,
+                newData.Website ?? "",
+                newData.Phone ?? "",
+                newData.Picture ?? "",
+                newData.Stars,
+                newData.Location.Id
+            );
+            return GetHotelById(id);
+        }
+
+        /// <summary>
+        ///     Devuelve la imagen en base64 del hotel.
+        /// </summary>
+        /// <param name="id">Id del hotel del que se quiere su imagen</param>
+        /// <returns>Imagen en base64</returns>
+        /// <exception cref="DatabaseException">
+        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la bse de
+        ///     datos
+        /// </exception>
+        public static string GetHotelImage(int id)
+        {
+            var result = PgConnection.Instance.ExecuteFunction("GetHotelImage(@p_id)", id);
+            return result.Rows[0][0].ToString();
+        }
+
+        /// <summary>
+        ///     Metodo para formar un <see cref="Hotel" /> a partir de un <see cref="DataRow" />.
+        ///     El <see cref="DataRow" /> debe cumplir con un orden especifico de parametros para funcionar,
+        ///     el cual es respetado por todos las funciones almancenadas relacionadas al modulo de Hotel.
+        /// </summary>
+        /// <param name="row">
+        ///     Fila en donde se encuentran los datos para generar el <see cref="Hotel" />
+        /// </param>
+        /// <returns><see cref="Hotel" /> segun los datos recibidos</returns>
+        /// <exception cref="IndexOutOfRangeException">
+        ///     Lanzado si el DataRow no devuelve la cantidad de atributos necesarios
+        /// </exception>
+        /// <exception cref="FormatException">
+        ///     Lanzado si algun elemento del DataRow no esta en el orden correcto y por lo tanto no se
+        ///     puede convertir al tipo de dato correspondiente para el <see cref="Hotel" />
+        /// </exception>
         private static Hotel ExtractHotelFromRow(DataRow row)
         {
             var id = Convert.ToInt32(row[0]);
@@ -79,7 +201,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
                 .WithPhone(phone)
                 .WithWebsite(website)
                 .WithStars(stars)
-                .WithBase64Picture(picture)
+                .WithPictureUrl(picture)
                 .LocatedAt(LocationRepository.GetLocationById(locationId))
                 .WithStatus(isActive)
                 .WithAddressDescription(addressSpecs)

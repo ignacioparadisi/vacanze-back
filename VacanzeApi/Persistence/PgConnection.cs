@@ -9,12 +9,14 @@ namespace vacanze_back.VacanzeApi.Persistence
     {
         private static PgConnection _instance;
         private readonly string _connectionParameters;
-        private NpgsqlConnection _connection;
 
         private PgConnection(string host, string user, string password, string databaseName)
         {
             _connectionParameters =
                 $"Server={host};User Id={user};Password={password};Database={databaseName}";
+            /* _connectionParameters =
+                $"Server=localhost;Port=5433;User Id=postgres;" + 
+                      "Password=122324;Database=vacanza;";*/
         }
 
         // TODO: Obtener datos para conectar con la BD de algun archivo de configuracion
@@ -46,11 +48,12 @@ namespace vacanze_back.VacanzeApi.Persistence
         // </summary>
         public DataTable ExecuteFunction(string functionSignature, params object[] arguments)
         {
+            NpgsqlConnection connection = null;
             try
             {
-                _connection = new NpgsqlConnection(_connectionParameters);
-                _connection.Open();
-                var command = new NpgsqlCommand("select * from " + functionSignature, _connection);
+                connection = new NpgsqlConnection(_connectionParameters);
+                connection.Open();
+                var command = new NpgsqlCommand("select * from " + functionSignature, connection);
                 if (arguments.Length > 0)
                 {
                     var keys = ExtractParameters(functionSignature);
@@ -62,14 +65,15 @@ namespace vacanze_back.VacanzeApi.Persistence
                 dataTable.Load(command.ExecuteReader());
                 return dataTable;
             }
-            catch (NpgsqlException e)
+            catch (Exception e)
             {
+                Console.WriteLine(e);
                 throw new DatabaseException(
                     $"Error ejecutando funcion: {functionSignature}.{Environment.NewLine}{e.Message}");
             }
             finally
             {
-                _connection?.Close();
+                connection?.Close();
             }
         }
 
