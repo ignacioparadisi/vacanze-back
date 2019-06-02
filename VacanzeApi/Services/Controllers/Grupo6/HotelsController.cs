@@ -45,10 +45,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         {
             try
             {
-                if (hotel.Location == null)
-                    return new BadRequestObjectResult("Es necesario especificar un location");
-                LocationRepository.GetLocationById(hotel.Location.Id);
                 hotel.Validate();
+                LocationRepository.GetLocationById(hotel.Location.Id);
                 var idFromDatabase = HotelRepository.AddHotel(hotel);
                 return CreatedAtAction("Get", "hotels",
                     HotelRepository.GetHotelById(idFromDatabase));
@@ -80,9 +78,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         {
             try
             {
+                dataToUpdate.Validate();
                 LocationRepository.GetLocationById(dataToUpdate.Location.Id);
                 HotelRepository.GetHotelById(hotelId);
-                dataToUpdate.Validate();
                 var updated = HotelRepository.UpdateHotel(hotelId, dataToUpdate);
                 return Ok(updated);
             }
@@ -93,7 +91,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
             }
             catch (LocationNotFoundException)
             {
-                return new NotFoundObjectResult(
+                return new BadRequestObjectResult(
                     new ErrorMessage($"Location con id {dataToUpdate.Location.Id} no conseguido"));
             }
             catch (RequiredAttributeException e)
