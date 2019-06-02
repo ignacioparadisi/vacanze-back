@@ -36,6 +36,14 @@ namespace vacanze_back.VacanzeApiTest.Grupo7
         }
 
         [Test]
+        public void CreateRestaurantTest()
+        {
+            ActionResult<Restaurant> res = restaurantsController.Create(restaurant);
+            RestaurantRepository.DeleteRestaurant(id+1);
+            Assert.NotNull(res);
+        }
+
+        [Test]
         public void GetRestaurantsTest()
         {
             ActionResult<IEnumerable<Restaurant>> res = restaurantsController.Get();
@@ -56,13 +64,6 @@ namespace vacanze_back.VacanzeApiTest.Grupo7
         }
 
         [Test]
-        public void CreateRestaurantTest()
-        {
-            ActionResult<Restaurant> res = restaurantsController.Create(restaurant);
-            Assert.NotNull(res);
-        }
-
-        [Test]
         public void PutRestaurantTest()
         {
             ActionResult<Restaurant> res = restaurantsController.PutRestaurant(restaurant);
@@ -73,8 +74,18 @@ namespace vacanze_back.VacanzeApiTest.Grupo7
         public void DeleteRestaurantTest()
         {
             ActionResult<int> res = restaurantsController.DeleteRestaurant(id);
+            id = 0;
             Assert.NotNull(res);
         }
-        
+
+        [TearDown]
+        public void TearDown()
+        {
+            if (id != 0)
+            {
+                id = RestaurantRepository.DeleteRestaurant(id);
+            }
+                
+        }       
     }
 }
