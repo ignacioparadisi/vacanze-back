@@ -969,7 +969,7 @@ BEGIN
    ( _cla_title, _cla_description, 'ABIERTO')RETURNING cla_ID INTO _cla_ID;
 	
     if (_cla_ID is not null)then 
-	    update BAGGAGE set bag_status = 'LOST' , bag_cla_fk= _cla_id where bag_id = _bag_id;
+	    update BAGGAGE set bag_status = 'EXTRAVIADO' , bag_cla_fk= _cla_id where bag_id = _bag_id;
 	  end if;
    RETURN _cla_ID;
 END;
