@@ -20,9 +20,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         // GET api/values
 
         // GET api/reservationautomobiles/?id={user_id}]
-       /* https://localhost:5001/api/reservationautomobiles/?user=1 */
+        /* https://localhost:5001/api/reservationautomobiles/?user=1 */
         [HttpGet]
-        public ActionResult<IEnumerable<Entity>> GetAllByUserID([FromQuery] int user= -1)
+        public ActionResult<IEnumerable<Entity>> GetAllByUserID([FromQuery] int user = -1)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             }
         }
 
-        
+
         [HttpGet("{id}")]
         public ActionResult<Entity> Get(int id)
         {
@@ -74,15 +74,15 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 
 
         // PUT api/values/5    //ACTUALIZAR UN RECURSO
-        [HttpPut("{id}")]
-        public ActionResult<Entity> Put([FromBody] ReservationAutomobile entity)
+        [HttpPut]
+        public ActionResult<Entity> Put([FromBody] ReservationAutomobile res)
         {
             try
             {
                 ReservationAutomobileRepository repository = new ReservationAutomobileRepository();
-                ReservationAutomobile reservation = (ReservationAutomobile) repository.Find((int)entity.Id);
+              //  ReservationAutomobile reservation = (ReservationAutomobile) repository.Find((int)res.Id);
 
-                repository.Update(entity);
+                repository.Update(res);
 
                 return Ok(new { Message = "Editado" });
             }

@@ -19,7 +19,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
         const String SP_FIND = "m13_findbyroomreservationid(@_id)";
         const String SP_AVAILABLE = "m13_getAvailableRooms(@_checkin, @_checkout)";
         const String SP_ADD_RESERVATION = "m13_addRoomReservation(@_checkin, @_checkout,@_use_fk,@_hot_fk)";
-        const String SP_UPDATE = "";
+        const String SP_UPDATE = "m13_updatehotelreservation(@_checkin,@_checkout,@_use_fk,@_hot_fk,@_id)";
         const String SP_DELETE_RESERVATION = "m13_deleteRoomReservation(@_rooid)";
         const String SP_ALL_BY_USER_ID = "m13_getresroobyuserandroomid(@_id)";
         const String SP_ADD_PAYMENT = "";
@@ -255,11 +255,11 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
 
                 var table = PgConnection.Instance.ExecuteFunction(
                     SP_UPDATE,
-                    (int)reservation.Id,
                     reservation.CheckIn,
                     reservation.CheckOut,
-                    reservation.Hotel,
-                    reservation.Fk_user
+                    reservation.Fk_user,
+                    (int)reservation.Hotel.Id,
+                   (int) reservation.Id     
                 );
             }
             catch (DatabaseException ex)

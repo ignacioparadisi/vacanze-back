@@ -71,15 +71,15 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         }
 
         // PUT api/values/5    //ACTUALIZAR UN RECURSO
-        [HttpPut("{id}")]
-        public ActionResult<Entity> Put([FromBody] ReservationRoom entity)
+        [HttpPut]
+        public ActionResult<Entity> Put([FromBody] ReservationRoom res)
         {
             try
             {
                 ReservationRoomRepository repository = new ReservationRoomRepository();
-                ReservationRoom reservation = (ReservationRoom)repository.Find((int)entity.Id);
+              //  ReservationRoom reservation = (ReservationRoom)repository.Find((int)entity.Id);
 
-                repository.Update(entity);
+                repository.Update(res);
 
                 return Ok(new { Message = "Editado" });
             }
