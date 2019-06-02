@@ -755,11 +755,11 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION AddCruise( 
   _cru_shi_fk INTEGER,
-  _cru_departuredate TIMESTAMP,
-  _cru_arrivaldate TIMESTAMP,
+  _cru_departuredate VARCHAR,
+  _cru_arrivaldate VARCHAR,
   _cru_price DECIMAL,
-  _cru_loc_arrival INTEGER,
-  _cru_loc_departure INTEGER
+  _cru_loc_departure INTEGER,
+  _cru_loc_arrival INTEGER
   ) 
 RETURNS integer AS
 $$
@@ -769,7 +769,7 @@ BEGIN
 
    INSERT INTO Cruise(cru_id, cru_shi_fk, cru_departuredate, cru_arrivaldate, cru_price,
                        cru_loc_arrival, cru_loc_departure ) VALUES
-    (default, _cru_shi_fk, _cru_departuredate, _cru_arrivaldate, _cru_price, _cru_loc_arrival, _cru_loc_departure )
+    (default, _cru_shi_fk, TO_TIMESTAMP(_cru_departuredate, 'yyyy-mm-dd hh24:mi'), TO_TIMESTAMP(_cru_arrivaldate, 'yyyy-mm-dd hh24:mi'), _cru_price, _cru_loc_arrival, _cru_loc_departure )
     RETURNING cru_id INTO ret_id;
    RETURN ret_id;
 END;
@@ -836,10 +836,10 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION ModifyCruise( 
     _cru_id integer,
     _shi_id integer,
-    _cru_departuredate TIMESTAMP,
-    _cru_arivaldate TIMESTAMP,
-    _loc_arrival integer,
+    _cru_departuredate VARCHAR,
+    _cru_arivaldate VARCHAR,
     _loc_departure integer,
+    _loc_arrival integer,
     _cru_price DECIMAL
     )
 RETURNS TABLE
@@ -853,8 +853,8 @@ RETURNS TABLE
   )AS
 $$
 BEGIN
-   UPDATE Cruise SET cru_departuredate= _cru_departuredate,
-   cru_shi_fk = _shi_id, cru_arrivaldate = _cru_arivaldate, 
+   UPDATE Cruise SET cru_departuredate= TO_TIMESTAMP(_cru_departuredate, 'yyyy-mm-dd hh24:mi'),
+   cru_shi_fk = _shi_id, cru_arrivaldate = TO_TIMESTAMP(_cru_arrivaldate, 'yyyy-mm-dd hh24:mi'), 
    cru_loc_arrival = _loc_arrival, cru_loc_departure = _loc_departure, 
    cru_price = _cru_price
     WHERE (cru_id = _cru_id);

@@ -10,12 +10,12 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
         public int CruiserId { get;}
         public string DepartureDate { get;}
         public string ArrivalDate { get;}
-        public double Price { get;}
+        public decimal Price { get;}
         public int LocDeparture { get;}
         public int LocArrival { get;}
 
         [JsonConstructor]
-        public Layover(int id, int cruiserId, string departureDate,string arrivalDate, double price, int locDeparture,
+        public Layover(int id, int cruiserId, string departureDate,string arrivalDate, decimal price, int locDeparture,
             int locArrival)
         {
             Id = id;
@@ -26,7 +26,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
             LocDeparture = locDeparture;
             LocArrival = locArrival;
         }
-        public Layover(int cruiserId,string departureDate,string arrivalDate, double price, int locDeparture,
+        public Layover(int cruiserId,string departureDate,string arrivalDate, decimal price, int locDeparture,
             int locArrival)
         {   
             CruiserId = cruiserId;
