@@ -1,11 +1,13 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Cors;
 using vacanze_back.VacanzeApi.Common.Exceptions;
-using vacanze_back.VacanzeApi.Common.Exceptions.Grupo12;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo12;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo12;
+using vacanze_back.VacanzeApi.Common.Entities;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
 {
@@ -27,9 +29,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
                 FlightRes f=new FlightRes(flight._seatNum,flight._timestamp,
                 flight._numPas,flight._id_user,flight._id_pay,flight._id_fli);
                 con.AddReservationFlight(f);
-                  return StatusCode(200, "Se agrego satisfactoriamente");
-                //else
-                  //  return StatusCode(201,"Capacidad No disponible");
+                return StatusCode(200, "Se agrego satisfactoriamente");
+            
             }catch(Exception e){
                 Console.WriteLine(e);
                  return StatusCode(404, "Error");
@@ -37,6 +38,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
             }
 
         }
+
+
 
         [Route("~/api/list-reservation-flight/{id_user}")] 
         // GET api/list-reservation-flight
@@ -50,12 +53,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
                 List<FlightRes> listFlight = con.GetReservationFlight(id_user);
                 return listFlight;
 
-            }catch(Exception ){
+            }catch(Exception ex ){
 
-                 return StatusCode(404, "Error");
+                 return BadRequest(ex.Message);
             }
 
         }
+
 
         [Route("~/api/id-return-city/{name_city_i}/{name_city_v}")] 
         // GET api/list-reservation-flight
@@ -69,9 +73,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
                 lis_id.Add(id_locationI);
                 lis_id.Add(id_locationV);
                 return lis_id;
-            }catch(Exception ){
+            }catch(Exception ex ){
 
-                 return StatusCode(404, "Error");
+                 return BadRequest(ex.Message);
             }
 
         }
@@ -89,11 +93,40 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
                 con.DeleteReservationFlight(id_res);
                 return StatusCode(200, "Se elimino satisfactoriamente");
 
-            }catch(Exception ){
+            }catch(Exception ex ){
 
-                return StatusCode(404, "Error");
+                return BadRequest(ex.Message);
             }
 
+        }
+
+
+          /// <summary> GET api/outbounds/departure/arrival/departuredate</summary>
+        /// <param name="departure">Ciudad de salida del vuelor</param>
+        /// <param name="arrival">Ciudad de llegada del vuelo</param>
+        /// <param name="departuredate">Fecha de salida del vuelo</param>
+        /// <returns>ActionResult con resultado de la query</returns>
+        
+
+        [Route("~/api/reservation-flight/{departure}/{arrival}/{departuredate}/{numpas}")] 
+        [HttpGet("{departure}/{arrival}/{departuredate}/{numpas}")]
+        public ActionResult<IEnumerable<ListRes>> Get(int departure, int arrival, string departuredate,int numpas)
+        {
+            try
+            {
+                Console.WriteLine("Estoy Aqui");
+                FlightResConnection con=new FlightResConnection();
+                List<ListRes> listFlight=con.GetFlightValidate(departure, arrival, departuredate,numpas);
+                return listFlight;
+            }
+            catch (DatabaseException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         

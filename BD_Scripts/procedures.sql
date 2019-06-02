@@ -1358,38 +1358,24 @@ RETURNS TABLE (id INTEGER,seatNum VARCHAR,fecha_res_fli TIMESTAMP,num_Pas INTEGE
   END;
   $$ LANGUAGE plpgsql;
 
-  --retornar la capacidad del vuelo
-  CREATE OR  REPLACE FUNCTION GetCapacityFlight(id_flight INTEGER)
-   RETURNS TABLE(id integer,capacity integer) 
-   AS $$
-  BEGIN
-    RETURN QUERY SELECT pla_id,pla_capacity FROM plane as c, flight as f, res_fli as h
-    where c.pla_id = f.fli_pla_fk and f.fli_id =id_flight; 
-  END;
-  $$ LANGUAGE plpgsql;
-
-  --retorna una Reserva de vuelo  en especifico--Modificar por favor
---CREATE OR REPLACE FUNCTION getReservationFlight(id_res INTEGER) 
---RETURNS TABLE (id_res INTEGER,precio INTEGER,fecha_ida VARCHAR,fecha_vuelta VARCHAR,pais_ida VARCHAR,,
---  pais_vuelta VARCHAR) AS $$
- -- BEGIN
-  --   RETURN QUERY SELECT h.rf_id,f.fli_price,f.fli_departuredate,f.fli_arrivaldate,
-   --  loc.LOC_CITY,loc.LOC_CITY
-   --  FROM plane as c, flight as f, res_fli as h, location as loc 
-   --  where c.pla_id = f.fli_pla_fk and f.fli_id=id_res and f.fli_loc_arrival=loc.loc_id 
-   --  and f.fli_loc_departure=loc.loc_id; 
-  --END;
- 
-
-  ---Suma de pasajero en un reserva
-  CREATE OR REPLACE FUNCTION getSumaSeat(_res_id INTEGER) RETURNS INTEGER AS $$
-  DECLARE 
-  available INTEGER;
-  BEGIN
-    SELECT SUM(rf_num_ps) FROM RES_FLI WHERE rf_fli_fk = _res_id INTO available;
-    RETURN available;
-  END;
-  $$ LANGUAGE plpgsql;
+---Devuelve la capacidad de un vuelo
+  CREATE OR REPLACE FUNCTION getCapacity(idflight INTEGER)RETURNS integer AS $$  
+DECLARE capacity Integer;
+BEGIN
+ SELECT p.pla_capacity FROM flight as f ,plane as p WHERE f.fli_id=idflight into capacity ;
+ return capacity;
+END;
+$$ 
+LANGUAGE plpgsql;
+---Devuelve la cantidad de asientos reservados
+CREATE OR REPLACE FUNCTION getSum(idflight INTEGER)RETURNS integer AS $$  
+DECLARE sum Integer;
+BEGIN
+ SELECT SUM(rf_num_ps) FROM res_fli as f WHERE f.rf_fli_fk=idflight into sum ;
+ return sum;
+END;
+$$ 
+LANGUAGE plpgsql;
 
 --Devolver id ciudad
 CREATE OR REPLACE FUNCTION GetIDLocation(name_city VARCHAR) 
@@ -1401,29 +1387,47 @@ RETURNS TABLE (id INTEGER) AS $$
   END;   
   $$ LANGUAGE plpgsql;
 
----------En configuracion-------------------------------------------
-  --retornar la suma de todas las reservas de un vuelo
-  CREATE OR  REPLACE FUNCTION SumResFlight(id_flight INTEGER,numpas INTEGER) RETURNS BOOLEAN AS $$
-  DECLARE cantidad_pas INTEGER;
-  DECLARE capacidad INTEGER;
-  DECLARE contador INTEGER;
-  BEGIN
-   SELECT SUM(rf_num_ps)FROM res_fli as c
-    where c.rf_fli_fk=id_flight INTO cantidad_pas; 
+ --Devolver Lista validada de una reserva de vuelo
+ CREATE OR REPLACE FUNCTION GetFlightsIDA(_departure integer,_arrival integer,_departuredate char varying)
+    RETURNS TABLE(id integer, price numeric, departuredate timestamp without time zone, arrivaldate timestamp without time zone, locdeparture integer, locarrival integer) 
+    LANGUAGE 'plpgsql'
 
-   SELECT pla_capacity FROM plane as c, flight as f, res_fli as h
-    where c.pla_id = f.fli_pla_fk and f.fli_id =id_flight; INTO capacidad; 
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
 
-    conntador=capacidad-cantidad_pas;  
+BEGIN
+	RETURN QUERY SELECT
+  fli_id,fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, fli_loc_arrival
+	FROM public.Flight WHERE fli_departuredate::date = _departuredate::timestamp without time zone  and fli_loc_departure = _departure and fli_loc_arrival = _arrival;
+END;
 
-    if (conntador >= numpas || conntador != 0) then 
-		   return true;
-	  else  
-	    return false;
-    END IF; 
+$BODY$;
 
-  END;
-  $$ LANGUAGE plpgsql;
+ALTER FUNCTION public.GetFlightsIDA(integer, integer, char varying)
+    OWNER TO vacanza;  
+
+-----Devuelve los datos de la tabla location
+CREATE OR REPLACE FUNCTION GetNameLocation(_id_city integer)
+    RETURNS TABLE(id integer, namecity varchar,namecountry varchar) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+	RETURN QUERY SELECT
+		loc_id,loc_city,loc_country
+	FROM location WHERE location.loc_id=_id_city;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.GetNameLocation(integer)
+    OWNER TO vacanza; 
 
 ------------------------------------Fin Grupo12--------------------------------------------------
 ----------------------------------- grupo 14 ---------------------------------
