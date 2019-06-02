@@ -235,9 +235,28 @@ INSERT INTO public.Plane(
 INSERT INTO public.Plane(
 	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
 	VALUES (80,true, 10, 1000, 'Boeing 5');
-	
-	
---------------Grupo 8 ---------------------------------
+--------------Grupo 5 --------------------------------------------
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
+VALUES('Toyota','Corolla',3,true,55,'aa11ab1','auto1.jpg',1);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
+VALUES('VolksWagen','Golf',3,false,70.5,'aa11ab2','auto2.jpg',1);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
+VALUES('Honda','Civic',3,true,40,'aa12ab1','auto3.jpg',2);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
+VALUES('Ford','Fusion',3,false,60,'aa12ab2','auto4.jpg',2);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
+VALUES('Ford','F-150',4,true,80,'aa13ab1','auto5.jpg',3);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
+VALUES('Honda','Civic',3,false,50.2,'aa13ab2','auto6.jpg',3);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
+VALUES('Toyota','Camry',3,true,60,'aa14ab1','auto7.jpg',4);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
+VALUES('Honda','Accord',3,false,54,'aa14ab2','auto8.jpg',4);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
+VALUES('Honda','CR-V',3,true,55,'aa15ab1','auto9.jpg',5);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
+VALUES('Chevrolet','Silverado',5,false,69.8,'aa15ab2','auto10.jpg',5);
+--------------Grupo 8 ---------------------------------------------
 INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'concordia', 100, 1000, 'Modelo1','Linea1', '1.jpg' );
 INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'Lmao', 500, 2000, 'Modelo2','Linea2', '3.jpg' );
 
