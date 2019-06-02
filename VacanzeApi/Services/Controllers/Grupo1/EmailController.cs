@@ -6,6 +6,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using MimeKit;
@@ -13,6 +14,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
     using vacanze_back.VacanzeApi.Persistence.Repository.Grupo1;
 
     [Route("api/[controller]")]
+    [EnableCors("MyPolicy")]
     [ApiController]
     public class EmailController : ControllerBase
     {

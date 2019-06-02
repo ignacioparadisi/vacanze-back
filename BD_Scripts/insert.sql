@@ -268,6 +268,20 @@ INSERT INTO public.Plane(
 INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'concordia', 100, 1000, 'Modelo1','Linea1', '1.jpg' );
 INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'Lmao', 500, 2000, 'Modelo2','Linea2', '3.jpg' );
 
+-------------Grupo 9 ------------------------------------
+INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('Mi primer reclamo','perdi mi maleta negra, nunca aparecio cuando llegue a mi destino','ABIERTO');
+INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('equipaje de mano','deje en el asiento de el avion mi equipaje de mano es color rojo con puntos negros','ABIERTO');
+INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('equipaje dejado en la sala de espera ','Hola, deje mi equipaje en la sala de espera del aeropuerto intermacional de maiquetia, era un bolso pequeno aproximadamente de 30 cm','ABIERTO');
+INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('mi vuelo se retraso','Buenas noches, mi vuelo se retraso pero el personal me comenta que mi equipaje lo mandaron a otro avion pero no saben en cual. Les agradezco pronta respuesta','ABIERTO');
+
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ) VALUES('EXTRAVIADO','maleta negra para mi prueba unitaria');
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ) VALUES('EXTRAVIADO','maleta negra');
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','maleta roja con puntos negros',2);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','maleta pequeña aproximadamente 20 kg color negra',3);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','maleta azul tamaño medio',4);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','maleta vinotinto con logo de la FVF',4);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','maleta rosada con dibujos de niña',1);
+
 ------- grupo 10 ----------
 
 -- Cliente Generico --
@@ -292,5 +306,4 @@ INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (2,158); -- Osaka
 INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (3,127); -- Oxford
 INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (3,78); -- Sydney
 INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (3,29); -- Caracas
-
 
