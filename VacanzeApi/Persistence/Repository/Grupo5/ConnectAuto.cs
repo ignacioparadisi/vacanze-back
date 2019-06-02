@@ -35,7 +35,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo5
             var table = PgConnection.Instance.ExecuteFunction(command,id);
             return aux;
         }
-       public static List<Auto> ConsultforId(int idconsulta){
+       public static List<Auto> ConsultforId(int idconsulta)
+       {
             var AutoList = new List<Auto>();
             string command="consultforidauto (@AUT_ID)";
             var table = PgConnection.Instance.ExecuteFunction(command,idconsulta);
@@ -57,8 +58,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo5
             return AutoList;
         }
 
-
-           public static List<Location> GetCity(){
+        public static List<Location> GetCity()
+        {
             var CityList = new List<Location>();
             string command="GetCity ()";
             var table = PgConnection.Instance.ExecuteFunction(command);
