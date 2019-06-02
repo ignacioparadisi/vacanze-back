@@ -969,14 +969,21 @@ RETURNS TABLE
   )
 AS
 $$
+DECLARE
+  stat boolean;
 BEGIN 
-    RETURN QUERY SELECT
-    c.cru_id,c.cru_shi_fk, c.cru_departuredate, c.cru_arrivaldate, c.cru_price,
-  	c.cru_loc_departure, c.cru_loc_arrival
-	FROM Cruise c
+  SELECT shi_isactive FROM ship INTO stat 
+  WHERE shi_id IN (SELECT cru_shi_fk FROM CRUISE
+  WHERE cru_loc_departure = _dep_id
+  AND cru_loc_arrival = _arr_id);
+  IF stat = True THEN
+      RETURN QUERY SELECT
+      c.cru_id,c.cru_shi_fk, c.cru_departuredate, c.cru_arrivaldate, c.cru_price,
+      c.cru_loc_departure, c.cru_loc_arrival
+    FROM Cruise c
     WHERE c.cru_loc_departure = _dep_id
-	and c.cru_loc_arrival = _arr_id;
-    
+    AND c.cru_loc_arrival = _arr_id;
+  END IF;  
 END;
 $$ LANGUAGE plpgsql;
 
