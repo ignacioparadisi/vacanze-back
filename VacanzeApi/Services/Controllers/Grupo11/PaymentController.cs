@@ -90,6 +90,12 @@ namespace vacanze_back.Controllers
 
         }
 
+        /// <summary>
+        /// Post que permite añadir un pago exitoso al registro
+        /// tambien simula pago dependiedno de su respuesta exitosa o no
+        /// </summary>
+        /// <param name="bill"></param>
+        /// <returns> mensaje de respuesta</returns>
         [HttpPost]
         [Route("")]
         public ActionResult<List<Payment>> AddPayment([FromBody] Bill bill)
@@ -130,7 +136,10 @@ namespace vacanze_back.Controllers
 
         }
 
-
+        /// <summary>
+        /// Ruta que simula procesamiento de pago
+        /// </summary>
+        /// <returns>aprobado o causa de rechazo</returns>
         [HttpGet]
         [Route("Procces")]
         public ActionResult<List<Payment>> GetProccesPayment()

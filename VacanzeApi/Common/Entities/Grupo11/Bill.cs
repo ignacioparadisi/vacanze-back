@@ -1,14 +1,18 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
 using vacanze_back.VacanzeApi.Common.Entities;
 
 namespace vacanze_back.Entities.Grupo11
 {
     public class Bill : Entity
     {
-
+        [Required]
         public long id { get; set; }
+        [Required]
         public string paymentMethod { get; set; }
+        [Required]
         public string reference { get; private set; }
+        [Required]
         public double total{get; set;}
 
 
