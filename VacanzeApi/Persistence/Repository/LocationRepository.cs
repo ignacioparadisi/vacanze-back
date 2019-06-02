@@ -8,6 +8,14 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
 {
     public static class LocationRepository
     {
+        /// <summary>
+        ///     Metodo para obtener todos los ubicaciones guardados.
+        /// </summary>
+        /// <returns>Lista de Locations</returns>
+        /// <exception cref="DatabaseException">
+        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la base de
+        ///     datos
+        /// </exception>
         public static List<Location> GetLocations()
         {
             var locationList = new List<Location>();
@@ -17,6 +25,15 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
             return locationList;
         }
 
+        /// <summary>
+        ///     Metodo para obtener la ubicacion por id.
+        /// </summary>
+        /// <param name="id">ID del hotel a buscar</param>
+        /// <returns>objeto tipo Location</returns>
+        /// <exception cref="DatabaseException">
+        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la base de
+        ///     datos
+        /// </exception>
         public static Location GetLocationById(int id)
         {
             var resultTable = PgConnection.Instance.ExecuteFunction("GetLocationById(@p_id)", id);
@@ -26,6 +43,14 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
             return ExtractLocationFromRow(resultTable.Rows[0]);
         }
 
+        /// <summary>
+        ///     Metodo para obtener todos los paises.
+        /// </summary>
+        /// <returns>Lista de Locations</returns>
+        /// <exception cref="DatabaseException">
+        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la base de
+        ///     datos
+        /// </exception>
         public static List<Location> GetCountries()
         {
             var locationList = new List<Location>();
@@ -35,6 +60,15 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
             return locationList;
         }
 
+        /// <summary>
+        ///     Metodo para obtener todos las ciudades por pais
+        /// </summary>
+        /// <param name="id">ID del alguna ciudad del pais deseado, para buscar las demas ciudades</param>
+        /// <returns>Lista de Locations</returns>
+        /// <exception cref="DatabaseException">
+        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la base de
+        ///     datos
+        /// </exception>
         public static List<Location> GetCitiesByCountry(int id)
         {
             var locationList = new List<Location>();
@@ -44,6 +78,22 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
             return locationList;
         }
 
+        /// <summary>
+        ///     Metodo para formar un <see cref="Location" /> a partir de un <see cref="DataRow" />.
+        ///     El <see cref="DataRow" /> debe cumplir con un orden especifico de parametros para funcionar,
+        ///     el cual es respetado por todos las funciones almancenadas relacionadas al modulo de Hotel.
+        /// </summary>
+        /// <param name="row">
+        ///     Fila en donde se encuentran los datos para generar el <see cref="Location" />
+        /// </param>
+        /// <returns><see cref="Location" /> segun los datos recibidos</returns>
+        /// <exception cref="IndexOutOfRangeException">
+        ///     Lanzado si el DataRow no devuelve la cantidad de atributos necesarios
+        /// </exception>
+        /// <exception cref="FormatException">
+        ///     Lanzado si algun elemento del DataRow no esta en el orden correcto y por lo tanto no se
+        ///     puede convertir al tipo de dato correspondiente para el <see cref="Location" />
+        /// </exception>
         private static Location ExtractLocationFromRow(DataRow row)
         {
             var id = Convert.ToInt32(row[0]);
@@ -52,6 +102,15 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
             return new Location(id, country, city);
         }
 
+        /// <summary>
+        ///     Metodo para agregar una ubicacion
+        /// </summary>
+        /// <param name="location">Objeto tipo Location a agregar</param>
+        /// <returns>ID de la ubicacion creada</returns>
+        /// <exception cref="DatabaseException">
+        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la base de
+        ///     datos
+        /// </exception>
         public static int AddLocation(Location location)
         {
             var table = PgConnection.Instance.ExecuteFunction(
@@ -63,6 +122,14 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository
             return savedId;
         }
 
+        /// <summary>
+        ///     Metodo para elimnar una ubicacion
+        /// </summary>
+        /// <param name="id">ID del objeto location a eliminar</param>
+        /// <exception cref="DatabaseException">
+        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la base de
+        ///     datos
+        /// </exception>
         public static void DeleteLocation(int id)
         {
             PgConnection.Instance.ExecuteFunction("DeleteLocation(@_id)", id);
