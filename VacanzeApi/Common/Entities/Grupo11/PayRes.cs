@@ -1,21 +1,24 @@
 ﻿
+using System;
+
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo11
 {
     /// <summary>
-    /// Clase de pago. Contiene metodos getters y setters de la clase. 
+    /// Clase utilizada para realizar el pago de las reservas que haga el usuario
     /// </summary>
-    public class Payment :Entity
+    public class PayRes :Entity
     {
-        public int id { get; set; }
+       
+        public long id { get; set; }
         public string name { get; set; }
-        public bool active { get; private set; }
+        public DateTime dateR { get; set; }
      
 
-        public Payment(int _id , string _name, bool _active ) : base(_id)
+        public PayRes(long _id , string _name, DateTime _dateR ) : base(_id)
         {
             id = _id;
             name = _name;
-            active =_active;
+            dateR =_dateR;
         }
 
 
@@ -24,7 +27,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo11
             return id;
         }
 
-        public void setId(int _id)
+        public void setId(long _id)
         {
             id = _id;
         }
@@ -41,14 +44,14 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo11
         }
 
 
-        public bool getActive()
+        public DateTime getdateR()
         {
-            return active;
+            return dateR;
         }
 
-        public void setActive(bool _active)
+        public void setdateR(DateTime _dateR)
         {
-            active = _active;
+            dateR = _dateR;
         }
     }
 }

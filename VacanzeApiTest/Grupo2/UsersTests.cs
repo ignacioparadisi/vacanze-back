@@ -355,6 +355,26 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
           }
 
           [Test]
+          public void AddUser_NotValidPasswordExceptionTest()
+          {
+               _user.Password = "123";
+               Assert.Throws<NotValidFieldException>(() => { UserRepository.AddUser(_user); });
+          }
+
+          [Test]
+          public void AddUser_DuplicateRoleTest()
+          {
+               var roles = new List<Role>();
+               roles.Add(new Role(1, "Cliente"));
+               roles.Add(new Role(1, "Cliente"));
+               roles.Add(new Role(1, "Cliente"));
+               _user.Roles = roles;
+               var user = UserRepository.AddUser(_user);
+               _insertedUsers.Add(user.Id);
+               Assert.AreEqual(1, user.Roles.Count);
+          }
+
+          [Test]
           public void GetEmployeesTest()
           {
                var roles = new List<Role>();
