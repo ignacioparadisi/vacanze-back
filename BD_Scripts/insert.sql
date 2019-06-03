@@ -350,14 +350,18 @@ INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('no encuentro mi equipa
 INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('el personal no consigue mi maleta','Buenas noches, mi equipaje no salio al llegar a mi destino, hasta cuando su irresponsabilidad.','CERRADO');
 
 
+insert into res_cru(RC_NUM_PPL,RC_USE_FK,RC_CRU_FK,RC_TIMESTAMP) values (10,5,1,'2019-03-01');
+insert into res_cru(RC_NUM_PPL,RC_USE_FK,RC_CRU_FK,RC_TIMESTAMP) values (100,6,2,'2019-03-02');
+insert into res_cru(RC_NUM_PPL,RC_USE_FK,RC_CRU_FK,RC_TIMESTAMP) values (10,7,3,'2019-03-03');
+
 INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ) VALUES('EXTRAVIADO','maleta negra para mi prueba unitaria');
 INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ) VALUES('EXTRAVIADO','maleta rola de 15 kg');
 INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ) VALUES('EXTRAVIADO','maleta azul con franjas negras');
-INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ) VALUES('EXTRAVIADO','maleta negra');
 INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('RECLAMADO','maleta roja con puntos negros',2);
-INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('RECLAMADO','maleta pequeña aproximadamente 20 kg color negra',3);
-INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('RECLAMADO','maleta vinotinto con logo de la FVF',4);
-INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('RECLAMADO','maleta rosada con dibujos de niña',1);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ) VALUES('EXTRAVIADO','maleta negra');
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK,BAG_RES_CRU_FK) VALUES('RECLAMADO','maleta pequeña aproximadamente 20 kg color negra',3,1);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK,BAG_RES_CRU_FK) VALUES('RECLAMADO','maleta vinotinto con logo de la FVF',4,2);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK, BAG_RES_CRU_FK) VALUES('RECLAMADO','maleta rosada con dibujos de niña',1,3);
 INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('ENCONTRADO','maleta de la seleccion nacional de venezuela a nombre de Salomon Rondon , marca adidas',5);
 INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('ENCONTRADO','maleta de la seleccion nacional de venezuela con implementos deportivos , marca adidas',6);
 INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('ENCONTRADO','maleta de mi esposa, hicimos el check-in todo bien, pero nunca aparecio en nuestro destino ',7);
