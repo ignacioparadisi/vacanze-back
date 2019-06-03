@@ -6,6 +6,8 @@ using vacanze_back.VacanzeApi.Persistence.Repository.Grupo10;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo10;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
+
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
 {
@@ -20,12 +22,27 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
             List<Travel> travels = new List<Travel>();
             try{
                 travels = TravelRepository.GetTravels(userId);
+            }catch(UserNotFoundException ex){
+                return BadRequest(ex.Message);
             }catch(WithoutExistenceOfTravelsException ex){
                 return BadRequest(ex.Message);
             }catch(Exception ex){
                 return BadRequest(ex.Message);
             }
             return Ok(travels);
+        }
+
+        [HttpGet("{travelId}")]
+        public ActionResult<IEnumerable<Entity>> GetReservationsByTravelAndLocation(
+            long travelId, [FromQuery] int locationId, [FromQuery] string type){
+            try{
+                type = type.ToUpper();
+                List<Entity> reservations = 
+                        TravelRepository.GetReservationsByTravelAndLocation(travelId, locationId, type.ToUpper());
+                return Ok(reservations);
+            }catch(Exception ex){
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{travelId}/locations")]
@@ -49,6 +66,21 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
                 return Ok(travel);
             }catch(NameRequiredException ex){
                 return BadRequest(ex.Message);
+            }catch(Exception ex){
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Consumes("application/json")]
+        [HttpPost("{travelId}/locations")]
+        public IActionResult AddLocationsToTravel(long travelId, [FromBody] List<Location> locations){
+            Boolean saved = false;
+            try{
+                saved = TravelRepository.AddLocationsToTravel(travelId, locations);
+                if(saved){
+                    return Ok("Las ciudades fueron agregadas satisfactoriamente");
+                }
+                return Ok(saved);
             }catch(Exception ex){
                 return BadRequest(ex.Message);
             }
