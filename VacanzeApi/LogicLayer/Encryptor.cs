@@ -33,22 +33,26 @@ namespace vacanze_back.VacanzeApi.Common
             return sBuilder.ToString();
         }
         
+        /// <summary>
+        /// Encripta el input y compara el valor encriptado contra el hash
+        /// </summary>
+        /// <param name="input">Texto a ser encriptado</param>
+        /// <param name="hash">Texto encriptado</param>
+        /// <returns>Retorna true si el input encriptado y el hash son iguales. Retorna false en caso
+        /// contrario </returns>
         public static bool Verify(string input, string hash)
         {
-            // Hash the input.
+            // Encripta el input.
             string hashOfInput = Encrypt(input);
-
-            // Create a StringComparer an compare the hashes.
+            
             StringComparer comparer = StringComparer.OrdinalIgnoreCase;
 
             if (0 == comparer.Compare(hashOfInput, hash))
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+
+            return false;
         }
     }
 }
