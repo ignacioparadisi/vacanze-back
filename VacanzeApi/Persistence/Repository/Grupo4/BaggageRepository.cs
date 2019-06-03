@@ -11,41 +11,39 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo4
           /// <summary>
           ///     Metodo para agregar un Baggage
           /// </summary>
-          /// <param name="Baggage"></param>
-          public static Baggage AddBaggage(Baggage baggage)
+
+          public static String AddBaggage(int bag_res_fli_fk, int bag_res_cru_fk, string status, string descripcion)
           {
 
-               var table = PgConnection.Instance.ExecuteFunction("addBaggage(@bag_res_fli_fk,@bag_res_cru_fk,@bag_status,@bag_descr)",
-                   baggage.MaletaFkVuelo, baggage.MaletaFkCrucero, baggage.MaletaStatus, baggage.Descripcion);
+               var table = PgConnection.Instance.ExecuteFunction("addbaggage(@bag_res_fli_fk,@bag_res_cru_fk,@bag_status,@bag_descr)",
+                   DBNull.Value, DBNull.Value, status, descripcion);
 
-               var id = Convert.ToInt64(table.Rows[0][0]);
-               baggage.Id = id;
-               baggage.MaletaStatus = table.Rows[1][3].ToString();
-               baggage.Descripcion = table.Rows[1][4].ToString();
-               return baggage;
+
+               return "Maleta Agregada";
           }
 
+          public static int AddBaggageReturnId(int bag_res_fli_fk, int bag_res_cru_fk, string status, string descripcion)
+          {
+
+               var table = PgConnection.Instance.ExecuteFunction("addbaggage(@bag_res_fli_fk,@bag_res_cru_fk,@bag_status,@bag_descr)",
+                   DBNull.Value, DBNull.Value, status, descripcion);
 
 
-          public static void DeleteBaggage(int baggageId)
+               return Convert.ToInt32(table.Rows[0][0]);
+          }
+          public static int DeleteBaggage(int baggageId)
           {
 
                var table = PgConnection.Instance.ExecuteFunction("deletebaggage(@bag_id)",
                    baggageId);
+               var baggage = table.Rows[0][0];
+               if (baggage == DBNull.Value)
+               {
+                    throw new UserNotFoundException("La Maleta  no se encuentra registrada.");
+               }
 
-          }
+               return Convert.ToInt32(baggage);
 
-          public void ModifyBaggageStatus(int baggageId, Baggage baggage)
-          {
-               var table = PgConnection.Instance.ExecuteFunction("modifyBaggageStatus(@bag_id,@bag_status)",
-                  baggageId, baggage.MaletaStatus);
-
-          }
-
-          public void ModifyBaggageDescripcion(int baggageId, Baggage baggage)
-          {
-               var table = PgConnection.Instance.ExecuteFunction("modifyBaggageDescri(@bag_id, @bag_descr)",
-                 baggageId, baggage.Descripcion);
           }
 
           public static List<Baggage> GetBaggage()
@@ -60,11 +58,27 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo4
                var BaggageList = new List<Baggage>();
                for (var i = 0; i < table.Rows.Count; i++)
                {
+                    if (table.Rows[i][1] != DBNull.Value)
+                    {
+                         Vuelo = Convert.ToInt32(table.Rows[i][1]);
+                    }
+                    else
+                    {
+                         Vuelo = 0;
+                    }
+                    if (table.Rows[i][2] != DBNull.Value)
+                    {
+                         Crucero = Convert.ToInt32(table.Rows[i][2]);
+                    }
+                    else
+                    {
+                         Crucero = 0;
+                    }
                     status = table.Rows[i][4].ToString();
                     id = Convert.ToInt32(table.Rows[i][0]);
                     descripcion = table.Rows[i][3].ToString();
-                    Vuelo = Convert.ToInt32(table.Rows[i][1]);
-                    Crucero = Convert.ToInt32(table.Rows[i][2]);
+
+
                     var Baggage = new Baggage(id, Vuelo, Crucero, status, descripcion);
                     BaggageList.Add(Baggage);
                }

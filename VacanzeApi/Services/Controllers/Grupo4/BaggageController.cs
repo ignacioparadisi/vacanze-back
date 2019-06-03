@@ -15,9 +15,28 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo4
      public class BaggageController : ControllerBase
      {
 
+          // Metodo para agregar equipajes
+          [HttpGet("agregar/{estatus}/{descripcion}")]
+          public ActionResult<int> Get(string estatus, string descripcion)
+          {
+               int i = 0;
 
-          // GET api/values
-          //se usara para consultar por pasaporte
+               try
+               {
+                    i = BaggageRepository.AddBaggageReturnId(0, 0, descripcion, estatus);
+               }
+               catch (DatabaseException e)
+               {
+
+                    return BadRequest("Error al agregar equipaje" + e);
+               }
+
+               return i;
+
+          }
+
+
+          //Metodo para obtener todos los equipajes
           [HttpGet]
           public ActionResult<IEnumerable<Baggage>> Get()
           {
@@ -35,15 +54,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo4
                return Baggages;
           }
 
-          // GET api/values/5
-          [HttpGet("{id}")]
-          public ActionResult<string> Get(int id)
-          {
-               return "id::" + id;
-          }
 
-          // GET api/values/5
-          // Get para la tabla equipaje
+          // Metodo para eliminar equipajes
           [HttpGet("{tipo}/{id}")]
           public ActionResult<string> Get(string tipo, int id)
           {
@@ -63,28 +75,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo4
           }
 
 
-          // Post api/Claim/
-
-          [HttpPost]
-          public ActionResult<string> Post([FromBody] string prueba)
-          {
-
-               return "exito " + prueba;
-
-          }
-
      }
 
-     public class BaggageSecundary
-     {
-
-          private string MaletaId;
-          private string MaletaFkVuelo;
-          private string MaletaFkCrucero;
-          private string MaletaStatus;
-          private string CantidadPasajeros;
-          private string Descripcion;
-
-
-     }
 }

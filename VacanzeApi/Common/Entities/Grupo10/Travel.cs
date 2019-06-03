@@ -1,21 +1,27 @@
 using System;
 using System.Collections.Generic;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo14;
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10   
 {
-    public class Travel : Entity{
+    public class Travel{
 
-        private List<Entity> _carReservations;
-        private List<Entity> _hotelReservations; 
-        private List<Entity> _restaurantReservations;
-        private List<Entity> _flightReservations;
+        private List<Location> locations = new List<Location>();
+
+        private List<ReservationRoom> _roomReservations = new List<ReservationRoom>();
+        private List<ReservationAutomobile> _carReservations = new List<ReservationAutomobile>();
+        private List<Restaurant_res> _restaurantReservations = new List<Restaurant_res>();
+        
+        private int _id;
+        public int Id{ get{ return _id; } set{ _id = value; } }
 
         private User _user;
         public User User{ get{ return _user; } set{ _user = value; } }
 
-        private long _userId;
-        public long UserId{ get { return _userId; } set{ _userId = value; } }
+        private int _userId;
+        public int UserId{ get { return _userId; } set{ _userId = value; } }
 
         private string _name;
         public string Name{ get{ return _name; } set{ _name = value; } }
@@ -29,8 +35,8 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10
         private string _description;
         public string Description{ get{ return _description; } set{ _description = value; } }
 
-        public Travel(long id, string _name, DateTime _init, DateTime _end, string _description, long _userId) :base(id){
-            this.Id = id;
+        public Travel(int _id, string _name, DateTime _init, DateTime _end, string _description, int _userId){
+            this.Id = _id;
             this.Name = _name;
             this.Init = _init;
             this.End = _end;
@@ -38,7 +44,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10
             this.UserId = _userId;
         }
 
-        public Travel(string _name, DateTime _init, DateTime _end, string _description, long _userId) :base(0){
+        public Travel(string _name, DateTime _init, DateTime _end, string _description, int _userId){
             this.Name = _name;
             this.Init = _init;
             this.End = _end;
@@ -46,29 +52,18 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10
             this.UserId = _userId;
         }
 
-        public Travel(string _name, DateTime _init, DateTime _end, string _descriptio) :base(0){
+        public Travel(string _name, DateTime _init, DateTime _end, string _descriptio){
             this.Name = _name;
             this.Init = _init;
             this.End = _end;
             this.Description = _description;
         }
 
-        public Travel() :base(0){}
+        public Travel(){}
 
-        public void AddCar(Entity car){
-            _carReservations.Add(car);
-        }
-
-        public void AddHotel(Entity hotel){
-            _hotelReservations.Add(hotel);
+        public void AddLocation(Location location){
+            this.locations.Add(location);
         }
 
-        public void AddRestaurant(Entity restaurant){
-            _hotelReservations.Add(restaurant);
-        }
-        
-        public void AddFlight(Entity flight){
-            _hotelReservations.Add(flight);
-        }
     }
 }
