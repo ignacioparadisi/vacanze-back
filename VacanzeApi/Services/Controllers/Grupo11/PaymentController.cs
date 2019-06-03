@@ -209,6 +209,11 @@ namespace vacanze_back.Controllers
 
         }
 
+        /// <summary>
+        /// Devuelve todos los pagos de un usaurio
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("Mypayment/{id}")]
         public ActionResult<List<Transaction>> GetpaymentTransact(long id)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using vacanze_back.Entities.Grupo11;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo11;
+using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Util;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo11
@@ -91,9 +92,18 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo11
                {
                     _iResp = UpdatePaymentId(_iResp, bill.reference);
 
-               }
+                }
+                else
+                {
+                    throw new NotValidIdException("El id no es valido añadiendo el pago");
+                }
 
 
+            }
+            catch (GeneralException ex)
+            {
+
+                throw ex;
             }
             catch (Exception ex)
             {
@@ -136,10 +146,15 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo11
 
 
             }
+            catch (GeneralException ex)
+            {
+
+                throw ex;
+            }
             catch (Exception ex)
             {
 
-                throw  ex;
+                throw ex;
             }
         }
 
@@ -170,6 +185,11 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo11
                 }
 
 
+            }
+            catch (GeneralException ex)
+            {
+
+                throw ex;
             }
             catch (Exception ex)
             {
@@ -225,6 +245,11 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo11
                     _iResp = -5;
                 }
             }
+            catch (GeneralException ex)
+            {
+
+                throw ex;
+            }
             catch (Exception ex)
             {
 
@@ -255,6 +280,11 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo11
                 }
 
 
+            }
+            catch (GeneralException ex)
+            {
+
+                throw ex;
             }
             catch (Exception ex)
             {
