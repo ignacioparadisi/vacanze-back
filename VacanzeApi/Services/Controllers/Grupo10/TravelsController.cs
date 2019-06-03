@@ -74,13 +74,15 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
         public IActionResult AddTravel([FromBody] Travel travel){
             try{
                 int id = TravelRepository.AddTravel(travel);
-                if(id == 0)
-                    return BadRequest("Lo sentimos, el viaje no pudo ser creado");
                 return Ok(travel);
-            }catch(NameRequiredException ex){
-                return BadRequest(ex.Message);
-            }catch(Exception ex){
-                return BadRequest(ex.Message);
+            }catch(RequiredAttributeException ex){
+                return StatusCode(400,ex.Message);
+            }catch(UserNotFoundException ex){
+                return StatusCode(404,ex.Message);
+            }catch(InternalServerErrorException ex){
+                return StatusCode(500, ex.Message);
+            }catch(Exception){
+                return StatusCode(400);
             }
         }
 
