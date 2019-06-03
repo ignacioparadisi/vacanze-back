@@ -1,20 +1,21 @@
 using System;
+using Newtonsoft.Json;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
 {
     public class Layover
     {
-        public int Id { get; }
+        public int Id { get; set; }
         public int CruiserId { get;}
         public string DepartureDate { get;}
         public string ArrivalDate { get;}
-        public double Price { get;}
+        public decimal Price { get;}
         public int LocDeparture { get;}
         public int LocArrival { get;}
 
-
-        public Layover(int id, int cruiserId, string departureDate,string arrivalDate, double price, int locDeparture,
+        [JsonConstructor]
+        public Layover(int id, int cruiserId, string departureDate,string arrivalDate, decimal price, int locDeparture,
             int locArrival)
         {
             Id = id;
@@ -25,7 +26,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
             LocDeparture = locDeparture;
             LocArrival = locArrival;
         }
-        public Layover(int cruiserId,string departureDate,string arrivalDate, double price, int locDeparture,
+        public Layover(int cruiserId,string departureDate,string arrivalDate, decimal price, int locDeparture,
             int locArrival)
         {   
             CruiserId = cruiserId;
@@ -37,6 +38,10 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
         }
         public void Validate()
         {
+            if (CruiserId <=0)
+            {
+                throw new InvalidAttributeException("Cruiser id is required");
+            }
             if (string.IsNullOrEmpty(ArrivalDate))
             {
                 throw new InvalidAttributeException("Arrival Date is required");
