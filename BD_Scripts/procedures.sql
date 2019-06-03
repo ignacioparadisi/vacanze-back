@@ -958,33 +958,6 @@ $$
 $$;
 --------Consultar Cruise-----------------
 --devuelve una tabla con los datos de una ruta dado su id
-CREATE OR REPLACE FUNCTION GetCruise(_cru_id integer)
-RETURNS TABLE
-  (id integer,
-   ship VARCHAR(30),
-   departure_date TIMESTAMP,
-   arrival_date TIMESTAMP,
-   price DECIMAL,
-   arrival_loc VARCHAR,
-   departure_loc VARCHAR
-  )
-AS
-$$
-DECLARE 
- loc1 VARCHAR;
- loc2 VARCHAR;
-BEGIN 
-    RETURN QUERY SELECT
-    c.cru_id, s.shi_name, c.cru_departuredate, c.cru_arrivaldate, c.cru_price,
-  	concat(ll.loc_city, ', ',ll.loc_country)::varchar,
-	concat(l.loc_city, ',',l.loc_country)::varchar
-    FROM Cruise c, Ship s, Location ll, Location l
-    WHERE c.cru_id = _cru_id and s.shi_id = c.cru_shi_fk
-	and ll.loc_id = c.cru_loc_arrival
-	and l.loc_id = c.cru_loc_departure;
-    
-END;
-$$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION GetCruisers(ship_id integer)
 RETURNS TABLE
