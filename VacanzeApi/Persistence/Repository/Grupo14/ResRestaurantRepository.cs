@@ -55,19 +55,39 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo14{
         }
     
          
-        public List<Restaurant_res> getResRestaurant(int user){
+        public static List<Restaurant_res> getResRestaurant(int user){
 
             var ReservationList = new List<Restaurant_res>();
-            var table = PgConnection.Instance.ExecuteFunction("getResRestaurant(@userId)",user);
+            var table = PgConnection.Instance.ExecuteFunction("getResRestaurant(@usuario)",user);
+            Console.WriteLine("Antes del for");
             for (var i = 0; i < table.Rows.Count; i++){
-
+                //Orden del SP id, ciudad, pais, restaurant, direccion, fecha_res, cant_persona
                 var id = Convert.ToInt32(table.Rows[i][0].ToString());
-                var fecha_for_res = table.Rows[i][1].ToString();
-                var number_people =  Convert.ToInt32(table.Rows[i][2].ToString());
-                var fecha_que_reservo = table.Rows[i][3].ToString();
-                var userID =  Convert.ToInt32(table.Rows[i][4].ToString());
-                var restaurantID =  Convert.ToInt32(table.Rows[i][5].ToString());
-                var Restaurant_res = new Restaurant_res(id, fecha_for_res,number_people,fecha_que_reservo,userID,restaurantID);
+                var locationName = table.Rows[i][1].ToString();
+                var pais = table.Rows[i][2].ToString();
+                var restName = table.Rows[i][3].ToString();
+                var address =  table.Rows[i][4].ToString();
+                var fecha_reservacion =  table.Rows[i][5].ToString();
+                var cant_persona = Convert.ToInt32(table.Rows[i][6].ToString());
+
+                var Restaurant_res = new Restaurant_res(id,locationName, pais, restName, address, fecha_reservacion, cant_persona);
+                ReservationList.Add(Restaurant_res);
+            };
+            return ReservationList;
+        }
+
+        public static List<Restaurant_res> getReservationNotPay(int user){
+
+            var ReservationList = new List<Restaurant_res>();
+            var table = PgConnection.Instance.ExecuteFunction("getReservationNotPay(@usuario)",user);
+            Console.WriteLine("Antes del for");
+            for (var i = 0; i < table.Rows.Count; i++){
+                //Orden del SP id, ciudad, pais, restaurant, direccion, fecha_res, cant_persona
+                var id = Convert.ToInt32(table.Rows[i][0].ToString());
+                var fecha_reservacion = table.Rows[i][1].ToString();
+                var tipo = "Restaurantes";
+
+                var Restaurant_res = new Restaurant_res(id, fecha_reservacion, tipo);
                 ReservationList.Add(Restaurant_res);
             };
             return ReservationList;
