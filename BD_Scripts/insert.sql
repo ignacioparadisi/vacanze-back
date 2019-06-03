@@ -206,6 +206,44 @@ INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (1, 5);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (1, 6);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (1, 7);
 
+-------------------------------Grupo 3---------------------------------------------------
+INSERT INTO public.Plane(
+	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
+	VALUES (100,true, 50, 1000, 'Boeing 1');
+INSERT INTO public.Plane(
+	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
+	VALUES (150,true, 40, 1000, 'Boeing 2');
+INSERT INTO public.Plane(
+	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
+	VALUES (111,true, 30, 1000, 'Boeing 3');
+INSERT INTO public.Plane(
+	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
+	VALUES (200,true, 50, 2000, 'Boeing 4');
+INSERT INTO public.Plane(
+	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
+	VALUES (80,true, 10, 1000, 'Boeing 5');
+
+--------------Grupo 5 --------------------------------------------
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
+VALUES('Toyota','Corolla',3,true,55,'aa11ab1','auto1.jpg',1);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
+VALUES('VolksWagen','Golf',3,false,70.5,'aa11ab2','auto2.jpg',1);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
+VALUES('Honda','Civic',3,true,40,'aa12ab1','auto3.jpg',2);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
+VALUES('Ford','Fusion',3,false,60,'aa12ab2','auto4.jpg',2);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
+VALUES('Ford','F-150',4,true,80,'aa13ab1','auto5.jpg',3);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
+VALUES('Honda','Civic',3,false,50.2,'aa13ab2','auto6.jpg',3);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
+VALUES('Toyota','Camry',3,true,60,'aa14ab1','auto7.jpg',4);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
+VALUES('Honda','Accord',3,false,54,'aa14ab2','auto8.jpg',4);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
+VALUES('Honda','CR-V',3,true,55,'aa15ab1','auto9.jpg',5);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
+VALUES('Chevrolet','Silverado',5,false,69.8,'aa15ab2','auto10.jpg',5);
 
 ------- grupo 6 ----------
 
@@ -240,25 +278,7 @@ VALUES	('Prueba 1', 30, 4, true, 'Alguna direccion, algun lugar', 234.5, null, n
 		('Sydney Hotel', 12, 4, true, 'Sydney', 1300.5, null, '+58 414 1100085', null, 4, 78),
 		('Gold Coast Hotel', 12, 4, true, 'Sydney', 2125.5, null, '+58 414 1100085', null, 4, 78);
 
--------------------------------Grupo 3---------------------------------------------------
-INSERT INTO public.Plane(
-	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
-	VALUES (100,true, 50, 1000, 'Boeing 1');
-INSERT INTO public.Plane(
-	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
-	VALUES (150,true, 40, 1000, 'Boeing 2');
-INSERT INTO public.Plane(
-	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
-	VALUES (111,true, 30, 1000, 'Boeing 3');
-INSERT INTO public.Plane(
-	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
-	VALUES (200,true, 50, 2000, 'Boeing 4');
-INSERT INTO public.Plane(
-	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
-	VALUES (80,true, 10, 1000, 'Boeing 5');
-
 ------- grupo 7 ----------
-
 INSERT INTO restaurant(res_name, res_capacity , res_isactive, res_qualify, res_specialty, 
 res_price, res_businessname, res_picture, res_descr, res_tlf, res_loc_fk, res_address_specs) 
 VALUES	('Pescado Frito', 50, default, 5,'Carite', 100, 'sam', null, 'Pescado Frito', '04141100085', 37, 'Naiguata'),
@@ -294,10 +314,11 @@ VALUES	('Pescado Frito', 50, default, 5,'Carite', 100, 'sam', null, 'Pescado Fri
 	('Wendy', 50, default, 5,'Hamburguesas', 100, 'sam', null, 'Cuadra contigo', '04141100085', 29, 'Caracas'),
 	('KFC', 50, default, 5,'Pollo', 100, 'sam', null, 'Pollo', '04141100085', 29, 'Caracas'),
 	('Avila Burguer', 50, default, 5,'Hamburguesa', 100, 'sam', null, 'Hamburguesa', '04141100085', 29, 'Caracas');
-	
---------------Grupo 8 ---------------------------------
+
+--------------Grupo 8 ---------------------------------------------
 INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'concordia', 100, 1000, 'Modelo1','Linea1', '1.jpg' );
 INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'Lmao', 500, 2000, 'Modelo2','Linea2', '3.jpg' );
+Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,2,'2019/2/11','2019/2/12',2000,1,2);
 
 -------------Grupo 9 ------------------------------------
 INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('Mi primer reclamo','perdi mi maleta negra, nunca aparecio cuando llegue a mi destino','ABIERTO');
@@ -313,8 +334,8 @@ INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','male
 INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','maleta vinotinto con logo de la FVF',4);
 INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','maleta rosada con dibujos de niña',1);
 
-------- grupo 10 ----------
 
+------- grupo 10 ----------
 -- Cliente Generico --
 INSERT INTO Travel(tra_name, tra_descr, tra_use_fk, tra_ini, tra_end)
 VALUES ('Surf Trip', 'Surf trip arroud Vnzla', 5, '2019-06-10', '2019-07-10');
@@ -337,4 +358,6 @@ INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (2,158); -- Osaka
 INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (3,127); -- Oxford
 INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (3,78); -- Sydney
 INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (3,29); -- Caracas
+
+Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,2,'2019/2/11','2019/2/12',2000,1,2);
 

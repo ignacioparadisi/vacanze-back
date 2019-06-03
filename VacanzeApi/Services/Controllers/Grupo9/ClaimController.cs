@@ -56,6 +56,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 			{
 				return StatusCode(500, ex.Message);
 			}
+			catch (NullClaimException ex)
+			{			
+				return StatusCode(500, ex.Message);
+			}
 		}		
 		/// <summary>
 		// GET api/values/5
@@ -75,6 +79,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 			}
 			catch (InvalidStoredProcedureSignatureException ex)
 			{
+				return StatusCode(500, ex.Message);
+			}
+			catch (NullClaimException ex)
+			{
+				
 				return StatusCode(500, ex.Message);
 			}
 		}

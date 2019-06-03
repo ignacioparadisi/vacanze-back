@@ -7,7 +7,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
 {
     public static class RestaurantRepository
     {
-        public static long AddRestaurant(Restaurant restaurant)
+        public static int AddRestaurant(Restaurant restaurant)
         {
             try
             {
@@ -16,7 +16,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
                 restaurant.Name, restaurant.Capacity, restaurant.IsActive, restaurant.Qualify, restaurant.Specialty, restaurant.Price, restaurant.BusinessName, 
                 restaurant.Picture, restaurant.Description, restaurant.Phone, restaurant.Location, restaurant.Address
                 );
-                var savedId = Convert.ToInt64(table.Rows[0][0]);
+                var savedId = Convert.ToInt32(table.Rows[0][0]);
                 return savedId;
             }
             catch(DatabaseException)

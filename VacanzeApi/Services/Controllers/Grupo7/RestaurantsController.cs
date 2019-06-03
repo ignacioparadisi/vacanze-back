@@ -17,9 +17,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
     public class RestaurantsController : ControllerBase
     {
 
-        // GET api/restaurants/[?location={location_id}]
+        // GET api/restaurants
         [HttpGet]
-        public ActionResult<IEnumerable<Restaurant>> Get([FromQuery] long location = 0)
+        public ActionResult<IEnumerable<Restaurant>> Get()
         {
             try
             {
@@ -31,7 +31,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
             }
         }
 
-         // GET/Restaurant/{id}
+         // GET/Restaurants/location/{id}
         [HttpGet("location/{id}")]
         public ActionResult<IEnumerable<Restaurant>> GetRestaurantByLocation(int id)
         {
@@ -49,7 +49,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
             }
         }
 
-        // GET/Restaurant/{id}
+        // GET/Restaurants/{id}
         [HttpGet("{id}")]
         public IActionResult GetRestaurant(int id)
         {
