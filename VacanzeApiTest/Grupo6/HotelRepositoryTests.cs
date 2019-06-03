@@ -26,6 +26,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
                 .LocatedAt(location)
                 .WithStatus(true)
                 .WithAddressDescription("Calle Los Almendrones")
+                .WithPictureUrl("alguncodigoenbase64")
                 .Build();
         }
 
@@ -140,7 +141,9 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         [Test]
         public void GetHotelImageTest()
         {
-            var base64ImageCode = HotelRepository.GetHotelImage(29);
+            var insertedHotelId = HotelRepository.AddHotel(_hotel);
+            _insertedHotels.Add(insertedHotelId);
+            var base64ImageCode = HotelRepository.GetHotelImage(insertedHotelId);
             Assert.IsNotNull(base64ImageCode);
         }
 
