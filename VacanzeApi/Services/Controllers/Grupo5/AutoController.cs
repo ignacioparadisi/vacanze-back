@@ -192,8 +192,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
             }
             catch (IndexOutOfRangeException )
             {
-                return StatusCode(500,"No hay automoviles registrados {c-DB}");
+                return StatusCode(500,"No hay ciudades guardadas - error de conexion con las ciudades {IOoR}");
             }
+            catch (DatabaseException )
+            {
+                return StatusCode(500,"No hay ciudades guardadas - error de conexion con las ciudades {DB}");
             }
+        }
     }
 }

@@ -6,11 +6,12 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo1
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using vacanze_back.VacanzeApi.Common.Entities.Grupo1;
     using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 
     public class LoginRepository
     {
-        public User SessionLogin(string Email, string Password)
+        public Login SessionLogin(string Email, string Password)
         {
             try
             {
@@ -21,10 +22,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo1
                 var roles = new List<Role>();
                 for (var i = 0; i < view.Rows.Count; i++)
                 {
-                    Role objRol = new Role(i, view.Rows[i][3].ToString());
+                    Role objRol = new Role(Convert.ToInt32(view.Rows[i][3]), view.Rows[i][4].ToString());
                     roles.Add(objRol);
                 }
-                var user = new User(Id, 000, Name, LastName, Email, Password, roles);
+                var user = new Login(Id, roles, Email,Password );
                 return user;
             }
             catch (Exception e)

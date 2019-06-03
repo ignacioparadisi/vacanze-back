@@ -1,3 +1,18 @@
+------ Consulta de los lugares ------
+
+CREATE OR REPLACE FUNCTION GetLocations()
+RETURNS TABLE
+  (id integer,
+   city VARCHAR(30),
+   country VARCHAR(30))
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT
+    LOC_ID, LOC_CITY, LOC_COUNTRY
+    FROM LOCATION;
+END;
+$$ LANGUAGE plpgsql;
 -------------------------------Grupo 3---------------------------------
 -- FUNCTION: public.addflight(integer, double precision, character varying, character varying, integer, integer)
 
@@ -351,7 +366,7 @@ $$
     END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION GetUserByEmail(email_id VARCHAR(30))
+CREATE OR REPLACE FUNCTION GetUserByEmail(email_id VARCHAR(30), user_id INTEGER)
   RETURNS TABLE
           (id integer,
            documentId VARCHAR(50),
@@ -362,7 +377,7 @@ AS
 $$
 BEGIN
   RETURN QUERY SELECT use_id, use_document_id, use_name, use_last_name, use_email
-               FROM Users WHERE use_email = email_id;
+               FROM Users WHERE use_email = email_id AND use_id <> user_id;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -491,7 +506,7 @@ RETURNS TABLE
    pricePerRoom DECIMAL,
    website VARCHAR(100),
    phone VARCHAR(20),
-   picture VARCHAR,
+   picture text,
    stars INTEGER,
    location INTEGER
   )
@@ -507,7 +522,7 @@ BEGIN
                         H.hot_room_price,
                         H.hot_website,
                         H.hot_phone,
-                        H.HOT_PICTURE,
+                        '/hotels/' || H.HOT_ID || '/image' picture,
                         H.HOT_STARS,
                         H.hot_loc_fk
                  FROM Hotel AS H;
@@ -526,7 +541,7 @@ CREATE OR REPLACE FUNCTION GetHotelById(p_id INTEGER)
                 pricePerRoom DECIMAL,
                 website VARCHAR(100),
                 phone VARCHAR(20),
-                picture VARCHAR,
+                picture text,
                 stars INTEGER,
                 location INTEGER
             )
@@ -542,7 +557,7 @@ BEGIN
                         H.hot_room_price,
                         H.hot_website,
                         H.hot_phone,
-                        H.HOT_PICTURE,
+                        '/hotels/' || H.HOT_ID || '/image' picture,
                         H.HOT_STARS,
                         H.hot_loc_fk
                  FROM Hotel AS H
@@ -562,7 +577,7 @@ CREATE OR REPLACE FUNCTION GetHotelsByCity(city_id integer)
                 pricePerRoom DECIMAL,
                 website VARCHAR(100),
                 phone VARCHAR(20),
-                picture VARCHAR,
+                picture text,
                 stars INTEGER,
                 location INTEGER
             )
@@ -578,7 +593,7 @@ BEGIN
                         H.hot_room_price,
                         H.hot_website,
                         H.hot_phone,
-                        H.HOT_PICTURE,
+                        '/hotels/' || H.HOT_ID || '/image' picture,
                         H.HOT_STARS,
                         H.hot_loc_fk
                  FROM Hotel AS H, LOCATION L
@@ -609,7 +624,7 @@ CREATE OR REPLACE FUNCTION UpdateHotel(_id INTEGER,
                 pricePerRoom DECIMAL,
                 website VARCHAR(100),
                 phone VARCHAR(20),
-                picture VARCHAR,
+                picture text,
                 stars INTEGER,
                 location INTEGER
             )
@@ -630,6 +645,19 @@ BEGIN
         hot_loc_fk        = _location
     WHERE hot_id = _id;
     return query select * from gethotelbyid(_id);
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION GetHotelImage(p_id INTEGER)
+    RETURNS VARCHAR AS
+$$
+DECLARE
+    img VARCHAR;
+BEGIN
+    SELECT hot_picture
+    FROM Hotel
+    WHERE hot_id = p_id INTO img;
+    return img;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -750,16 +778,29 @@ BEGIN
  RETURN ret_id;
 END;
 $$ LANGUAGE plpgsql;
-
+-------Update Cruiser Status--------------------
+CREATE OR REPLACE FUNCTION UpdateShipStatus(
+_shi_id integer,
+_status boolean
+)
+returns integer AS
+$$
+declare 
+ret_id integer;
+begin
+update ship set shi_isactive = _status where shi_id = _shi_id returning shi_id into ret_id;
+return ret_id;
+END;
+$$ LANGUAGE plpgsql;
 -------Agregar Crucero(ruta)--------------------
 
 CREATE OR REPLACE FUNCTION AddCruise( 
   _cru_shi_fk INTEGER,
-  _cru_departuredate TIMESTAMP,
-  _cru_arrivaldate TIMESTAMP,
+  _cru_departuredate VARCHAR,
+  _cru_arrivaldate VARCHAR,
   _cru_price DECIMAL,
-  _cru_loc_arrival INTEGER,
-  _cru_loc_departure INTEGER
+  _cru_loc_departure INTEGER,
+  _cru_loc_arrival INTEGER
   ) 
 RETURNS integer AS
 $$
@@ -769,7 +810,7 @@ BEGIN
 
    INSERT INTO Cruise(cru_id, cru_shi_fk, cru_departuredate, cru_arrivaldate, cru_price,
                        cru_loc_arrival, cru_loc_departure ) VALUES
-    (default, _cru_shi_fk, _cru_departuredate, _cru_arrivaldate, _cru_price, _cru_loc_arrival, _cru_loc_departure )
+    (default, _cru_shi_fk, TO_TIMESTAMP(_cru_departuredate, 'yyyy-mm-dd hh24:mi'), TO_TIMESTAMP(_cru_arrivaldate, 'yyyy-mm-dd hh24:mi'), _cru_price, _cru_loc_arrival, _cru_loc_departure )
     RETURNING cru_id INTO ret_id;
    RETURN ret_id;
 END;
@@ -786,6 +827,8 @@ BEGIN
     DELETE FROM Ship 
     WHERE (shi_id = _shi_id)
     returning shi_id into ret_id;
+    DELETE FROM Cruise
+    WHERE (cru_shi_fk = _shi_id);
    return ret_id;
 END;
 $$ LANGUAGE plpgsql;
@@ -836,25 +879,29 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION ModifyCruise( 
     _cru_id integer,
     _shi_id integer,
-    _cru_departuredate TIMESTAMP,
-    _cru_arivaldate TIMESTAMP,
-    _loc_arrival integer,
+    _cru_departuredate VARCHAR,
+    _cru_arivaldate VARCHAR,
     _loc_departure integer,
+    _loc_arrival integer,
     _cru_price DECIMAL
     )
-RETURNS integer AS
+RETURNS TABLE
+  (id integer,
+   ship integer,
+   departure_date TIMESTAMP,
+   arrival_date TIMESTAMP,
+   price DECIMAL,
+   arrival_loc integer,
+   departure_loc integer
+  )AS
 $$
-declare
-    ret_id integer;
 BEGIN
-
-   UPDATE Cruise SET cru_departuredate= _cru_departuredate,
-   cru_shi_fk = _shi_id, cru_arrivaldate = _cru_arivaldate, 
+   UPDATE Cruise SET cru_departuredate= TO_TIMESTAMP(_cru_departuredate, 'yyyy-mm-dd hh24:mi'),
+   cru_shi_fk = _shi_id, cru_arrivaldate = TO_TIMESTAMP(_cru_arrivaldate, 'yyyy-mm-dd hh24:mi'), 
    cru_loc_arrival = _loc_arrival, cru_loc_departure = _loc_departure, 
    cru_price = _cru_price
-    WHERE (cru_id = _cru_id)
-   returning cru_id into ret_id;
-   RETURN _cru_id;
+    WHERE (cru_id = _cru_id);
+   RETURN query select * from cruise where cru_id = _cru_id;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -868,13 +915,14 @@ RETURNS TABLE
    capacity_people integer,
    capacity_tonnes integer,
    model VARCHAR(30),
-   cruise_line VARCHAR(30)
+   cruise_line VARCHAR(30),
+   picture VARCHAR
   )
 AS
 $$
 BEGIN
     RETURN QUERY SELECT
-    shi_id, shi_name, shi_isactive, shi_capacity, shi_loadingcap, shi_model, shi_line
+    shi_id, shi_name, shi_isactive, shi_capacity, shi_loadingcap, shi_model, shi_line,shi_picture
     FROM Ship WHERE shi_id = _shi_id;
 END;
 $$ LANGUAGE plpgsql;
@@ -889,6 +937,33 @@ $$
 $$;
 --------Consultar Cruise-----------------
 --devuelve una tabla con los datos de una ruta dado su id
+CREATE OR REPLACE FUNCTION GetCruise(_cru_id integer)
+RETURNS TABLE
+  (id integer,
+   ship VARCHAR(30),
+   departure_date TIMESTAMP,
+   arrival_date TIMESTAMP,
+   price DECIMAL,
+   arrival_loc VARCHAR,
+   departure_loc VARCHAR
+  )
+AS
+$$
+DECLARE 
+ loc1 VARCHAR;
+ loc2 VARCHAR;
+BEGIN 
+    RETURN QUERY SELECT
+    c.cru_id, s.shi_name, c.cru_departuredate, c.cru_arrivaldate, c.cru_price,
+  	concat(ll.loc_city, ', ',ll.loc_country)::varchar,
+	concat(l.loc_city, ',',l.loc_country)::varchar
+    FROM Cruise c, Ship s, Location ll, Location l
+    WHERE c.cru_id = _cru_id and s.shi_id = c.cru_shi_fk
+	and ll.loc_id = c.cru_loc_arrival
+	and l.loc_id = c.cru_loc_departure;
+    
+END;
+$$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION GetCruisers(ship_id integer)
 RETURNS TABLE
@@ -911,23 +986,37 @@ BEGIN
     
 END;
 $$ LANGUAGE plpgsql;
+--------------get cruise by loc------------------------------------------
+CREATE OR REPLACE FUNCTION GetCruiseByLocation(_dep_id integer, _arr_id integer)
+RETURNS TABLE
+  (id integer,
+   ship_id integer,
+   departure_date TIMESTAMP,
+   arrival_date TIMESTAMP,
+   price DECIMAL,
+   departure_loc integer,
+   arrival_loc integer
+  )
+AS
+$$
+DECLARE
+  stat boolean;
+BEGIN 
+  SELECT shi_isactive FROM ship INTO stat 
+  WHERE shi_id IN (SELECT cru_shi_fk FROM CRUISE
+  WHERE cru_loc_departure = _dep_id
+  AND cru_loc_arrival = _arr_id);
+  IF stat = True THEN
+      RETURN QUERY SELECT
+      c.cru_id,c.cru_shi_fk, c.cru_departuredate, c.cru_arrivaldate, c.cru_price,
+      c.cru_loc_departure, c.cru_loc_arrival
+    FROM Cruise c
+    WHERE c.cru_loc_departure = _dep_id
+    AND c.cru_loc_arrival = _arr_id;
+  END IF;  
+END;
+$$ LANGUAGE plpgsql;
 
--- CREATE OR REPLACE FUNCTION GetCruiseByLocation(_cru_id integer)
--- RETURNS TABLE
---   (id integer,
---    ship VARCHAR(30),
---    departure_date TIMESTAMP,
---    arrival_date TIMESTAMP,
---    price DECIMAL
---   )
--- AS
--- $$
--- BEGIN
---     RETURN QUERY SELECT
---     c.cru_id, s.shi_name, c.cru_departuredate, c.cru_arrivaldate, c.cru_price
---     FROM Cruise c, Ship s WHERE c.cru_id = _cru_id and s.shi_id = c.cru_shi_fk;
--- END;
--- $$ LANGUAGE plpgsql;
 ---------Retorna todos los Cruceros--------
 CREATE OR REPLACE FUNCTION GetAllShip()
 RETURNS TABLE
@@ -1153,7 +1242,7 @@ $$ LANGUAGE plpgsql;
 
 ------------------------------------FIN DEL GRUPO 9--------------------------------
 
------------------------------------Grupo 5 ------------------------------------------------
+---------------------------------INICIO DEL GRUPO 5 -------------------------------------
 -------------AGREGAR AUTO-----------------
 
 CREATE OR REPLACE FUNCTION 
@@ -1397,21 +1486,7 @@ UPDATE automobile
 	RETURN _id;
 END;
 $$ LANGUAGE plpgsql;
------- Consulta de los lugares ------
 
-CREATE OR REPLACE FUNCTION GetLocations()
-RETURNS TABLE
-  (id integer,
-   city VARCHAR(30),
-   country VARCHAR(30))
-AS
-$$
-BEGIN
-    RETURN QUERY SELECT
-    LOC_ID, LOC_CITY, LOC_COUNTRY
-    FROM LOCATION;
-END;
-$$ LANGUAGE plpgsql;
 ----------------------------------------- consulta de ciudades-----------------------------------
 
 CREATE OR REPLACE FUNCTION GetCity()
@@ -1428,7 +1503,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-------------------------fin de grupo 5-------------------------------------------
+------------------------FIN DEL GRUPO 5 ------------------------------------------------------
 
 ------------------------------------inicio de grupo 7---------------------------------
 
@@ -1698,13 +1773,51 @@ CREATE OR REPLACE FUNCTION modifyReservationPayment(pay INTEGER,reservation INTE
   END;
   $$ LANGUAGE plpgsql;
 
+--SP para traerme la cantidad de personas que ya han reservado en el restaurant seleccionado
+CREATE OR REPLACE FUNCTION getAvailability(_res_id INTEGER, _res_date VARCHAR) RETURNS INTEGER AS $$
+  DECLARE 
+  available INTEGER;
+  total INTEGER;
+  capacity INTEGER;
+  BEGIN
+    SELECT SUM(rr_num_ppl) FROM RES_REST 
+    WHERE rr_res_fk = _res_id
+    AND rr_date = TO_TIMESTAMP(_res_date, 'yyyy-mm-dd hh24:mi')
+    INTO available;
+
+    SELECT res_capacity FROM RESTAURANT
+    WHERE RES_ID = _res_id
+    INTO capacity;
+    
+    total = capacity - available;
+	  IF total > 0 THEN 
+		  RAISE NOTICE 'dentro del if';
+		  RETURN total;
+	  END IF;
+	  RETURN 0;
+  END;
+  $$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION getAvailabilityRest(_res_id INTEGER) RETURNS INTEGER AS $$
+  DECLARE capaityRest INTEGER;
+  BEGIN
+    SELECT res_capacity FROM RESTAURANT
+    WHERE RES_ID = _res_id
+    INTO capaityRest;
+
+    RETURN capaityRest;
+  END;
+  $$ LANGUAGE plpgsql;
 -----------------------------------fin grupo 14-----------------------------------------------------------
 
 ------Grupo1-----------------------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION LoginRepository(Email varchar(20),Password VARCHAR(50)) RETURNS table (use_id integer,use_name varchar(50),use_last_name varchar(30),usr_rol_id integer)AS $BODY$
+CREATE OR REPLACE FUNCTION LoginRepository(Email varchar(20),Password VARCHAR(50)) RETURNS table (use_id integer,use_name varchar(50),use_last_name varchar(30),usr_rol_id integer,rol_name varchar(30))AS $BODY$
         BEGIN
 		RETURN QUERY
-                select USERS.use_id,USERS.use_name,USERS.use_last_name,User_Role.usr_rol_id from USERS,User_Role WHERE USERS.use_email=$1 and (USERS.use_password=MD5($2) or USERS.use_password=$2) and USERS.use_id=User_Role.usr_use_id;
+                select USERS.use_id,USERS.use_name,USERS.use_last_name,User_Role.usr_rol_id,Role.rol_name from USERS,User_Role,Role WHERE USERS.use_email=$1 and (USERS.use_password=MD5($2) or 
+				USERS.use_password=$2) and USERS.use_id=User_Role.usr_use_id and
+				Role.rol_id=User_Role.usr_rol_id;
         END;
 $BODY$ LANGUAGE plpgsql;
 

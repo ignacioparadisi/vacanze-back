@@ -14,9 +14,9 @@ namespace vacanze_back.VacanzeApi.Persistence
         {
             _connectionParameters =
                 $"Server={host};User Id={user};Password={password};Database={databaseName}";
-            /* _connectionParameters =
+             _connectionParameters =
                 $"Server=localhost;Port=5433;User Id=postgres;" + 
-                      "Password=122324;Database=vacanza;";*/
+                      "Password=122324;Database=vacanza;";
         }
 
         // TODO: Obtener datos para conectar con la BD de algun archivo de configuracion
@@ -67,6 +67,7 @@ namespace vacanze_back.VacanzeApi.Persistence
             }
             catch (Exception e)
             {
+                Console.WriteLine(e);
                 throw new DatabaseException(
                     $"Error ejecutando funcion: {functionSignature}.{Environment.NewLine}{e.Message}");
             }
