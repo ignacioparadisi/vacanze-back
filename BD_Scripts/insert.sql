@@ -250,10 +250,7 @@ VALUES('Chevrolet','Silverado',5,false,69.8,'aa15ab2','auto10.jpg',5);
 INSERT INTO hotel (hot_name, hot_room_qty, hot_room_capacity, hot_is_active,
                    hot_address_specs, hot_room_price, hot_website, hot_phone, hot_picture,
                    hot_stars, hot_loc_fk)
-VALUES	('Prueba 1', 30, 4, true, 'Alguna direccion, algun lugar', 234.5, null, null, null, 4, 1),
-		('Prueba 2', 40, 2, true, 'Alguna direccion, algun lugar', 500.5, null, '+58 4253 2732', null, 5, 10),
-		('Prueba 3', 40, 2, true, 'Alguna direccion, algun lugar', 500.5, null, '+58 4253 2732', null, 5, 10),
-		('Posada Los Caracas', 8, 6, true, 'Playa la Punta', 150.5, null, null, null, 3, 37),
+VALUES	('Posada Los Caracas', 8, 6, true, 'Playa la Punta', 150.5, null, null, null, 3, 37),
 		('Hotel Tanaguarena', 8, 6, true, 'Al frente de playa escondida', 400.5, null, null, null, 4, 37),
 		('Posada Los Cocos', 8, 6, true, 'Playa Los Cocos', 400.5, null, null, null, 3, 37),
 		('Hotel Otro País', 8, 6, true, 'Playa Otro País', 400.5, null, null, null, 3, 37),
