@@ -1977,7 +1977,7 @@ ALTER FUNCTION public.m13_updateautomobilereservation(timestamp without time zon
 --Delete
 CREATE OR REPLACE FUNCTION public.m13_deleteautomobilereservation(
     _rar integer)
-    RETURNS void
+    RETURNS integer
     LANGUAGE 'plpgsql'
 
     COST 100
@@ -1987,12 +1987,14 @@ AS $BODY$
 DECLARE
 BEGIN
     EXECUTE format('DELETE from public.res_aut WHERE ra_id= %L', _rar);
+    return _rar;
 END;
 
 $BODY$;
 
 ALTER FUNCTION public.m13_deleteautomobilereservation(integer)
     OWNER TO vacanza;
+
 
 
 --Get Reservation By User ID
