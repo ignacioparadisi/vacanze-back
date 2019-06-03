@@ -7,6 +7,7 @@ using vacanze_back.VacanzeApi.Persistence.Repository.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
+using vacanze_back.VacanzeApi.Persistence.Repository;
 
 namespace vacanze_back.VacanzeApiTest.Grupo13
 {
@@ -14,12 +15,14 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
     public class ReservationRoomsTest
     {
         ReservationRoom reservation;
-        ReservationRoomRepository reservationRoomConnection;
+        ReservationRoomRepository _connection;
+        DateTime time;
+
         [SetUp]
         public void SetUp()
         {
-            reservationRoomConnection = new ReservationRoomRepository();
-            DateTime time = new DateTime(1990, 04, 14);
+            _connection = new ReservationRoomRepository();
+            time = new DateTime(1990, 04, 14);
             DateTime time2 = new DateTime(1990, 04, 14);
             ReservationRoom reservation = new ReservationRoom(0,time,time2);
             Hotel hotel = new Hotel();
@@ -34,37 +37,57 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             hotel.AddressSpecification = "PU al lado de X";
             hotel.Picture = "PU";
             hotel.Website = "Pu Website";
-            //Location location = new Location();
-            //hotel.location = location;
+            hotel.Location = LocationRepository.GetLocationById(1);
             hotel.Id = 0;
             reservation.Hotel = hotel;
             reservation.Fk_user = 2;
             reservation.Id = 27;
         }
 
-        [Test]
+        [Test,Order(1)]
         public void GetReservationsRoomTest()
         {
-            List<Entity> reservations = reservationRoomConnection.GetRoomReservations();
+            List<Entity> reservations = _connection.GetRoomReservations();
             Assert.AreNotEqual(0, reservations.Count());
         }
 
-        //PIEDRERA
-        [Test]
+        [Test, Order(2)]
         public void GetReservationsRoomByIdTest()
         {
-            ReservationRoomRepository repository = new ReservationRoomRepository();
-            Assert.IsNotNull(repository.Find(11));
+            Assert.IsNotNull(_connection.Find(1));
         }
 
- 
-        [Test]
+        [Test, Order(3)]
+        public void GetAllByUserIdTest()
+        {
+            List<Entity> reservations = _connection.GetAllByUserId(1);
+            Assert.AreNotEqual(0, reservations.Count());
+        }
+
+
+        [Test, Order(4)]
         public void AddReservationsRoomTest()
         {
-            List<Entity> reservations = reservationRoomConnection.GetRoomReservations();
-            reservationRoomConnection.Add(reservation);
-            List<Entity> reservationslater = reservationRoomConnection.GetRoomReservations();
-            Assert.Greater(reservationslater.Count, reservations.Count);
+            var reserv = _connection.Add(reservation);
+            Assert.IsNotNull(reserv);
+        }
+
+        [Test, Order(5)]
+        public void UpdateTest()
+        {
+            reservation.CheckIn = new DateTime(1991, 04, 14);
+            _connection.Update(reservation);
+            var reservation2 = (ReservationAutomobile)_connection.Find(1);
+            Assert.AreNotEqual(reservation2.CheckIn, time);
+
+        }
+
+        [Test, Order(6)]
+        public void DeleteReservationAutomobileTest()
+        {
+            _connection.Delete(reservation);
+            Entity reservation2 = _connection.Find((int)reservation.Id);
+            Assert.IsNull(reservation2);
         }
 
     }

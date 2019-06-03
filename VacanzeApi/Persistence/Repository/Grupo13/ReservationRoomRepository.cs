@@ -149,8 +149,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
          * </summary> 
          * <param name="reservation">La reservacion a agregar en la BD</param>
          */
-        //Falta el user
-        public void Add(ReservationRoom reservation)
+        
+        public ReservationRoom Add(ReservationRoom reservation)
         {
             try
             {
@@ -160,6 +160,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                         reservation.CheckOut,
                         reservation.Fk_user,
                         (int)reservation.Hotel.Id);
+                return reservation;
             }
             catch (Exception e)
             {

@@ -15,58 +15,69 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
     public class ReservationAutomobileTest
     {
         ReservationAutomobile reservation;
-
         ReservationAutomobileRepository _connection;
+        DateTime time;
+
         [SetUp]
         public void SetUp()
         {
             _connection = new ReservationAutomobileRepository();
-            DateTime time = new DateTime(1990, 04, 14);
+            time = new DateTime(1990, 04, 14);
             DateTime time2 = new DateTime(1990, 04, 14);
             reservation = new ReservationAutomobile(0, time, time2);
-            Auto automobile = new Auto("Mazda", "X3", 5, true, "XYZ23D", 35, "mazda.jgp", 1);
-            automobile.setId(7);
-            User user = new User(3, 99, "NameTest", "LastTest", "EmailTest");
+
+            Auto automobile = new Auto("Prueba", "Unitaria", 5, true, "licencia", 35, "mazda.jgp", 1);
+            automobile.setId(1);
             reservation.Automobile = automobile;
-          //  reservation.User = user;
             reservation.Fk_user = 2;
             reservation.Id = 27;
-           // reservation.User.Id = 3;
         }
 
-        [Test]
+        [Test, Order(1)]
         public void GetReservationsAutomobileTest()
         {
             List<Entity> reservations = _connection.GetAutomobileReservations();
             Assert.AreNotEqual(0, reservations.Count());
         }
 
-        [Test]
+        [Test, Order(2)]
         public void FindReservationAutomobileTest()
         {
-            ReservationAutomobile reservation = (ReservationAutomobile) _connection.Find(17);
+            ReservationAutomobile reservation = (ReservationAutomobile) _connection.Find(1);
             Assert.IsNotNull(reservation);
         }
 
-        [Test]
+        [Test, Order(3)]
+        public void GetAllByUserIdTest()
+        {
+            List<Entity> reservations = _connection.GetAllByUserId(1);
+            Assert.AreNotEqual(0, reservations.Count());
+        }
+
+        [Test, Order(4)]
         public void AddReservationsAutomobileTest()
         {
-             List<Entity> reservations = _connection.GetAutomobileReservations();
-            int i = reservations.Count();
-            _connection.AddReservation(reservation);
-            reservations = _connection.GetAutomobileReservations();
-            int j = reservations.Count();
-            Assert.AreNotEqual(j, i);
+            var reserv= _connection.AddReservation(reservation);
+            Assert.IsNotNull(reserv);
+        }
+
+        [Test, Order(5)]
+        public void UpdateTest()
+        {
+            reservation.CheckIn = new DateTime(1991, 04, 14);
+            _connection.Update(reservation);
+            var reservation2 = (ReservationAutomobile)_connection.Find(1);
+            Assert.AreNotEqual(reservation2.CheckIn, time);
+            
         }
         
 
-        [Test]
+        [Test, Order(6)]
         public void DeleteReservationAutomobileTest()
         {
-            List<Entity> reservations = _connection.GetAutomobileReservations();
             _connection.Delete(reservation);
-            List<Entity> reservationslater = _connection.GetAutomobileReservations();
-            Assert.Greater(reservations.Count(),reservationslater.Count());
+            Entity reservation2 = _connection.Find((int)reservation.Id);
+            Assert.IsNull(reservation2);
         }
 
     }
