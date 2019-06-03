@@ -1316,7 +1316,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 ----------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION consultayuda(
+CREATE OR REPLACE FUNCTION getAutoParameters(
 	_place integer,
 	_result varchar,
 	_license character varying,

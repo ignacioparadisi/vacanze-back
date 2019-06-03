@@ -30,10 +30,18 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo5
         }
        public static int DeleteAuto (int id)
        {      
-            int aux = id;
+            try {int aux = id;
             string command="DeleteAuto (@AUT_ID)";
             var table = PgConnection.Instance.ExecuteFunction(command,id);
-            return aux;
+            return aux;}
+            catch (DatabaseException){
+              var AutoList =ConsultforId(id)
+              if (AutoList==null){
+                  return -1 ;
+              }else{
+                  return aux;
+              }
+            }
         }
        public static List<Auto> ConsultforId(int idconsulta){
             var AutoList = new List<Auto>();
@@ -72,10 +80,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo5
             }
             return CityList;
         }
-        public static List<Auto> consultforall(int _place , string _result , string _license , int _capacity)
+        public static List<Auto> getforall(int _place , string _result , string _license , int _capacity)
         {
             var AutoList = new List<Auto>();
-            string command="consultayuda (@AUT_PLACE,@AUT_ISACTIVE,@AUT_LICENSE,@AUT_CAOACITY)";
+            string command="getAutoParameters (@AUT_PLACE,@AUT_ISACTIVE,@AUT_LICENSE,@AUT_CAOACITY)";
              var table = PgConnection.Instance.ExecuteFunction(command,_place,_result,_license,_capacity);
              for (int i = 0; i < table.Rows.Count; i++)
             {

@@ -50,7 +50,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
             try 
             {
                 var result= ConnectAuto.DeleteAuto(i);
-                return Ok("eliminado exitosamente");
+           
+                    return Ok(new { Message = "eliminado exitosamente " });
+                
+                
             } 
             catch (DatabaseException )
             {
@@ -64,14 +67,14 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
             }
 
         }
-        /*https://localhost:5001/api/Auto/consultarforall/2 
+        /*https://localhost:5001/api/Auto/getforall/2 
          result = isactive */ 
-        [HttpGet("consultforall/{place}/{result}/{license}/{capacity}")]
+        [HttpGet("getforall/{place}/{result}/{license}/{capacity}")]
         public  ActionResult<IEnumerable<Auto>> GetconsultAll(int place , string result , string license , int capacity)
         {
             try
             { 
-                List<Auto> AutoList =ConnectAuto.consultforall(place,result,license,capacity);
+                List<Auto> AutoList =ConnectAuto.getforall(place,result,license,capacity);
                 return Ok(AutoList.ToList());
             }
             catch (IndexOutOfRangeException )
@@ -162,7 +165,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
                 Auto auto = new Auto(make,model,capacity,status,licence,price,picture,place);
                 auto.setId(id);
                 var result= ConnectAuto.ModifyAuto(auto);
-                return Ok(JsonConvert.SerializeObject(result));
+                return Ok();
             }
             catch (IndexOutOfRangeException )
             {
