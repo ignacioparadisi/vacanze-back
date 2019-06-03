@@ -128,10 +128,12 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             catch (NpgsqlException e)
             {
                 e.ToString();
+                throw new AutomobileReservationNotFoundException(id);
             }
             catch (Exception e)
             {
                 e.ToString();
+                throw new AutomobileReservationNotFoundException(id);
             }
             return _reservation;
         }
