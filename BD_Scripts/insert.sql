@@ -244,9 +244,7 @@ INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AU
 VALUES('Honda','CR-V',3,true,55,'aa15ab1',5);
 INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_LOC_FK)
 VALUES('Chevrolet','Silverado',5,false,69.8,'aa15ab2',5);
-
 ------- grupo 6 ----------
-
 INSERT INTO hotel (hot_name, hot_room_qty, hot_room_capacity, hot_is_active,
                    hot_address_specs, hot_room_price, hot_website, hot_phone, hot_picture,
                    hot_stars, hot_loc_fk)
