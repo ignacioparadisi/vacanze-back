@@ -162,41 +162,41 @@ INSERT INTO LOCATION (LOC_CITY, LOC_COUNTRY) VALUES
 ('Sendai','Japan');
 ------- grupo 2 ----------
 
-INSERT INTO Role (rol_name)
-VALUES ('Cliente');
+INSERT INTO Role (rol_id, rol_name)
+VALUES (1, 'Cliente');
 
-INSERT INTO Role (rol_name)
-VALUES ('Administrador');
+INSERT INTO Role (rol_id, rol_name)
+VALUES (2, 'Administrador');
 
-INSERT INTO Role (rol_name)
-VALUES ('Checkin');
+INSERT INTO Role (rol_id, rol_name)
+VALUES (3, 'Checkin');
 
-INSERT INTO Role (rol_name)
-VALUES ('Reclamo');
+INSERT INTO Role (rol_id, rol_name)
+VALUES (4, 'Reclamo');
 
-INSERT INTO Role (rol_name)
-VALUES ('Cargador');
+INSERT INTO Role (rol_id, rol_name)
+VALUES (5, 'Cargador');
 
-INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
-VALUES ('9784673', 'admin@vacanze.com', 'Virtuoso', 'Francisco', MD5('admin123'));
+INSERT INTO Users(use_id, use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES (1, '9784673', 'admin@vacanze.com', 'Virtuoso', 'Francisco', MD5('admin123'));
 
-INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
-VALUES ('10754927', 'checkin@vacanze.com', 'Gomes', 'Francisco', MD5('checkin123'));
+INSERT INTO Users(use_id, use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES (2, '10754927', 'checkin@vacanze.com', 'Gomes', 'Francisco', MD5('checkin123'));
 
-INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
-VALUES ('12345678', 'reclamo@vacanze.com', 'Omar', 'Jorge', MD5('reclamo123'));
+INSERT INTO Users(use_id, use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES (3, '12345678', 'reclamo@vacanze.com', 'Omar', 'Jorge', MD5('reclamo123'));
 
-INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
-VALUES ('8654826', 'cargador@vacanze.com', 'Salazar', 'Marcos', MD5('cargador123'));
+INSERT INTO Users(use_id, use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES (4, '8654826', 'cargador@vacanze.com', 'Salazar', 'Marcos', MD5('cargador123'));
 
-INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
-VALUES ('20766589', 'cliente@vacanze.com', 'Martinez', 'Carlos', MD5('cliente123'));
+INSERT INTO Users(use_id, use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES (5, '20766589', 'cliente@vacanze.com', 'Martinez', 'Carlos', MD5('cliente123'));
 
-INSERT INTO USERS (use_document_id, use_email, use_last_name, use_name, use_password)
-VALUES ('23613704', 'larry.page@vacanze.com', 'Page', 'Larry', MD5('google'));
+INSERT INTO USERS (use_id, use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES (6, '23613704', 'larry.page@vacanze.com', 'Page', 'Larry', MD5('google'));
 
-INSERT INTO USERS (use_document_id, use_email, use_last_name, use_name, use_password)
-VALUES ('23613704', 'reggaebob@vacanze.com', 'Marley', 'Bob', MD5('jah'));
+INSERT INTO USERS (use_id, use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES (7, '23613704', 'reggaebob@vacanze.com', 'Marley', 'Bob', MD5('jah'));
 
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (2, 1 );
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (3, 2);
@@ -316,10 +316,29 @@ VALUES	('Pescado Frito', 50, default, 5,'Carite', 100, 'sam', null, 'Pescado Fri
 	('Avila Burguer', 50, default, 5,'Hamburguesa', 100, 'sam', null, 'Hamburguesa', '04141100085', 29, 'Caracas');
 
 --------------Grupo 8 ---------------------------------------------
-INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'concordia', 100, 1000, 'Modelo1','Linea1', '1.jpg' );
-INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'Lmao', 500, 2000, 'Modelo2','Linea2', '3.jpg' );
-Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,2,'2019/2/11','2019/2/12',2000,1,2);
-
+INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'Concord', 500, 10000, 'Streamliner','Royal', '1.jpg' );
+INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'Victory', 600, 40000, 'Streamliner','Royal', '2.jpg' );
+INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'Queen', 550, 20000, 'Streamliner','Circus', '3.jpg' );
+INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'Ace', 450, 20000, 'Cruiseliner','Circus', '4.jpg' );
+INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'Sea', 300, 10000, 'Cruiseliner','Royal', '5.jpg' );
+Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,1,'2019/2/11','2019/2/15',2000,37,2);
+Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,1,'2019/3/11','2019/3/16',3000,27,3);
+Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,1,'2019/4/11','2019/4/14',4000,28,6);
+Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,2,'2019/2/11','2019/2/15',2000,25,7);
+Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,2,'2019/3/11','2019/3/16',3000,32,12);
+Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,2,'2019/4/11','2019/4/14',2000,30,140);
+Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,3,'2019/2/11','2019/2/15',3000,32,130);
+Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,3,'2019/3/11','2019/3/16',2000,27,122);
+Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,4,'2019/2/11','2019/2/13',3000,5,127);
+Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,4,'2019/3/11','2019/3/14',2000,20,120);
+Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,5,'2019/4/11','2019/4/15',3000,18,110);
+Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,5,'2019/5/11','2019/5/13',1000,126,96);
+Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,3,'2019/2/11','2019/2/14',1000,140,98);
+Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,4,'2019/3/11','2019/3/15',2000,127,142);
+Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,5,'2019/4/11','2019/4/13',1000,125,140);
+Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,2,'2019/5/11','2019/5/25',2000,116,127);
+Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,1,'2019/5/11','2019/5/25',3000,110,140);
+Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,3,'2019/4/11','2019/4/1',4000,111,132);
 -------------Grupo 9 ------------------------------------
 INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('Mi primer reclamo','perdi mi maleta negra, nunca aparecio cuando llegue a mi destino','ABIERTO');
 INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('equipaje de mano','deje en el asiento de el avion mi equipaje de mano es color rojo con puntos negros','ABIERTO');
