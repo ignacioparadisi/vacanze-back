@@ -13,10 +13,10 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
         public DateTime CheckOut { get; set; }
         //Automobile which the reservation references
         public Auto Automobile { get; set; }
-        //User who made the reservation
-      //  public User User { get; set; }
+       
         public int Fk_user { get; set; }
 
+        public int Fk_pay{ get; set; }
         /// <summary>
         /// Inicializa una nueva instancia de la clase ReservationAutomobile.
         /// </summary>
