@@ -19,7 +19,7 @@ $$ Language plpgsql;
 CREATE TRIGGER reservedAutomobile
     AFTER INSERT ON public.Res_Aut
     FOR EACH ROW
-    EXECUTE PROCEDURE m13_automobilenotavaliable(ra_id)
+    EXECUTE PROCEDURE m13_automobilenotavaliable(ra_id);
 
 -- TRIGGER CON SU FUNCION que cambia el estado de un auto cuando se cancela la  reserva
 CREATE FUNCTION m13_automobileavaliable() returns TRIGGER
@@ -41,6 +41,6 @@ $$ Language plpgsql;
 CREATE TRIGGER notReservedAutomobile
     BEFORE DELETE ON public.Res_Aut
     FOR EACH ROW
-    EXECUTE PROCEDURE m13_automobileavaliable(ra_id)
+    EXECUTE PROCEDURE m13_automobileavaliable(ra_id);
 
 ------------------------------Fin grupo 13-------------------------------------------
