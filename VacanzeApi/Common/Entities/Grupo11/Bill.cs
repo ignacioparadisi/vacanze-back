@@ -11,7 +11,7 @@ namespace vacanze_back.Entities.Grupo11
         [Required]
         public string paymentMethod { get; set; }
         [Required]
-        public string reference { get; private set; }
+        public string reference { get;  set; }
         [Required]
         public double total{get; set;}
 

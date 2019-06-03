@@ -115,7 +115,7 @@ namespace vacanze_back.Controllers
                     var id = PaymentRepository.AddPayment(bill);
                     if (id > 0)
                     {
-                        return Ok("Se ha registrado con exito");
+                        return Ok("Se ha registrado con exito el pago nro " +id.ToString());
 
                     }
                     else
@@ -126,7 +126,7 @@ namespace vacanze_back.Controllers
                 }
                 else
                 {
-                    return StatusCode(StatusCodes.Status402PaymentRequired, oResp);
+                    return StatusCode(StatusCodes.Status402PaymentRequired, oResp.Item2);
                 }
 
             }
