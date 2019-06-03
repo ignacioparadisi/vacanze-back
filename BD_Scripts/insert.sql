@@ -359,5 +359,63 @@ INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (3,127); -- Oxford
 INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (3,78); -- Sydney
 INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (3,29); -- Caracas
 
+------- grupo 11 ----------
+
+
+------- grupo 12 ----------
+
+
+------- grupo 13 ----------
+	
+INSERT INTO res_roo(rr_checkindate, rr_checkoutdate, rr_timestamp, rr_use_fk, rr_hot_fk)
+VALUES	('2019-06-12', '2019-06-13', '2019-06-11', 5, 4),
+	('2019-06-14', '2019-06-15', '2019-06-13', 5, 5),
+	('2019-06-17', '2019-06-18', '2019-06-16', 5, 12),
+	('2019-06-25', '2019-06-26', '2019-06-24', 5, 15),
+	('2019-07-2', '2019-07-8', '2019-07-1', 5, 17),
+	('2019-08-12', '2019-08-13', '2019-08-11', 5, 18),
+	('2019-09-19', '2019-09-21', '2019-09-18', 6, 22),
+	('2019-09-23', '2019-09-22', '2019-09-21', 6, 25),
+	('2019-09-5', '2019-09-7', '2019-09-3', 6, 27);
+
+------- grupo 14 ----------
+
+INSERT INTO res_rest(rr_date, rr_num_ppl, rr_timestamp, rr_use_fk, rr_res_fk)
+VALUES	('2019-06-12', 3, '2019-06-11', 5, 1), 
+		('2019-06-14', 3, '2019-06-13', 5, 2), 
+		('2019-06-17', 3, '2019-06-16', 5, 6), 
+		('2019-06-22', 3, '2019-06-21', 5, 11),
+		('2019-06-29', 3, '2019-06-28', 5, 15),
+		('2019-08-14', 3, '2019-08-13', 5, 16),
+		('2019-08-22', 3, '2019-08-21', 5, 20),
+		('2019-09-14', 3, '2019-09-13', 6, 25),
+		('2019-09-29', 3, '2019-09-28', 6, 27),
+		('2019-10-2', 3, '2019-10-1', 6, 33);
+
+
+
+-- -----------------------------------------------------------------------------------------------------------
+
+INSERT INTO tra_res (tr_travel_fk, tr_res_roo_fk, tr_res_fli_fk, tr_res_rest_fk, tr_res_aut_fk, tr_res_cru_fk, tr_type)
+VALUES	(1, 1, null, null, null, null, 'HOTEL'), -- La Guaira
+	(1, 3, null, null, null, null, 'HOTEL'), -- Puerto Cabello
+	(1, 4, null, null, null, null, 'HOTEL'), -- Carupano
+	(1, 5, null, null, null, null, 'HOTEL'), -- Puerto La Cruz
+	(2, 6, null, null, null, null, 'HOTEL'), -- Tokyo
+	(3, 7, null, null, null, null, 'HOTEL'), -- Caracas
+	(3, 8, null, null, null, null, 'HOTEL'), -- Oxford
+	(3, 9, null, null, null, null, 'HOTEL'), -- Sydney
+	
+	(1, null, null, 1, null, null, 'RESTAURANT'), -- La Guaira
+	(1, null, null, 2, null, null, 'RESTAURANT'), -- La Guaira
+	(1, null, null, 3, null, null, 'RESTAURANT'), -- Puerto Cabello
+	(1, null, null, 4, null, null, 'RESTAURANT'), -- Carupano
+	(1, null, null, 5, null, null, 'RESTAURANT'), -- Puerto La Cruz
+	(2, null, null, 6, null, null, 'RESTAURANT'), -- Tokyo
+	(2, null, null, 7, null, null, 'RESTAURANT'), -- Osaka
+	(3, null, null, 8, null, null, 'RESTAURANT'), -- Oxford	
+	(3, null, null, 9, null, null, 'RESTAURANT'), -- Sydney
+	(3, null, null, 10, null, null, 'RESTAURANT'); -- Caracas
+
 Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,2,'2019/2/11','2019/2/12',2000,1,2);
 
