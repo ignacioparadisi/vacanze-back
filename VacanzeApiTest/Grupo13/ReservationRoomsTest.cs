@@ -17,14 +17,15 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         ReservationRoom reservation;
         ReservationRoomRepository _connection;
         DateTime time;
+        int id;
 
         [SetUp]
         public void SetUp()
         {
             _connection = new ReservationRoomRepository();
-            time = new DateTime(1990, 04, 14);
-            DateTime time2 = new DateTime(1990, 04, 14);
-            ReservationRoom reservation = new ReservationRoom(0,time,time2);
+            time = new DateTime(1990, 04, 01);
+            DateTime time2 = new DateTime(1990, 04, 01);
+            reservation = new ReservationRoom(0,time,time2);
             Hotel hotel = new Hotel();
             hotel.Id = 1;
             hotel.IsActive = true;
@@ -54,7 +55,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         [Test, Order(2)]
         public void GetReservationsRoomByIdTest()
         {
-            Assert.IsNotNull(_connection.Find(1));
+            Assert.IsNotNull(_connection.Find(11));
         }
 
         [Test, Order(3)]
@@ -68,28 +69,28 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         [Test, Order(4)]
         public void AddReservationsRoomTest()
         {
-            var reserv = _connection.Add(reservation);
-            Assert.IsNotNull(reserv);
+            id = _connection.Add(reservation);
+            Assert.True(id > 0);
         }
 
         [Test, Order(5)]
         public void UpdateTest()
         {
-            reservation.CheckIn = new DateTime(1991, 04, 14);
+            DateTime date = new DateTime(1999, 04, 01);
+            reservation.CheckIn = date;
             _connection.Update(reservation);
-            var reservation2 = (ReservationAutomobile)_connection.Find(1);
-            Assert.AreNotEqual(reservation2.CheckIn, time);
+            ReservationAutomobile reservation2 = (ReservationAutomobile)_connection.Find(id);
+            Assert.True(reservation2.CheckIn==date);
 
         }
-
+        /*
         [Test, Order(6)]
         public void DeleteReservationAutomobileTest()
         {
-            _connection.Delete(reservation);
-            Entity reservation2 = _connection.Find((int)reservation.Id);
-            Assert.IsNull(reservation2);
+           int id= _connection.Delete(reservation);
+            Assert.IsNotNull(id);
         }
-
+        */
     }
 
 }

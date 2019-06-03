@@ -22,7 +22,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
         const String SP_UPDATE = "m13_updatehotelreservation(@_checkin,@_checkout,@_use_fk,@_hot_fk,@_id)";
         const String SP_DELETE_RESERVATION = "m13_deleteRoomReservation(@_rooid)";
         const String SP_ALL_BY_USER_ID = "m13_getresroobyuserandroomid(@_id)";
-        const String SP_ADD_PAYMENT = "";
+        const String SP_ADD_PAYMENT = "m13_modifyReservationRoomPayment(@_pay,@_id)";
 
         private ReservationRoom _reservationRoom;
 
@@ -48,7 +48,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                     var pickup = Convert.ToDateTime(table.Rows[i][1]);
                     var returndate = Convert.ToDateTime(table.Rows[i][2]);
                     var timestamp = Convert.ToDateTime(table.Rows[i][3]);
-                    //var fk_hotel = Convert.ToInt32(table.Rows[i][4]);
                     var use_id = (int)Convert.ToInt64(table.Rows[i][5]);
                     // var payment = Convert.ToInt64(table.Rows[i][6]);
 
@@ -150,22 +149,32 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
          * <param name="reservation">La reservacion a agregar en la BD</param>
          */
         
-        public ReservationRoom Add(ReservationRoom reservation)
+        public int Add(ReservationRoom reservation)
         {
             try
             {
-                var table = PgConnection.Instance.
+                 var table=   PgConnection.Instance.
                     ExecuteFunction(SP_ADD_RESERVATION,
                         reservation.CheckIn,
                         reservation.CheckOut,
                         reservation.Fk_user,
                         (int)reservation.Hotel.Id);
-                return reservation;
+
+                if (table.Rows.Count > 0)
+                {
+                    return Convert.ToInt32(table.Rows[0][0]);
+                }
+                return 0;
+            }
+            catch(DatabaseException e)
+            {
+                Console.WriteLine(e.ToString());
+                throw new Exception();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
-                throw;
+                throw new Exception();
             }
         }
 
@@ -174,7 +183,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
          * </summary>
          * <param name="entity">La entidad reservacion a borrar de la BD</param>
          */
-        public void Delete(Entity entity)
+        public int Delete(Entity entity)
         {
             try
             {
@@ -183,6 +192,11 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                    SP_DELETE_RESERVATION,
                    (int)reservation.Id
                );
+                if (table.Rows.Count > 0)
+                {
+                    return Convert.ToInt32(table.Rows[0][0]);
+                }
+                return 0;
             }
             catch (Exception e)
             {
@@ -243,8 +257,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             try
             {
                 ReservationRoom reservation = (ReservationRoom)entity;
-
-                var table = PgConnection.Instance.ExecuteFunction(
+                PgConnection.Instance.ExecuteFunction(
                     SP_UPDATE,
                     reservation.CheckIn,
                     reservation.CheckOut,
@@ -261,6 +274,28 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             }
             finally
             {
+            }
+        }
+
+        public int AddPayment(ReservationRoom reservation, int fk_payment)
+        {
+            try
+            {
+                var table = PgConnection.Instance.
+                   ExecuteFunction(SP_ADD_PAYMENT,
+                       fk_payment,
+                       (int)reservation.Id);
+
+                if (table.Rows.Count > 0)
+                {
+                    return Convert.ToInt32(table.Rows[0][0]);
+                }
+                return 0;
+            }
+            catch (DatabaseException e)
+            {
+                Console.WriteLine(e.ToString());
+                throw new Exception();
             }
         }
 
