@@ -222,7 +222,6 @@ INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (3, 10);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (4, 10);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (5, 10);
 
-
 ------- grupo 6 ----------
 
 INSERT INTO hotel (hot_id, hot_name, hot_room_qty, hot_room_capacity, hot_is_active,
