@@ -4,6 +4,10 @@ using vacanze_back.VacanzeApi.Common.Entities;
 
 namespace vacanze_back.Entities.Grupo11
 {
+
+    /// <summary>
+    /// clase de factura
+    /// </summary>
     public class Bill : Entity
     {
         [Required]

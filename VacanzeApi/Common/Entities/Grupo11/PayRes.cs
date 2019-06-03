@@ -3,10 +3,12 @@ using System;
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo11
 {
+    /// <summary>
+    /// Clase utilizada para realizar el pago de las reservas que haga el usuario
+    /// </summary>
     public class PayRes :Entity
     {
        
-
         public long id { get; set; }
         public string name { get; set; }
         public DateTime dateR { get; set; }

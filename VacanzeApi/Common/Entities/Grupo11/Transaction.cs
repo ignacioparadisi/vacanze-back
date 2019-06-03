@@ -5,8 +5,10 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo11
 {
     public class Transaction :Entity
     {
-       
-
+       /// <summary>
+       /// Clase de trnasaccion. Se utiliza para simular la transaccion entre calcular la cuenta de las reservaciones y
+       /// luego proceder a hacer el pago de las mismas.
+       /// </summary>
         public long id { get; set; }
         public string descrip { get; set; }
         public string pm { get; set; }

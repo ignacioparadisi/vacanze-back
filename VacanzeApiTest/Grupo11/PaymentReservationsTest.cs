@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 
 namespace vacanze_back.VacanzeApiTest.Grupo11
 {
-    public class Class
+    public class PaymentReservationTest
     {
+
+
     }
 }
