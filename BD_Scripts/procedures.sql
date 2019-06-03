@@ -1137,11 +1137,19 @@ AS
 $$
 BEGIN    
     RETURN QUERY SELECT 
+    cla_id, cla_title,cla_descr, cla_status , bag_id from claim, Baggage , res_cru, users
+    where  BAG_RES_CRU_FK = rc_id and rc_use_fk =use_id 
+    and use_document_id=_users_document_id
+    and bag_cla_fk=cla_id 
+	UNION
+	SELECT 
     cla_id, cla_title,cla_descr, cla_status , bag_id from claim, Baggage , res_fli, users
-    where bag_res_fli_fk =rf_id and rf_use_fk =use_id  and use_document_id=_users_document_id
+    where  BAG_RES_fli_FK = rf_id and rf_use_fk =use_id 
+    and use_document_id=_users_document_id
     and bag_cla_fk=cla_id; 
 END;
 $$ LANGUAGE plpgsql;
+
 
 ---------------------- CONSULTAR RECLAMO SEGUN ESTATUS -------------------------
 CREATE OR REPLACE FUNCTION GetClaimStatus(_cla_status varchar(30))
@@ -1178,7 +1186,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 --------------------------CONSULTAR EQUIPAJE POR DOCUMENTO -------------------------
-CREATE OR REPLACE FUNCTION GetBaggageDocumentPasaport(_users_document_id varchar(30))
+CREATE OR REPLACE FUNCTION getBaggageDOcumentpasaport(_users_document_id varchar(30))
 RETURNS TABLE
   (id integer,
    descr VARCHAR(30),
@@ -1188,10 +1196,17 @@ AS
 $$
 BEGIN    
     RETURN QUERY SELECT 
-    bag_id, bag_descr, bag_status from Baggage , res_fli, users
-    where bag_res_fli_fk =rf_id and rf_use_fk =use_id  and use_document_id=_users_document_id;
+    bag_id, bag_descr, bag_status from  Baggage , res_cru, users
+    where  BAG_RES_CRU_FK = rc_id and rc_use_fk =use_id 
+    and use_document_id=_users_document_id
+	UNION
+	SELECT 
+    bag_id, bag_descr, bag_status from  Baggage , res_fli, users
+    where  BAG_RES_fli_FK = rf_id and rf_use_fk =use_id 
+    and use_document_id=_users_document_id; 
 END;
 $$ LANGUAGE plpgsql;
+
 
 ------------------- CONSUTAR EQUIPAJE SEGUN ESTATUS------------------------------------
 CREATE OR REPLACE FUNCTION GetBaggageStatus(_bag_status varchar(30))

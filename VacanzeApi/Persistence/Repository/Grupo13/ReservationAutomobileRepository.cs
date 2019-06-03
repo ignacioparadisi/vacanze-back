@@ -17,13 +17,13 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
     public class ReservationAutomobileRepository
     { 
         const String SP_SELECT = "m13_getResAutos()";
-        const String SP_AVAILABLE = "m13_getavailableautomobilereservations('01/03/2019', '01/05/2019')";
+     //   const String SP_AVAILABLE = "m13_getavailableautomobilereservations('01/03/2019', '01/05/2019')";
         const String SP_FIND = "m13_findByResAutId(@_id)";
         const String SP_ADD = "m13_addautomobilereservation(@_checkin,@_checkout,@_use_fk,@_ra_aut_fk)";
         const String SP_UPDATE = "m13_updateautomobilereservation(@_checkin,@_checkout,@_use_fk,@_ra_aut_fk,@_ra_id)";
         const String SP_DELETE = "m13_deleteautomobilereservation(@_id)";
         const String SP_ALL_BY_USER_ID = "m13_getresautomobilebyuserid(@_id)";
-        const String SP_ADD_PAYMENT = "m13_modifyReservationRoomPayment(@_pay,@_id)";
+     //   const String SP_ADD_PAYMENT = "m13_modifyReservationRoomPayment(@_pay,@_id)";
         private Auto _automobile;
         private ReservationAutomobile _reservation;
 
@@ -62,7 +62,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                     }
                     return reservationAutomobileList;
                 }
-
+        /*
         public List<Entity> GetAvailableAutomobileReservations()
         {
             List<Entity> reservationAutomobileList = new List<Entity>();
@@ -93,7 +93,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             }
             return reservationAutomobileList;
         }
-
+        */
         /** <summary>
          * Busca en la BD, la reserva que posee el identificador suministrado
          * </summary>
@@ -123,15 +123,17 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             }
             catch (AutomobileReservationNotFoundException e)
             {
-                throw new AutomobileReservationNotFoundException(id);
+                throw new AutomobileReservationNotFoundException(e.ToString());
             }
             catch (NpgsqlException e)
             {
                 e.ToString();
+                throw;
             }
             catch (Exception e)
             {
                 e.ToString();
+                throw;
             }
             return _reservation;
         }
