@@ -1740,17 +1740,29 @@ CREATE OR REPLACE FUNCTION addReservationRestaurant(fecha VARCHAR,
   $$ LANGUAGE plpgsql;
 
 --SP para retornar todas las reservas de restaurant para un usuario
-CREATE OR REPLACE FUNCTION getResRestaurant(usuario INTEGER) RETURNS TABLE ( id INTEGER,
+CREATE OR REPLACE FUNCTION getResRestaurant(usuario INTEGER) RETURNS TABLE (
   ciudad VARCHAR, pais VARCHAR, restaurant VARCHAR, direccion VARCHAR,
   fecha_reservacion TIMESTAMP, cantPeople INTEGER) AS $$
   
   BEGIN
-    RETURN QUERY select M.rr_id, l.loc_city, l.loc_country, r.res_name, r.res_address_specs, m.rr_date, m.rr_num_ppl
+    RETURN QUERY select l.loc_city, l.loc_country, r.res_name, r.res_address_specs, m.rr_date, m.rr_num_ppl
     FROM restaurant r, res_rest m, location l, users u
     where m.rr_use_fk = usuario and r.res_id = m.rr_res_fk and l.loc_id = r.res_loc_fk and U.USE_ID = m.rr_use_fk;
 
   END;
   $$ LANGUAGE plpgsql;
+
+--SP para retornar aquellas reservas que no han sido pagadas
+CREATE OR REPLACE FUNCTION getReservationNotPay(usuario INTEGER) RETURNS TABLE 
+  (id INTEGER, f_reserva TIMESTAMP) AS $$
+
+  BEGIN
+    RETURN QUERY select r.rr_id, r.rr_date
+    FROM res_rest r, users u
+    where r.rr_use_fk = usuario and u.use_id = rr_use_fk and rr_pay_fk isNull;
+  END;
+  $$ LANGUAGE plpgsql;
+
 
 --SP para cancelar la reserva de un usuario 
 CREATE OR  REPLACE FUNCTION deleteReservation(reservationID INTEGER) RETURNS INTEGER AS $$

@@ -75,6 +75,23 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo14{
             return ReservationList;
         }
 
+        public static List<Restaurant_res> getReservationNotPay(int user){
+
+            var ReservationList = new List<Restaurant_res>();
+            var table = PgConnection.Instance.ExecuteFunction("getReservationNotPay(@usuario)",user);
+            Console.WriteLine("Antes del for");
+            for (var i = 0; i < table.Rows.Count; i++){
+                //Orden del SP id, ciudad, pais, restaurant, direccion, fecha_res, cant_persona
+                var id = Convert.ToInt32(table.Rows[i][0].ToString());
+                var fecha_reservacion = table.Rows[i][1].ToString();
+                var tipo = "Restaurantes";
+
+                var Restaurant_res = new Restaurant_res(id, fecha_reservacion, tipo);
+                ReservationList.Add(Restaurant_res);
+            };
+            return ReservationList;
+        }
+
         public int deleteResRestaurant(int resRestId){
             try{
                 var table = PgConnection.Instance.ExecuteFunction("deleteReservation(@reservationID)",resRestId);

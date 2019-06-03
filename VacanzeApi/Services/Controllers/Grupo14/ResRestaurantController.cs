@@ -18,7 +18,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 	[ApiController]
 	public class ResRestaurantController : ControllerBase
 	{
-      
+		//POST api/ResRestaurant
 		[HttpPost]
 		public ActionResult<int> Post([FromBody] reservationRestaurant resAux)
 		{            
@@ -62,13 +62,28 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 			}
 		}
 
-		//api/ResRestaurant/id
-		[HttpDelete("{resRestId}")]
-		public ActionResult<string> Delete(int resRestId){
+		//GET /ResRestaurant/Payment/{id} el ID es el del usuario
+		[HttpGet("Payment/{userId}")]
+		public ActionResult<IEnumerable<Restaurant_res>> GetReservationNotPay(int userId){
+			try{
+				Console.WriteLine(userId);
+				return ResRestaurantRepository.getReservationNotPay(userId);
+			}
+            catch (DatabaseException ){            
+				return StatusCode(500);
+			}
+			catch (InvalidStoredProcedureSignatureException ){
+				return StatusCode(500);
+			}
+		}
 
-			Console.WriteLine(resRestId);
+		//DELETE api/ResRestaurant/id el ID es el de la reserva
+		[HttpDelete("{id}")]
+		public ActionResult<string> Delete(int id){
+
+			Console.WriteLine(id);
 			ResRestaurantRepository conec= new ResRestaurantRepository();
-			var deletedid = conec.deleteResRestaurant(resRestId);
+			var deletedid = conec.deleteResRestaurant(id);
 
 			if(deletedid.Equals(-1)){
 				ResponseError mensaje = new ResponseError();
@@ -80,9 +95,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 
 		}
 
-		
-		[HttpPut("{resRestId}")]
-		public ActionResult<string> Put(int resRestId, reservationRestaurant resAux)
+		//PUT api/ResRestaurant/id es el id de la reserva
+		[HttpPut("{id}")]
+		public ActionResult<string> Put(int id, reservationRestaurant resAux)
 		{
 			try{
 				ResRestaurantRepository conec = new ResRestaurantRepository();
@@ -96,8 +111,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 					return StatusCode(500,mensaje);
 				}						
 				else{
-					int deletedid = conec.updateResRestaurant(resAux.pay_id, resRestId);
-					if (deletedid == -1){
+					int modifyId = conec.updateResRestaurant(resAux.pay_id, id);
+					if (modifyId == -1){
 						ResponseError mensaje= new ResponseError();
 						mensaje.error="Can't modify your reservation.";
 						return StatusCode(500,mensaje);
