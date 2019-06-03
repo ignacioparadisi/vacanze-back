@@ -26,7 +26,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo4
           {
 
                var table = PgConnection.Instance.ExecuteFunction("addbaggage(@bag_res_fli_fk,@bag_res_cru_fk,@bag_status,@bag_descr)",
-                   bag_res_fli_fk, bag_res_cru_fk, status, descripcion);
+                   DBNull.Value, DBNull.Value, status, descripcion);
 
 
                return Convert.ToInt32(table.Rows[0][0]);

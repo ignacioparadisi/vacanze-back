@@ -28,7 +28,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo4
           [Test]
           public void BaggageDeleteByIdTest()
           {
-               var response = BaggageRepository.AddBaggageReturnId(3, 3, "Maleta verde", "EXTRAVIADO");
+               var response = BaggageRepository.AddBaggageReturnId(0, 0, "Maleta verde4", "EXTRAVIADO");
                var id = BaggageRepository.DeleteBaggage(response);
                Assert.AreEqual(id, response);
           }
