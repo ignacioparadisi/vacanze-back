@@ -21,15 +21,6 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         private int id;
         Auto automobile = new Auto("Prueba", "Unitaria", 5, true, "licencia", 35, "mazda.jgp", 1);
 
-        //private ReservationAutomobile res_aut;
-        //private ReservationAutomobileRepository _connection;
-        //int id;
-        //ReservationAutomobileRepository _connection = new ReservationAutomobileRepository();
-        //private DateTime time = new DateTime(1990, 04, 14);
-        //private DateTime time2 = new DateTime(1991, 04, 14);
-        //static Auto automobile = new Auto("Prueba", "Unitaria", 5, true, "licencia", 35, "mazda.jgp", 1);
-        //private int fk_aut_id = ConnectAuto.Agregar(automobile);
-
         [SetUp]
         public void SetUp()
         {
@@ -37,9 +28,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             _connection = new ReservationAutomobileRepository();
             time = new DateTime(1990, 04, 14);
             DateTime time2 = new DateTime(1990, 04, 14);
-            
-
-                        automobile.setId(7);
+            automobile.setId(7);
             reservation = new ReservationAutomobile(0, time, time2,automobile,2);
             reservation.Id = id;
         }
