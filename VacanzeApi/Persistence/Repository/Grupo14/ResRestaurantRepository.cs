@@ -59,7 +59,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo14{
 
             var ReservationList = new List<Restaurant_res>();
             var table = PgConnection.Instance.ExecuteFunction("getResRestaurant(@usuario)",user);
-            Console.WriteLine("Antes del for");
             for (var i = 0; i < table.Rows.Count; i++){
                 //Orden del SP id, ciudad, pais, restaurant, direccion, fecha_res, cant_persona
                 var id = Convert.ToInt32(table.Rows[i][0].ToString());
@@ -80,7 +79,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo14{
 
             var ReservationList = new List<Restaurant_res>();
             var table = PgConnection.Instance.ExecuteFunction("getReservationNotPay(@usuario)",user);
-            Console.WriteLine("Antes del for");
             for (var i = 0; i < table.Rows.Count; i++){
                 //Orden del SP id, ciudad, pais, restaurant, direccion, fecha_res, cant_persona
                 var id = Convert.ToInt32(table.Rows[i][0].ToString());
@@ -101,7 +99,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo14{
                 return deletedid;
             }
             catch(InvalidCastException){
-                return -1;
+                throw new DeleteReservationException("La reserva no existe.");
+            }
+            catch(DatabaseException){
+                throw new DeleteReservationException("Error con la base de datos.");
             }
         }
 
@@ -109,12 +110,21 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo14{
             try{
                 Console.WriteLine(payID); Console.WriteLine(resRestID);
                 var table = PgConnection.Instance.ExecuteFunction("modifyReservationPayment(@pay, @reservation)", payID, resRestID);
-                var deletedid = Convert.ToInt32(table.Rows[0][0]);
-                Console.WriteLine(deletedid);
-                return deletedid;
+                var modifyId = Convert.ToInt32(table.Rows[0][0]);
+                Console.WriteLine(modifyId);
+                return modifyId;
             }
-            catch(InvalidCastException){
-                return -1;
+            catch (InvalidOperationException)
+            {
+                throw new UpdateReservationException("Error, no se pudo actualizar el pago de reserva");
+            }
+            catch (InvalidCastException)
+            {
+                throw new UpdateReservationException("Error, no se pudo encontrar y actualizar el pago de reserva");
+            }
+            catch (DatabaseException)
+            {
+                throw new UpdateReservationException("Error, no se pudo conectar con la base de datos");
             }
         }
     }

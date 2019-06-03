@@ -958,33 +958,6 @@ $$
 $$;
 --------Consultar Cruise-----------------
 --devuelve una tabla con los datos de una ruta dado su id
-CREATE OR REPLACE FUNCTION GetCruise(_cru_id integer)
-RETURNS TABLE
-  (id integer,
-   ship VARCHAR(30),
-   departure_date TIMESTAMP,
-   arrival_date TIMESTAMP,
-   price DECIMAL,
-   arrival_loc VARCHAR,
-   departure_loc VARCHAR
-  )
-AS
-$$
-DECLARE 
- loc1 VARCHAR;
- loc2 VARCHAR;
-BEGIN 
-    RETURN QUERY SELECT
-    c.cru_id, s.shi_name, c.cru_departuredate, c.cru_arrivaldate, c.cru_price,
-  	concat(ll.loc_city, ', ',ll.loc_country)::varchar,
-	concat(l.loc_city, ',',l.loc_country)::varchar
-    FROM Cruise c, Ship s, Location ll, Location l
-    WHERE c.cru_id = _cru_id and s.shi_id = c.cru_shi_fk
-	and ll.loc_id = c.cru_loc_arrival
-	and l.loc_id = c.cru_loc_departure;
-    
-END;
-$$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION GetCruisers(ship_id integer)
 RETURNS TABLE
@@ -1164,11 +1137,19 @@ AS
 $$
 BEGIN    
     RETURN QUERY SELECT 
+    cla_id, cla_title,cla_descr, cla_status , bag_id from claim, Baggage , res_cru, users
+    where  BAG_RES_CRU_FK = rc_id and rc_use_fk =use_id 
+    and use_document_id=_users_document_id
+    and bag_cla_fk=cla_id 
+	UNION
+	SELECT 
     cla_id, cla_title,cla_descr, cla_status , bag_id from claim, Baggage , res_fli, users
-    where bag_res_fli_fk =rf_id and rf_use_fk =use_id  and use_document_id=_users_document_id
+    where  BAG_RES_fli_FK = rf_id and rf_use_fk =use_id 
+    and use_document_id=_users_document_id
     and bag_cla_fk=cla_id; 
 END;
 $$ LANGUAGE plpgsql;
+
 
 ---------------------- CONSULTAR RECLAMO SEGUN ESTATUS -------------------------
 CREATE OR REPLACE FUNCTION GetClaimStatus(_cla_status varchar(30))
@@ -1205,7 +1186,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 --------------------------CONSULTAR EQUIPAJE POR DOCUMENTO -------------------------
-CREATE OR REPLACE FUNCTION GetBaggageDocumentPasaport(_users_document_id varchar(30))
+CREATE OR REPLACE FUNCTION getBaggageDOcumentpasaport(_users_document_id varchar(30))
 RETURNS TABLE
   (id integer,
    descr VARCHAR(30),
@@ -1215,10 +1196,17 @@ AS
 $$
 BEGIN    
     RETURN QUERY SELECT 
-    bag_id, bag_descr, bag_status from Baggage , res_fli, users
-    where bag_res_fli_fk =rf_id and rf_use_fk =use_id  and use_document_id=_users_document_id;
+    bag_id, bag_descr, bag_status from  Baggage , res_cru, users
+    where  BAG_RES_CRU_FK = rc_id and rc_use_fk =use_id 
+    and use_document_id=_users_document_id
+	UNION
+	SELECT 
+    bag_id, bag_descr, bag_status from  Baggage , res_fli, users
+    where  BAG_RES_fli_FK = rf_id and rf_use_fk =use_id 
+    and use_document_id=_users_document_id; 
 END;
 $$ LANGUAGE plpgsql;
+
 
 ------------------- CONSUTAR EQUIPAJE SEGUN ESTATUS------------------------------------
 CREATE OR REPLACE FUNCTION GetBaggageStatus(_bag_status varchar(30))
@@ -2390,7 +2378,7 @@ BEGIN
 	END IF;
 END
 $BODY$
-  LANGUAGE plpgsql 
+    LANGUAGE plpgsql; 
   -- select * from getinfoorder(3,3)
 
   --SP QUE TRAE LISTA DE ORDENES VERSION 2 MEJORADA
@@ -2467,7 +2455,7 @@ BEGIN
 
 END
 $BODY$
-  LANGUAGE plpgsql 
+    LANGUAGE plpgsql; 
   -- select * from getinfoorderAll(3,3,3,3)
 
   --SP QUE TRAE RESERVAS NO PAGADAS AUTOS Y HABITACION
@@ -2519,7 +2507,7 @@ BEGIN
 	END IF;
 END
 $BODY$
-  LANGUAGE plpgsql 
+      LANGUAGE plpgsql; 
 
  -- SELECT * FROM getNoPaysResAutHab(1,0)
 
@@ -2553,7 +2541,7 @@ WHERE RR_ID = _idRes;
 SELECT _idRes;
 END
 $BODY$
-  LANGUAGE plpgsql 
+      LANGUAGE plpgsql; 
 
 
 --Consulta Pagos Realizados
@@ -2600,7 +2588,7 @@ RETURN QUERY
    WHERE RR_USE_FK = _ID;
 END
 $BODY$
-  LANGUAGE plpgsql 
+    LANGUAGE plpgsql;
 
 
 -----------------------------------fin grupo 11-----------------------------------------------------------
