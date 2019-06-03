@@ -90,12 +90,6 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
             Assert.IsInstanceOf<BadRequestObjectResult>(updatedcruiser.Result);
         }
         [Test]
-        public void PutCruiser_NullCruiser_BadRequestReturned_Test()
-        {
-            var updatedcruiser = _cruiserController.PutCruiser(null);
-            Assert.IsInstanceOf<BadRequestObjectResult>(updatedcruiser.Result);
-        }
-        [Test]
         public void DeleteCruiser_CruiserNotFound_BadRequestReturned_Test()
         {
             var deletedCruiser = _cruiserController.DeleteCruiser(-1);
@@ -156,6 +150,22 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
         {
             var deletedlayover = _cruiserController.DeleteLayover(-1);
             Assert.IsInstanceOf<BadRequestObjectResult>(deletedlayover.Result);
+        }
+        [Test]
+        public void GetLayoversByLoc_ReturnsOkResult_Test()
+        {
+            var addedCruiser = CruiserRepository.AddCruiser(_cruiser);
+            var layover = new Layover(addedCruiser,"2019-01-01", "2019-01-02",2000,1,2);
+            var addedlayover = CruiserRepository.AddLayover(layover);
+            _addedCruiserList.Add(addedCruiser);
+            var result = _cruiserController.GetLayoverByLoc(layover.LocDeparture,layover.LocArrival);
+            Assert.IsInstanceOf<OkObjectResult>(result.Result);
+        }
+        [Test]
+        public void GetLayoversByLoc_LayoverNotFound_ReturnsBadRequest_Test()
+        {
+            var result = _cruiserController.GetLayoverByLoc(-1,-1);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
     }
 }

@@ -1,5 +1,4 @@
 
-using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -36,8 +35,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (DatabaseException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                return BadRequest(errorMessage);
+                return BadRequest(new ErrorMessage(e.Message));
             }
         }
 
@@ -63,13 +61,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (CruiserNotFoundException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                return BadRequest(errorMessage);
+                return BadRequest(new ErrorMessage(e.Message));
             }
             catch (DatabaseException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                return BadRequest(errorMessage);
+                return BadRequest(new ErrorMessage(e.Message));
             }
         }
         // POST/Cruiser/{id}
@@ -97,13 +93,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (InvalidAttributeException e)
             {
-                var errorMsg = new ErrorMessage(e.Message);
-                return BadRequest(errorMsg);
+                return BadRequest(new ErrorMessage(e.Message));
             }
             catch (DatabaseException e)
             {
-                ErrorMessage errorMsg = new ErrorMessage(e.Message);
-                return BadRequest(errorMsg);
+                return BadRequest(new ErrorMessage(e.Message));
             }
         }
         // PUT/Cruiser/{id}
@@ -131,23 +125,19 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (InvalidAttributeException e)
             {
-                ErrorMessage errorMsg = new ErrorMessage(e.Message);
-                return BadRequest(errorMsg);
+                return BadRequest(new ErrorMessage(e.Message));
             }
             catch (CruiserNotFoundException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                return BadRequest(errorMessage);
+                return BadRequest(new ErrorMessage(e.Message));
             }
             catch (NullCruiserException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                return BadRequest(errorMessage);
+                return BadRequest(new ErrorMessage(e.Message));
             }
             catch (DatabaseException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                return BadRequest(errorMessage);
+                return BadRequest(new ErrorMessage(e.Message));
             }
         }
         
@@ -172,13 +162,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (CruiserNotFoundException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                return BadRequest(errorMessage);
+                return BadRequest(new ErrorMessage(e.Message));
             }
             catch (DatabaseException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                return BadRequest(errorMessage);
+                return BadRequest(new ErrorMessage(e.Message));
             }
         }
         
@@ -202,8 +190,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (DatabaseException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                return BadRequest(errorMessage);
+                return BadRequest(new ErrorMessage(e.Message));
             }
         }
         /// <summary>
@@ -230,18 +217,15 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (InvalidAttributeException e)
             {
-                var errorMsg = new ErrorMessage(e.Message);
-                return BadRequest(errorMsg);
+                return BadRequest(new ErrorMessage(e.Message));
             }
             catch (CruiserNotFoundException e)
             {
-                var errorMsg = new ErrorMessage(e.Message);
-                return BadRequest(errorMsg);
+                return BadRequest(new ErrorMessage(e.Message));
             }
             catch (DatabaseException e)
             {
-                ErrorMessage errorMsg = new ErrorMessage(e.Message);
-                return BadRequest(errorMsg);
+                return BadRequest(new ErrorMessage(e.Message));
             }
         }
         /// <summary>
@@ -266,13 +250,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (LayoverNotFoundException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                return BadRequest(errorMessage);
+                return BadRequest(new ErrorMessage(e.Message));
             }
             catch (DatabaseException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                return BadRequest(errorMessage);
+                return BadRequest(new ErrorMessage(e.Message));
             }
         }
         
@@ -298,13 +280,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (LayoverNotFoundException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                return BadRequest(errorMessage);
+                return BadRequest(new ErrorMessage(e.Message));
             }
             catch (DatabaseException e)
             {
-                ErrorMessage errorMessage = new ErrorMessage(e.Message);
-                return BadRequest(errorMessage);
+                return BadRequest(new ErrorMessage(e.Message));
             }
         }
     }
