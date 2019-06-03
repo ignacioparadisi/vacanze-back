@@ -38,10 +38,6 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo8
         }
         public void Validate()
         {
-            if (CruiserId <=0)
-            {
-                throw new InvalidAttributeException("Cruiser id is required");
-            }
             if (string.IsNullOrEmpty(ArrivalDate))
             {
                 throw new InvalidAttributeException("Arrival Date is required");

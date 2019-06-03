@@ -958,33 +958,6 @@ $$
 $$;
 --------Consultar Cruise-----------------
 --devuelve una tabla con los datos de una ruta dado su id
-CREATE OR REPLACE FUNCTION GetCruise(_cru_id integer)
-RETURNS TABLE
-  (id integer,
-   ship VARCHAR(30),
-   departure_date TIMESTAMP,
-   arrival_date TIMESTAMP,
-   price DECIMAL,
-   arrival_loc VARCHAR,
-   departure_loc VARCHAR
-  )
-AS
-$$
-DECLARE 
- loc1 VARCHAR;
- loc2 VARCHAR;
-BEGIN 
-    RETURN QUERY SELECT
-    c.cru_id, s.shi_name, c.cru_departuredate, c.cru_arrivaldate, c.cru_price,
-  	concat(ll.loc_city, ', ',ll.loc_country)::varchar,
-	concat(l.loc_city, ',',l.loc_country)::varchar
-    FROM Cruise c, Ship s, Location ll, Location l
-    WHERE c.cru_id = _cru_id and s.shi_id = c.cru_shi_fk
-	and ll.loc_id = c.cru_loc_arrival
-	and l.loc_id = c.cru_loc_departure;
-    
-END;
-$$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION GetCruisers(ship_id integer)
 RETURNS TABLE
@@ -1164,11 +1137,19 @@ AS
 $$
 BEGIN    
     RETURN QUERY SELECT 
+    cla_id, cla_title,cla_descr, cla_status , bag_id from claim, Baggage , res_cru, users
+    where  BAG_RES_CRU_FK = rc_id and rc_use_fk =use_id 
+    and use_document_id=_users_document_id
+    and bag_cla_fk=cla_id 
+	UNION
+	SELECT 
     cla_id, cla_title,cla_descr, cla_status , bag_id from claim, Baggage , res_fli, users
-    where bag_res_fli_fk =rf_id and rf_use_fk =use_id  and use_document_id=_users_document_id
+    where  BAG_RES_fli_FK = rf_id and rf_use_fk =use_id 
+    and use_document_id=_users_document_id
     and bag_cla_fk=cla_id; 
 END;
 $$ LANGUAGE plpgsql;
+
 
 ---------------------- CONSULTAR RECLAMO SEGUN ESTATUS -------------------------
 CREATE OR REPLACE FUNCTION GetClaimStatus(_cla_status varchar(30))
@@ -1205,7 +1186,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 --------------------------CONSULTAR EQUIPAJE POR DOCUMENTO -------------------------
-CREATE OR REPLACE FUNCTION GetBaggageDocumentPasaport(_users_document_id varchar(30))
+CREATE OR REPLACE FUNCTION getBaggageDOcumentpasaport(_users_document_id varchar(30))
 RETURNS TABLE
   (id integer,
    descr VARCHAR(30),
@@ -1215,10 +1196,17 @@ AS
 $$
 BEGIN    
     RETURN QUERY SELECT 
-    bag_id, bag_descr, bag_status from Baggage , res_fli, users
-    where bag_res_fli_fk =rf_id and rf_use_fk =use_id  and use_document_id=_users_document_id;
+    bag_id, bag_descr, bag_status from  Baggage , res_cru, users
+    where  BAG_RES_CRU_FK = rc_id and rc_use_fk =use_id 
+    and use_document_id=_users_document_id
+	UNION
+	SELECT 
+    bag_id, bag_descr, bag_status from  Baggage , res_fli, users
+    where  BAG_RES_fli_FK = rf_id and rf_use_fk =use_id 
+    and use_document_id=_users_document_id; 
 END;
 $$ LANGUAGE plpgsql;
+
 
 ------------------- CONSUTAR EQUIPAJE SEGUN ESTATUS------------------------------------
 CREATE OR REPLACE FUNCTION GetBaggageStatus(_bag_status varchar(30))
@@ -2076,6 +2064,7 @@ CREATE OR REPLACE FUNCTION getAvailabilityRest(_res_id INTEGER) RETURNS INTEGER 
   $$ LANGUAGE plpgsql;
 -----------------------------------fin grupo 14-----------------------------------------------------------
 
+
 ------Grupo1-----------------------------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION LoginRepository(Email varchar(20),Password VARCHAR(50)) RETURNS table (use_id integer,use_name varchar(50),use_last_name varchar(30),usr_rol_id integer,rol_name varchar(30))AS $BODY$
         BEGIN
@@ -2095,6 +2084,339 @@ CREATE OR REPLACE FUNCTION RecoveryPass(Email varchar(20)) RETURNS table (use_na
 $BODY$ LANGUAGE plpgsql;
 ---------------------------------finGrupo1---------------------------------------------------------------------------
 
+
+----------------------------------Grupo 13 Automobile Reservations-----------------------------------------
+
+--Get all Reservations Automobiles
+CREATE OR REPLACE FUNCTION public.m13_getresautos(
+    )
+    RETURNS TABLE(ra_id integer, ra_pickupdate timestamp without time zone, ra_returndate timestamp without time zone, ra_use_fk integer, ra_aut_fk integer, ra_pay_fk integer, aut_id integer, aut_make character varying, aut_model character varying, aut_capacity integer, aut_price numeric, aut_license character varying, aut_picture character varying, aut_loc_fk integer)
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE
+    ROWS 1000
+AS $BODY$
+BEGIN
+ RETURN QUERY
+  select rr.ra_id,rr.ra_pickupdate, rr.ra_returndate, rr.ra_use_fk,rr.ra_aut_fk,rr.ra_pay_fk,
+  r.aut_id,r.aut_make,r.aut_model, r.aut_capacity,r.aut_price,r.aut_license,r.aut_picture,r.aut_loc_fk
+  from public.res_aut as rr,public.Automobile as r
+  where rr.ra_aut_fk = r.aut_id;
+END;
+$BODY$;
+
+ALTER FUNCTION public.m13_getresautos()
+    OWNER TO vacanza;
+
+--Find by id de la reservation
+CREATE OR REPLACE FUNCTION public.m13_findbyresautid(
+    _resautid integer)
+    RETURNS TABLE(ra_id integer, ra_pickupdate timestamp without time zone, ra_returndate timestamp without time zone, ra_timestamp timestamp without time zone, ra_use_fk integer, ra_aut_fk integer, ra_pay_fk integer)
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE
+    ROWS 1000
+AS $BODY$
+BEGIN
+  RETURN QUERY
+    select ra.ra_id, ra.ra_pickupdate, ra.ra_returndate,ra.ra_timestamp,ra.ra_use_fk, ra.ra_aut_fk, ra.ra_pay_fk
+    from public.res_aut as ra
+         where _resautid = ra.ra_id;
+END;
+$BODY$;
+
+ALTER FUNCTION public.m13_findbyresautid(integer)
+    OWNER TO vacanza;
+
+--Add Automobile Reservation
+CREATE OR REPLACE FUNCTION public.m13_addautomobilereservation(
+    _checkin timestamp without time zone,
+    _checkout timestamp without time zone,
+    _use_fk integer,
+    _ra_aut_fk integer)
+    RETURNS void
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE
+AS $BODY$
+
+BEGIN
+INSERT INTO Res_Aut
+(ra_pickupdate,ra_returndate,ra_timestamp,ra_use_fk,ra_aut_fk)
+VALUES(_checkin,_checkout,CURRENT_TIMESTAMP,_use_fk,_ra_aut_fk);
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.m13_addautomobilereservation(timestamp without time zone, timestamp without time zone, integer, integer)
+    OWNER TO vacanza;
+
+--Update de una Automobile Reservation
+CREATE OR REPLACE FUNCTION public.m13_updateautomobilereservation(
+    _checkin timestamp without time zone,
+    _checkout timestamp without time zone,
+    _use_fk integer,
+    _ra_aut_fk integer,
+    _ra_id integer)
+    RETURNS void
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE
+AS $BODY$
+
+BEGIN
+UPDATE Res_Aut SET
+ra_pickupdate = _checkin,
+ra_returndate = _checkout,
+ra_timestamp = CURRENT_TIMESTAMP,
+ra_use_fk =_use_fk,
+ra_aut_fk = _ra_aut_fk
+WHERE _ra_id = ra_id;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.m13_updateautomobilereservation(timestamp without time zone, timestamp without time zone, integer, integer, integer)
+    OWNER TO vacanza;
+
+--Delete
+CREATE OR REPLACE FUNCTION public.m13_deleteautomobilereservation(
+    _rar integer)
+    RETURNS integer
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE
+AS $BODY$
+
+DECLARE
+BEGIN
+    EXECUTE format('DELETE from public.res_aut WHERE ra_id= %L', _rar);
+    return _rar;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.m13_deleteautomobilereservation(integer)
+    OWNER TO vacanza;
+
+
+
+--Get Reservation By User ID
+CREATE OR REPLACE FUNCTION public.m13_getresautomobilebyuserid(
+    _user_id integer)
+    RETURNS TABLE(ra_id integer, ra_pickupdate timestamp without time zone, ra_returndate timestamp without time zone, ra_timestamp timestamp without time zone, ra_aut_fk integer, ra_use_fk integer, ra_pay_fk integer, aut_id integer, aut_make character varying, aut_model character varying, aut_capacity integer, aut_price numeric)
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+ RETURN QUERY
+  select ra.ra_id, ra.ra_pickupdate, ra.ra_returndate,ra.ra_timestamp,
+  ra.ra_aut_fk,ra.ra_use_fk,ra.ra_pay_fk,au.aut_id, au.aut_make, au.aut_model,
+  au.aut_capacity,au.aut_price
+  from public.Res_Aut as ra, public.Automobile as au
+  where ra.ra_aut_fk= au.aut_id and _user_id = ra.ra_use_fk ;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.m13_getresautomobilebyuserid(integer)
+    OWNER TO vacanza;
+
+----------------------------------FIN Grupo 13 Automobile Reservations------------------------------------
+
+----------------------------------Grupo 13 Room Reservations------------------------------------------------
+
+CREATE OR REPLACE FUNCTION public.m13_getresrooms(
+    )
+    RETURNS TABLE(rr_id integer, rr_checkindate timestamp without time zone, rr_checkoutdate timestamp without time zone, rr_timestamp timestamp without time zone, rr_hot_fk integer, rr_use_fk integer, rr_pay_fk integer, hot_id integer)
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE
+    ROWS 1000
+AS $BODY$
+BEGIN
+ RETURN QUERY
+  select rr.rr_id, rr.rr_checkinDate, rr.rr_checkoutDate,rr.rr_timestamp, rr.rr_hot_fk,rr.rr_use_fk,rr.rr_pay_fk,
+  h.hot_id
+  from public.Res_Roo as rr, public.Hotel as h
+  where rr.rr_hot_fk= h.hot_id;
+END;
+$BODY$;
+
+ALTER FUNCTION public.m13_getresrooms()
+    OWNER TO vacanza;
+
+CREATE OR REPLACE FUNCTION public.m13_findbyroomreservationid(
+    _resrooid integer)
+    RETURNS TABLE(res_roo_id integer, res_roo_fecha_ingreso timestamp without time zone, res_roo_fecha_salida timestamp without time zone, rr_timestamp timestamp without time zone, rr_hot_fk integer, rr_use_fk integer, rr_pay_fk integer)
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE
+    ROWS 1000
+AS $BODY$
+BEGIN
+  RETURN QUERY
+    select rr.rr_id, rr.rr_checkindate, rr.rr_checkoutdate,rr.rr_timestamp, rr.rr_hot_fk,rr.rr_use_fk,rr.rr_pay_fk
+    from public.res_roo as rr
+         where _resrooid = rr.rr_id;
+END;
+$BODY$;
+
+ALTER FUNCTION public.m13_findbyroomreservationid(integer)
+    OWNER TO vacanza;
+
+--ADD room reservation
+CREATE OR REPLACE FUNCTION public.m13_addroomreservation(
+    _checkin timestamp without time zone,
+    _checkout timestamp without time zone,
+    _use_fk integer,
+    _rr_hot_fk integer)
+    RETURNS integer
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE
+AS $BODY$
+DECLARE
+_id INTEGER;
+BEGIN
+INSERT INTO Res_Roo
+(rr_checkindate,rr_checkoutdate,rr_timestamp,rr_use_fk,rr_hot_fk)
+VALUES(_Checkin,_Checkout,CURRENT_TIMESTAMP,_use_fk,_rr_hot_fk)
+RETURNING rr_id into _id;
+return _id;
+END;
+$BODY$;
+
+ALTER FUNCTION public.m13_addroomreservation(timestamp without time zone, timestamp without time zone, integer, integer)
+    OWNER TO vacanza;
+
+
+--UPDATE Room Reservation
+CREATE OR REPLACE FUNCTION public.m13_updatehotelreservation(
+    _checkin timestamp without time zone,
+    _checkout timestamp without time zone,
+    _use_fk integer,
+    _rr_hot_fk integer,
+    _rr_id integer)
+    RETURNS void
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE
+AS $BODY$
+BEGIN
+UPDATE Res_roo SET
+rr_checkindate = _checkin,
+rr_checkoutdate = _checkout,
+rr_timestamp = CURRENT_TIMESTAMP,
+rr_use_fk =_use_fk,
+rr_hot_fk = _rr_hot_fk
+WHERE _rr_id = rr_id;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.m13_updatehotelreservation(timestamp without time zone, timestamp without time zone, integer, integer, integer)
+    OWNER TO vacanza;
+
+
+
+--DELETE Room Reservation
+CREATE OR REPLACE FUNCTION public.m13_deleteroomreservation(
+    _rooid integer)
+    RETURNS integer
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE
+AS $BODY$
+DECLARE
+BEGIN
+    EXECUTE format('DELETE from public.res_roo WHERE rr_id= %L', _rooid);
+    return _rooid;
+END;
+$BODY$;
+
+ALTER FUNCTION public.m13_deleteroomreservation(integer)
+    OWNER TO vacanza;
+
+CREATE OR REPLACE FUNCTION public.m13_getresroobyuserandroomid(
+    _user_id integer)
+    RETURNS TABLE(rr_id integer, rr_checkindate timestamp without time zone, rr_checkoutdate timestamp without time zone, rr_hot_fk integer, hot_name character varying, hot_room_capacity integer, hot_room_price numeric, hot_phone character varying, hot_stars integer)
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+ RETURN QUERY
+  select rr.rr_id,
+  rr.rr_checkindate,
+  rr.rr_checkoutdate,
+  rr.rr_hot_fk,
+  h.hot_name,
+  h.hot_room_capacity,
+  h.hot_room_price,
+  h.hot_phone,
+  h.hot_stars
+  from public.Res_Roo as rr, public.Hotel as h
+  where rr.rr_hot_fk= h.hot_id and _user_id = rr.rr_use_fk ;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.m13_getresroobyuserandroomid(integer)
+    OWNER TO vacanza;
+--AVAILABILITY HOTEL
+CREATE OR REPLACE FUNCTION getAvailableRoomsBasedOnReservationByHotelId(
+    IN _hot_id integer, OUT disponibles int)
+AS $$
+BEGIN
+disponibles := (SELECT ((Select hot_room_qty FROM hotel where hot_id = _hot_id)
+    - (SELECT COUNT(rr_hot_fk) FROM res_roo where rr_hot_fk=_hot_id  and rr_checkoutdate>=CURRENT_TIMESTAMP)
+) AS "Habitaciones Disponibles");
+
+END;
+
+$$ LANGUAGE plpgsql;
+
+-------SP para PAYMENT EN las RESERVAS---------------
+CREATE OR REPLACE FUNCTION m13_modifyReservationRoomPayment(pay Integer,reservation Integer) RETURNS
+INTEGER AS $$
+DECLARE res_id INTEGER;
+BEGIN
+UPDATE res_roo set rr_pay_fk = pay
+where(rr_id = reservation) returning rr_id INTO res_id;
+return res_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION m13_modifyReservationAutomobilePayment(pay Integer,reservation Integer) RETURNS
+INTEGER AS $$
+DECLARE res_id INTEGER;
+BEGIN
+UPDATE res_aut set ra_pay_fk = pay
+where(ra_id = reservation) returning ra_id INTO res_id;
+return res_id;
+END;
+$$ LANGUAGE plpgsql;
+
+
+----------------------------------FIN Grupo 13 Room Reservations-------------------------------------------
 
 ----------------------------------- grupo 11-----------------------------------------------------------
 
@@ -2205,7 +2527,7 @@ BEGIN
 	END IF;
 END
 $BODY$
-  LANGUAGE plpgsql 
+    LANGUAGE plpgsql; 
   -- select * from getinfoorder(3,3)
 
   --SP QUE TRAE LISTA DE ORDENES VERSION 2 MEJORADA
@@ -2282,7 +2604,7 @@ BEGIN
 
 END
 $BODY$
-  LANGUAGE plpgsql 
+    LANGUAGE plpgsql; 
   -- select * from getinfoorderAll(3,3,3,3)
 
   --SP QUE TRAE RESERVAS NO PAGADAS AUTOS Y HABITACION
@@ -2334,7 +2656,7 @@ BEGIN
 	END IF;
 END
 $BODY$
-  LANGUAGE plpgsql 
+      LANGUAGE plpgsql; 
 
  -- SELECT * FROM getNoPaysResAutHab(1,0)
 
@@ -2368,7 +2690,7 @@ WHERE RR_ID = _idRes;
 SELECT _idRes;
 END
 $BODY$
-  LANGUAGE plpgsql 
+      LANGUAGE plpgsql; 
 
 
 --Consulta Pagos Realizados
@@ -2415,7 +2737,8 @@ RETURN QUERY
    WHERE RR_USE_FK = _ID;
 END
 $BODY$
-  LANGUAGE plpgsql 
+    LANGUAGE plpgsql;
 
 
 -----------------------------------fin grupo 11-----------------------------------------------------------
+
