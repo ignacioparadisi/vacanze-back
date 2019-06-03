@@ -198,6 +198,15 @@ VALUES (6, '23613704', 'larry.page@vacanze.com', 'Page', 'Larry', MD5('google'))
 INSERT INTO USERS (use_id, use_document_id, use_email, use_last_name, use_name, use_password)
 VALUES (7, '23613704', 'reggaebob@vacanze.com', 'Marley', 'Bob', MD5('jah'));
 
+INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES ('20766123', 'userp1@vacanze.com', 'prueba', '1', MD5('userp1123'));
+
+INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES ('20766124', 'userp2@vacanze.com', 'prueba', '2', MD5('userp2123'));
+
+INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES ('20766125', 'hombrehealth@hotmail.com', 'prueba', '3', MD5('userp3123'));
+
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (2, 1 );
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (3, 2);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (4, 3);
@@ -205,6 +214,28 @@ INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (5, 4);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (1, 5);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (1, 6);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (1, 7);
+
+INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (3, 8);
+INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (4, 8);
+INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (4, 9);
+INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (5, 9);
+INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (3, 10);
+INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (4, 10);
+INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (5, 10);
+
+------- grupo 6 ----------
+
+INSERT INTO hotel (hot_id, hot_name, hot_room_qty, hot_room_capacity, hot_is_active,
+                   hot_address_specs, hot_room_price, hot_website, hot_phone, hot_picture,
+                   hot_stars, hot_loc_fk)
+VALUES (1, 'Prueba 1', 30, 4, true, 'Alguna direccion, algun lugar', 234.5, null, null, null, 4, 1),
+       (2, 'Prueba 2', 40, 2, true, 'Alguna direccion, algun lugar', 500.5, null, '+58 4253 2732',
+        null, 5, 10),
+       (3, 'Prueba 3', 40, 2, true, 'Alguna direccion, algun lugar', 500.5, null, '+58 4253 2732',
+        null, 5, 10);
+
+=======
+
 
 -------------------------------Grupo 3---------------------------------------------------
 INSERT INTO public.Plane(
