@@ -17,8 +17,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
     [ApiController]
     public class TravelsController : ControllerBase {
         
-        [HttpGet("~/api/users/{userId}/[controller]")]
-        public ActionResult<IEnumerable<Travel>> GetTravels(long userId){
+        [HttpGet("~/api/users/{userId:int}/[controller]")]
+        public ActionResult<IEnumerable<Travel>> GetTravels(int userId){
             List<Travel> travels = new List<Travel>();
             try{
                 travels = TravelRepository.GetTravels(userId);
@@ -33,20 +33,20 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
         }
 
         [HttpGet("{travelId}")]
-        public ActionResult<IEnumerable<Entity>> GetReservationsByTravelAndLocation(
-            long travelId, [FromQuery] int locationId, [FromQuery] string type){
+        public ActionResult<IEnumerable<object>> GetReservationsByTravelAndLocation(
+            int travelId, [FromQuery] int locationId, [FromQuery] string type){
             try{
                 type = type.ToUpper();
-                List<Entity> reservations = 
-                        TravelRepository.GetReservationsByTravelAndLocation(travelId, locationId, type.ToUpper());
+                List<object> reservations = 
+                        TravelRepository.GetReservationsByTravelAndLocation<object>(travelId, locationId, type.ToUpper());
                 return Ok(reservations);
             }catch(Exception ex){
                 return BadRequest(ex.Message);
             }
         }
 
-        [HttpGet("{travelId}/locations")]
-        public ActionResult<IEnumerable<Location>> GetLocationsByTravel(long travelId){
+        [HttpGet("{travelId:int}/locations")]
+        public ActionResult<IEnumerable<Location>> GetLocationsByTravel(int travelId){
             List<Location> locationsByTravel = new List<Location>();
             try{
                 locationsByTravel = TravelRepository.GetLocationsByTravel(travelId);
@@ -60,7 +60,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
         [HttpPost]
         public IActionResult AddTravel([FromBody] Travel travel){
             try{
-                long id = TravelRepository.AddTravel(travel);
+                int id = TravelRepository.AddTravel(travel);
                 if(id == 0)
                     return BadRequest("Lo sentimos, el viaje no pudo ser creado");
                 return Ok(travel);
@@ -72,8 +72,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
         }
 
         [Consumes("application/json")]
-        [HttpPost("{travelId}/locations")]
-        public IActionResult AddLocationsToTravel(long travelId, [FromBody] List<Location> locations){
+        [HttpPost("{travelId:int}/locations")]
+        public IActionResult AddLocationsToTravel(int travelId, [FromBody] List<Location> locations){
             Boolean saved = false;
             try{
                 saved = TravelRepository.AddLocationsToTravel(travelId, locations);

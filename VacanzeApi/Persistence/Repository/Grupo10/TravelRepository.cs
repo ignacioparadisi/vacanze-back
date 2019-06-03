@@ -25,39 +25,39 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
         /// User's travels
         ///</returns>
         ///<param name="userId">User's id</param>
-        public static List<Travel> GetTravels(long userId){
+        public static List<Travel> GetTravels(int userId){
             List<Travel> listOfTravels = new List<Travel>();
             try{
-                User user = UserRepository.GetUserById((int)userId);    
+                User user = UserRepository.GetUserById(userId);    
                 PgConnection pgConnection = PgConnection.Instance;
                 DataTable dataTable = pgConnection.ExecuteFunction("GetTravels(@userId)", userId);
                 if( dataTable.Rows.Count > 0){
                     foreach (DataRow dataRow in dataTable.Rows){
                         Travel travel = new Travel(
-                            Convert.ToInt64(dataRow[0]),
+                            Convert.ToInt32(dataRow[0]),
                             dataRow[1].ToString(),
                             Convert.ToDateTime(dataRow[2]),
                             Convert.ToDateTime(dataRow[3]),
                             dataRow[4].ToString(),
-                            Convert.ToInt64(dataRow[5])
+                            Convert.ToInt32(dataRow[5])
                         );   
                         listOfTravels.Add(travel);  
                     }
                 }else{
                     throw new WithoutExistenceOfTravelsException(userId, "Animate, planifica un viaje");
                 }
-            }catch(DatabaseException){
-                
-            }catch(InvalidStoredProcedureSignatureException){
-                
+            }catch(DatabaseException ex){
+                throw new Exception(ex.Message);
+            }catch(InvalidStoredProcedureSignatureException ex){
+                throw new Exception(ex.Message);
             }finally{
 
             }
             return listOfTravels;
         }
 
-        public static List<Entity> GetReservationsByTravelAndLocation(long travelId, int locationId, string type){
-            List<Entity> reservations = new List<Entity>();
+        public static List<T> GetReservationsByTravelAndLocation<T>(int travelId, int locationId, string type){
+            List<T> reservations = new List<T>();
             try{
                 PgConnection pgConnection = PgConnection.Instance;
                 if(type.Equals("HOTEL")){
@@ -67,16 +67,15 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
                         List<ReservationRoom> reservationsOfRoom = new List<ReservationRoom>();
                         foreach (DataRow dataRow in dataTable.Rows){
                             ReservationRoom reservationRoom = new ReservationRoom(
-                                Convert.ToInt64(dataRow[0]),
+                                Convert.ToInt32(dataRow[0]),
                                 DateTime.Parse(dataRow[1].ToString()),
-                                DateTime.Parse(dataRow[2].ToString()),
-                                HotelRepository.GetHotelById(Convert.ToInt32(dataRow[5])),
-                                Convert.ToInt32(dataRow[4]),
-                                null
+                                DateTime.Parse(dataRow[2].ToString())
                             );
+                            reservationRoom.Hotel = HotelRepository.GetHotelById(Convert.ToInt32(dataRow[5]));
+                            reservationRoom.Fk_user = Convert.ToInt32(dataRow[4]);
                             reservationsOfRoom.Add(reservationRoom);
                         }
-                        reservations = reservationsOfRoom.Cast<Entity>().ToList();
+                        reservations = reservationsOfRoom.Cast<T>().ToList();
                     }
                 }
             }catch(DatabaseException ex){
@@ -97,7 +96,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
         /// List of Locations by travel
         ///</returns>
         ///<param name="travelId">Travel's id</param>
-        public static List<Location> GetLocationsByTravel(long travelId){
+        public static List<Location> GetLocationsByTravel(int travelId){
             List<Location> locationsByTravel = new List<Location>();
             try{
                 // Validate travel id exist
@@ -132,8 +131,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
         /// Travel's id
         ///</returns>
         ///<param name="travel">Travel that should be inserted at the db</param>
-        public static long AddTravel(Travel travel){
-            long id = 0;
+        public static int AddTravel(Travel travel){
+            int id = 0;
             try{
                 //1. Validate: User exist & Is a Client
                     //throw exception
@@ -146,7 +145,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
                 DataTable dataTable = pgConnection.ExecuteFunction(
                     "AddTravel(@travelName, @travelInit, @travelEnd, @travelDescription, @userId)", 
                     travel.Name, travel.Init.ToString("yyyy-MM-dd"), travel.End.ToString("yyyy-MM-dd"), travel.Description, travel.UserId);
-                id = Convert.ToInt64(dataTable.Rows[0][0]);
+                id = Convert.ToInt32(dataTable.Rows[0][0]);
                 travel.Id = id;
             }catch(DatabaseException ex){
                 throw new Exception(ex.Message);
@@ -158,7 +157,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
             return id;
         }
         
-        public static Boolean AddLocationsToTravel(long travelId, List<Location> locations){
+        public static Boolean AddLocationsToTravel(int travelId, List<Location> locations){
             Boolean saved = false;
             try{
                 // Validate travel id exist

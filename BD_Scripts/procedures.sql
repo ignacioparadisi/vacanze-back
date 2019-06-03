@@ -1670,7 +1670,7 @@ $$ LANGUAGE plpgsql;
 ------------------------------------ grupo 10 ---------------------------------
 
 -- DROP FUNCTION GetTravels(BIGINT);
-CREATE OR REPLACE FUNCTION GetTravels(userId BIGINT) 
+CREATE OR REPLACE FUNCTION GetTravels(userId INTEGER) 
 RETURNS TABLE (
 	travel_id INTEGER,
 	travel_name VARCHAR,
@@ -1686,7 +1686,7 @@ END; $$
 LANGUAGE plpgsql;
 
 -- DROP FUNCTION GetLocationsByTravel(BIGINT);
-CREATE OR REPLACE FUNCTION GetLocationsByTravel(travelId BIGINT)
+CREATE OR REPLACE FUNCTION GetLocationsByTravel(travelId INTEGER)
 RETURNS TABLE (
 	locationId INTEGER, 
 	locationCity VARCHAR,
@@ -1707,11 +1707,11 @@ CREATE OR REPLACE FUNCTION AddTravel(
 	travelInit VARCHAR,
 	travelEnd VARCHAR,
   travelDescription VARCHAR,
-	userId BIGINT)
+	userId INTEGER)
 RETURNS BIGINT AS
 $$
 DECLARE
-	travelId BIGINT;
+	travelId INTEGER;
 BEGIN
 	INSERT INTO Travel(tra_name, tra_ini, tra_end, tra_descr, tra_use_fk)
 	VALUES(travelName, to_date(travelInit,'YYYY-MM-DD'), to_date(travelEnd,'YYYY-MM-DD'), travelDescription, userId) RETURNING tra_id INTO travelId;
@@ -1722,7 +1722,7 @@ LANGUAGE 'plpgsql';
 
 -- DROP FUNCTION AddLocationToTravel(BIGINT, INTEGER);
 CREATE OR REPLACE FUNCTION AddLocationToTravel(
-	travelId BIGINT, 
+	travelId INTEGER, 
 	locationId INTEGER	
 )
 RETURNS BOOLEAN AS $$
@@ -1738,8 +1738,8 @@ END; $$
 LANGUAGE 'plpgsql';
 
 CREATE OR REPLACE FUNCTION GetReservationsOfHotelByTravelAndLocation(
-	travelId BIGINT, 
-	locationId INT
+	travelId INTEGER, 
+	locationId INTEGER
 ) RETURNS TABLE (
 	reservationId INTEGER,
 	checkin TIMESTAMP,
