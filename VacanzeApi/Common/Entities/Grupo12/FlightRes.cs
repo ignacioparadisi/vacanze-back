@@ -39,22 +39,14 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo12{
 
 
         
-         public FlightRes(int id,string seatNum,string timestamp,int numPas,
-         int id_user,int id_pay,int _idfli,string name_plane,string dateI,
-         string dateV,int price,string name_cityI,string name_countryI,
-          string namecityV,string namecountryV):base(id){
+         public FlightRes(int id,int price,string timestamp,string seatNum,
+         string name_cityI,string name_countryI, string namecityV,string namecountryV):base(id){
 
              _id=id;
-             _seatNum=seatNum;
-             _timestamp=timestamp;
-             _numPas=numPas;
-             _id_user=id_user;
-             _id_pay=id_pay;
-             _id_fli=_idfli;
-             _nameplane=name_plane;
-             _dateI=dateI;
-             _dateV=dateV;
              _price=price;
+             _timestamp=timestamp;
+             _seatNum=seatNum;
+             
              _namecityI=name_cityI;
              _namecountryI=name_countryI;
              _namecityV=namecityV;

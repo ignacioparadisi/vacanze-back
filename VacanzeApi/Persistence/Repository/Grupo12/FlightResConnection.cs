@@ -62,30 +62,23 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo12
                 for (int i = 0; i < table.Rows.Count; i++){
                     
                     table2 = PgConnection.Instance.ExecuteFunction("GetNameLocation(@_id_city)",
-                    Convert.ToInt32(table.Rows[i][13].ToString()));
+                    Convert.ToInt32(table.Rows[i][6].ToString()));
 
                     res._id=Convert.ToInt32(table.Rows[i][0]);
-                    res._seatNum=Convert.ToString(table.Rows[i][1].ToString());
+                    res._price=Convert.ToInt32(table.Rows[i][1]);
                     res._timestamp=Convert.ToString(table.Rows[i][2].ToString());
-                    res._numPas= Convert.ToInt32(table.Rows[i][3]);
-                    res._id_user=Convert.ToInt32(table.Rows[i][4]);
-                    res._id_pay=0;
-                    res._id_fli=Convert.ToInt32(table.Rows[i][6]);      
-                    res._nameplane=table.Rows[i][7].ToString();
-                    res._dateI=table.Rows[i][8].ToString();
-                    res._dateV=table.Rows[i][9].ToString();
-                    res._price=Convert.ToInt32(table.Rows[i][10]);
-                    res._namecityI=table.Rows[i][11].ToString();
-                    res._namecountryI=table.Rows[i][12].ToString();
+                    res._seatNum=Convert.ToString(table.Rows[i][3].ToString());
+                    res._namecityI=table.Rows[i][4].ToString();
+                    res._namecountryI=table.Rows[i][5].ToString();
                     
                     res._namecityV=table2.Rows[0][1].ToString();
                     res._namecountryV=table2.Rows[0][2].ToString();
                
                   
-                    reservation_flight = new FlightRes(res._id,res._seatNum,
-                    res._timestamp,res._numPas,res._id_user,res._id_pay,
-                    res._id_fli,res._nameplane,res._dateI,res._dateV,res._price,
-                    res._namecityI,res._namecountryI,res._namecityV,res._namecountryV);
+                    reservation_flight = new FlightRes(res._id,res._price,
+                    res._timestamp,res._seatNum, res._namecityI,res._namecountryI,
+                    res._namecityV,res._namecountryV);
+
 
 
                     FlightRes.Add(reservation_flight);
