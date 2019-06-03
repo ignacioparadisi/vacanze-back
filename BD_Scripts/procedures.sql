@@ -2071,21 +2071,27 @@ CREATE OR REPLACE FUNCTION public.m13_addroomreservation(
     _checkout timestamp without time zone,
     _use_fk integer,
     _rr_hot_fk integer)
-    RETURNS void
+    RETURNS integer
     LANGUAGE 'plpgsql'
 
     COST 100
     VOLATILE
 AS $BODY$
+DECLARE
+_id INTEGER;
 BEGIN
 INSERT INTO Res_Roo
 (rr_checkindate,rr_checkoutdate,rr_timestamp,rr_use_fk,rr_hot_fk)
-VALUES(_Checkin,_Checkout,CURRENT_TIMESTAMP,_use_fk,_rr_hot_fk);
+VALUES(_Checkin,_Checkout,CURRENT_TIMESTAMP,_use_fk,_rr_hot_fk)
+RETURNING rr_id into _id;
+return _id;
 END;
 $BODY$;
 
 ALTER FUNCTION public.m13_addroomreservation(timestamp without time zone, timestamp without time zone, integer, integer)
     OWNER TO vacanza;
+
+
 --UPDATE Room Reservation
 CREATE OR REPLACE FUNCTION public.m13_updatehotelreservation(
     _checkin timestamp without time zone,
@@ -2099,7 +2105,6 @@ CREATE OR REPLACE FUNCTION public.m13_updatehotelreservation(
     COST 100
     VOLATILE
 AS $BODY$
-
 BEGIN
 UPDATE Res_roo SET
 rr_checkindate = _checkin,
@@ -2115,10 +2120,12 @@ $BODY$;
 ALTER FUNCTION public.m13_updatehotelreservation(timestamp without time zone, timestamp without time zone, integer, integer, integer)
     OWNER TO vacanza;
 
+
+
 --DELETE Room Reservation
 CREATE OR REPLACE FUNCTION public.m13_deleteroomreservation(
     _rooid integer)
-    RETURNS void
+    RETURNS integer
     LANGUAGE 'plpgsql'
 
     COST 100
@@ -2127,6 +2134,7 @@ AS $BODY$
 DECLARE
 BEGIN
     EXECUTE format('DELETE from public.res_roo WHERE rr_id= %L', _rooid);
+    return _rooid;
 END;
 $BODY$;
 
@@ -2162,7 +2170,6 @@ $BODY$;
 
 ALTER FUNCTION public.m13_getresroobyuserandroomid(integer)
     OWNER TO vacanza;
-
 --AVAILABILITY HOTEL
 CREATE OR REPLACE FUNCTION getAvailableRoomsBasedOnReservationByHotelId(
     IN _hot_id integer, OUT disponibles int)
@@ -2175,5 +2182,27 @@ disponibles := (SELECT ((Select hot_room_qty FROM hotel where hot_id = _hot_id)
 END;
 
 $$ LANGUAGE plpgsql;
+
+-------SP para PAYMENT EN las RESERVAS---------------
+CREATE OR REPLACE FUNCTION m13_modifyReservationRoomPayment(pay Integer,reservation Integer) RETURNS
+INTEGER AS $$
+DECLARE res_id INTEGER;
+BEGIN
+UPDATE res_roo set rr_pay_fk = pay
+where(rr_id = reservation) returning rr_id INTO res_id;
+return res_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION m13_modifyReservationAutomobilePayment(pay Integer,reservation Integer) RETURNS
+INTEGER AS $$
+DECLARE res_id INTEGER;
+BEGIN
+UPDATE res_aut set ra_pay_fk = pay
+where(ra_id = reservation) returning ra_id INTO res_id;
+return res_id;
+END;
+$$ LANGUAGE plpgsql;
+
 
 ----------------------------------FIN Grupo 13 Room Reservations-------------------------------------------
