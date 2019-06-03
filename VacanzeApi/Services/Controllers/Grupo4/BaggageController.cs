@@ -15,6 +15,26 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo4
      public class BaggageController : ControllerBase
      {
 
+          // Metodo para agregar equipajes
+          [HttpGet("agregar/{estatus}/{descripcion}")]
+          public ActionResult<int> Get(string estatus, string descripcion)
+          {
+               int i = 0;
+
+               try
+               {
+                    i = BaggageRepository.AddBaggageReturnId(0, 0, descripcion, estatus);
+               }
+               catch (DatabaseException e)
+               {
+
+                    return BadRequest("Error al agregar equipaje" + e);
+               }
+
+               return i;
+
+          }
+
 
           //Metodo para obtener todos los equipajes
           [HttpGet]
