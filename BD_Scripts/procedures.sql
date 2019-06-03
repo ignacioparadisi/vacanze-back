@@ -2065,7 +2065,6 @@ $BODY$
   -- select * from getinfoorderAll(3,3,3,3)
 
   --SP QUE TRAE RESERVAS NO PAGADAS AUTOS Y HABITACION
-
 CREATE OR REPLACE FUNCTION getNoPaysResAutHab(
     IN _id bigint,
     IN _tipo integer)
@@ -2097,6 +2096,17 @@ BEGIN
 	      RR_TIMESTAMP AS DATER
 	      from RES_ROO
 	      INNER JOIN HOTEL ON RR_HOT_FK = HOT_ID
+	      WHERE RR_USE_FK =_ID
+	      AND RR_PAY_FK IS NULL;
+     ELSEIF _tipo = 2 
+		THEN
+	      RETURN QUERY
+	      SELECT 
+	      RR_ID AS ID,
+	      RES_NAME AS NAME,
+	      RR_TIMESTAMP AS DATER
+	      from RES_REST
+	      INNER JOIN RESTAURANT ON RR_ID = res_id
 	      WHERE RR_USE_FK =_ID
 	      AND RR_PAY_FK IS NULL;
 	      
@@ -2140,6 +2150,51 @@ $BODY$
   LANGUAGE plpgsql 
 
 
+--Consulta Pagos Realizados
+CREATE OR REPLACE FUNCTION getMyPayments(
+    IN _id bigint)
+  RETURNS TABLE(
+    id integer,
+    descrip character varying,
+    pm character varying,
+    amount numeric,
+    dater timestamp) 
+    AS
+$BODY$
+BEGIN
+RETURN QUERY
+   SELECT 
+   PAY_ID AS TRANSACT,
+   CAST('Habitacion' AS character varying ) AS DESCRIP,
+   PAY_METHOD AS PM,
+   PAY_TOTAL  AS AMOUNT,
+   PAY_TIMESTAMP AS DATER
+   FROM PAYMENT
+   INNER JOIN RES_ROO ON RR_PAY_FK = PAY_ID
+   WHERE RR_USE_FK = _ID
+   UNION
+      SELECT 
+   PAY_ID AS TRANSACT,
+   CAST('Auto' AS character varying ) AS DESCRIP,
+   PAY_METHOD AS PM,
+   PAY_TOTAL  AS AMOUNT,
+   PAY_TIMESTAMP AS DATER
+   FROM PAYMENT
+   INNER JOIN RES_AUT ON RA_PAY_FK = PAY_ID
+   WHERE RA_USE_FK = _ID
+   UNION
+    SELECT 
+   PAY_ID AS TRANSACT,
+   CAST('Restaurant' AS character varying ) AS DESCRIP,
+   PAY_METHOD AS PM,
+   PAY_TOTAL  AS AMOUNT,
+   PAY_TIMESTAMP AS DATER
+   FROM PAYMENT
+   INNER JOIN RES_REST ON RR_PAY_FK = PAY_ID
+   WHERE RR_USE_FK = _ID;
+END
+$BODY$
+  LANGUAGE plpgsql 
 
 
 -----------------------------------fin grupo 11-----------------------------------------------------------
