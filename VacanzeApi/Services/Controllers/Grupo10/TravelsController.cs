@@ -22,14 +22,16 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
             List<Travel> travels = new List<Travel>();
             try{
                 travels = TravelRepository.GetTravels(userId);
-            }catch(UserNotFoundException ex){
-                return BadRequest(ex.Message);
+                return Ok(travels);
             }catch(WithoutExistenceOfTravelsException ex){
-                return BadRequest(ex.Message);
-            }catch(Exception ex){
-                return BadRequest(ex.Message);
+                return StatusCode(404,ex.Message);
+            }catch(UserNotFoundException ex){
+                return StatusCode(400,ex.Message);
+            }catch(InternalServerErrorException ex){
+                return StatusCode(500, ex.Message);
+            }catch(Exception){
+                return StatusCode(400);
             }
-            return Ok(travels);
         }
 
         [HttpGet("{travelId}")]
@@ -40,8 +42,14 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
                 List<object> reservations = 
                         TravelRepository.GetReservationsByTravelAndLocation<object>(travelId, locationId, type.ToUpper());
                 return Ok(reservations);
-            }catch(Exception ex){
-                return BadRequest(ex.Message);
+            }catch(InvalidReservationTypeException ex){
+                return StatusCode(400, ex.Message);
+            }catch(WithoutTravelReservationsException ex){
+                return StatusCode(404, ex.Message);
+            }catch(InternalServerErrorException ex){
+                return StatusCode(500, ex.Message);
+            }catch(Exception){
+                return StatusCode(400);
             }
         }
 
@@ -50,10 +58,14 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
             List<Location> locationsByTravel = new List<Location>();
             try{
                 locationsByTravel = TravelRepository.GetLocationsByTravel(travelId);
-            }catch(Exception ex){
-                return BadRequest(ex.Message);
+                return Ok(locationsByTravel);
+            }catch(WithoutTravelLocationsException ex){
+                return StatusCode(404,ex.Message);
+            }catch(InternalServerErrorException ex){
+                return StatusCode(500, ex.Message);
+            }catch(Exception){
+                return StatusCode(400);
             }
-            return Ok(locationsByTravel);
         }
 
         [Consumes("application/json")]

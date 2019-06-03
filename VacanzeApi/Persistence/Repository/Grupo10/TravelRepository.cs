@@ -18,13 +18,18 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
     public class TravelRepository{
 
         ///<sumary>
-        /// Receive the user's id and return their travels
+        /// Recibe el id de usuario y retorna la lista de sus viajes
         ///</sumary>
-        ///<exception cref="WithoutExistenceOfTravelsException"></exception>
+        ///<param name="userId">Id del Usuario</param>
         ///<returns>
-        /// User's travels
+        /// Lista de vieajes del usuario
         ///</returns>
-        ///<param name="userId">User's id</param>
+        ///<exception cref="WithoutExistenceOfTravelsException">
+        /// La excepción es lanzada cuando el usuario no pesee ningún viaje
+        ///</exception>
+        ///<exception cref="UserNotFoundException">
+        /// La excepción es lanzada si el usuario no existe
+        ///</exception>
         public static List<Travel> GetTravels(int userId){
             List<Travel> listOfTravels = new List<Travel>();
             try{
@@ -47,15 +52,32 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
                     throw new WithoutExistenceOfTravelsException(userId, "Animate, planifica un viaje");
                 }
             }catch(DatabaseException ex){
-                throw new Exception(ex.Message);
+                throw new InternalServerErrorException("Error en el servidor : Conexion a base de datos", ex);
             }catch(InvalidStoredProcedureSignatureException ex){
-                throw new Exception(ex.Message);
-            }finally{
-
+                throw new InternalServerErrorException("Error en el servidor", ex);
             }
             return listOfTravels;
         }
 
+        ///<sumary>
+        /// Consulta de reservas de un viaje por ciudad y tipo.
+        ///</sumary>
+        ///<param name="travelId">Id del viaje en la que se basará la consulta</param>
+        ///<param name="locationId">Id de la ciudad en la que se basará la consulta</param>
+        ///<param name="type">Tipo de reserva en la que se basará la consulta, los tipos son:
+        /// RESTAURANT, HOTEL, FLIGHT, CAR -> Todos en Uppercase, basado en alguno de ellos se obtendrán
+        /// las reservas de dicho tipo para determinado viaje con determinada ciudad.
+        ///</param>
+        ///<returns>
+        /// Las reservas por tipo, viaje y ciudad.
+        ///</returns>
+        ///<exception cref="InvalidReservationType">
+        /// Cuando el cliente envía un tipo de reserva no permitido es lanzada esta excepción
+        ///</exception>
+        ///<exception cref="WithoutTravelReservationsException">
+        /// Si el usuario no tiene reservaciones en el viaje para esa ciudad retorna esta excepción
+        /// no hay restricciones de si realmente la ciudad pertenece al viaje.
+        ///</exception>
         public static List<T> GetReservationsByTravelAndLocation<T>(int travelId, int locationId, string type){
             List<T> reservations = new List<T>();
             try{
@@ -76,31 +98,40 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
                             reservationsOfRoom.Add(reservationRoom);
                         }
                         reservations = reservationsOfRoom.Cast<T>().ToList();
+                    }else{
+                        throw new WithoutTravelReservationsException(
+                            travelId, locationId, "No posee reservaciones de " + type.ToLower() + " en dicha ciudad");
                     }
+                }else if(type.Equals("RESTAURANT")){
+
+                }else if(type.Equals("FLIGHT")){
+
+                }else if(type.Equals("CAR")){
+
+                }else{
+                    throw new InvalidReservationTypeException(type,"Tipo de reserva invalido : " + type);
                 }
             }catch(DatabaseException ex){
-                throw new Exception(ex.Message);
-            }catch(InvalidStoredProcedureSignatureException){
-                throw new Exception("InvalidStoredProcedureSignatureException");
-            }finally{
-
+                throw new InternalServerErrorException("Error en el servidor : Conexion a base de datos", ex);
+            }catch(InvalidStoredProcedureSignatureException ex){
+                throw new InternalServerErrorException("Error en el servidor", ex);
             }
-
             return reservations;
         }
 
         ///<sumary>
-        /// Receive the travel's id and return their associate locations
+        /// Consulta las ciudades relacionadas con un viaje
         ///</sumary>
+        ///<param name="travelId">Id del viaje con el que se basará la consulta</param>
         ///<returns>
-        /// List of Locations by travel
+        /// Ciudades o Locations que estan asociadas a un viaje
         ///</returns>
-        ///<param name="travelId">Travel's id</param>
+        ///<exception cref="WithoutTravelLocationsException">
+        ///
+        ///</exception>
         public static List<Location> GetLocationsByTravel(int travelId){
             List<Location> locationsByTravel = new List<Location>();
             try{
-                // Validate travel id exist
-                    //Throw exception
                 PgConnection pgConnection = PgConnection.Instance;
                 DataTable dataTable = pgConnection.ExecuteFunction("GetLocationsByTravel(@travelId)", travelId);
                 if( dataTable.Rows.Count > 0){
@@ -112,14 +143,12 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
                         locationsByTravel.Add(location);    
                     }
                 }else{
-                    //Throw Exception travel id exist
+                    throw new WithoutTravelLocationsException("El viaje aun no tiene ciudades");
                 }
-            }catch(DatabaseException){
-
-            }catch(InvalidStoredProcedureSignatureException){
-
-            }finally{
-
+            }catch(DatabaseException ex){
+                throw new InternalServerErrorException("Error en el servidor : Conexion a base de datos", ex);
+            }catch(InvalidStoredProcedureSignatureException ex){
+                throw new InternalServerErrorException("Error en el servidor", ex);
             }
             return locationsByTravel;
         }
