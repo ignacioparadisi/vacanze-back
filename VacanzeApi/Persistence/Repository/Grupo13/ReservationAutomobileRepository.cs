@@ -62,7 +62,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                     }
                     return reservationAutomobileList;
                 }
-
+        /*
         public List<Entity> GetAvailableAutomobileReservations()
         {
             List<Entity> reservationAutomobileList = new List<Entity>();
@@ -93,7 +93,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             }
             return reservationAutomobileList;
         }
-
+        */
         /** <summary>
          * Busca en la BD, la reserva que posee el identificador suministrado
          * </summary>

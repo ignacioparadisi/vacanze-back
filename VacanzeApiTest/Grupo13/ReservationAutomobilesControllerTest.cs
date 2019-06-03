@@ -45,6 +45,23 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         }
 
         [Test, Order(3)]
+        public void PostTest()
+        {
+
+            controller = new ReservationAutomobilesController();
+            DateTime time = new DateTime(1990, 04, 14);
+            DateTime time2 = new DateTime(1990, 04, 14);
+            Auto auto = new Auto("prueba","unitaria",5,true,"ddad",1,"asdadads",1);
+            auto.setId(0);
+            reservation = new ReservationAutomobile(0, time, time2, auto, 2);
+
+            var result = controller.Post(reservation);
+
+            Assert.IsInstanceOf<OkObjectResult>(result.Result);
+
+        }
+
+        [Test, Order(4)]
         public void PutTest()
         {
             ActionResult<Entity> res = controller.Put(reservation);
