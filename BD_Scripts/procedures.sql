@@ -2064,6 +2064,82 @@ $BODY$
   LANGUAGE plpgsql 
   -- select * from getinfoorderAll(3,3,3,3)
 
+  --SP QUE TRAE RESERVAS NO PAGADAS AUTOS Y HABITACION
+
+CREATE OR REPLACE FUNCTION getNoPaysResAutHab(
+    IN _id bigint,
+    IN _tipo integer)
+  RETURNS TABLE(
+    id integer,
+    name character varying,
+    dateR timestamp) 
+    AS
+$BODY$
+BEGIN
+	IF _tipo = 0 
+		THEN
+	     RETURN QUERY
+		SELECT 
+		RA_ID AS ID,
+		aut_make AS NAME,
+		RA_TIMESTAMP AS DATER
+		FROM RES_AUT
+		INNER JOIN AUTOMOBILE ON RA_AUT_FK = AUT_ID
+		WHERE RA_USE_FK = _ID
+		AND RA_PAY_FK IS  NULL;
+		
+	    ELSEIF _tipo = 1 
+		THEN
+	      RETURN QUERY
+	      SELECT 
+	      RR_ID AS ID,
+	      HOT_NAME AS NAME,
+	      RR_TIMESTAMP AS DATER
+	      from RES_ROO
+	      INNER JOIN HOTEL ON RR_HOT_FK = HOT_ID
+	      WHERE RR_USE_FK =_ID
+	      AND RR_PAY_FK IS NULL;
+	      
+	END IF;
+END
+$BODY$
+  LANGUAGE plpgsql 
+
+ -- SELECT * FROM getNoPaysResAutHab(1,0)
+
+  --DROP FUNCTION getnopaysresauthab(bigint,integer)
+
+
+  --SP QUE Actualiza id de pago en tablas afectadas
+  CREATE OR REPLACE FUNCTION PutPayProccess(
+    IN _idPay bigint,
+    IN _idAuto bigint,
+    IN _idRoo bigint,
+    IN _idRes bigint,
+    IN _idCru bigint)
+RETURNS BIGINT
+    AS
+$BODY$
+BEGIN
+
+UPDATE RES_AUT
+SET RA_PAY_FK = _idPay
+WHERE RA_ID = _idAuto;
+
+UPDATE RES_ROO
+SET RR_PAY_FK = _idPay
+WHERE RR_ID = _idRoo;
+
+UPDATE RES_REST
+SET RR_PAY_FK = _idPay
+WHERE RR_ID = _idRes;
+
+SELECT _idRes;
+END
+$BODY$
+  LANGUAGE plpgsql 
+
+
 
 
 -----------------------------------fin grupo 11-----------------------------------------------------------
