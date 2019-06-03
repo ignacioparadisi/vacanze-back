@@ -19,7 +19,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         ReservationAutomobileRepository _connection;
         DateTime time;
         private int id;
-        Auto automobile = new Auto("Prueba", "Unitaria", 5, true, "licencia", 35, 1);
+        Auto automobile = new Auto("Prueba", "Unitaria", 5, true, "licencia", 35, "mazda.jgp", 1);
 
         //private ReservationAutomobile res_aut;
         //private ReservationAutomobileRepository _connection;
