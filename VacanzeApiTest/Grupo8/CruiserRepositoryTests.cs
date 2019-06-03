@@ -141,5 +141,24 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
             List<Layover> getLayoverList = CruiserRepository.GetLayovers(addedCruiserId);
             Assert.AreEqual(layoversList.Count,getLayoverList.Count);
         }
+        [Test]
+
+        public void GetLayoversByLocationTest()
+        {
+            List<Layover> layoversList= new List<Layover>();
+            var addedCruiserId = CruiserRepository.AddCruiser(_cruiser);
+            _addedCruiserList.Add(addedCruiserId);
+            var layover = new Layover(addedCruiserId,Convert.ToString("2019-01-01"), Convert.ToString("2019-01-02"),2000,50,10);
+            var addedLayover = CruiserRepository.AddLayover(layover);
+            layoversList.Add(addedLayover);
+            List<Layover> getLayoverList = CruiserRepository.GetLayoversForRes(layover.LocDeparture,layover.LocArrival);
+            Assert.Greater(getLayoverList.Count,0);
+        }
+        [Test]
+
+        public void GetLayoversByLocation_LayoverNotfound_Test()
+        {
+            Assert.Throws<LayoverNotFoundException>(() => CruiserRepository.GetLayoversForRes(-1, -1));
+        }
     }
 }

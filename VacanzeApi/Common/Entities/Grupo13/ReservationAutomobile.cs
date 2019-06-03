@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 
@@ -7,23 +8,37 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
 
     public class ReservationAutomobile : Entity
     {
-        //Checkin: Initial date of the reservation
+        //CheckIn: Initial date of the reservation
         public DateTime CheckIn { get; set; }
-        //Checkout: Last date of the reservation
+        //CheckOut: Last date of the reservation
         public DateTime CheckOut { get; set; }
         //Automobile which the reservation references
         public Auto Automobile { get; set; }
-        //User who made the reservation
-        public User User { get; set; }
+       
         public int Fk_user { get; set; }
 
-            /**
-             * Constructor of the class.
-             */
+        public int Fk_pay{ get; set; }
+        /// <summary>
+        /// Inicializa una nueva instancia de la clase ReservationAutomobile.
+        /// </summary>
+        [JsonConstructor]
         public ReservationAutomobile(long id, DateTime CheckIn, DateTime CheckOut) : base(id)
         {
             this.CheckIn = CheckIn;
             this.CheckOut = CheckOut;
+        }
+
+        public ReservationAutomobile(long id, DateTime CheckIn, DateTime CheckOut, Auto automobile, int usuario) : base(id)
+        {
+            this.CheckIn = CheckIn;
+            this.CheckOut = CheckOut;
+            this.Fk_user = usuario;
+            this.Automobile = automobile;
+        }
+
+        public ReservationAutomobile(int payment) : base(0)
+        {
+            this.Fk_pay = payment;
         }
     }
 }

@@ -28,12 +28,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         public ActionResult<IEnumerable<string>> Post(FlightRes flight){
 
             try{
-<<<<<<< HEAD
 
-                
-=======
-                DateTime dateLocal = DateTime.Now;
->>>>>>> 4b63bbb14414fc5390dd34d3fbe217b67b66c4b6
                 FlightResConnection con=new FlightResConnection();
                 string seat=con.conSeatNum(flight._numPas,flight._id_fli);
                 FlightRes f=new FlightRes(seat,flight._timestamp,

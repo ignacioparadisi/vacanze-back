@@ -209,16 +209,16 @@ INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (1, 7);
 -------------------------------Grupo 3---------------------------------------------------
 INSERT INTO public.Plane(
 	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
-	VALUES (100,true, 50, 1000, 'Boeing 1');
+	VALUES (24,true, 50, 1000, 'Boeing 1');
 INSERT INTO public.Plane(
 	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
-	VALUES (150,true, 40, 1000, 'Boeing 2');
+	VALUES (12,true, 40, 1000, 'Boeing 2');
 INSERT INTO public.Plane(
 	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
-	VALUES (111,true, 30, 1000, 'Boeing 3');
+	VALUES (20,true, 30, 1000, 'Boeing 3');
 INSERT INTO public.Plane(
 	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
-	VALUES (200,true, 50, 2000, 'Boeing 4');
+	VALUES (20,true, 50, 2000, 'Boeing 4');
 INSERT INTO public.Plane(
 	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
 	VALUES (80,true, 10, 1000, 'Boeing 5');
@@ -316,6 +316,10 @@ VALUES	('Pescado Frito', 50, default, 5,'Carite', 100, 'sam', null, 'Pescado Fri
 	('Avila Burguer', 50, default, 5,'Hamburguesa', 100, 'sam', null, 'Hamburguesa', '04141100085', 29, 'Caracas');
 
 --------------Grupo 8 ---------------------------------------------
+
+INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'concordia', 100, 1000, 'Modelo1','Linea1', '1.jpg' );
+INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'Lmao', 500, 2000, 'Modelo2','Linea2', '3.jpg' );
+Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,2,'2019/2/11','2019/2/12',2000,1,2);
 INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'Concord', 500, 10000, 'Streamliner','Royal', '1.jpg' );
 INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'Victory', 600, 40000, 'Streamliner','Royal', '2.jpg' );
 INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'Queen', 550, 20000, 'Streamliner','Circus', '3.jpg' );
@@ -339,19 +343,34 @@ Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price
 Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,2,'2019/5/11','2019/5/25',2000,116,127);
 Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,1,'2019/5/11','2019/5/25',3000,110,140);
 Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,3,'2019/4/11','2019/4/1',4000,111,132);
+
 -------------Grupo 9 ------------------------------------
 INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('Mi primer reclamo','perdi mi maleta negra, nunca aparecio cuando llegue a mi destino','ABIERTO');
 INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('equipaje de mano','deje en el asiento de el avion mi equipaje de mano es color rojo con puntos negros','ABIERTO');
 INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('equipaje dejado en la sala de espera ','Hola, deje mi equipaje en la sala de espera del aeropuerto intermacional de maiquetia, era un bolso pequeno aproximadamente de 30 cm','ABIERTO');
 INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('mi vuelo se retraso','Buenas noches, mi vuelo se retraso pero el personal me comenta que mi equipaje lo mandaron a otro avion pero no saben en cual. Les agradezco pronta respuesta','ABIERTO');
+INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('equipaje se perdio luego del check-in','Buenas noches, mi equipaje no salio al llegar a mi destino','CERRADO');
+INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('equipaje se perdio en la sala de espera','Buenos dias, mi equipaje estaba conmigo en el bano pero lo deje olvidado. Saludos','CERRADO');
+INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('no encuentro mi equipaje','Mi equipaje no salio al llegar a mi destino, luego de esperar 3 horas','CERRADO');
+INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('el personal no consigue mi maleta','Buenas noches, mi equipaje no salio al llegar a mi destino, hasta cuando su irresponsabilidad.','CERRADO');
+
+
+insert into res_cru(RC_NUM_PPL,RC_USE_FK,RC_CRU_FK,RC_TIMESTAMP) values (10,5,1,'2019-03-01');
+insert into res_cru(RC_NUM_PPL,RC_USE_FK,RC_CRU_FK,RC_TIMESTAMP) values (100,6,2,'2019-03-02');
+insert into res_cru(RC_NUM_PPL,RC_USE_FK,RC_CRU_FK,RC_TIMESTAMP) values (10,7,3,'2019-03-03');
 
 INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ) VALUES('EXTRAVIADO','maleta negra para mi prueba unitaria');
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ) VALUES('EXTRAVIADO','maleta rola de 15 kg');
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ) VALUES('EXTRAVIADO','maleta azul con franjas negras');
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('RECLAMADO','maleta roja con puntos negros',2);
 INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ) VALUES('EXTRAVIADO','maleta negra');
-INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','maleta roja con puntos negros',2);
-INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','maleta pequeña aproximadamente 20 kg color negra',3);
-INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','maleta azul tamaño medio',4);
-INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','maleta vinotinto con logo de la FVF',4);
-INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','maleta rosada con dibujos de niña',1);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK,BAG_RES_CRU_FK) VALUES('RECLAMADO','maleta pequeña aproximadamente 20 kg color negra',3,1);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK,BAG_RES_CRU_FK) VALUES('RECLAMADO','maleta vinotinto con logo de la FVF',4,2);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK, BAG_RES_CRU_FK) VALUES('RECLAMADO','maleta rosada con dibujos de niña',1,3);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('ENCONTRADO','maleta de la seleccion nacional de venezuela a nombre de Salomon Rondon , marca adidas',5);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('ENCONTRADO','maleta de la seleccion nacional de venezuela con implementos deportivos , marca adidas',6);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('ENCONTRADO','maleta de mi esposa, hicimos el check-in todo bien, pero nunca aparecio en nuestro destino ',7);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('ENCONTRADO','maleta verde fluorescente',8);
 
 
 ------- grupo 10 ----------
@@ -411,7 +430,44 @@ INSERT INTO res_fli(rf_id, rf_seatnum, rf_timestamp, rf_num_ps, rf_use_fk, rf_pa
     VALUES (2,2,'2019-01-15',4,1,null,2);
 
 ------- grupo 13 ----------
-	
+
+INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
+VALUES('FIAT','UNO',5,true,25.99,'TAT77E','fiatuno.jgp',1);
+
+INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
+VALUES('FIAT','FIRE',5,true,24.99,'MEB19G','fiatfire.jgp',1);
+
+INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
+VALUES('BMW','Z3',4,true,35.99,'DDB43S','bmwz3.jpg',2);
+
+INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
+VALUES('Audi','Q7',6,true,40.99,'AA1239G','audiq7.jpg',3);
+
+INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
+VALUES('Sin','Reserva',4,true,34.99,'Bueno','',2);
+
+INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
+VALUES('Sin2','Reserva2',3,true,36.99,'Bueno2','',2);
+
+INSERT INTO public.res_roo(rr_checkinDate,rr_checkoutDate,rr_timestamp,rr_use_fk,rr_hot_fk)
+values('10/12/2018', '02/01/2019','10/12/2018', 1, 1 );
+INSERT INTO public.res_roo(rr_checkinDate,rr_checkoutDate,rr_timestamp,rr_use_fk,rr_hot_fk)
+values('10/11/2018', '02/01/2019','10/11/2018', 2, 2 );
+INSERT INTO public.res_roo(rr_checkinDate,rr_checkoutDate,rr_timestamp,rr_use_fk,rr_hot_fk)
+values('10/10/2018', '02/01/2019','10/10/2018', 1, 1 );
+INSERT INTO public.res_roo(rr_checkinDate,rr_checkoutDate,rr_timestamp,rr_use_fk,rr_hot_fk)
+values('10/09/2018', '02/01/2019','10/09/2018', 2, 2 );
+
+INSERT INTO public.Res_Aut(ra_pickupdate, ra_returndate,ra_timestamp,ra_use_fk, ra_aut_fk)
+values ('01/03/2019', '01/05/2019','01/03/2019', 1, 1);
+INSERT INTO public.Res_Aut(ra_pickupdate, ra_returndate,ra_timestamp,ra_use_fk, ra_aut_fk)
+values ('01/04/2019', '01/07/2019','01/04/2019', 2, 2);
+INSERT INTO public.Res_Aut(ra_pickupdate, ra_returndate,ra_timestamp,ra_use_fk, ra_aut_fk)
+values ('01/02/2019', '01/07/2019','01/02/2019', 2, 3);
+INSERT INTO public.Res_Aut(ra_pickupdate, ra_returndate,ra_timestamp,ra_use_fk, ra_aut_fk)
+values ('02/03/2019', '02/07/2019','02/03/2019', 1, 4);
+INSERT INTO public.Res_Aut(ra_pickupdate, ra_returndate,ra_timestamp,ra_use_fk, ra_aut_fk)
+values ('02/03/2019', '02/09/2019','02/03/2019', 1, 1);	
 INSERT INTO res_roo(rr_checkindate, rr_checkoutdate, rr_timestamp, rr_use_fk, rr_hot_fk)
 VALUES	('2019-06-12', '2019-06-13', '2019-06-11', 5, 4),
 	('2019-06-14', '2019-06-15', '2019-06-13', 5, 5),

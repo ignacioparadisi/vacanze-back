@@ -8,6 +8,7 @@ using vacanze_back.VacanzeApi.Persistence.Repository.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using Microsoft.AspNetCore.Http;
+using Npgsql;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 {
@@ -18,21 +19,25 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
     public class ReservationAutomobilesController : ControllerBase
     {
         // GET api/values
+
+        // GET api/reservationautomobiles/?id={user_id}]
+        /* https://localhost:5001/api/reservationautomobiles/?user=1 */
         [HttpGet]
-        public ActionResult<IEnumerable<Entity>> Get()
+        public ActionResult<IEnumerable<Entity>> GetAllByUserID([FromQuery] int user = -1)
         {
             try
             {
-                ReservationAutomobileRepository reservationAutomobileConnection = new ReservationAutomobileRepository();
-                List<Entity> result = reservationAutomobileConnection.GetAutomobileReservations();
-                return Ok(result.ToList());
+                ReservationAutomobileRepository connection = new ReservationAutomobileRepository();
+                return user == -1
+                    ? connection.GetAutomobileReservations()
+                    : connection.GetAllByUserId(user);
             }
-            catch (System.Exception)
+            catch (SystemException)
             {
-
                 throw;
             }
         }
+
 
         [HttpGet("{id}")]
         public ActionResult<Entity> Get(int id)
@@ -45,7 +50,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             }
             catch (System.Exception)
             {
-
                 throw;
             }
         }
@@ -71,28 +75,51 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 
 
         // PUT api/values/5    //ACTUALIZAR UN RECURSO
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public ActionResult<Entity> Put([FromBody] ReservationAutomobile res)
         {
+            try
+            {
+                ReservationAutomobileRepository repository = new ReservationAutomobileRepository();
+              //  ReservationAutomobile reservation = (ReservationAutomobile) repository.Find((int)res.Id);
+
+                repository.Update(res);
+
+                return Ok(new { Message = "Editado" });
+            }
+        /*    catch (DbErrorException ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }*/
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
         }
 
-        /*
     [HttpDelete("{id}")]
     public ActionResult<string> Delete(int id)
     {
         try
         {
-            ReservationAutomobileConnection connection = new ReservationAutomobileConnection();
-            connection.DeleteClaim(id);
+            var connection = new ReservationAutomobileRepository();
+               ReservationAutomobile reservation = (ReservationAutomobile)connection.Find(id);
+                connection.Delete(reservation);
             return Ok("Eliminado exitosamente");
         }
-        catch (System.Exception)
-        {
-            throw;
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+
         }
 
+        
+
     }
-    */
-    }
+
+ 
 
 }
