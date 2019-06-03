@@ -15,34 +15,36 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
 
         public Flight flight { get; set; }
 
-        /// <summary>Metodo que valida la informacion del vuelo a agregar</summary>
+        /// <summary>Metodo que valida la información del vuelo a agregar</summary>
         public void Validate()
         {
             
             if (flight.plane == null || flight.arrival == null || flight.departure == null ||
                 flight.price == null || flight.loc_arrival == null || flight.loc_departure == null){
-                    throw new ValidationErrorException("All fields must be filled");
+                    throw new ValidationErrorException("Se deben llenar todos los campos");
             }
 
             var plane = (Airplane) AirplanesRepository.Find(flight.plane.Id);
 
+            if (plane == null)
+                throw new ValidationErrorException("El avión seleccionado no existe");
+
+
             if( flight.loc_departure.Id == flight.loc_arrival.Id ){
-                throw new ValidationErrorException("The departure city and the arrival city cannot be the same");
+                throw new ValidationErrorException("La ciudad de salida no puede ser igual a la de llegada");
             }    
 
             DateTime arrivalDate= DateTime.ParseExact(flight.arrival, "MM-dd-yyyy HH:mm:ss",null);
             DateTime departureDate= DateTime.ParseExact(flight.departure, "MM-dd-yyyy HH:mm:ss",null);
             TimeSpan hours = arrivalDate - departureDate;
 
-            if( hours.TotalHours > plane.autonomy){
-                throw new ValidationErrorException("The autonomy of the plane is not enough to make this flight");
+            if( hours.TotalHours > plane.autonomy ){
+                throw new ValidationErrorException("La autonomía del avión no es suficiente para realizar este vuelo");
             }
 
-            if (plane == null)
-                throw new ValidationErrorException("The plane you selected does not exist");
 
             if( DateTime.Compare(departureDate, arrivalDate) > 0 ){
-                throw new ValidationErrorException("The departure date cannot be greater than the arrival date");
+                throw new ValidationErrorException("La fecha de salida no puede ser mayor a la de llegada");
             }
 
         }
