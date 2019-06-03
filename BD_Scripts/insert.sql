@@ -209,16 +209,16 @@ INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (1, 7);
 -------------------------------Grupo 3---------------------------------------------------
 INSERT INTO public.Plane(
 	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
-	VALUES (100,true, 50, 1000, 'Boeing 1');
+	VALUES (24,true, 50, 1000, 'Boeing 1');
 INSERT INTO public.Plane(
 	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
-	VALUES (150,true, 40, 1000, 'Boeing 2');
+	VALUES (12,true, 40, 1000, 'Boeing 2');
 INSERT INTO public.Plane(
 	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
-	VALUES (111,true, 30, 1000, 'Boeing 3');
+	VALUES (20,true, 30, 1000, 'Boeing 3');
 INSERT INTO public.Plane(
 	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
-	VALUES (200,true, 50, 2000, 'Boeing 4');
+	VALUES (20,true, 50, 2000, 'Boeing 4');
 INSERT INTO public.Plane(
 	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
 	VALUES (80,true, 10, 1000, 'Boeing 5');
