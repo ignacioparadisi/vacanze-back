@@ -198,6 +198,15 @@ VALUES ('23613704', 'larry.page@vacanze.com', 'Page', 'Larry', MD5('google'));
 INSERT INTO USERS (use_document_id, use_email, use_last_name, use_name, use_password)
 VALUES ('23613704', 'reggaebob@vacanze.com', 'Marley', 'Bob', MD5('jah'));
 
+INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES ('20766123', 'userp1@vacanze.com', 'prueba', '1', MD5('userp1123'));
+
+INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES ('20766124', 'userp2@vacanze.com', 'prueba', '2', MD5('userp2123'));
+
+INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES ('20766125', 'userp3@vacanze.com', 'prueba', '3', MD5('userp3123'));
+
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (2, 1 );
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (3, 2);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (4, 3);
@@ -205,6 +214,13 @@ INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (5, 4);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (1, 5);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (1, 6);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (1, 7);
+INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (3, 8);
+INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (4, 8);
+INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (4, 9);
+INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (5, 9);
+INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (3, 10);
+INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (4, 10);
+INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (5, 10);
 
 
 ------- grupo 6 ----------
