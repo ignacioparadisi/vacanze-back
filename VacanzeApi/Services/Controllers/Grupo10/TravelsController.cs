@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo10;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo10;
@@ -13,7 +14,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
-     
+    [EnableCors("MyPolicy")]
     [ApiController]
     public class TravelsController : ControllerBase {
         
