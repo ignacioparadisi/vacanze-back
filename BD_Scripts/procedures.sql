@@ -2390,7 +2390,7 @@ BEGIN
 	END IF;
 END
 $BODY$
-  LANGUAGE plpgsql 
+    LANGUAGE plpgsql; 
   -- select * from getinfoorder(3,3)
 
   --SP QUE TRAE LISTA DE ORDENES VERSION 2 MEJORADA
@@ -2467,7 +2467,7 @@ BEGIN
 
 END
 $BODY$
-  LANGUAGE plpgsql 
+    LANGUAGE plpgsql; 
   -- select * from getinfoorderAll(3,3,3,3)
 
   --SP QUE TRAE RESERVAS NO PAGADAS AUTOS Y HABITACION
@@ -2519,7 +2519,7 @@ BEGIN
 	END IF;
 END
 $BODY$
-  LANGUAGE plpgsql 
+      LANGUAGE plpgsql; 
 
  -- SELECT * FROM getNoPaysResAutHab(1,0)
 
@@ -2553,7 +2553,7 @@ WHERE RR_ID = _idRes;
 SELECT _idRes;
 END
 $BODY$
-  LANGUAGE plpgsql 
+      LANGUAGE plpgsql; 
 
 
 --Consulta Pagos Realizados
@@ -2600,7 +2600,7 @@ RETURN QUERY
    WHERE RR_USE_FK = _ID;
 END
 $BODY$
-  LANGUAGE plpgsql 
+    LANGUAGE plpgsql;
 
 
 -----------------------------------fin grupo 11-----------------------------------------------------------
