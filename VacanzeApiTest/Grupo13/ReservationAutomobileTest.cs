@@ -42,13 +42,13 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             Assert.AreNotEqual(0, reservations.Count());
         }
         
-
-        /*[Test, Order(1)]
+        /*
+        [Test, Order(6)]
         public void AutomobileReservationNotFoundExceptionTest()
         {
-            ReservationAutomobileRepository connection = new ReservationAutomobileRepository();
-            Assert.Throws<AutomobileReservationNotFoundException>(() => { connection.Find(0); });
-        }*/
+            Assert.Throws<AutomobileReservationNotFoundException>(() => _connection.Find(0));
+        }
+        */
 
         [Test, Order(2)]
         public void FindReservationAutomobileTest()

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.Repository;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo13;
 
 namespace vacanze_back.VacanzeApiTest.Grupo13
 {
@@ -86,6 +87,33 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
 
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
 
+        }
+
+        [Test, Order(4)]
+        public void DeleteTest()
+        {
+            controller = new ReservationRoomsController();
+            DateTime time = new DateTime(1990, 04, 14);
+            DateTime time2 = new DateTime(1990, 04, 14);
+            Hotel hotel = new Hotel();
+            hotel.IsActive = true;
+            hotel.Name = "PruebaUnitaria";
+            hotel.Phone = "04141234323";
+            hotel.PricePerRoom = 13;
+            hotel.RoomCapacity = 5;
+            hotel.Stars = 5;
+            hotel.AmountOfRooms = 30;
+            hotel.AddressSpecification = "PU al lado de X";
+            hotel.Picture = "PU";
+            hotel.Website = "Pu Website";
+            hotel.Location = LocationRepository.GetLocationById(1);
+            hotel.Id = 0;
+            reservation = new ReservationRoom(0, time, time2, hotel, 2);
+            ReservationRoomRepository connection = new ReservationRoomRepository();
+            int id = connection.Add(reservation);
+
+            var result = controller.Delete(id);
+            Assert.IsInstanceOf<OkObjectResult>(result.Result);
         }
     }
 /*

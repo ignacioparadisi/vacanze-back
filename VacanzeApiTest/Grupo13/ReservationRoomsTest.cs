@@ -82,7 +82,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
 
         }
 */
-/*
+
         [Test, Order(5)]
         public void DeleteReservationRoomTest()
         {
@@ -90,7 +90,14 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             Entity reservation2 = _connection.Find((int)reservation.Id);
             Assert.IsNull(reservation2);
         }
-        */
+
+        [Test, Order(6)]
+        public void AvailableRoomsTest()
+        {
+            id = _connection.GetAvailableRoomReservations(1);
+            Assert.IsNotNull(id);
+        }
+
     }
 
 }

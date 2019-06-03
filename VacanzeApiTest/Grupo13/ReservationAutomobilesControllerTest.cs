@@ -8,6 +8,7 @@ using vacanze_back.VacanzeApi.Common.Entities;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo13;
 
 namespace vacanze_back.VacanzeApiTest.Grupo13
 {
@@ -44,6 +45,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             Assert.IsInstanceOf<ActionResult<Entity>>(result);
         }
 
+        /*
         [Test, Order(3)]
         public void PostTest()
         {
@@ -68,5 +70,22 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             Assert.NotNull(res);
         }
 
+        [Test, Order(5)]
+        public void DeleteTest()
+        {
+            DateTime time = new DateTime(1990, 04, 14);
+            DateTime time2 = new DateTime(1990, 04, 14);
+            ReservationAutomobile testflight = new ReservationAutomobile(1,time,time2);
+            Auto airplane = new Auto("a","b",1,true,"x",20,"x",1);
+            airplane.setId(1);
+
+            testflight.Automobile = airplane;
+            ReservationAutomobileRepository connection = new ReservationAutomobileRepository();
+            int id =(int) connection.AddReservation(testflight).Id;
+
+            var result = controller.Delete(id);
+            Assert.IsInstanceOf<OkObjectResult>(result.Result);
+        }
+        */
     }
 }
