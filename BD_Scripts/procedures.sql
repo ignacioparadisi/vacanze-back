@@ -1796,7 +1796,7 @@ RETURNS TABLE (id INTEGER) AS $$
   END;   
   $$ LANGUAGE plpgsql;
 
- --Devolver Lista validada de una reserva de vuelo
+ --Devuelve Lista validada de una reserva de vuelo (IDA)
  CREATE OR REPLACE FUNCTION GetFlightsIDA(_departure integer,_arrival integer,_departuredate char varying)
     RETURNS TABLE(id integer, price numeric, departuredate timestamp without time zone, arrivaldate timestamp without time zone, locdeparture integer, locarrival integer) 
     LANGUAGE 'plpgsql'
@@ -1836,6 +1836,28 @@ END;
 $BODY$;
 
 ALTER FUNCTION public.GetNameLocation(integer)
+    OWNER TO vacanza; 
+
+--Devuelve Lista validada de una reserva de vuelo (IDA y Vuelta)
+CREATE OR REPLACE FUNCTION public.GetFlightsIDAVU(_departure integer,_arrival integer,_departuredate char varying,_arrivaldate char varying)
+    RETURNS TABLE(id integer, plane integer, price numeric, departuredate timestamp without time zone, arrivaldate timestamp without time zone, locdeparture integer, locarrival integer) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+	RETURN QUERY SELECT
+  fli_id, fli_pla_fk, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, fli_loc_arrival
+	FROM public.Flight WHERE fli_departuredate::date = _departuredate::timestamp without time zone and fli_arrivaldate::date = _arrivaldate::timestamp without time zone 
+  and fli_loc_departure = _departure and fli_loc_arrival = _arrival;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.GetFlightsIDAVU(integer, integer, char varying, char varying)
     OWNER TO vacanza; 
 
 ------------------------------------Fin Grupo12--------------------------------------------------
