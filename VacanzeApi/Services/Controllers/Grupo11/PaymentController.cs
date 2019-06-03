@@ -30,7 +30,7 @@ namespace vacanze_back.Controllers
             {
                 var lPayments = PaymentRepository.GetPaymentMethod();
 
-                if (lPayments!=null && lPayments.Count > 0)
+                if (lPayments != null && lPayments.Count > 0)
                 {
                     //Si la lista viene llena
                     return Ok(lPayments);
@@ -40,24 +40,20 @@ namespace vacanze_back.Controllers
                     return NotFound("No se encontró informacón");
                 }
 
-               
+
 
             }
             catch (DatabaseException e)
             {
                 //Aqui va una excepcion personalizada
-                return StatusCode(StatusCodes.Status500InternalServerError,e);
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
             }
 
-          
+
 
 
         }
 
-
-       
-        [HttpGet]
-        [Route("id/{id}/type/{type}")]
 
         /// <summary>
         /// Get que consulta metodos de pagos precargados estaticamente
@@ -69,12 +65,12 @@ namespace vacanze_back.Controllers
         /// <returns>lista de metodos de pagos</returns>
         [HttpGet]
         [Route("id/{idAuto}/{idRoo}/{idRes}/{idCru}")]
-        public ActionResult<List<Payment>> GetPayment_Order(long idAuto,long idRoo,long idRes, long idCru)
+        public ActionResult<List<Payment>> GetPayment_Order(long idAuto, long idRoo, long idRes, long idCru)
         {
 
             try
             {
-                var lPayments = PaymentRepository.GetInfoOrder(idAuto,idRoo,idRes,idCru);
+                var lPayments = PaymentRepository.GetInfoOrder(idAuto, idRoo, idRes, idCru);
 
                 if (lPayments != null && lPayments.Count > 0)
                 {
@@ -119,7 +115,7 @@ namespace vacanze_back.Controllers
                     var id = PaymentRepository.AddPayment(bill);
                     if (id > 0)
                     {
-                        return Ok("Se ha registrado con exito el pago nro " +id.ToString());
+                        return Ok("Se ha registrado con exito el pago nro " + id.ToString());
 
                     }
                     else
@@ -161,11 +157,11 @@ namespace vacanze_back.Controllers
                 if (oResp.Item1 == 0)
                 {
 
-                   return Ok(oResp);
+                    return Ok(oResp);
                 }
                 else
                 {
-                    return StatusCode(StatusCodes.Status402PaymentRequired,oResp);
+                    return StatusCode(StatusCodes.Status402PaymentRequired, oResp);
                 }
 
             }
@@ -181,12 +177,12 @@ namespace vacanze_back.Controllers
         }
 
 
-          /// <summary>
-          /// Devuelve habitaciones y autos no pagados
-          /// </summary>
-          /// <param name="id"></param>
-          /// <param name="tipo"></param>
-          /// <returns></returns>
+        /// <summary>
+        /// Devuelve habitaciones y autos no pagados
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="tipo"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("ResHabAuto/{id}/{tipo}")]
         public ActionResult<List<PayRes>> GetProccesPayment(long id, int tipo)
@@ -194,7 +190,7 @@ namespace vacanze_back.Controllers
 
             try
             {
-                var lPayments = PaymentRepository.GetPayRes(id,tipo);
+                var lPayments = PaymentRepository.GetPayRes(id, tipo);
 
                 if (lPayments != null && lPayments.Count > 0)
                 {
@@ -212,10 +208,40 @@ namespace vacanze_back.Controllers
             }
 
         }
-           
+
+        [HttpGet]
+        [Route("Mypayment/{id}")]
+        public ActionResult<List<Transaction>> GetpaymentTransact(long id)
+        {
+
+            try
+            {
+                var lPayments = PaymentRepository.GetTransaction(id);
+
+                if (lPayments != null && lPayments.Count > 0)
+                {
+                    return Ok(lPayments);
+                }
+                else
+                {
+                    return NotFound("No se encontró informacón");
+                }
 
 
-     
+
+            }
+            catch (DatabaseException e)
+            {
+                //Aqui va una excepcion personalizada
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
+
+
+
+
+        }
+
+
 
     }
 }

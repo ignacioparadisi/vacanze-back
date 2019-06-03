@@ -233,5 +233,36 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo11
 
             return _iResp;
         }
+
+        public static List<Transaction> GetTransaction(long id)
+        {
+            DataTable _table;
+            var _oList = new List<Transaction>();
+            try
+            {
+                _table = PgConnection.Instance.ExecuteFunction("getMyPayments(@id)", id);
+
+                for (int i = 0; i < _table.Rows.Count; i++)
+                {
+                    _oList.Add(
+                        new Transaction(
+                        Convert.ToInt64(_table.Rows[i][0]),
+                        Convert.ToString(_table.Rows[i][1]),
+                        Convert.ToString(_table.Rows[i][2]),
+                        Convert.ToDouble(_table.Rows[i][3]),
+                        Convert.ToDateTime(_table.Rows[i][4]))
+                        );
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            return _oList;
+        }
     }
 }
