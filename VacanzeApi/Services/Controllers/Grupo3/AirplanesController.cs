@@ -38,7 +38,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
         /// <param name="id">Id del avion a busca</param>
         /// <returns>ActionResult con el avion buscado o nulo si no encontro nada</returns>
         [HttpGet("{id}")]
-        public ActionResult<Entity> Get(int id)
+        public ActionResult<Entity> Find(int id)
         {
             try
             {
