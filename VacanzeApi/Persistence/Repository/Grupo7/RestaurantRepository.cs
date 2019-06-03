@@ -5,8 +5,18 @@ using vacanze_back.VacanzeApi.Common.Exceptions;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
 {
+    /// <summary>  
+    ///  Clase para manejar peticiones, relacionadas a los restaurantes, contra la base de datos   
+    /// </summary>  
     public static class RestaurantRepository
     {
+        /// <summary>
+        ///     Metodo para crear un restaurant
+        /// </summary>
+        /// <param name="restaurant">Objeto Restaurant a crear</param>
+        /// <returns>Objeto tipo restaurant del restaurant creado</returns>
+        /// <exception cref="DatabaseException">Ocurrio una excepcion en la ejecución de la función</exception>
+        /// <exception cref="InvalidOperationException">Algun atributo tenia un valor invalido o nulo</exception>
         public static int AddRestaurant(Restaurant restaurant)
         {
             try
@@ -30,6 +40,14 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
             
         }
 
+        /// <summary>
+        ///     Metodo para modifcar un restaurant
+        /// </summary>
+        /// <param name="restaurant">Objeto restaurant con la data para el restaurant a modificar</param>
+        /// <returns>Objeto tipo restaurant del restaurant modificado</returns>
+        /// <exception cref="InvalidOperationException">Algun atributo tenia un valor invalido o nulo</exception>
+        /// <exception cref="InvalidCastException">Algun atributo no era del tipo correcto</exception>
+        /// <exception cref="DatabaseException">Ocurrio una excepcion en la ejecución de la función</exception>
         public static Restaurant UpdateRestaurant(Restaurant restaurant)
         {
             try
@@ -57,6 +75,11 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
            
         }
 
+        /// <summary>
+        ///     Metodo para obtener todos los restaurantes
+        /// </summary>
+        /// <returns>Lista tipo restaurant con los restaurantes obtenidos</returns>
+        /// <exception cref="DatabaseException">Ocurrio una excepcion en la ejecución de la función</exception>
         public static List<Restaurant> GetRestaurants()
         {
             try
@@ -89,6 +112,13 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
             }
             
         }
+
+        /// <summary>
+        ///     Metodo para obtener un unico restaurant
+        /// </summary>
+        /// <param name="restaurant_id">Identificador unico del restaurant a obtener</param>
+        /// <returns>Objeto tipo restaurant con el restaurant obtenido</returns>
+        /// <exception cref="DatabaseException">Ocurrio una excepcion en la ejecución de la función</exception>
         public static Restaurant GetRestaurant(int restaurant_id)
         {       
             try
@@ -117,6 +147,12 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
             }
         }
 
+        /// <summary>
+        ///     Metodo para obtener todos los restaurantes de una ciudad dada
+        /// </summary>
+        /// <param name="location_id">Identificador unico de la ciudad a la que pertenecen los restaurantes</param>
+        /// <returns>Lista tipo restaurant con los restaurantes obtenidos</returns>
+        /// <exception cref="DatabaseException">Ocurrio una excepcion en la ejecución de la función</exception>
         public static List<Restaurant> GetRestaurantsByCity(int location_id)
         {
             try
@@ -149,6 +185,13 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
             }
         }
 
+        /// <summary>
+        ///     Metodo para eliminar un restaurante 
+        /// </summary>
+        /// <param name="id">Identificador unico del restaurant a eliminar</param>
+        /// <returns>Entero que contiene el identificador del restaurant eliminado</returns>
+        /// <exception cref="DatabaseException">Ocurrio una excepcion en la ejecución de la función</exception>
+        /// <exception cref="InvalidCastException">El identificador dado no corresponde a un restaurant existente</exception>
          public static int DeleteRestaurant(int id)
         {
             try
