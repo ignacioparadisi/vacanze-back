@@ -30,7 +30,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             _connection = new ReservationAutomobileRepository();
             time = new DateTime(1990, 04, 14);
             time2 = new DateTime(1990, 04, 14);
-            automobile.setId(7);
+            automobile.setId(1);
             reservation = new ReservationAutomobile(0, time, time2,automobile,2);
             reservation.Id = id;
         }
