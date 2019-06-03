@@ -107,12 +107,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
                 connection.Delete(reservation);
             return Ok("Eliminado exitosamente");
         }
-        catch (System.Exception)
-        {
-            throw;
-        }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
 
-    }
+        }
     }
 
 }
