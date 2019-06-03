@@ -42,8 +42,8 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo14 {
         }
 
         //Constructor para el GET de todas las reservas del usuario
-        public Restaurant_res(string locationName, string pais,  string restName,
-         string address, string fecha_reservacion, int cant_persona) : base(0)
+        public Restaurant_res(int id,string locationName, string pais,  string restName,
+         string address, string fecha_reservacion, int cant_persona) : base(id)
         {
             fecha_res = fecha_reservacion; //rr_date = fecha a futuro a la cual reservo el usuario
             cant_people = cant_persona; //rr_num_ppl

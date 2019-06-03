@@ -62,14 +62,15 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo14{
             Console.WriteLine("Antes del for");
             for (var i = 0; i < table.Rows.Count; i++){
                 //Orden del SP id, ciudad, pais, restaurant, direccion, fecha_res, cant_persona
-                var locationName = table.Rows[i][0].ToString();
-                var pais = table.Rows[i][1].ToString();
-                var restName = table.Rows[i][2].ToString();
-                var address =  table.Rows[i][3].ToString();
-                var fecha_reservacion =  table.Rows[i][4].ToString();
-                var cant_persona = Convert.ToInt32(table.Rows[i][5].ToString());
+                var id = Convert.ToInt32(table.Rows[i][0].ToString());
+                var locationName = table.Rows[i][1].ToString();
+                var pais = table.Rows[i][2].ToString();
+                var restName = table.Rows[i][3].ToString();
+                var address =  table.Rows[i][4].ToString();
+                var fecha_reservacion =  table.Rows[i][5].ToString();
+                var cant_persona = Convert.ToInt32(table.Rows[i][6].ToString());
 
-                var Restaurant_res = new Restaurant_res(locationName, pais, restName, address, fecha_reservacion, cant_persona);
+                var Restaurant_res = new Restaurant_res(id,locationName, pais, restName, address, fecha_reservacion, cant_persona);
                 ReservationList.Add(Restaurant_res);
             };
             return ReservationList;
