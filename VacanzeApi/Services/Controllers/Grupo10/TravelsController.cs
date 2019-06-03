@@ -86,6 +86,19 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
             }
         }
 
+        [HttpPost("{travelId}")]
+        public IActionResult AddReservationToTravel(int travelId,[FromQuery] int res, [FromQuery] string type){
+            try{
+                if(TravelRepository.AddReservationToTravel(travelId, res, type.ToUpper())) 
+                    return Ok("Ok");
+                else
+                    return BadRequest("Bad Reques");
+            }catch(InternalServerErrorException ex){
+                return BadRequest(ex.Message);
+            }
+
+        }
+
         [Consumes("application/json")]
         [HttpPost("{travelId:int}/locations")]
         public IActionResult AddLocationsToTravel(int travelId, [FromBody] List<Location> locations){

@@ -191,6 +191,24 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
             }
             return id;
         }
+
+        
+        public static Boolean AddReservationToTravel(int travel, int reservation, string type){
+            Boolean saved = false;
+            try{
+                PgConnection pgConnection = PgConnection.Instance;
+                DataTable dataTable = pgConnection.ExecuteFunction(
+                    "AddReservationToTravel(@travel, @reservation, @type)",
+                    travel, reservation, type);
+                if(Convert.ToBoolean(dataTable.Rows[0][0]))
+                    saved = true;
+            }catch(DatabaseException ex){
+                throw new InternalServerErrorException("Error en el servidor : Conexion a base de datos", ex);
+            }catch(InvalidStoredProcedureSignatureException ex){
+                throw new InternalServerErrorException("Error en el servidor", ex);
+            }
+            return saved;
+        }
         
         public static Boolean AddLocationsToTravel(int travelId, List<Location> locations){
             Boolean saved = false;
