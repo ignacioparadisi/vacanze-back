@@ -149,7 +149,12 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                         reservation.CheckOut,
                         reservation.Fk_user,
                         reservation.Automobile.getId());
-                return reservation;
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    int id = (int)Convert.ToInt64(table.Rows[i][0]);
+                    reservation.Id = id;
+                }
+                    return reservation;
             }
             catch
             {
@@ -244,27 +249,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             }
         }
 
-        public int AddPayment(ReservationAutomobile reservation, int fk_payment)
-        {
-            try
-            {
-                var table = PgConnection.Instance.
-                   ExecuteFunction(SP_ADD_PAYMENT,
-                       fk_payment,
-                       (int)reservation.Id);
-
-                if (table.Rows.Count > 0)
-                {
-                    return Convert.ToInt32(table.Rows[0][0]);
-                }
-                return 0;
-            }
-            catch (DatabaseException e)
-            {
-                Console.WriteLine(e.ToString());
-                throw new Exception();
-            }
-        }
     }
 
 }

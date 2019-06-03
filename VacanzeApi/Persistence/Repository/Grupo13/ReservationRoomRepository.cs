@@ -277,27 +277,5 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             }
         }
 
-        public int AddPayment(ReservationRoom reservation, int fk_payment)
-        {
-            try
-            {
-                var table = PgConnection.Instance.
-                   ExecuteFunction(SP_ADD_PAYMENT,
-                       fk_payment,
-                       (int)reservation.Id);
-
-                if (table.Rows.Count > 0)
-                {
-                    return Convert.ToInt32(table.Rows[0][0]);
-                }
-                return 0;
-            }
-            catch (DatabaseException e)
-            {
-                Console.WriteLine(e.ToString());
-                throw new Exception();
-            }
-        }
-
     }
 }

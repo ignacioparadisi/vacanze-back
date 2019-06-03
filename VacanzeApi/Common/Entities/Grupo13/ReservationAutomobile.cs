@@ -28,6 +28,14 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
             this.CheckOut = CheckOut;
         }
 
+        public ReservationAutomobile(long id, DateTime CheckIn, DateTime CheckOut, Auto automobile, int usuario) : base(id)
+        {
+            this.CheckIn = CheckIn;
+            this.CheckOut = CheckOut;
+            this.Fk_user = usuario;
+            this.Automobile = automobile;
+        }
+
         public ReservationAutomobile(int payment) : base(0)
         {
             this.Fk_pay = payment;
