@@ -455,6 +455,42 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+------grupo4---------------
+---------------------------Agregar Baggage-------------------------------
+
+CREATE OR REPLACE FUNCTION AddBaggage(
+	_bag_res_fli_fk INTEGER,
+    _bag_res_cru_fk INTEGER,
+    _bag_descr VARCHAR(100),
+    _bag_status VARCHAR(100))
+  RETURNS INTEGER AS
+$$
+DECLARE
+  ret_id INTEGER;
+BEGIN
+    INSERT INTO Baggage(bag_id, bag_res_fli_fk, bag_res_cru_fk, bag_descr, bag_status) VALUES
+        (default, _bag_res_fli_fk, _bag_res_cru_fk, _bag_descr, _bag_status)
+    RETURNING bag_id INTO ret_id;
+RETURN ret_id;
+END;
+$$ LANGUAGE plpgsql;
+
+---------------------------Eliminar Baggage-------------------------------
+CREATE OR REPLACE FUNCTION DeleteBaggage(_bag_id INTEGER)
+RETURNS INTEGER AS
+$$
+DECLARE
+ ret_id INTEGER;
+BEGIN
+
+    DELETE FROM Baggage 
+    WHERE (bag_id = _bag_id)
+    returning bag_id into ret_id;
+   return ret_id;
+END;
+$$ LANGUAGE plpgsql;
+
+
 ------- grupo 6 ----------
 CREATE OR REPLACE FUNCTION AddHotel(name VARCHAR(100),
                                     amountOfRooms INTEGER,
