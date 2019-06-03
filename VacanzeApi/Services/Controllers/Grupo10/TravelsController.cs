@@ -90,11 +90,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
         public IActionResult AddReservationToTravel(int travelId,[FromQuery] int res, [FromQuery] string type){
             try{
                 if(TravelRepository.AddReservationToTravel(travelId, res, type.ToUpper())) 
-                    return Ok("Ok");
+                    return Ok("La reserva fue agregada satisfactoriamente");
                 else
-                    return BadRequest("Bad Reques");
+                    return StatusCode(400,"No se pudo añadir la reserva al viaje");
             }catch(InternalServerErrorException ex){
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
+            }catch(Exception){
+                return StatusCode(400);
             }
 
         }
@@ -109,8 +111,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
                     return Ok("Las ciudades fueron agregadas satisfactoriamente");
                 }
                 return Ok(saved);
-            }catch(Exception ex){
-                return BadRequest(ex.Message);
+            }catch(InternalServerErrorException ex){
+                return StatusCode(500, ex.Message);
+            }catch(Exception){
+                return StatusCode(400);
             }
         }
 
@@ -124,7 +128,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
                     return StatusCode(400);
             }catch(InternalServerErrorException ex){
                 return StatusCode(500, ex.Message);
-            }   
+            }catch(Exception){
+                return StatusCode(400);
+            }
         }
     }
 }

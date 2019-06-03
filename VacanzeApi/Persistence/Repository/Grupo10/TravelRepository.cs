@@ -103,11 +103,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
                             travelId, locationId, "No posee reservaciones de " + type.ToLower() + " en dicha ciudad");
                     }
                 }else if(type.Equals("RESTAURANT")){
-
+                    
                 }else if(type.Equals("FLIGHT")){
-
+                    
                 }else if(type.Equals("CAR")){
-
                 }else{
                     throw new InvalidReservationTypeException(type,"Tipo de reserva invalido : " + type);
                 }
@@ -192,7 +191,16 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
             return id;
         }
 
-        
+        ///<sumary>
+        /// Añade una nueva reserva a un determinado viaje
+        ///</sumary>
+        ///<param name="travel">Correspondiente al Id del Travel que queremos añadír la reserva</param>
+        ///<param name="reserva">Id de la reserva</param>
+        ///<param name="type">Tipo de reserva, se realiza el insert según el tipo en el SP:
+        ///     RESTAURANT, HOTEL, FLIGHT, CAR => Uppercase </param>
+        ///<returns>
+        /// true sí hizo el record correctamente.
+        ///</returns>
         public static Boolean AddReservationToTravel(int travel, int reservation, string type){
             Boolean saved = false;
             try{
@@ -209,34 +217,40 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
             }
             return saved;
         }
-        
+
+        ///<sumary>
+        /// Añadir ciudades (Locations) a Travel
+        ///</sumary>
+        ///<param name="travelId">Id del viaje al que se le añadira la reserva</param>
+        ///<param name="locations">Lista de ciudades que serán agregadas</param>
+        ///<returns>
+        /// Si agrega correctamente retorna true
+        ///</returns>
         public static Boolean AddLocationsToTravel(int travelId, List<Location> locations){
             Boolean saved = false;
             try{
-                // Validate travel id exist
-                    //Throw exception
                 PgConnection pgConnection = PgConnection.Instance;
                 DataTable dataTable;
                 foreach( Location location in locations ){
-                    // Validate location exist
-                        //throw exception
                     dataTable = pgConnection.ExecuteFunction("AddLocationToTravel(@travelId, @locationId)",
                         travelId, location.Id);
-                    if(!(saved = Convert.ToBoolean(dataTable.Rows[0][0]))){
-                        // throw exception
-                    }
-                    
                 }
             }catch(DatabaseException ex){
-                throw new Exception(ex.Message);
+                throw new InternalServerErrorException("Error en el servidor : Conexion a base de datos", ex);
             }catch(InvalidStoredProcedureSignatureException ex){
-                throw new Exception(ex.Message);
-            }finally{
-
+                throw new InternalServerErrorException("Error en el servidor", ex);
             }
             return saved;
         }
 
+        ///<sumary>
+        /// Modificar viaje
+        ///</sumary>
+        ///<param name="travel">Obejeto de tipo travel con los respectivos atributos que
+        ///  serán modificos</param>
+        ///<returns>
+        /// Si modifico correctamente retorna true
+        ///</returns>
         public static Boolean UpdateTravel(Travel travel){
             Boolean saved = false;
             try{
@@ -248,8 +262,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
                     saved = true;
                 }
             }catch(DatabaseException ex){
-                //throw new InternalServerErrorException("Error en el servidor : Conexion a base de datos", ex);
-                throw new InternalServerErrorException(ex.Message);
+                throw new InternalServerErrorException("Error en el servidor : Conexion a base de datos", ex);
             }catch(InvalidStoredProcedureSignatureException ex){
                 throw new InternalServerErrorException("Error en el servidor", ex);
             }
