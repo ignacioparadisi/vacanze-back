@@ -19,6 +19,7 @@ namespace vacanze_back.VacanzeApi.Persistence
                       "Password=122324;Database=vacanza;";
         }
 
+
           // TODO: Obtener datos para conectar con la BD de algun archivo de configuracion
           public static PgConnection Instance =>
               _instance ??
@@ -26,6 +27,7 @@ namespace vacanze_back.VacanzeApi.Persistence
                   "vacanza",
                   "vacanza",
                   "vacanza"));
+
 
           // <summary>
           // Ejecuta una funcion almacenada, pasando los argumentos recibidos

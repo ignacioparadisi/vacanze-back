@@ -97,6 +97,26 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
                 throw new RoleRequiredException("Al menos un rol es requerido");
             }
 
+            var rolesToBeDeleted = new List<int>();
+            for (var i = 0; i < Roles.Count -1; i++)
+            {
+                for (var j = i + 1; j < Roles.Count; j++)
+                {
+                    if (Roles[i].Id == Roles[j].Id)
+                    {
+                        rolesToBeDeleted.Add(j);
+                    }
+                }
+            }
+
+            rolesToBeDeleted = rolesToBeDeleted.Distinct().ToList();
+            rolesToBeDeleted = rolesToBeDeleted.OrderByDescending(id => id).ToList();
+
+            foreach (var rol in rolesToBeDeleted)
+            {
+                Roles.RemoveAt(rol);
+            }
+
             foreach (var role in Roles)
             {
                 role.Validate();
@@ -114,7 +134,6 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         /// genera una contraseña concatenando la primera letra del nombre, la primera letra del apellido
         /// y el número de cédula
         /// </summary>
-        /// <param name="isClient">Define si el usuario es un cliente o un empleado</param>
         /// <exception cref="PasswordRequiredException">Excepción retornada si el usuario es cliente
         /// y envía una contraseña nula o vacía</exception>
         public void EncryptOrCreatePassword()
@@ -133,13 +152,17 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
                 Password = Name.Trim().ToLower()[0] + Lastname.Trim().ToLower()[0] + DocumentId.ToString();
                 Password = Encryptor.Encrypt(Password);
             }
-            else if (!string.IsNullOrEmpty(Password) && !string.IsNullOrWhiteSpace(Password))
+            else if (string.IsNullOrEmpty(Password) || string.IsNullOrWhiteSpace(Password))
             {
-                Password = Encryptor.Encrypt(Password);
+                throw new PasswordRequiredException("La contraseña es requerida");
+                
+            } else if (Password.Length < 8)
+            {
+                throw new NotValidFieldException("La contraseña debe tener como mínimo 8 caracteres");
             }
             else
             {
-                throw new PasswordRequiredException("La contraseña es requerida");
+                Password = Encryptor.Encrypt(Password);
             }
         }
     }
