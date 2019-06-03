@@ -40,13 +40,13 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo12{
 
         
          public FlightRes(int id,int price,string timestamp,string seatNum,
-         string name_cityI,string name_countryI, string namecityV,string namecountryV):base(id){
+         string name_cityI,string name_countryI, string namecityV,string namecountryV,int numPas):base(id){
 
              _id=id;
              _price=price;
              _timestamp=timestamp;
              _seatNum=seatNum;
-             
+             _numPas=numPas;
              _namecityI=name_cityI;
              _namecountryI=name_countryI;
              _namecityV=namecityV;

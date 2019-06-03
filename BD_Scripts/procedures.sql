@@ -1854,15 +1854,18 @@ CREATE OR  REPLACE FUNCTION deleteReservationFlight(id_reservation INTEGER) RETU
 
   --retornar Reserva de vuelo de un Pasajero
 CREATE OR REPLACE FUNCTION getReservationFlight(usuario INTEGER) 
-RETURNS TABLE (id INTEGER,price numeric,fecha_res_fli timestamp,seatnum character varying(100),country_s varchar,city_s varchar,id_arrival integer) AS $$
+RETURNS TABLE (id INTEGER,price numeric,fecha_res_fli timestamp,seatnum character varying(100),country_s varchar,city_s varchar,id_arrival integer,numpas integer) AS $$
   BEGIN
-    RETURN QUERY select r.rf_id as id,f.fli_price ,f.fli_departuredate as salida, r.rf_seatnum as asiento, l.loc_country as pais_salida, l.loc_city as ciudad_salida,f.fli_loc_arrival
+    RETURN QUERY select r.rf_id as id,f.fli_price ,f.fli_departuredate as salida, r.rf_seatnum as asiento, l.loc_country as pais_salida, l.loc_city as ciudad_salida,f.fli_loc_arrival,r.rf_num_ps
     FROM res_fli r, flight f, plane p, location l, users u
    where f.fli_id = r.rf_fli_fk and r.rf_use_fk = usuario and u.use_id = r.rf_use_fk and p.pla_id = f.fli_pla_fk and l.loc_id = f.fli_loc_departure;  
   END;
   $$ LANGUAGE plpgsql;
 
   
+
+
+
 
 
 
