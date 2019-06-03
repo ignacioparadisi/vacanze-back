@@ -118,7 +118,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
          * Returns all room reservations from the system which are available within the range of dates that were passed.
          */
 
-        public int GetAvailableRoomReservations(int id)
+        public static int GetAvailableRoomReservations(int id)
         {
             int available = 0;
             try
