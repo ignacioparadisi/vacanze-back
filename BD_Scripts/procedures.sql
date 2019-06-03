@@ -1812,6 +1812,38 @@ END;
 $$
 LANGUAGE 'plpgsql';
 
+CREATE OR REPLACE FUNCTION AddReservationToTravel(
+	travelId INTEGER,
+	reservationId INTEGER,
+	reservationType VARCHAR
+)
+RETURNS BOOLEAN AS
+$$
+BEGIN 
+	IF reservationType = 'HOTEL' THEN 
+		INSERT INTO TRA_RES (TR_TRAVEL_FK, TR_RES_CRU_FK, TR_RES_FLI_FK, TR_RES_REST_FK, TR_RES_AUT_FK, TR_RES_ROO_FK, TR_TYPE)
+		VALUES	(travelId, null, null, null, null, reservationId, reservationType);
+	ELSIF reservationType = 'RESTAURANT' THEN
+		INSERT INTO TRA_RES (TR_TRAVEL_FK, TR_RES_CRU_FK, TR_RES_FLI_FK, TR_RES_REST_FK, TR_RES_AUT_FK, TR_RES_ROO_FK, TR_TYPE)
+		VALUES	(travelId, null, null, reservationId, null, null, reservationType);
+	ELSIF reservationType = 'FLIGHT' THEN
+		INSERT INTO TRA_RES (TR_TRAVEL_FK, TR_RES_CRU_FK, TR_RES_FLI_FK, TR_RES_REST_FK, TR_RES_AUT_FK, TR_RES_ROO_FK, TR_TYPE)
+		VALUES	(travelId, null, reservationId, null, null, null, reservationType);
+	ELSIF reservationType = 'CAR' THEN
+		INSERT INTO TRA_RES (TR_TRAVEL_FK, TR_RES_CRU_FK, TR_RES_FLI_FK, TR_RES_REST_FK, TR_RES_AUT_FK, TR_RES_ROO_FK, TR_TYPE)
+		VALUES	(travelId, null, reservationId, null, null, null, reservationType);
+	END IF;
+	IF FOUND THEN
+		RETURN TRUE;
+	ELSE
+		RETURN FALSE;
+	END IF;
+	
+END; $$
+LANGUAGE plpgsql;
+
+
+
 ------------------------------------fin de grupo 10---------------------------------
 
 ----------------------------------- grupo 14 ---------------------------------

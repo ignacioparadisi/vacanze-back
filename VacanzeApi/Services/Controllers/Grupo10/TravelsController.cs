@@ -74,14 +74,31 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
         public IActionResult AddTravel([FromBody] Travel travel){
             try{
                 int id = TravelRepository.AddTravel(travel);
-                if(id == 0)
-                    return BadRequest("Lo sentimos, el viaje no pudo ser creado");
                 return Ok(travel);
-            }catch(NameRequiredException ex){
-                return BadRequest(ex.Message);
-            }catch(Exception ex){
-                return BadRequest(ex.Message);
+            }catch(RequiredAttributeException ex){
+                return StatusCode(400,ex.Message);
+            }catch(UserNotFoundException ex){
+                return StatusCode(404,ex.Message);
+            }catch(InternalServerErrorException ex){
+                return StatusCode(500, ex.Message);
+            }catch(Exception){
+                return StatusCode(400);
             }
+        }
+
+        [HttpPost("{travelId}")]
+        public IActionResult AddReservationToTravel(int travelId,[FromQuery] int res, [FromQuery] string type){
+            try{
+                if(TravelRepository.AddReservationToTravel(travelId, res, type.ToUpper())) 
+                    return Ok("La reserva fue agregada satisfactoriamente");
+                else
+                    return StatusCode(400,"No se pudo añadir la reserva al viaje");
+            }catch(InternalServerErrorException ex){
+                return StatusCode(500, ex.Message);
+            }catch(Exception){
+                return StatusCode(400);
+            }
+
         }
 
         [Consumes("application/json")]
@@ -94,8 +111,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
                     return Ok("Las ciudades fueron agregadas satisfactoriamente");
                 }
                 return Ok(saved);
-            }catch(Exception ex){
-                return BadRequest(ex.Message);
+            }catch(InternalServerErrorException ex){
+                return StatusCode(500, ex.Message);
+            }catch(Exception){
+                return StatusCode(400);
             }
         }
 
@@ -109,7 +128,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
                     return StatusCode(400);
             }catch(InternalServerErrorException ex){
                 return StatusCode(500, ex.Message);
-            }   
+            }catch(Exception){
+                return StatusCode(400);
+            }
         }
     }
 }
