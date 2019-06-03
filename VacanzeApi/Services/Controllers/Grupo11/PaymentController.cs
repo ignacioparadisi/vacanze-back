@@ -180,5 +180,42 @@ namespace vacanze_back.Controllers
 
         }
 
+
+          /// <summary>
+          /// Devuelve habitaciones y autos no pagados
+          /// </summary>
+          /// <param name="id"></param>
+          /// <param name="tipo"></param>
+          /// <returns></returns>
+        [HttpGet]
+        [Route("ResHabAuto/{id}/{tipo}")]
+        public ActionResult<List<PayRes>> GetProccesPayment(long id, int tipo)
+        {
+
+            try
+            {
+                var lPayments = PaymentRepository.GetPayRes(id,tipo);
+
+                if (lPayments != null && lPayments.Count > 0)
+                {
+                    return Ok(lPayments);
+                }
+                else
+                {
+                    return NotFound("No se encontró informacón");
+                }
+            }
+            catch (DatabaseException e)
+            {
+                //Aqui va una excepcion personalizada
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
+            }
+
+        }
+           
+
+
+     
+
     }
 }

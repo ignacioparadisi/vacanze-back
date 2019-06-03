@@ -135,5 +135,41 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo11
             }
         }
 
+
+
+        /// <summary>
+        /// Devuelve reservas de habitacion 1 y auto 0 no pagadas
+        /// </summary>
+        /// <param name="id">Auto 1 o Hab 0</param>
+        /// <param name="type"></param>
+        /// <returns>Lis</returns>
+        public static List<PayRes> GetPayRes(long id,int type)
+        {
+            DataTable _table;
+            var _oListOrder = new List<PayRes>();
+            try
+            {
+                _table = PgConnection.Instance.ExecuteFunction("getNoPaysResAutHab(@id,@type)", id, type);
+
+                for (int i = 0; i < _table.Rows.Count; i++)
+                {
+                    _oListOrder.Add(
+                        new PayRes(
+                        Convert.ToInt64(_table.Rows[i][0]),
+                        Convert.ToString(_table.Rows[i][1]),
+                        Convert.ToDateTime(_table.Rows[i][2])) 
+                        );
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            return _oListOrder;
+        }
     }
 }

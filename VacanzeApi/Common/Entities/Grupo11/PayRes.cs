@@ -1,22 +1,20 @@
 ﻿
-using System;
-
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo11
 {
-    public class PayRes :Entity
+    public class Payment :Entity
     {
        
 
-        public long id { get; set; }
+        public int id { get; set; }
         public string name { get; set; }
-        public DateTime dateR { get; set; }
+        public bool active { get; private set; }
      
 
-        public PayRes(long _id , string _name, DateTime _dateR ) : base(_id)
+        public Payment(int _id , string _name, bool _active ) : base(_id)
         {
             id = _id;
             name = _name;
-            dateR =_dateR;
+            active =_active;
         }
 
 
@@ -25,7 +23,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo11
             return id;
         }
 
-        public void setId(long _id)
+        public void setId(int _id)
         {
             id = _id;
         }
@@ -42,14 +40,14 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo11
         }
 
 
-        public DateTime getdateR()
+        public bool getActive()
         {
-            return dateR;
+            return active;
         }
 
-        public void setdateR(DateTime _dateR)
+        public void setActive(bool _active)
         {
-            dateR = _dateR;
+            active = _active;
         }
     }
 }
