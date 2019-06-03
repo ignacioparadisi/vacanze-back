@@ -70,14 +70,14 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo12
                     res._seatNum=Convert.ToString(table.Rows[i][3].ToString());
                     res._namecityI=table.Rows[i][4].ToString();
                     res._namecountryI=table.Rows[i][5].ToString();
-                    
+                    res._numPas=Convert.ToInt32(table.Rows[i][7].ToString());
                     res._namecityV=table2.Rows[0][1].ToString();
                     res._namecountryV=table2.Rows[0][2].ToString();
                
                   
                     reservation_flight = new FlightRes(res._id,res._price,
                     res._timestamp,res._seatNum, res._namecityI,res._namecountryI,
-                    res._namecityV,res._namecountryV);
+                    res._namecityV,res._namecountryV,res._numPas);
 
 
 
