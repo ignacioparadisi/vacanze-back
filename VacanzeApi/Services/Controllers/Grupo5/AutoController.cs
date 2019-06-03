@@ -50,7 +50,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
             try 
             {
                 var result= ConnectAuto.DeleteAuto(i);
-                return Ok("eliminado exitosamente");
+                return Ok(new { Message = "eliminado exitosamente " });
             } 
             catch (DatabaseException )
             {
@@ -66,12 +66,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
         }
         /*https://localhost:5001/api/Auto/consultarforall/2 
          result = isactive */ 
-        [HttpGet("consultforall/{place}/{result}/{license}/{capacity}")]
-        public  ActionResult<IEnumerable<Auto>> GetconsultAll(int place , string result , string license , int capacity)
+        [HttpGet("getforall/{place}/{result}/{license}/{capacity}")]
+        public  ActionResult<IEnumerable<Auto>> getforall(int place , string result , string license , int capacity)
         {
             try
             { 
-                List<Auto> AutoList =ConnectAuto.consultforall(place,result,license,capacity);
+                List<Auto> AutoList =ConnectAuto.getforall(place,result,license,capacity);
                 return Ok(AutoList.ToList());
             }
             catch (IndexOutOfRangeException )

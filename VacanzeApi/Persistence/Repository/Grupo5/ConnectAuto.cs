@@ -72,10 +72,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo5
             }
             return CityList;
         }
-        public static List<Auto> consultforall(int _place , string _result , string _license , int _capacity)
+        public static List<Auto> getforall(int _place , string _result , string _license , int _capacity)
         {
             var AutoList = new List<Auto>();
-            string command="consultayuda (@AUT_PLACE,@AUT_ISACTIVE,@AUT_LICENSE,@AUT_CAOACITY)";
+            string command="getAutoParameters (@AUT_PLACE,@AUT_ISACTIVE,@AUT_LICENSE,@AUT_CAOACITY)";
              var table = PgConnection.Instance.ExecuteFunction(command,_place,_result,_license,_capacity);
              for (int i = 0; i < table.Rows.Count; i++)
             {
