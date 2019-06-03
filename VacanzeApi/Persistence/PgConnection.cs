@@ -10,14 +10,14 @@ namespace vacanze_back.VacanzeApi.Persistence
           private static PgConnection _instance;
           private readonly string _connectionParameters;
 
-          private PgConnection(string host, string user, string password, string databaseName)
-          {
-               _connectionParameters =
-                   $"Server={host};User Id={user};Password={password};Database={databaseName}";
-               /* _connectionParameters =
-                   $"Server=localhost;Port=5433;User Id=postgres;" + 
-                         "Password=122324;Database=vacanza;";*/
-          }
+        private PgConnection(string host, string user, string password, string databaseName)
+        {
+            _connectionParameters =
+                $"Server={host};User Id={user};Password={password};Database={databaseName}";
+          /*_connectionParameters =
+                $"Server=localhost;Port=5433;User Id=postgres;" + 
+                      "Password=122324;Database=vacanza;";*/
+        }
 
 
           // TODO: Obtener datos para conectar con la BD de algun archivo de configuracion

@@ -224,29 +224,27 @@ INSERT INTO public.Plane(
 	VALUES (80,true, 10, 1000, 'Boeing 5');
 
 --------------Grupo 5 --------------------------------------------
-INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
-VALUES('Toyota','Corolla',3,true,55,'aa11ab1','auto1.jpg',1);
-INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
-VALUES('VolksWagen','Golf',3,false,70.5,'aa11ab2','auto2.jpg',1);
-INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
-VALUES('Honda','Civic',3,true,40,'aa12ab1','auto3.jpg',2);
-INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
-VALUES('Ford','Fusion',3,false,60,'aa12ab2','auto4.jpg',2);
-INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
-VALUES('Ford','F-150',4,true,80,'aa13ab1','auto5.jpg',3);
-INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
-VALUES('Honda','Civic',3,false,50.2,'aa13ab2','auto6.jpg',3);
-INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
-VALUES('Toyota','Camry',3,true,60,'aa14ab1','auto7.jpg',4);
-INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
-VALUES('Honda','Accord',3,false,54,'aa14ab2','auto8.jpg',4);
-INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
-VALUES('Honda','CR-V',3,true,55,'aa15ab1','auto9.jpg',5);
-INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
-VALUES('Chevrolet','Silverado',5,false,69.8,'aa15ab2','auto10.jpg',5);
-
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_LOC_FK)
+VALUES('Toyota','Corolla',3,true,55,'aa11ab1',1);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_LOC_FK)
+VALUES('VolksWagen','Golf',3,false,70.5,'aa11ab2',1);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_LOC_FK)
+VALUES('Honda','Civic',3,true,40,'aa12ab1',2);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_LOC_FK)
+VALUES('Ford','Fusion',3,false,60,'aa12ab2',2);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_LOC_FK)
+VALUES('Ford','F-150',4,true,80,'aa13ab1',3);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_LOC_FK)
+VALUES('Honda','Civic',3,false,50.2,'aa13ab2',3);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_LOC_FK)
+VALUES('Toyota','Camry',3,true,60,'aa14ab1',4);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_LOC_FK)
+VALUES('Honda','Accord',3,false,54,'aa14ab2',4);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_LOC_FK)
+VALUES('Honda','CR-V',3,true,55,'aa15ab1',5);
+INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_LOC_FK)
+VALUES('Chevrolet','Silverado',5,false,69.8,'aa15ab2',5);
 ------- grupo 6 ----------
-
 INSERT INTO hotel (hot_name, hot_room_qty, hot_room_capacity, hot_is_active,
                    hot_address_specs, hot_room_price, hot_website, hot_phone, hot_picture,
                    hot_stars, hot_loc_fk)
@@ -391,23 +389,23 @@ INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (3,29); -- Caracas
 
 ------- grupo 13 ----------
 
-INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
-VALUES('FIAT','UNO',5,true,25.99,'TAT77E','fiatuno.jgp',1);
+INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_loc_fk)
+VALUES('FIAT','UNO',5,true,25.99,'TAT77E',1);
 
-INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
-VALUES('FIAT','FIRE',5,true,24.99,'MEB19G','fiatfire.jgp',1);
+INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_loc_fk)
+VALUES('FIAT','FIRE',5,true,24.99,'MEB19G',1);
 
-INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
-VALUES('BMW','Z3',4,true,35.99,'DDB43S','bmwz3.jpg',2);
+INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_loc_fk)
+VALUES('BMW','Z3',4,true,35.99,'DDB43S',2);
 
-INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
-VALUES('Audi','Q7',6,true,40.99,'AA1239G','audiq7.jpg',3);
+INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_loc_fk)
+VALUES('Audi','Q7',6,true,40.99,'AA1239G',3);
 
-INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
-VALUES('Sin','Reserva',4,true,34.99,'Bueno','',2);
+INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_loc_fk)
+VALUES('Sin','Reserva',4,true,34.99,'Bueno',2);
 
-INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
-VALUES('Sin2','Reserva2',3,true,36.99,'Bueno2','',2);
+INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_loc_fk)
+VALUES('Sin2','Reserva2',3,true,36.99,'Bueno2',2);
 
 INSERT INTO public.res_roo(rr_checkinDate,rr_checkoutDate,rr_timestamp,rr_use_fk,rr_hot_fk)
 values('10/12/2018', '02/01/2019','10/12/2018', 1, 1 );
