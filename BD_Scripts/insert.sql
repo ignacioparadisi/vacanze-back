@@ -162,41 +162,41 @@ INSERT INTO LOCATION (LOC_CITY, LOC_COUNTRY) VALUES
 ('Sendai','Japan');
 ------- grupo 2 ----------
 
-INSERT INTO Role (rol_name)
-VALUES ('Cliente');
+INSERT INTO Role (rol_id, rol_name)
+VALUES (1, 'Cliente');
 
-INSERT INTO Role (rol_name)
-VALUES ('Administrador');
+INSERT INTO Role (rol_id, rol_name)
+VALUES (2, 'Administrador');
 
-INSERT INTO Role (rol_name)
-VALUES ('Checkin');
+INSERT INTO Role (rol_id, rol_name)
+VALUES (3, 'Checkin');
 
-INSERT INTO Role (rol_name)
-VALUES ('Reclamo');
+INSERT INTO Role (rol_id, rol_name)
+VALUES (4, 'Reclamo');
 
-INSERT INTO Role (rol_name)
-VALUES ('Cargador');
+INSERT INTO Role (rol_id, rol_name)
+VALUES (5, 'Cargador');
 
-INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
-VALUES ('9784673', 'admin@vacanze.com', 'Virtuoso', 'Francisco', MD5('admin123'));
+INSERT INTO Users(use_id, use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES (1, '9784673', 'admin@vacanze.com', 'Virtuoso', 'Francisco', MD5('admin123'));
 
-INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
-VALUES ('10754927', 'checkin@vacanze.com', 'Gomes', 'Francisco', MD5('checkin123'));
+INSERT INTO Users(use_id, use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES (2, '10754927', 'checkin@vacanze.com', 'Gomes', 'Francisco', MD5('checkin123'));
 
-INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
-VALUES ('12345678', 'reclamo@vacanze.com', 'Omar', 'Jorge', MD5('reclamo123'));
+INSERT INTO Users(use_id, use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES (3, '12345678', 'reclamo@vacanze.com', 'Omar', 'Jorge', MD5('reclamo123'));
 
-INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
-VALUES ('8654826', 'cargador@vacanze.com', 'Salazar', 'Marcos', MD5('cargador123'));
+INSERT INTO Users(use_id, use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES (4, '8654826', 'cargador@vacanze.com', 'Salazar', 'Marcos', MD5('cargador123'));
 
-INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
-VALUES ('20766589', 'cliente@vacanze.com', 'Martinez', 'Carlos', MD5('cliente123'));
+INSERT INTO Users(use_id, use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES (5, '20766589', 'cliente@vacanze.com', 'Martinez', 'Carlos', MD5('cliente123'));
 
-INSERT INTO USERS (use_document_id, use_email, use_last_name, use_name, use_password)
-VALUES ('23613704', 'larry.page@vacanze.com', 'Page', 'Larry', MD5('google'));
+INSERT INTO USERS (use_id, use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES (6, '23613704', 'larry.page@vacanze.com', 'Page', 'Larry', MD5('google'));
 
-INSERT INTO USERS (use_document_id, use_email, use_last_name, use_name, use_password)
-VALUES ('23613704', 'reggaebob@vacanze.com', 'Marley', 'Bob', MD5('jah'));
+INSERT INTO USERS (use_id, use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES (7, '23613704', 'reggaebob@vacanze.com', 'Marley', 'Bob', MD5('jah'));
 
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (2, 1 );
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (3, 2);
