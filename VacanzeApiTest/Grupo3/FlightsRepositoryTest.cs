@@ -90,8 +90,8 @@ namespace vacanze_back.VacanzeApiTest.Grupo3
         [Test, Order(8)]
         public void GetRoundTripFlightTest()
         {
-            List<Entity> flights = FlightRepository.GetRoundTripFlights(testflight.loc_departure.Id,testflight.loc_arrival.Id
-            ,testflight.departure,testflight.arrival);
+            List<Entity> flights = FlightRepository.GetRoundTripFlights(testflight.loc_departure.Id,6
+            ,"12-11-2020","12-21-2020");
             Assert.True(flights.Count() > 0);
         }
 
