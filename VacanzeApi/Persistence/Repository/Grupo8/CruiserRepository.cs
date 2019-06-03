@@ -39,9 +39,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
         /// <summary>
         ///     Metodo para obtener objeto Crucero correspondiente a los datos guardados para el ID recibido.
         /// </summary>
-        /// <param name="id">ID del crucero a obtener</param>
+        /// <param name="shipId">ID del crucero a obtener</param>
         /// <returns>Objeto Crucero correspondiente al ID recibido</returns>
-        /// <exception cref="CruicerNotFoundException">Lanzada si no existe un Crucero para el ID recibido</exception>
+        /// <exception cref="CruiserNotFoundException">Lanzada si no existe un Crucero para el ID recibido</exception>
         /// <exception cref="DatabaseException">
         ///     Lanzada si ocurre un fallo al ejecutar la funcion en la bse de
         ///     datos
@@ -71,6 +71,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
         /// <param name="cruiser">Datos a ser guardados en tipo crucero</param>
         /// <returns>ID del registro del crucero en la base de datos</returns>
         /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
+        /// <exception cref="DatabaseException">
+        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la bse de
+        ///     datos
+        /// </exception>
         public static int AddCruiser(Cruiser cruiser)
         {
             cruiser.Validate();
@@ -81,13 +85,17 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
             return id;
         }
         /// <summary>
-        ///     Metodo para añadir un Crucero.
+        ///     Metodo para actualizar los datos de un Crucero.
         /// </summary>
-        /// <param name="cruiser">Datos a ser en tipo crucero guardados</param>
+        /// <param name="cruiser">Datos a ser actualizados en tipo crucero guardados</param>
         /// <returns>ID del registro del crucero en la base de datos</returns>
         /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
         /// <exception cref="NullCruiserException">El metodo recibio null como parametro</exception>
         /// <exception cref="CruiserNotFoundException">No se encontro el crucero con el Id sumunistrado en los parametros</exception>
+        /// <exception cref="DatabaseException">
+        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la bse de
+        ///     datos
+        /// </exception>
         public static Cruiser UpdateCruiser(Cruiser cruiser)
         {
             try
@@ -214,7 +222,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo8
         ///     Lanzada si ocurre un fallo al ejecutar la funcion en la base de
         ///     datos
         /// </exception>
-        /// <exception cref="LayoverNotFoundException">Si no se encontraron rutas para las locaciones ingresadass</exception>>
+        /// <exception cref="LayoverNotFoundException">Si no se encontraron rutas para las locaciones ingresadass</exception>
         public static List<Layover> GetLayoversForRes(int departure, int arrival)
         {
             List<Layover> layovers = new List<Layover>();
