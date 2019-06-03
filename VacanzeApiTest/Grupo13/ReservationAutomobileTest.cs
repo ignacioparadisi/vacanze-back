@@ -30,7 +30,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             _connection = new ReservationAutomobileRepository();
             time = new DateTime(1990, 04, 14);
             time2 = new DateTime(1990, 04, 14);
-            automobile.setId(7);
+            automobile.setId(1);
             reservation = new ReservationAutomobile(0, time, time2,automobile,2);
             reservation.Id = id;
         }
@@ -41,19 +41,11 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             List<Entity> reservations = _connection.GetAutomobileReservations();
             Assert.AreNotEqual(0, reservations.Count());
         }
-        
-        /*
-        [Test, Order(6)]
-        public void AutomobileReservationNotFoundExceptionTest()
-        {
-            Assert.Throws<AutomobileReservationNotFoundException>(() => _connection.Find(0));
-        }
-        */
 
         [Test, Order(2)]
         public void FindReservationAutomobileTest()
         {
-            ReservationAutomobile reservation = (ReservationAutomobile) _connection.Find(68);
+            ReservationAutomobile reservation = (ReservationAutomobile) _connection.Find(1);
             Assert.IsNotNull(reservation);
         }
 
@@ -64,13 +56,14 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             Assert.AreNotEqual(0, reservations.Count());
         }
 
+        /*
         [Test, Order(4)]
         public void AddReservationsAutomobileTest()
         {
              id  = (int)_connection.AddReservation(reservation).Id;
              Assert.True(id > 0);
         }
-
+        */
         /*
         [Test, Order(5)]
         public void UpdateTest()
@@ -86,7 +79,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         }
     */
         
-
+            /*
         [Test, Order(5)]
         public void DeleteReservationAutomobileTest()
         {
@@ -95,7 +88,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             Assert.IsNull(reservation2);
         }
 
-
+    */
 
 
 

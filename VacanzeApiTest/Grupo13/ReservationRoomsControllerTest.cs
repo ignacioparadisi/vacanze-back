@@ -80,8 +80,8 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             hotel.Picture = "PU";
             hotel.Website = "Pu Website";
             hotel.Location = LocationRepository.GetLocationById(1);
-            hotel.Id = 0;
-            reservation = new ReservationRoom(0, time, time2, hotel, 2);
+            hotel.Id = 1;
+            reservation = new ReservationRoom(1, time, time2, hotel, 1);
 
             var result = controller.Post(reservation);
 
@@ -107,7 +107,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             hotel.Picture = "PU";
             hotel.Website = "Pu Website";
             hotel.Location = LocationRepository.GetLocationById(1);
-            hotel.Id = 0;
+            hotel.Id = 1;
             reservation = new ReservationRoom(0, time, time2, hotel, 2);
             ReservationRoomRepository connection = new ReservationRoomRepository();
             int id = connection.Add(reservation);
