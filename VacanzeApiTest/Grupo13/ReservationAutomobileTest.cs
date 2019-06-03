@@ -53,7 +53,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         [Test, Order(2)]
         public void FindReservationAutomobileTest()
         {
-            ReservationAutomobile reservation = (ReservationAutomobile) _connection.Find(68);
+            ReservationAutomobile reservation = (ReservationAutomobile) _connection.Find(1);
             Assert.IsNotNull(reservation);
         }
 
