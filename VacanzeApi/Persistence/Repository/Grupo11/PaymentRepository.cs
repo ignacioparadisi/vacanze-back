@@ -86,6 +86,14 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo11
                  bill.paymentMethod,
                  bill.total);
                 _iResp = Convert.ToInt32(_table.Rows[0][0]);
+
+               if (_iResp > 0)
+               {
+                    _iResp = UpdatePaymentId(_iResp, bill.reference);
+
+               }
+
+
             }
             catch (Exception ex)
             {
@@ -170,6 +178,60 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo11
             }
 
             return _oListOrder;
+        }
+
+
+        /// <summary>
+        /// Funcion que actualiza id del pago a cada tabla de reserva
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="reference"></param>
+        /// <returns></returns>
+        public static long UpdatePaymentId(long id, string reference)
+        {
+            /// <summary>
+            /// Función que asocia un pago con una factura. 
+            /// </summary>
+            /// <param name="bill">Objeto del tipo bill o factura</param>
+            /// <returns>Retorna la factura ya pagada.</returns>
+
+            long _iResp = 0;
+          
+            try
+            {
+                var _paramReference = reference.Split("|");
+                //Si no es null
+                if (_paramReference != null)
+                {
+                    //Si posee la data adecuadad y completa
+                    if (_paramReference.Length == 4)
+                    {
+                        var _table = PgConnection.Instance.ExecuteFunction("PutPayProccess(@idpay,@idAuto,@idRoo,@idRes,@idCru)",
+                            id,
+                           Convert.ToInt64( _paramReference[0]),
+                           Convert.ToInt64(_paramReference[1]),
+                           Convert.ToInt64( _paramReference[2]),
+                           Convert.ToInt64( _paramReference[3])
+                            );
+                        _iResp = Convert.ToInt32(_table.Rows[0][0]);
+                    }
+                    else
+                    {
+                        _iResp = -3;
+                    }
+                }
+                else
+                {
+                    _iResp = -5;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+            return _iResp;
         }
     }
 }
