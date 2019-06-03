@@ -214,7 +214,7 @@ AS $BODY$
 BEGIN
 	RETURN QUERY SELECT
 	fli_id, fli_pla_fk, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, fli_loc_arrival
-	FROM public.Flight WHERE fli_departuredate BETWEEN _begin::timestamp without time zone AND _end::timestamp without time zone + '1 days'::interval;
+	FROM public.Flight WHERE fli_departuredate BETWEEN TO_TIMESTAMP(_begin,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone AND TO_TIMESTAMP(_end,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone + '1 days'::interval;
 END;
 
 $BODY$;
@@ -271,7 +271,7 @@ AS $BODY$
 BEGIN
 	RETURN QUERY SELECT
   fli_id, fli_pla_fk, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, fli_loc_arrival
-	FROM public.Flight WHERE fli_departuredate::date = _departuredate::timestamp without time zone and fli_arrivaldate::date = _arrivaldate::timestamp without time zone 
+	FROM public.Flight WHERE fli_departuredate::date = TO_TIMESTAMP(_departuredate,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone and fli_arrivaldate::date = TO_TIMESTAMP(_arrivaldate,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone
   and fli_loc_departure = _departure and fli_loc_arrival = _arrival;
 END;
 

@@ -36,6 +36,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
                 table = PgConnection.Instance.ExecuteFunction("claim");
             else 
                 table = PgConnection.Instance.ExecuteFunction("getclaim(@cla_id)",numero);
+            if(table.Rows.Count < 1) throw new NullClaimException("No existe el elemento");
             return fillList(table);
         }
         /// <summary>
@@ -52,6 +53,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
         public List<Claim> GetClaimDocument(string numero)
         {
             var table = PgConnection.Instance.ExecuteFunction("GetClaimDocument(@cla_id)",numero);
+            if(table.Rows.Count < 1) throw new NullClaimException("No existe el elemento");
             return fillList(table);;
         }
         /// <summary>
