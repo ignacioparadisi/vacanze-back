@@ -349,14 +349,28 @@ INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('Mi primer reclamo','pe
 INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('equipaje de mano','deje en el asiento de el avion mi equipaje de mano es color rojo con puntos negros','ABIERTO');
 INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('equipaje dejado en la sala de espera ','Hola, deje mi equipaje en la sala de espera del aeropuerto intermacional de maiquetia, era un bolso pequeno aproximadamente de 30 cm','ABIERTO');
 INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('mi vuelo se retraso','Buenas noches, mi vuelo se retraso pero el personal me comenta que mi equipaje lo mandaron a otro avion pero no saben en cual. Les agradezco pronta respuesta','ABIERTO');
+INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('equipaje se perdio luego del check-in','Buenas noches, mi equipaje no salio al llegar a mi destino','CERRADO');
+INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('equipaje se perdio en la sala de espera','Buenos dias, mi equipaje estaba conmigo en el bano pero lo deje olvidado. Saludos','CERRADO');
+INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('no encuentro mi equipaje','Mi equipaje no salio al llegar a mi destino, luego de esperar 3 horas','CERRADO');
+INSERT INTO CLAIM (cla_title,cla_descr,cla_status)values('el personal no consigue mi maleta','Buenas noches, mi equipaje no salio al llegar a mi destino, hasta cuando su irresponsabilidad.','CERRADO');
+
+
+insert into res_cru(RC_NUM_PPL,RC_USE_FK,RC_CRU_FK,RC_TIMESTAMP) values (10,5,1,'2019-03-01');
+insert into res_cru(RC_NUM_PPL,RC_USE_FK,RC_CRU_FK,RC_TIMESTAMP) values (100,6,2,'2019-03-02');
+insert into res_cru(RC_NUM_PPL,RC_USE_FK,RC_CRU_FK,RC_TIMESTAMP) values (10,7,3,'2019-03-03');
 
 INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ) VALUES('EXTRAVIADO','maleta negra para mi prueba unitaria');
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ) VALUES('EXTRAVIADO','maleta rola de 15 kg');
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ) VALUES('EXTRAVIADO','maleta azul con franjas negras');
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('RECLAMADO','maleta roja con puntos negros',2);
 INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ) VALUES('EXTRAVIADO','maleta negra');
-INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','maleta roja con puntos negros',2);
-INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','maleta pequeña aproximadamente 20 kg color negra',3);
-INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','maleta azul tamaño medio',4);
-INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','maleta vinotinto con logo de la FVF',4);
-INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('EXTRAVIADO','maleta rosada con dibujos de niña',1);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK,BAG_RES_CRU_FK) VALUES('RECLAMADO','maleta pequeña aproximadamente 20 kg color negra',3,1);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK,BAG_RES_CRU_FK) VALUES('RECLAMADO','maleta vinotinto con logo de la FVF',4,2);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK, BAG_RES_CRU_FK) VALUES('RECLAMADO','maleta rosada con dibujos de niña',1,3);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('ENCONTRADO','maleta de la seleccion nacional de venezuela a nombre de Salomon Rondon , marca adidas',5);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('ENCONTRADO','maleta de la seleccion nacional de venezuela con implementos deportivos , marca adidas',6);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('ENCONTRADO','maleta de mi esposa, hicimos el check-in todo bien, pero nunca aparecio en nuestro destino ',7);
+INSERT INTO BAGGAGE (BAG_STATUS,BAG_DESCR ,BAG_CLA_FK) VALUES('ENCONTRADO','maleta verde fluorescente',8);
 
 
 ------- grupo 10 ----------
