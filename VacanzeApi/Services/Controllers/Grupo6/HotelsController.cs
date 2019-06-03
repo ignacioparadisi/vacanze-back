@@ -32,7 +32,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         /// <summary>
         ///     Metodo para buscar los hoteles por id
         /// </summary>
-        /// <param name="id">ID del hotel a buscar</param>
+        /// <param name="hotelId">ID del hotel a buscar</param>
         /// <returns>Objeto tipo json del hotel encontrado</returns>
         /// <exception cref="HotelNotFoundException">Lanzada si no existe el hotel</exception>
         [HttpGet("{hotelId}", Name = "GetHotelById")]
