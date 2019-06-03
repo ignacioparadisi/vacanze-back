@@ -1764,6 +1764,30 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
+-- DROP FUNCTION updatetravel(integer,character varying,character varying,character varying,character varying);
+CREATE OR REPLACE FUNCTION UpdateTravel(
+	travelId INTEGER,
+	travelName VARCHAR,
+	travelDescription VARCHAR,
+	travelInit VARCHAR,
+	travelEnd VARCHAR
+)
+RETURNS BOOLEAN AS
+$$
+BEGIN
+	UPDATE travel
+	SET tra_name = travelName, tra_descr = travelDescription,
+	tra_ini = to_date(travelInit,'YYYY-MM-DD'), tra_end = to_date(travelEnd,'YYYY-MM-DD')
+	WHERE tra_id = travelId;
+	IF FOUND THEN
+		RETURN TRUE;
+	ELSE
+		RETURN FALSE;
+	END IF;
+END;
+$$
+LANGUAGE 'plpgsql';
+
 ------------------------------------fin de grupo 10---------------------------------
 
 ----------------------------------- grupo 14 ---------------------------------

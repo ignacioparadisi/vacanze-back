@@ -98,5 +98,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
                 return BadRequest(ex.Message);
             }
         }
+
+        [Consumes("application/json")]
+        [HttpPut]
+        public IActionResult UpdateTravel([FromBody] Travel travel){
+            try{
+                if(TravelRepository.UpdateTravel(travel))
+                    return Ok("Las modificaciones fueron realizadas exitosamente");
+                else
+                    return StatusCode(400);
+            }catch(InternalServerErrorException ex){
+                return StatusCode(500, ex.Message);
+            }   
+        }
     }
 }
