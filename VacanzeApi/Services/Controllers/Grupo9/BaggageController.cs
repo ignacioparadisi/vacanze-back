@@ -18,7 +18,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 		// GET api/values/id
 		// consultar los equipajes segun su id
 		/// </summary>
-		[HttpGet("{id}")]
+		[HttpGet("serial/{id}")]
 		public ActionResult<IEnumerable<Baggage>> Get(int id)
 		{
 			try
