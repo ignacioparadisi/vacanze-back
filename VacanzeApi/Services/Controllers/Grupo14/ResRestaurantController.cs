@@ -25,9 +25,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 			try{		 
 				
 				Restaurant_res reserva= new Restaurant_res(resAux.fecha_res, resAux.cant_people, resAux.date, resAux.user_id, resAux.rest_id);
-				Console.WriteLine("Antes de llamar al repository");
                 var id = ResRestaurantRepository.addReservation(reserva);
-				Console.WriteLine("Write en el controlador");
 				Console.WriteLine(id);
 				return Ok(id);
 			}catch (DatabaseException)
@@ -100,6 +98,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 		public ActionResult<string> Put(int id, reservationRestaurant resAux)
 		{
 			try{
+				Console.WriteLine(id);
 				ResRestaurantRepository conec = new ResRestaurantRepository();
 				Restaurant_res reserva = new Restaurant_res(resAux.pay_id);
 
@@ -107,17 +106,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 
 				if (resAux.pay_id == 0){
 					ResponseError mensaje= new ResponseError();
-					mensaje.error="Can't modify a null value.";
+					mensaje.error="No se puede nodificar un valor nulo";
 					return StatusCode(500,mensaje);
 				}						
 				else{
 					int modifyId = conec.updateResRestaurant(resAux.pay_id, id);
 					if (modifyId == -1){
 						ResponseError mensaje= new ResponseError();
-						mensaje.error="Can't modify your reservation.";
+						mensaje.error="No se puede modificar su reservacion.";
 						return StatusCode(500,mensaje);
 					}
-					return Ok("Your payment have been made succesfully.");
+					//Me regresa el ID de la reserva modificada
+					return Ok(modifyId);
 				}
 				
 			}catch (DatabaseException )
@@ -129,13 +129,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 			catch (InvalidStoredProcedureSignatureException e)
 			{
 				ResponseError mensaje= new ResponseError();
-				mensaje.error="Inside error at modify.";
+				mensaje.error="Error interno.";
 				return StatusCode(500);
-			}catch (NullClaimException )
-			{
-				ResponseError mensaje= new ResponseError();
-				mensaje.error="Your reservation doesn't exits.";
-				return StatusCode(500,mensaje);
 			}
 		}
 
