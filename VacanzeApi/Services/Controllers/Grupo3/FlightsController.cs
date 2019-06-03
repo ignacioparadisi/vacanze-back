@@ -160,7 +160,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
                 validator.Validate();
 
                 FlightRepository.Add(flight);
-                return Ok(new {Message = "Flight created succesfully!"});
+                return Ok(new {Message = "¡Vuelo creado con éxito!"});
             }
             catch (ValidationErrorException ex)
             {
@@ -189,7 +189,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
                 Flight f = (Flight) FlightRepository.Find( (int)flight.Id );
 
                 if(f == null){
-                    throw new ValidationErrorException("The flight you want to edit does not exist");
+                    throw new ValidationErrorException("El vuelo que quiere editar no existe");
                 }
  
                 FlightValidator validator = new FlightValidator(flight);
@@ -198,7 +198,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
                 validator.Validate();
                 FlightRepository.Update(flight);
 
-                return Ok( new {Message = "Flight updated succesfully!"});
+                return Ok( new {Message = "¡Vuelo editado con éxito!"});
             }
             catch (ValidationErrorException ex)
             {
@@ -228,14 +228,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
 
                 if (f == null)
                 {
-                    throw new ValidationErrorException("The flight you want to edit does not exist");
+                    throw new ValidationErrorException("El vuelo que quiere borrar no existe");
                 }
 
-                FlightValidator validator = new FlightValidator(f);
-
+                
                 FlightRepository.Delete(f);
 
-                return Ok(new { Message = "Flight deleted succesfully!" });
+                return Ok(new { Message = "¡Vuelo borrado con éxito!" });
             }
             catch (ValidationErrorException ex)
             {

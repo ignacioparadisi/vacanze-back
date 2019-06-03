@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo13;
+using Npgsql;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 {
@@ -16,19 +17,21 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
     [EnableCors("MyPolicy")]
     public class ReservationRoomsController : ControllerBase
     {
-        // GET api/values
+
+        // GET api/reservationautomobiles/?id={user_id}]
+        /* https://localhost:5001/api/reservationrooms/?user=1 */
         [HttpGet]
-        public ActionResult<IEnumerable<Entity>> Get()
+        public ActionResult<IEnumerable<Entity>> GetAllByUserID([FromQuery] int user = -1)
         {
             try
             {
-                ReservationRoomRepository reservationRoomConnection = new ReservationRoomRepository();
-                List<Entity> result = reservationRoomConnection.GetRoomReservations();
-                return Ok(result.ToList());
+                ReservationRoomRepository connection = new ReservationRoomRepository();
+                return user == -1
+                    ? connection.GetRoomReservations()
+                    : connection.GetAllByUserId(user);
             }
-            catch (System.Exception)
+            catch (SystemException)
             {
-                return null;
                 throw;
             }
         }
@@ -69,9 +72,27 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         }
 
         // PUT api/values/5    //ACTUALIZAR UN RECURSO
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public ActionResult<Entity> Put([FromBody] ReservationRoom res)
         {
+            try
+            {
+                ReservationRoomRepository repository = new ReservationRoomRepository();
+              //  ReservationRoom reservation = (ReservationRoom)repository.Find((int)entity.Id);
+
+                repository.Update(res);
+
+                return Ok(new { Message = "Editado" });
+            }
+            /*    catch (DbErrorException ex)
+                {
+                    return BadRequest(new { Message = ex.Message });
+                }*/
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
         }
 
         // DELETE api/values/5 //BORRAR
@@ -94,5 +115,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
                 return null;
             }
         }
+
+
+
     }
 }
+

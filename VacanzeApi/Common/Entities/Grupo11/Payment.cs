@@ -1,10 +1,11 @@
 ﻿
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo11
 {
+    /// <summary>
+    /// Clase de pago. Contiene metodos getters y setters de la clase. 
+    /// </summary>
     public class Payment :Entity
     {
-       
-
         public int id { get; set; }
         public string name { get; set; }
         public bool active { get; private set; }

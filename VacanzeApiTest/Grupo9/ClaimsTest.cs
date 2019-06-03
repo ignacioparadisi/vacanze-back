@@ -97,15 +97,15 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 		{
 			claim = controller.GetStatus("CERRADO");
 			response = claim.Value.Count();
-			Assert.True(response > 0);
+			Assert.True(response >= 0);
 		}
 		[Test, Order(7)]
 		public void GetClaimGetDocumentTest()
 		{
-			claim = controller.GetDocument("26055828");
+			claim = controller.GetDocument("20766589");
 
 		response = claim.Value.Count();
-			Assert.True(response >= 0);
+			Assert.AreEqual(response , 1);
 		}
 
 		[Test, Order(8)]
@@ -114,11 +114,10 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 			//se pone un id que exista en la bd por lo menos el 7 
 			ActionResult<IEnumerable<Claim>> enumerable = controller.Get(0);
 			Claim claimList = enumerable.Value.ToList().Find(x =>(x._title.Equals("Despues del put") && x._description.Equals("descripcion despues")) );
-
+			int rows = controller.Get();
 			controller.Delete(Convert.ToInt32(claimList.Id));
-			claim = controller.Get(Convert.ToInt32(claimList.Id));
-			response = claim.Value.Count();
-			Assert.AreEqual(0, response);
+			int rowsresponse = controller.Get();
+			Assert.AreEqual(rows-1, rowsresponse);
 		}
 
 		[Test, Order(9)]
@@ -144,20 +143,32 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 		}
 
 		[Test, Order(12)]
+		public void NullClaimExceptionGetClaimTest()
+		{
+			Assert.Throws<NullClaimException>(() => conec.GetClaim(-1));
+		}
+
+		[Test, Order(13)]
+		public void NullClaimExceptionGetClaimDocumentTest()
+		{			
+			Assert.Throws<NullClaimException>(() => conec.GetClaimDocument("0"));
+		}
+
+		[Test, Order(14)]
 		public void ValidateStatusClaimTest()
 		{
 			Claim c = new Claim("validando", "mi test", "mal");
 			Assert.Throws<AttributeValueException>((() => c.Validate()));
 		}
 
-		[Test, Order(13)]
+		[Test, Order(15)]
 		public void ValidateLengTitleClaimTest()
 		{
 			Claim c = new Claim("validaaxedededdededededdedendod3dd3dd3d33", "mi test", "ABIERTO");
 			Assert.Throws<AttributeSizeException>((() => c.Validate()));
 		}
 
-		[Test,Order(14)]
+		[Test,Order(16)]
 		public void ValidatePutClaimTest()
 		{
 			Claim c = new Claim("valida", "mi test", "ABIERTO");

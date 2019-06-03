@@ -14,9 +14,6 @@ namespace vacanze_back.VacanzeApi.Persistence
         {
             _connectionParameters =
                 $"Server={host};User Id={user};Password={password};Database={databaseName}";
-            /* _connectionParameters =
-                $"Server=localhost;Port=5433;User Id=postgres;" + 
-                      "Password=122324;Database=vacanza;";*/
         }
 
         // TODO: Obtener datos para conectar con la BD de algun archivo de configuracion
@@ -26,6 +23,7 @@ namespace vacanze_back.VacanzeApi.Persistence
                 "vacanza",
                 "vacanza",
                 "vacanza"));
+
 
         // <summary>
         // Ejecuta una funcion almacenada, pasando los argumentos recibidos
@@ -98,7 +96,7 @@ namespace vacanze_back.VacanzeApi.Persistence
                 var keys = betweenParenthesis.Split(',');
                 return keys;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new InvalidStoredProcedureSignatureException(
                     $"Signature: {procedureSignature}");
