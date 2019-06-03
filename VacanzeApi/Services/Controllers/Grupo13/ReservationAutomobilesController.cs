@@ -8,6 +8,7 @@ using vacanze_back.VacanzeApi.Persistence.Repository.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using Microsoft.AspNetCore.Http;
+using Npgsql;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 {
@@ -114,6 +115,36 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             }
 
         }
+
+        //PUT api/values/{id}
+        [HttpPut("{resAutId}")]
+        public ActionResult<string> Put(int resId, ReservationAutomobile res)
+        {
+            try
+            {
+                ReservationAutomobileRepository repository = new ReservationAutomobileRepository();
+                ReservationAutomobile reservation = new ReservationAutomobile(res.Fk_pay);
+                int id = repository.AddPayment(reservation, reservation.Fk_pay);
+                if (id == -1)
+                {
+                    return null;
+                }
+                return Ok("Pago modificado");
+            }
+            catch (NpgsqlException e)
+            {
+                e.ToString();
+                throw;
+            }
+            catch (Exception e)
+            {
+                e.ToString();
+                throw;
+            }
+        }
+
     }
+
+ 
 
 }

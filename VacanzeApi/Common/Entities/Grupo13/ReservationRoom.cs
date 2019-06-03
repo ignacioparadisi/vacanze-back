@@ -43,5 +43,10 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
             this.CheckIn = CheckIn;
             this.CheckOut = CheckOut;
         }
+
+        public ReservationRoom(int payment) : base(0)
+        {
+            this.Fk_pay = payment;
+        }
     }
 }
