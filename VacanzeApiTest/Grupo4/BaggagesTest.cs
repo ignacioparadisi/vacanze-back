@@ -36,7 +36,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo4
           [Test]
           public void AddBaggageTest()
           {
-               var response = BaggageRepository.AddBaggage(3, 3, "Maleta verde", "EXTRAVIADO");
+               var response = BaggageRepository.AddBaggage(0, 0, "Maleta verde", "EXTRAVIADO");
                Assert.AreEqual(response, "Maleta Agregada");
           }
 
