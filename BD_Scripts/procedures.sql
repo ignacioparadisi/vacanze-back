@@ -1853,17 +1853,19 @@ CREATE OR  REPLACE FUNCTION deleteReservationFlight(id_reservation INTEGER) RETU
   $$ LANGUAGE plpgsql;
 
   --retornar Reserva de vuelo de un Pasajero
-CREATE OR REPLACE FUNCTION getReservationFlight(usuario_id INTEGER) 
-RETURNS TABLE (id INTEGER,seatNum VARCHAR,fecha_res_fli TIMESTAMP,num_Pas INTEGER,id_rf_use INTEGER,
-  id_rf_pay INTEGER, id_rf_fli INTEGER,_nameplane VARCHAR,fechadeparture TIMESTAMP,fechaarrival TIMESTAMP,
-  price NUMERIC,_namecity VARCHAR,_namecountry VARCHAR,idlocarriva INTEGER) AS $$
+CREATE OR REPLACE FUNCTION getReservationFlight(usuario INTEGER) 
+RETURNS TABLE (id INTEGER,price numeric,fecha_res_fli timestamp,seatnum character varying(100),country_s varchar,city_s varchar,id_arrival integer) AS $$
   BEGIN
-    RETURN QUERY SELECT rf_id,rf_seatnum,rf_timestamp,rf_num_ps,rf_use_fk,rf_pay_fk,rf_fli_fk,pla_airline,
-    fli_departuredate,fli_arrivaldate,fli_price,loc_city,loc_country,fli_loc_arrival
-    FROM RES_FLI,users,flight,plane,location WHERE users.USE_ID = rf_use_fk and rf_use_fk = usuario_id
-    and flight.fli_loc_departure=location.loc_id and plane.pla_id=flight.fli_pla_fk;
+    RETURN QUERY select r.rf_id as id,f.fli_price ,f.fli_departuredate as salida, r.rf_seatnum as asiento, l.loc_country as pais_salida, l.loc_city as ciudad_salida,f.fli_loc_arrival
+    FROM res_fli r, flight f, plane p, location l, users u
+   where f.fli_id = r.rf_fli_fk and r.rf_use_fk = usuario and u.use_id = r.rf_use_fk and p.pla_id = f.fli_pla_fk and l.loc_id = f.fli_loc_departure;  
   END;
   $$ LANGUAGE plpgsql;
+
+  
+
+
+
 
 ---Devuelve la capacidad de un vuelo
   CREATE OR REPLACE FUNCTION getCapacity(idflight INTEGER)RETURNS integer AS $$  

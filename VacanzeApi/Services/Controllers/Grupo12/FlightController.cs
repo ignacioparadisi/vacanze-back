@@ -28,11 +28,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         public ActionResult<IEnumerable<string>> Post(FlightRes flight){
 
             try{
-
-                DateTime dat1 = new DateTime();
+                DateTime dateLocal = DateTime.Now;
                 FlightResConnection con=new FlightResConnection();
                 string seat=con.conSeatNum(flight._numPas,flight._id_fli);
-                FlightRes f=new FlightRes(seat,dat1.ToString(),
+                FlightRes f=new FlightRes(seat,flight._timestamp,
                 flight._numPas,flight._id_user,flight._id_fli);
                 int i = con.AddReservationFlight(f);
                 
