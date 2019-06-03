@@ -17,7 +17,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         ReservationRoom reservation;
         ReservationRoomRepository _connection;
         DateTime time;
-        int id;
+        private int id;
 
         [SetUp]
         public void SetUp()
@@ -25,9 +25,8 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             _connection = new ReservationRoomRepository();
             time = new DateTime(1990, 04, 01);
             DateTime time2 = new DateTime(1990, 04, 01);
-            reservation = new ReservationRoom(0,time,time2);
+            
             Hotel hotel = new Hotel();
-            hotel.Id = 1;
             hotel.IsActive = true;
             hotel.Name = "PruebaUnitaria";
             hotel.Phone = "04141234323";
@@ -40,9 +39,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             hotel.Website = "Pu Website";
             hotel.Location = LocationRepository.GetLocationById(1);
             hotel.Id = 0;
-            reservation.Hotel = hotel;
-            reservation.Fk_user = 2;
-            reservation.Id = 27;
+            reservation = new ReservationRoom(0, time, time2,hotel,2);
         }
 
         [Test,Order(1)]
@@ -73,6 +70,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             Assert.True(id > 0);
         }
 
+        /*
         [Test, Order(5)]
         public void UpdateTest()
         {
@@ -83,14 +81,23 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             Assert.True(reservation2.CheckIn==date);
 
         }
-        /*
-        [Test, Order(6)]
-        public void DeleteReservationAutomobileTest()
+*/
+
+        [Test, Order(5)]
+        public void DeleteReservationRoomTest()
         {
-           int id= _connection.Delete(reservation);
+            _connection.Delete(reservation);
+            Entity reservation2 = _connection.Find((int)reservation.Id);
+            Assert.IsNull(reservation2);
+        }
+
+        [Test, Order(6)]
+        public void AvailableRoomsTest()
+        {
+            id = ReservationRoomRepository.GetAvailableRoomReservations(1);
             Assert.IsNotNull(id);
         }
-        */
+
     }
 
 }

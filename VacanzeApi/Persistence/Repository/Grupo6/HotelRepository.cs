@@ -4,6 +4,7 @@ using System.Data;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo13;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
 {
@@ -90,7 +91,13 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
             var table = PgConnection.Instance.ExecuteFunction("GetHotelsByCity(@city_id)", city);
             var hotelList = new List<Hotel>();
             for (var i = 0; i < table.Rows.Count; i++)
-                hotelList.Add(ExtractHotelFromRow(table.Rows[i]));
+            {
+                var hotel = ExtractHotelFromRow(table.Rows[i]);
+                hotel.AvailableRooms =
+                    ReservationRoomRepository.GetAvailableRoomReservations(hotel.Id);
+                hotelList.Add(hotel);
+            }
+
             return hotelList;
         }
 

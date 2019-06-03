@@ -9,6 +9,7 @@ using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo5;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo13;
 
 namespace vacanze_back.VacanzeApiTest.Grupo13
 {
@@ -18,17 +19,9 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         ReservationAutomobile reservation;
         ReservationAutomobileRepository _connection;
         DateTime time;
+        DateTime time2;
         private int id;
         Auto automobile = new Auto("Prueba", "Unitaria", 5, true, "licencia", 35, "mazda.jgp", 1);
-
-        //private ReservationAutomobile res_aut;
-        //private ReservationAutomobileRepository _connection;
-        //int id;
-        //ReservationAutomobileRepository _connection = new ReservationAutomobileRepository();
-        //private DateTime time = new DateTime(1990, 04, 14);
-        //private DateTime time2 = new DateTime(1991, 04, 14);
-        //static Auto automobile = new Auto("Prueba", "Unitaria", 5, true, "licencia", 35, "mazda.jgp", 1);
-        //private int fk_aut_id = ConnectAuto.Agregar(automobile);
 
         [SetUp]
         public void SetUp()
@@ -36,20 +29,26 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
 
             _connection = new ReservationAutomobileRepository();
             time = new DateTime(1990, 04, 14);
-            DateTime time2 = new DateTime(1990, 04, 14);
-            
-
-                        automobile.setId(7);
+            time2 = new DateTime(1990, 04, 14);
+            automobile.setId(7);
             reservation = new ReservationAutomobile(0, time, time2,automobile,2);
             reservation.Id = id;
         }
-
+        
         [Test, Order(1)]
         public void GetReservationsAutomobileTest()
         {
             List<Entity> reservations = _connection.GetAutomobileReservations();
             Assert.AreNotEqual(0, reservations.Count());
         }
+        
+        /*
+        [Test, Order(6)]
+        public void AutomobileReservationNotFoundExceptionTest()
+        {
+            Assert.Throws<AutomobileReservationNotFoundException>(() => _connection.Find(0));
+        }
+        */
 
         [Test, Order(2)]
         public void FindReservationAutomobileTest()
@@ -95,6 +94,8 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             Entity reservation2 = _connection.Find((int)reservation.Id);
             Assert.IsNull(reservation2);
         }
+
+
 
 
 

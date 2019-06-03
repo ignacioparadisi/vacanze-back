@@ -6,6 +6,9 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo7
     { 
         // TODO: Cuando se cree la clase Lugar, implementar esta parte
         // private Lugar _direccion;
+        /// <summary>  
+        ///  Clase para crear objetos de tipo Restaurant, almacenando la información de cada restaurant  
+        /// </summary> 
 
         [JsonConstructor]
         public Restaurant(long id, string name, int capacity,bool isActive,decimal qualify, string specialty, 

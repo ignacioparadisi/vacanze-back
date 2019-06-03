@@ -102,10 +102,10 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
 		[Test, Order(7)]
 		public void GetClaimGetDocumentTest()
 		{
-			claim = controller.GetDocument("9784673");
+			claim = controller.GetDocument("20766589");
 
 		response = claim.Value.Count();
-			Assert.True(response >= 0);
+			Assert.AreEqual(response , 1);
 		}
 
 		[Test, Order(8)]
