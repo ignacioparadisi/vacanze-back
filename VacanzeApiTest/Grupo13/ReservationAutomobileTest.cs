@@ -8,6 +8,7 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo5;
 
 namespace vacanze_back.VacanzeApiTest.Grupo13
 {
@@ -15,46 +16,87 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
     public class ReservationAutomobileTest
     {
         ReservationAutomobile reservation;
-
         ReservationAutomobileRepository _connection;
+        DateTime time;
+        private int id;
+        Auto automobile = new Auto("Prueba", "Unitaria", 5, true, "licencia", 35, "mazda.jgp", 1);
+
+        //private ReservationAutomobile res_aut;
+        //private ReservationAutomobileRepository _connection;
+        //int id;
+        //ReservationAutomobileRepository _connection = new ReservationAutomobileRepository();
+        //private DateTime time = new DateTime(1990, 04, 14);
+        //private DateTime time2 = new DateTime(1991, 04, 14);
+        //static Auto automobile = new Auto("Prueba", "Unitaria", 5, true, "licencia", 35, "mazda.jgp", 1);
+        //private int fk_aut_id = ConnectAuto.Agregar(automobile);
+
         [SetUp]
         public void SetUp()
         {
+
             _connection = new ReservationAutomobileRepository();
-            DateTime time = new DateTime(1994, 04, 14);
-            DateTime time2 = new DateTime(1995, 04, 14);
-            reservation = new ReservationAutomobile(0, time, time2);
-            Auto automobile = new Auto("Mazda", "X3", 5, true, "XYZ23D", 35, "mazda.jgp", 1);
-            User user = new User(3, 99, "NameTest", "LastTest", "EmailTest");
-            reservation.Automobile = automobile;
-            reservation.User = user;
-            //reservation.Automobile.Id = 1;
-           // reservation.User.Id = 3;
+            time = new DateTime(1990, 04, 14);
+            DateTime time2 = new DateTime(1990, 04, 14);
+            
+
+                        automobile.setId(7);
+            reservation = new ReservationAutomobile(0, time, time2,automobile,2);
+            reservation.Id = id;
         }
 
-        [Test]
+        [Test, Order(1)]
         public void GetReservationsAutomobileTest()
         {
             List<Entity> reservations = _connection.GetAutomobileReservations();
             Assert.AreNotEqual(0, reservations.Count());
         }
 
-        [Test]
+        [Test, Order(2)]
         public void FindReservationAutomobileTest()
         {
-            ReservationAutomobile reservation = (ReservationAutomobile) _connection.Find(3);
+            ReservationAutomobile reservation = (ReservationAutomobile) _connection.Find(68);
             Assert.IsNotNull(reservation);
         }
 
+        [Test, Order(3)]
+        public void GetAllByUserIdTest()
+        {
+            List<Entity> reservations = _connection.GetAllByUserId(1);
+            Assert.AreNotEqual(0, reservations.Count());
+        }
 
-        [Test]
+        [Test, Order(4)]
         public void AddReservationsAutomobileTest()
         {
-            List<Entity> reservations = _connection.GetAutomobileReservations();
-            _connection.AddReservation(reservation);
-            List<Entity> reservationslater = _connection.GetAutomobileReservations();
-            Assert.Greater(reservationslater.Count, reservations.Count);
+             id  = (int)_connection.AddReservation(reservation).Id;
+             Assert.True(id > 0);
         }
+
+        /*
+        [Test, Order(5)]
+        public void UpdateTest()
+        {
+            
+            DateTime date = new DateTime(1991, 04, 14);
+            ReservationAutomobile reservation2 = new ReservationAutomobile(reservation.Id, date, reservation.CheckOut, automobile, 2);
+           // reservation.CheckIn = date;
+           _connection.Update(reservation2);
+           var reservation3 = (ReservationAutomobile)_connection.Find((int)reservation.Id);
+           Assert.AreEqual(reservation2.CheckIn,date);
+            
+        }
+    */
+        
+
+        [Test, Order(5)]
+        public void DeleteReservationAutomobileTest()
+        {
+            _connection.Delete(reservation);
+            Entity reservation2 = _connection.Find((int)reservation.Id);
+            Assert.IsNull(reservation2);
+        }
+
+
 
     }
 }
