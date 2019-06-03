@@ -24,7 +24,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo10
          public void getTravelsTest_Success(){
             int _userID = 3;
             var result = _TraveksController.getTravels();
-            Assert.IsInstanceOf<CreatedAtActionResult>(result.Result);
+            Assert.IsInstanceOf<OkObjectResult>(result.Result);
          }
 
         [Test]
@@ -57,22 +57,22 @@ namespace vacanze_back.VacanzeApiTest.Grupo10
 
          [Test]
          public void GetReservationsByTravelAndLocationTest_Success(){
-            int _travelID = 3;
-            int _locattionID = 3;
-            string _Type = "";
+            int _travelID = 1;
+            int _locattionID = 37;
+            string _Type = "hotel";
 
             var result = _TravelsController.GetReservationsByTravelAndLocation(_travelID, _locattionID, _Type);
-            Assert.IsInstanceOf<CreatedAtActionResult>(result.Result);
+            Assert.IsInstanceOf<OkObjectResult>(result.Result);
          }
 
          [Test]
          public void GetReservationsByTravelAndLocationTest_InvalidReservationTypeException(){
             int _travelID = 1;
             int _locattionID = 37;
-            string _Type = "hotel";
+            string _Type = "cohete";
 
             var result = _TravelsController.GetReservationsByTravelAndLocation(_travelID, _locattionID, _Type);
-            Assert.IsInstanceOf<CreatedAtActionResult>(result.Result);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
          }
 
          [Test]
@@ -82,7 +82,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo10
             string _Type = "hotel";
 
             var result = _TravelsController.GetReservationsByTravelAndLocation(_travelID, _locattionID, _Type);
-            Assert.IsInstanceOf<CreatedAtActionResult>(result.Result);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
          }
 
          [Test]
@@ -92,14 +92,45 @@ namespace vacanze_back.VacanzeApiTest.Grupo10
             string _Type = "";
 
             var result = _TravelsController.GetReservationsByTravelAndLocation(_travelID, _locattionID, _Type);
-            Assert.IsInstanceOf<CreatedAtActionResult>(result.Result);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
          }
 
         [Test]
          public void GetReservationsByTravelAndLocationTest_Exception(){
 
             var result = _TravelsController.GetReservationsByTravelAndLocation();
-            Assert.IsInstanceOf<CreatedAtActionResult>(result.Result);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
+         }
+
+         [Test]
+         public void GetLocationsByTravel_Success(){
+            int _travelID = 1;
+
+            var result = _TravelsController.GetLocationsByTravel(_travelID);
+            Assert.IsInstanceOf<OkObjectResult>(result.Result);
+         }
+
+         [Test]
+         public void GetLocationsByTravel_WithoutTravelLocationsException(){
+
+            var result = _TravelsController.GetLocationsByTravel();
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
+         }
+
+         [Test]
+         public void GetLocationsByTravel_InternalServerErrorException(){
+            int _travelID = -1;
+
+            var result = _TravelsController.GetLocationsByTravel(_travelID);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
+         }
+
+         [Test]
+         public void GetLocationsByTravel_Exception(){
+            string _travelID = "1";
+
+            var result = _TravelsController.GetLocationsByTravel(_travelID);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
          }
     }
 }
