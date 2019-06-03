@@ -11,7 +11,7 @@ using vacanze_back.VacanzeApi.Services.Controllers.Grupo5;
 namespace vacanze_back.VacanzeApiTest.Grupo5
 {
     [TestFixture]
-    public class AutoTest
+    public class AutoControllerTest
     {
         
     }
