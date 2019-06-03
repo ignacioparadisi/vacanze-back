@@ -65,7 +65,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
             }
 
         }
-
         
         
         /// <summary> GET api/id-return-city/name_city_i/name_city_v</summary>
