@@ -45,7 +45,7 @@ namespace vacanze_back.Controllers
             }
             catch (DatabaseException e)
             {
-
+                //Aqui va una excepcion personalizada
                 return StatusCode(StatusCodes.Status500InternalServerError,e);
             }
 
@@ -62,6 +62,10 @@ namespace vacanze_back.Controllers
         /// <summary>
         /// Get que consulta metodos de pagos precargados estaticamente
         /// </summary>
+        /// <param name="idAuto">Número identificador de la resenva del auto a pagar</param>
+        /// <param name="idRes">Número identificador de la resenva del restaurante a pagar</param>
+        /// <param name="idRoo">Número identificador de la resenva del hotel a pagar</param>
+        /// <param name="idCru">Número identificador de la resenvar del crucero a pagar</param>
         /// <returns>lista de metodos de pagos</returns>
         [HttpGet]
         [Route("id/{idAuto}/{idRoo}/{idRes}/{idCru}")]
@@ -86,7 +90,7 @@ namespace vacanze_back.Controllers
             }
             catch (DatabaseException e)
             {
-
+                //Aqui va una excepcion personalizada
                 return StatusCode(StatusCodes.Status500InternalServerError, e);
             }
 
@@ -99,7 +103,7 @@ namespace vacanze_back.Controllers
         /// Post que permite añadir un pago exitoso al registro
         /// tambien simula pago dependiedno de su respuesta exitosa o no
         /// </summary>
-        /// <param name="bill"></param>
+        /// <param name="bill">Obejto de tipo factura</param>
         /// <returns> mensaje de respuesta</returns>
         [HttpPost]
         [Route("")]
@@ -132,7 +136,7 @@ namespace vacanze_back.Controllers
             }
             catch (DatabaseException e)
             {
-
+                //Aqui va una excepcion personalizada
                 return StatusCode(StatusCodes.Status500InternalServerError, e);
             }
 
@@ -167,7 +171,7 @@ namespace vacanze_back.Controllers
             }
             catch (DatabaseException e)
             {
-
+                //Aqui va una excepcion personalizada
                 return StatusCode(StatusCodes.Status500InternalServerError, e);
             }
 
