@@ -209,19 +209,13 @@ INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (1, 7);
 
 ------- grupo 6 ----------
 
-INSERT INTO hotel (hot_id, hot_name, hot_room_qty, hot_room_capacity, hot_is_active,
-                   hot_address_specs, hot_room_price, hot_website, hot_phone, hot_picture,
-                   hot_stars, hot_loc_fk)
-VALUES (1, 'Prueba 1', 30, 4, true, 'Alguna direccion, algun lugar', 234.5, null, null, null, 4, 1),
-       (2, 'Prueba 2', 40, 2, true, 'Alguna direccion, algun lugar', 500.5, null, '+58 4253 2732',
-        null, 5, 10),
-       (3, 'Prueba 3', 40, 2, true, 'Alguna direccion, algun lugar', 500.5, null, '+58 4253 2732',
-        null, 5, 10);
-
 INSERT INTO hotel (hot_name, hot_room_qty, hot_room_capacity, hot_is_active,
                    hot_address_specs, hot_room_price, hot_website, hot_phone, hot_picture,
                    hot_stars, hot_loc_fk)
-VALUES  ('Posada Los Caracas', 8, 6, true, 'Playa la Punta', 150.5, null, null, null, 3, 37),
+VALUES	('Prueba 1', 30, 4, true, 'Alguna direccion, algun lugar', 234.5, null, null, null, 4, 1),
+		('Prueba 2', 40, 2, true, 'Alguna direccion, algun lugar', 500.5, null, '+58 4253 2732', null, 5, 10),
+		('Prueba 3', 40, 2, true, 'Alguna direccion, algun lugar', 500.5, null, '+58 4253 2732', null, 5, 10),
+		('Posada Los Caracas', 8, 6, true, 'Playa la Punta', 150.5, null, null, null, 3, 37),
 		('Hotel Tanaguarena', 8, 6, true, 'Al frente de playa escondida', 400.5, null, null, null, 4, 37),
 		('Posada Los Cocos', 8, 6, true, 'Playa Los Cocos', 400.5, null, null, null, 3, 37),
 		('Hotel Otro País', 8, 6, true, 'Playa Otro País', 400.5, null, null, null, 3, 37),
@@ -232,15 +226,15 @@ VALUES  ('Posada Los Caracas', 8, 6, true, 'Playa la Punta', 150.5, null, null, 
         ('Carabobo Surfer', 12, 4, true, '...', 225.5, null, '+58 414 1100085', null, 4, 65),
         ('Carabobo Hotel', 12, 4, true, '...', 225.5, null, '+58 414 1100085', null, 4, 65),
         ('Posada De Doña Barbara', 12, 4, true, 'Arepera Doña Barbara', 225.5, null, '+58 414 1100085', null, 4, 76),
-        ('Carupano Hotel', 12, 4, true, '...', 225.5, null, '+58 414 1100085', null, 5, 65),
+        ('Carupano Hotel', 12, 4, true,	 '...', 225.5, null, '+58 414 1100085', null, 5, 76),
         ('Purto Hotel', 12, 4, true, 'Puerto', 225.5, null, '+58 414 1100085', null, 4, 56),
-        ('Posada Puerto La Cruz', 12, 4, true, 'Puerto', 225.5, null, '+58 414 1100085', null, 4, 65),
+        ('Posada Puerto La Cruz', 12, 4, true, 'Puerto', 225.5, null, '+58 414 1100085', null, 4, 56),
         ('Tokyo Hotel', 12, 4, true, 'Rock Band', 225.5, null, '+58 414 1100085', null, 4, 143),
         ('Tokyo Sushi', 12, 4, true, 'Sushi Sushi', 225.5, null, '+58 414 1100085', null, 4, 143),
-        ('Osaka Hotel', 12, 4, true, '...', 225.5, null, '+58 414 1100085', null, 4, 143),
+        ('Osaka Hotel', 12, 4, true, '...', 225.5, null, '+58 414 1100085', null, 4, 158),
         ('Hotel Gioli', 12, 4, true, 'San Ignacio', 270.5, null, '+58 414 1100085', null, 4, 29),
 		('Hotel Dallas', 12, 4, true, 'Chacaito', 300.5, null, '+58 414 1100085', null, 4, 29),
-		('Hotel Renasence', 12, 4, true, 'Los Palos Grandes', 5000.5, null, '+58 414 1100085', null, 4, 29),
+		('Hotel Renaissance', 12, 4, true, 'Los Palos Grandes', 5000.5, null, '+58 414 1100085', null, 4, 29),
 		('Hotel Caracas', 12, 4, true, 'Caracas', 225.5, null, '+58 414 1100085', null, 4, 29),
 		('Hotel Oxford', 12, 4, true, 'Oxford', 2100.5, null, '+58 414 1100085', null, 4, 127),
 		('Sydney Hotel', 12, 4, true, 'Sydney', 1300.5, null, '+58 414 1100085', null, 4, 78),
@@ -262,7 +256,44 @@ INSERT INTO public.Plane(
 INSERT INTO public.Plane(
 	pla_autonomy, pla_isActive, pla_capacity, pla_loadingCap, pla_model)
 	VALUES (80,true, 10, 1000, 'Boeing 5');
-	
+
+------- grupo 7 ----------
+
+INSERT INTO restaurant(res_name, res_capacity , res_isactive, res_qualify, res_specialty, 
+res_price, res_businessname, res_picture, res_descr, res_tlf, res_loc_fk, res_address_specs) 
+VALUES	('Pescado Frito', 50, default, 5,'Carite', 100, 'sam', null, 'Pescado Frito', '04141100085', 37, 'Naiguata'),
+	('Paellon', 50, default, 5,'Paella', 100, 'sam', null, 'Paella', '04141100085', 37, 'Naiguata'),
+	('Pescado Burger', 50, default, 5,'Hamburguesa', 100, 'sam', null, 'Hamburguesa', '04141100085', 37, 'Naiguata'),
+	('Empanadas Finas', 50, default, 5,'Empanadas', 100, 'sam', null, 'Empanadas', '04141100085', 37, 'Tanaguarena'),
+	('Paellon', 50, default, 5,'Paella', 100, 'sam', null, 'Paella', '04141100085', 37, 'Naiguata'),
+	('Mama Pancha', 50, default, 5,'Arepa', 100, 'sam', null, 'Arepa', '04141100085', 65, 'Puerto Cabello'),
+	('Pepito Gloton', 50, default, 5,'Pepito', 100, 'sam', null, 'Pepito', '04141100085', 65, 'Puerto Cabello'),
+	('Parrillita', 50, default, 5,'Parrilla', 100, 'sam', null, 'Parrilla', '04141100085', 65, 'Puerto Cabello'),
+	('Criollo', 50, default, 5,'Arepa', 100, 'sam', null, 'Arepa', '04141100085', 65, 'Puerto Cabello'),
+	('Empana', 50, default, 5,'Empanadas', 100, 'sam', null, 'Empanadas', '04141100085', 76, 'Carupano'),
+	('La Doña', 50, default, 5,'Pabellon', 100, 'sam', null, 'Pabellon', '04141100085', 76, 'Carupano'),
+	('BurguerKing', 50, default, 5,'Hamburguesas', 100, 'sam', null, 'Hamburguesas', '04141100085', 56, 'Puerto La Cruz'),
+	('Macdonald', 50, default, 5,'Hamburguesas', 100, 'sam', null, 'Hamburguesas', '04141100085', 56, 'Puerto La Cruz'),
+	('Wendy', 50, default, 5,'Hamburguesas', 100, 'sam', null, 'Cuadra contigo', '04141100085', 56, 'Puerto La Cruz'),
+	('KFC', 50, default, 5,'Pollo', 100, 'sam', null, 'Pollo', '04141100085', 56, 'Puerto La Cruz'),
+	('Sushi shu', 50, default, 5,'Sushi', 100, 'sam', null, 'Sushi', '04141100085', 143, 'Tokyo'),
+	('Sushishi', 50, default, 5,'Sushi', 100, 'sam', null, 'Sushi', '04141100085', 143, 'Tokyo'),
+	('Sushi fu', 50, default, 5,'Sushi', 100, 'sam', null, 'Sushi', '04141100085', 143, 'Tokyo'),
+	('KFC', 50, default, 5,'Pollo', 100, 'sam', null, 'Pollo', '04141100085', 143, 'Tokyo'),
+	('Sushi shu', 50, default, 5,'Sushi', 100, 'sam', null, 'Sushi', '04141100085', 158, 'Osaka'),
+	('Sushishi', 50, default, 5,'Sushi', 100, 'sam', null, 'Sushi', '04141100085', 158, 'Osaka'),
+	('Sushi fu', 50, default, 5,'Sushi', 100, 'sam', null, 'Sushi', '04141100085', 158, 'Osaka'),
+	('Macdonald', 50, default, 5,'Hamburguesas', 100, 'sam', null, 'Hamburguesas', '04141100085', 158, 'Osaka'),
+	('Macdonald', 50, default, 5,'Hamburguesas', 100, 'sam', null, 'Hamburguesas', '04141100085', 127, 'Oxford'),
+	('Wendy', 50, default, 5,'Hamburguesas', 100, 'sam', null, 'Cuadra contigo', '04141100085', 127, 'Oxford'),
+	('KFC', 50, default, 5,'Pollo', 100, 'sam', null, 'Pollo', '04141100085', 127, 'Oxford'),
+	('Macdonald', 50, default, 5,'Hamburguesas', 100, 'sam', null, 'Hamburguesas', '04141100085', 78, 'Sydney'),
+	('Wendy', 50, default, 5,'Hamburguesas', 100, 'sam', null, 'Cuadra contigo', '04141100085', 78, 'Sydney'),
+	('KFC', 50, default, 5,'Pollo', 100, 'sam', null, 'Pollo', '04141100085', 78, 'Sydney'),
+	('Macdonald', 50, default, 5,'Hamburguesas', 100, 'sam', null, 'Hamburguesas', '04141100085', 29, 'Caracas'),
+	('Wendy', 50, default, 5,'Hamburguesas', 100, 'sam', null, 'Cuadra contigo', '04141100085', 29, 'Caracas'),
+	('KFC', 50, default, 5,'Pollo', 100, 'sam', null, 'Pollo', '04141100085', 29, 'Caracas'),
+	('Avila Burguer', 50, default, 5,'Hamburguesa', 100, 'sam', null, 'Hamburguesa', '04141100085', 29, 'Caracas');
 	
 --------------Grupo 8 ---------------------------------
 INSERT INTO Ship(shi_id, shi_name, shi_capacity ,shi_loadingcap, shi_model,shi_line, shi_picture ) VALUES (default, 'concordia', 100, 1000, 'Modelo1','Linea1', '1.jpg' );

@@ -6,6 +6,8 @@ using vacanze_back.VacanzeApi.Persistence.Repository.Grupo10;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo10;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
+
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
 {
@@ -28,6 +30,19 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
                 return BadRequest(ex.Message);
             }
             return Ok(travels);
+        }
+
+        [HttpGet("{travelId}")]
+        public ActionResult<IEnumerable<Entity>> GetReservationsByTravelAndLocation(
+            long travelId, [FromQuery] int locationId, [FromQuery] string type){
+            try{
+                type = type.ToUpper();
+                List<Entity> reservations = 
+                        TravelRepository.GetReservationsByTravelAndLocation(travelId, locationId, type.ToUpper());
+                return Ok(reservations);
+            }catch(Exception ex){
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{travelId}/locations")]

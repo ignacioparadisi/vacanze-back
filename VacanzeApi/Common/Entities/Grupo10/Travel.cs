@@ -7,6 +7,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10
     public class Travel : Entity{
 
         private List<Location> locations = new List<Location>();
+        
 
         private User _user;
         public User User{ get{ return _user; } set{ _user = value; } }

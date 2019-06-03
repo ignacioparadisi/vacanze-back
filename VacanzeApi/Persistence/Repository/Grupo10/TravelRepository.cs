@@ -1,12 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo10;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo10;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo2;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo6;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo14;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
 {
@@ -49,6 +54,40 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
 
             }
             return listOfTravels;
+        }
+
+        public static List<Entity> GetReservationsByTravelAndLocation(long travelId, int locationId, string type){
+            List<Entity> reservations = new List<Entity>();
+            try{
+                PgConnection pgConnection = PgConnection.Instance;
+                if(type.Equals("HOTEL")){
+                        DataTable dataTable = pgConnection.ExecuteFunction(
+                            "GetReservationsOfHotelByTravelAndLocation(@travelId, @locationId)", travelId, locationId);
+                    if( dataTable.Rows.Count > 0 ){
+                        List<ReservationRoom> reservationsOfRoom = new List<ReservationRoom>();
+                        foreach (DataRow dataRow in dataTable.Rows){
+                            ReservationRoom reservationRoom = new ReservationRoom(
+                                Convert.ToInt64(dataRow[0]),
+                                DateTime.Parse(dataRow[1].ToString()),
+                                DateTime.Parse(dataRow[2].ToString()),
+                                HotelRepository.GetHotelById(Convert.ToInt32(dataRow[5])),
+                                Convert.ToInt32(dataRow[4]),
+                                null
+                            );
+                            reservationsOfRoom.Add(reservationRoom);
+                        }
+                        reservations = reservationsOfRoom.Cast<Entity>().ToList();
+                    }
+                }
+            }catch(DatabaseException ex){
+                throw new Exception(ex.Message);
+            }catch(InvalidStoredProcedureSignatureException){
+                throw new Exception("InvalidStoredProcedureSignatureException");
+            }finally{
+
+            }
+
+            return reservations;
         }
 
         ///<sumary>
