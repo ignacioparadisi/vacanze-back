@@ -23,7 +23,6 @@ namespace vacanze_back.VacanzeApiTest.Grupo5
         private bool status;
         private string license;
         private int price;
-        private string pic;
         private int location;
 
         [SetUp]
@@ -36,8 +35,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo5
             status = true;
             license = "ab12c3f";
             price = 50;
-            pic = "toyota.jpg";
-            auto = new Auto(make,model,cap,status,license,price,pic,location) ; 
+            auto = new Auto(make,model,cap,status,license,price,location) ; 
         }
         [Test]
         public void AddTest()

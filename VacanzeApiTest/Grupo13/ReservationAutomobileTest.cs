@@ -24,7 +24,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             DateTime time = new DateTime(1994, 04, 14);
             DateTime time2 = new DateTime(1995, 04, 14);
             reservation = new ReservationAutomobile(0, time, time2);
-            Auto automobile = new Auto("Mazda", "X3", 5, true, "XYZ23D", 35, "mazda.jgp", 1);
+            Auto automobile = new Auto("Mazda", "X3", 5, true, "XYZ23D", 35, 1);
             User user = new User(3, 99, "NameTest", "LastTest", "EmailTest");
             reservation.Automobile = automobile;
             reservation.User = user;

@@ -1253,7 +1253,6 @@ ADDAUTOMOBILE(
     _status BOOLEAN,
     _licence varchar(30),
     _price real,
-    _picture varchar,
     _place integer
     ) 
 RETURNS integer AS
@@ -1261,10 +1260,10 @@ $$
 
 BEGIN
 
-
-   INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_LICENSE,AUT_PRICE,AUT_PICTURE,AUT_LOC_FK) VALUES
-    ( _make, _model,_capacity,_status,_licence,_price,_picture,_place);
+   INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_LICENSE,AUT_PRICE,AUT_LOC_FK) VALUES
+    ( _make, _model,_capacity,_status,_licence,_price,_place);
    RETURN 1 ;
+
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1291,7 +1290,6 @@ RETURNS TABLE
    isactive BOOLEAN, 
    price numeric , 
    license varchar(30), 
-   picture varchar (30), 
    loc_fk integer
   )
 AS
@@ -1311,8 +1309,7 @@ RETURNS TABLE
    capacity integer,
    isactive BOOLEAN, 
    price numeric , 
-   license varchar(30), 
-   picture varchar (30), 
+   license varchar(30),  
    loc_fk integer
   )
 AS
@@ -1322,7 +1319,6 @@ BEGIN
     FROM AUTOMOBILE  WHERE aut_loc_fk = codigo ;
 END;
 $$ LANGUAGE plpgsql;
-
 --------------------------------------------------
 CREATE OR REPLACE FUNCTION ConsultforPlaceandStatusAuto(_place integer,_status bool )
 RETURNS TABLE
@@ -1332,8 +1328,7 @@ RETURNS TABLE
    capacity integer,
    isactive BOOLEAN, 
    price numeric , 
-   license varchar(30), 
-   picture varchar (30), 
+   license varchar(30),  
    loc_fk integer
   )
 AS
@@ -1343,7 +1338,6 @@ BEGIN
     FROM AUTOMOBILE  WHERE aut_loc_fk = _place and aut_isactive =_status ;
 END;
 $$ LANGUAGE plpgsql;
-
 -------------consultar por estado del auto ---------------------------------
 CREATE OR REPLACE FUNCTION ConsultforStatusAuto(codigo integer)
 RETURNS TABLE
@@ -1353,8 +1347,7 @@ RETURNS TABLE
    capacity integer,
    isactive BOOLEAN, 
    price real , 
-   license varchar(30), 
-   picture varchar (30), 
+   license varchar(30),  
    loc_fk integer
   )
 AS
@@ -1374,7 +1367,6 @@ RETURNS TABLE
    isactive BOOLEAN, 
    price real , 
    license varchar(30), 
-   picture varchar (30), 
    loc_fk integer
   )
 AS
@@ -1394,7 +1386,6 @@ RETURNS TABLE
    isactive BOOLEAN, 
    price real , 
    license varchar(30), 
-   picture varchar (30), 
    loc_fk integer
   )
 AS
@@ -1410,7 +1401,16 @@ CREATE OR REPLACE FUNCTION getAutoParameters(
 	_result varchar,
 	_license character varying,
 	_capacity integer)
-    RETURNS TABLE(id integer, make character varying, model character varying, capacity integer, isactive boolean, price numeric, license character varying, picture character varying, loc_fk integer) 
+    RETURNS TABLE
+    (id integer,
+    make character varying,
+    model character varying,
+    capacity integer,
+    isactive boolean,
+    price numeric,
+    license character varying,
+    loc_fk integer)
+
     LANGUAGE 'plpgsql'
 
     COST 100
@@ -1460,8 +1460,6 @@ BEGIN
 
 END;
 $BODY$;
-
-
 -------------modificar auto--------------------------------------------------
 CREATE OR REPLACE FUNCTION 
 MODIFYAUTOMOBILE(
@@ -1472,7 +1470,6 @@ MODIFYAUTOMOBILE(
     _status BOOLEAN,
     _license varchar(30),
     _price real,
-    _picture varchar,
     _place integer
     ) 
 RETURNS integer AS
@@ -1481,28 +1478,25 @@ BEGIN
 UPDATE automobile
 	SET  aut_make=_make, aut_model=_model,
 	aut_capacity=_capacity, aut_isactive=_status, aut_price=_price,
-	aut_license=_license, aut_picture=_picture, aut_loc_fk=_place
+	aut_license=_license, aut_loc_fk=_place
 	WHERE aut_id =_id;
 	RETURN _id;
 END;
 $$ LANGUAGE plpgsql;
-
 ----------------------------------------- consulta de ciudades-----------------------------------
 
 CREATE OR REPLACE FUNCTION GetCity()
-    RETURNS TABLE
-            (
-                id integer,
-                city VARCHAR(30)
-               
-            )
+  RETURNS TABLE
+  (
+    id integer,
+    city VARCHAR(30)
+  )
 AS
 $$
 BEGIN
     RETURN QUERY select loc_id,loc_city from location;
 END;
 $$ LANGUAGE plpgsql;
-
 ------------------------FIN DEL GRUPO 5 ------------------------------------------------------
 
 ------------------------------------inicio de grupo 7---------------------------------

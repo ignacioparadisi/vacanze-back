@@ -12,19 +12,19 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo5
     {
        public static int Agregar(Auto auto)
         {
-            String command ="ADDAUTOMOBILE (@AUT_MAKE,@AUT_MODEL,@AUT_CAPACITY,@AUT_ISACTIVE,@AUT_LICENSE,@AUT_PRICE,@AUT_PICTURE,@AUT_LOC_FK)";
+            String command ="ADDAUTOMOBILE (@AUT_MAKE,@AUT_MODEL,@AUT_CAPACITY,@AUT_ISACTIVE,@AUT_LICENSE,@AUT_PRICE,@AUT_LOC_FK)";
             var table = PgConnection.Instance.ExecuteFunction(
                 command,auto.getmake(),auto.getmodel(),auto.getcapacity(),auto.getisActive(), 
-                auto.getlicence(),auto.getprice(), auto.getpicture(),auto.getplace());
+                auto.getlicence(),auto.getprice(),auto.getplace());
             var id = Convert.ToInt32(table.Rows[0][0]);
             return id;
         }
        public static int ModifyAuto (Auto auto)
         {
-            string command = "MODIFYAUTOMOBILE (@AUT_ID,@AUT_MAKE,@AUT_MODEL,@AUT_CAPACITY,@AUT_ISACTIVE,@AUT_LICENSE,@AUT_PRICE,@AUT_PICTURE,@AUT_LOC_FK)";
+            string command = "MODIFYAUTOMOBILE (@AUT_ID,@AUT_MAKE,@AUT_MODEL,@AUT_CAPACITY,@AUT_ISACTIVE,@AUT_LICENSE,@AUT_PRICE,@AUT_LOC_FK)";
             var table = PgConnection.Instance.ExecuteFunction(
                 command,auto.getId(),auto.getmake(),auto.getmodel(),auto.getcapacity(),auto.getisActive(),
-                auto.getlicence(),auto.getprice(),auto.getpicture(),auto.getplace());
+                auto.getlicence(),auto.getprice(),auto.getplace());
             var id = Convert.ToInt32(table.Rows[0][0]);
             return id;
         }
@@ -35,11 +35,11 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo5
             var table = PgConnection.Instance.ExecuteFunction(command,id);
             return aux;}
             catch (DatabaseException){
-              var AutoList =ConsultforId(id)
+              var AutoList =ConsultforId(id);
               if (AutoList==null){
                   return -1 ;
               }else{
-                  return aux;
+                  return id;
               }
             }
         }
@@ -57,9 +57,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo5
                 var status = Convert.ToBoolean(table.Rows[i][4]);
                 var price = Convert.ToInt32(table.Rows[i][5]);
                 var licence = table.Rows[i][6].ToString();
-                var picture =table.Rows[i][7].ToString();
-                var place =Convert.ToInt32(table.Rows[i][8]);
-                Auto auto=new Auto(make,model,capacity,status,licence,price,picture,place);
+                var place =Convert.ToInt32(table.Rows[i][7]);
+                Auto auto=new Auto(make,model,capacity,status,licence,price,place);
                 auto.setId(id);
                 AutoList.Add(auto);
             }
@@ -76,7 +75,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo5
                 var id = Convert.ToInt32(table.Rows[i][0]);
                 var city = table.Rows[i][1].ToString();
                 Location location=new Location (id,city,"null");
-                
                 CityList.Add(location);
             }
             return CityList;
@@ -95,9 +93,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo5
                 var status = Convert.ToBoolean(table.Rows[i][4]);
                 var price = Convert.ToInt32(table.Rows[i][5]);
                 var licence = table.Rows[i][6].ToString();
-                var picture =table.Rows[i][7].ToString();
-                var place =Convert.ToInt32(table.Rows[i][8]);
-                Auto auto=new Auto(make,model,capacity,status,licence,price,picture,place);
+                var place =Convert.ToInt32(table.Rows[i][7]);
+                Auto auto=new Auto(make,model,capacity,status,licence,price,place);
                 auto.setId(id);
                 AutoList.Add(auto);
             }
@@ -117,9 +114,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo5
                 var status = Convert.ToBoolean(table.Rows[i][4]);
                 var price = Convert.ToInt32(table.Rows[i][5]);
                 var licence = table.Rows[i][6].ToString();
-                var picture =table.Rows[i][7].ToString();
-                var place =Convert.ToInt32(table.Rows[i][8]);
-                Auto auto=new Auto(make,model,capacity,_status,licence,price,picture,place);
+                var place =Convert.ToInt32(table.Rows[i][7]);
+                Auto auto=new Auto(make,model,capacity,_status,licence,price,place);
                 auto.setId(id);
                 AutoList.Add(auto);
             }
@@ -139,9 +135,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo5
                 var status = Convert.ToBoolean(table.Rows[i][4]);
                 var price = Convert.ToInt32(table.Rows[i][5]);
                 var licence = table.Rows[i][6].ToString();
-                var picture =table.Rows[i][7].ToString();
-                var place =Convert.ToInt32(table.Rows[i][8]);
-                Auto auto=new Auto(make,model,capacity,status,licence,price,picture,place);
+                var place =Convert.ToInt32(table.Rows[i][7]);
+                Auto auto=new Auto(make,model,capacity,status,licence,price,place);
                 auto.setId(id);
                 AutoList.Add(auto);
             }
