@@ -23,6 +23,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
         const String SP_UPDATE = "m13_updateautomobilereservation(@_checkin,@_checkout,@_use_fk,@_ra_aut_fk,@_ra_id)";
         const String SP_DELETE = "m13_deleteautomobilereservation(@_id)";
         const String SP_ALL_BY_USER_ID = "m13_getresautomobilebyuserid(@_id)";
+        const String SP_ADD_PAYMENT = "m13_modifyReservationRoomPayment(@_pay,@_id)";
         private Auto _automobile;
         private ReservationAutomobile _reservation;
 
@@ -240,6 +241,28 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             }
             finally
             {
+            }
+        }
+
+        public int AddPayment(ReservationAutomobile reservation, int fk_payment)
+        {
+            try
+            {
+                var table = PgConnection.Instance.
+                   ExecuteFunction(SP_ADD_PAYMENT,
+                       fk_payment,
+                       (int)reservation.Id);
+
+                if (table.Rows.Count > 0)
+                {
+                    return Convert.ToInt32(table.Rows[0][0]);
+                }
+                return 0;
+            }
+            catch (DatabaseException e)
+            {
+                Console.WriteLine(e.ToString());
+                throw new Exception();
             }
         }
     }
