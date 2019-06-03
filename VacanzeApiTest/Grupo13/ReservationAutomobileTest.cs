@@ -86,7 +86,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         }
     */
         
-
+            /*
         [Test, Order(5)]
         public void DeleteReservationAutomobileTest()
         {
@@ -95,7 +95,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             Assert.IsNull(reservation2);
         }
 
-
+    */
 
 
 
