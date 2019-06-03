@@ -8,13 +8,17 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
     [TestFixture]
     public class LayoverEntitytests
     {
-        private Layover layover
-            ;
-
+        private Layover layover;
         [Test]
-        public void NullCruiserIdTest()
+        public void EmptyDepartureDateTest()
         {
-            var layover = new Layover(0,"2019-01-01","2019-01-02",2000,1,2);
+            var layover = new Layover(1,"", "2019-01-02",2000,0,2);
+            Assert.Throws<InvalidAttributeException>(() => layover.Validate());
+        }
+        [Test]
+        public void EmptyArrivalDateTest()
+        {
+            var layover = new Layover(1,"2019-01-01", "",2000,0,2);
             Assert.Throws<InvalidAttributeException>(() => layover.Validate());
         }
         [Test]

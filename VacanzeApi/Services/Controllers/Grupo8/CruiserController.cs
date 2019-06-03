@@ -61,7 +61,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (CruiserNotFoundException e)
             {
-                return BadRequest(new ErrorMessage(e.Message));
+                return NotFound(new ErrorMessage(e.Message));
             }
             catch (DatabaseException e)
             {
@@ -129,7 +129,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (CruiserNotFoundException e)
             {
-                return BadRequest(new ErrorMessage(e.Message));
+                return NotFound(new ErrorMessage(e.Message));
             }
             catch (NullCruiserException e)
             {
@@ -162,7 +162,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (CruiserNotFoundException e)
             {
-                return BadRequest(new ErrorMessage(e.Message));
+                return NotFound(new ErrorMessage(e.Message));
             }
             catch (DatabaseException e)
             {
@@ -221,7 +221,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (CruiserNotFoundException e)
             {
-                return BadRequest(new ErrorMessage(e.Message));
+                return NotFound(new ErrorMessage(e.Message));
             }
             catch (DatabaseException e)
             {
@@ -250,7 +250,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (LayoverNotFoundException e)
             {
-                return BadRequest(new ErrorMessage(e.Message));
+                return NotFound(new ErrorMessage(e.Message));
             }
             catch (DatabaseException e)
             {
@@ -280,7 +280,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             }
             catch (LayoverNotFoundException e)
             {
-                return BadRequest(new ErrorMessage(e.Message));
+                return NotFound(new ErrorMessage(e.Message));
             }
             catch (DatabaseException e)
             {
