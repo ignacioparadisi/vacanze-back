@@ -33,4 +33,20 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo12{
             _name_city_i=name_city_i;
             _name_city_V=name_city_V;
         }
+
+          public ListRes(int id,int price,int priceupdate,string dateI,string dateV,
+        string name_country_i ,string name_country_V,int seatavailable,string name_city_i,
+        string name_city_V ):base(id){
+
+            _id=id;
+            _price=price;
+            _priceupdate=priceupdate;
+            _dateI=dateI;
+            _dateV=dateV;
+            _name_country_i=name_country_i;
+            _name_country_V=name_country_V;
+            _seatavailable=seatavailable;
+            _name_city_i=name_city_i;
+            _name_city_V=name_city_V;
+        }
     }}
