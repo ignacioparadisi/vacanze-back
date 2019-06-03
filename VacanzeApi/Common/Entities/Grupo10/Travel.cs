@@ -6,10 +6,8 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10
 {
     public class Travel : Entity{
 
-        private List<Entity> _carReservations;
-        private List<Entity> _hotelReservations; 
-        private List<Entity> _restaurantReservations;
-        private List<Entity> _flightReservations;
+        private List<Location> locations = new List<Location>();
+        
 
         private User _user;
         public User User{ get{ return _user; } set{ _user = value; } }
@@ -55,20 +53,9 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10
 
         public Travel() :base(0){}
 
-        public void AddCar(Entity car){
-            _carReservations.Add(car);
+        public void AddLocation(Location location){
+            this.locations.Add(location);
         }
 
-        public void AddHotel(Entity hotel){
-            _hotelReservations.Add(hotel);
-        }
-
-        public void AddRestaurant(Entity restaurant){
-            _hotelReservations.Add(restaurant);
-        }
-        
-        public void AddFlight(Entity flight){
-            _hotelReservations.Add(flight);
-        }
     }
 }

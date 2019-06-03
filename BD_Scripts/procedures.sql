@@ -214,7 +214,7 @@ AS $BODY$
 BEGIN
 	RETURN QUERY SELECT
 	fli_id, fli_pla_fk, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, fli_loc_arrival
-	FROM public.Flight WHERE fli_departuredate BETWEEN _begin::timestamp without time zone AND _end::timestamp without time zone + '1 days'::interval;
+	FROM public.Flight WHERE fli_departuredate BETWEEN TO_TIMESTAMP(_begin,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone AND TO_TIMESTAMP(_end,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone + '1 days'::interval;
 END;
 
 $BODY$;
@@ -271,7 +271,7 @@ AS $BODY$
 BEGIN
 	RETURN QUERY SELECT
   fli_id, fli_pla_fk, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, fli_loc_arrival
-	FROM public.Flight WHERE fli_departuredate::date = _departuredate::timestamp without time zone and fli_arrivaldate::date = _arrivaldate::timestamp without time zone 
+	FROM public.Flight WHERE fli_departuredate::date = TO_TIMESTAMP(_departuredate,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone and fli_arrivaldate::date = TO_TIMESTAMP(_arrivaldate,'MM-DD-YYYY HH24:MI:SS')::timestamp without time zone
   and fli_loc_departure = _departure and fli_loc_arrival = _arrival;
 END;
 
@@ -1725,17 +1725,19 @@ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION GetLocationsByTravel(travelId BIGINT)
 RETURNS TABLE (
 	locationId INTEGER, 
-	locationCity VARCHAR
+	locationCity VARCHAR,
+  locationCountry VARCHAR
 ) AS $$
 BEGIN
 RETURN QUERY
-	SELECT TL.tl_loc_fk, L.loc_city
+	SELECT TL.tl_loc_fk, L.loc_city, L.loc_country
 	FROM TRA_LOC TL
 	INNER JOIN public.LOCATION L ON TL.tl_loc_fk = L.loc_id
 	WHERE TL.tl_tra_fk = travelId; 
 END; $$
 LANGUAGE plpgsql;  
 
+--DROP FUNCTION AddTravel(VARCHAR, VARCHAR, VARCHAR, VARCHAR, BIGINT);
 CREATE OR REPLACE FUNCTION AddTravel(
 	travelName VARCHAR,  
 	travelInit VARCHAR,
@@ -1754,6 +1756,49 @@ END;
 $$
 LANGUAGE 'plpgsql';
 
+-- DROP FUNCTION AddLocationToTravel(BIGINT, INTEGER);
+CREATE OR REPLACE FUNCTION AddLocationToTravel(
+	travelId BIGINT, 
+	locationId INTEGER	
+)
+RETURNS BOOLEAN AS $$
+BEGIN	
+	INSERT INTO tra_loc (tl_tra_fk, tl_loc_fk)
+	VALUES (travelId, locationId);
+	IF FOUND THEN
+		RETURN TRUE;
+	ELSE
+		RETURN FALSE;
+	END IF;
+END; $$
+LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION GetReservationsOfHotelByTravelAndLocation(
+	travelId BIGINT, 
+	locationId INT
+) RETURNS TABLE (
+	reservationId INTEGER,
+	checkin TIMESTAMP,
+	checkout TIMESTAMP,
+	timest TIMESTAMP,
+	userId INTEGER,
+	hotelId INTEGER
+)AS $$
+BEGIN
+	RETURN QUERY
+	SELECT rh.rr_id, rh.rr_checkindate, rh.rr_checkoutdate, rh.rr_timestamp, rh.rr_use_fk, rh.rr_hot_fk 
+	FROM TRA_RES tr
+		  INNER JOIN 
+		  TRA_LOC tl
+			    ON tr.tr_travel_fk = tl.tl_tra_fk
+		    INNER JOIN
+		    RES_ROO rh
+			    ON tr.tr_res_roo_fk = rh.rr_id
+			    INNER JOIN HOTEL h
+			        ON rh.rr_hot_fk = h.hot_id
+		  WHERE tr.tr_travel_fk = travelId AND tl.tl_loc_fk = locationId AND h.hot_loc_fk = locationId;
+END; $$
+LANGUAGE plpgsql;
 
 ------------------------------------fin de grupo 10---------------------------------
 
