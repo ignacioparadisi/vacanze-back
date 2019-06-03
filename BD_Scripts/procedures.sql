@@ -1752,5 +1752,5 @@ CREATE OR REPLACE FUNCTION RecoveryPass(Email varchar(20)) RETURNS table (use_na
 		RETURN QUERY
           select USERS.use_name,USERS.use_last_name,USERS.use_password from USERS WHERE USERS.use_email=$1 ;
         END
-$BODY$ LANGUAGE plpgsql;
+$BODY$ LANGUAGE plpgsql;sos
 ---------------------------------finGrupo1---------------------------------------------------------------------------

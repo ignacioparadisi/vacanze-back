@@ -39,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="VacanzeApiTest\Grupo1\" />
     <Folder Include="VacanzeApi\Common\Exceptions\Grupo13\" />
 
   </ItemGroup>
