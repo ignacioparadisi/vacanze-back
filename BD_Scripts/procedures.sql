@@ -1706,7 +1706,7 @@ $$ LANGUAGE plpgsql;
 ------------------------------------ grupo 10 ---------------------------------
 
 -- DROP FUNCTION GetTravels(BIGINT);
-CREATE OR REPLACE FUNCTION GetTravels(userId BIGINT) 
+CREATE OR REPLACE FUNCTION GetTravels(userId INTEGER) 
 RETURNS TABLE (
 	travel_id INTEGER,
 	travel_name VARCHAR,
@@ -1722,7 +1722,7 @@ END; $$
 LANGUAGE plpgsql;
 
 -- DROP FUNCTION GetLocationsByTravel(BIGINT);
-CREATE OR REPLACE FUNCTION GetLocationsByTravel(travelId BIGINT)
+CREATE OR REPLACE FUNCTION GetLocationsByTravel(travelId INTEGER)
 RETURNS TABLE (
 	locationId INTEGER, 
 	locationCity VARCHAR,
@@ -1743,11 +1743,11 @@ CREATE OR REPLACE FUNCTION AddTravel(
 	travelInit VARCHAR,
 	travelEnd VARCHAR,
   travelDescription VARCHAR,
-	userId BIGINT)
+	userId INTEGER)
 RETURNS BIGINT AS
 $$
 DECLARE
-	travelId BIGINT;
+	travelId INTEGER;
 BEGIN
 	INSERT INTO Travel(tra_name, tra_ini, tra_end, tra_descr, tra_use_fk)
 	VALUES(travelName, to_date(travelInit,'YYYY-MM-DD'), to_date(travelEnd,'YYYY-MM-DD'), travelDescription, userId) RETURNING tra_id INTO travelId;
@@ -1758,7 +1758,7 @@ LANGUAGE 'plpgsql';
 
 -- DROP FUNCTION AddLocationToTravel(BIGINT, INTEGER);
 CREATE OR REPLACE FUNCTION AddLocationToTravel(
-	travelId BIGINT, 
+	travelId INTEGER, 
 	locationId INTEGER	
 )
 RETURNS BOOLEAN AS $$
@@ -1774,8 +1774,8 @@ END; $$
 LANGUAGE 'plpgsql';
 
 CREATE OR REPLACE FUNCTION GetReservationsOfHotelByTravelAndLocation(
-	travelId BIGINT, 
-	locationId INT
+	travelId INTEGER, 
+	locationId INTEGER
 ) RETURNS TABLE (
 	reservationId INTEGER,
 	checkin TIMESTAMP,
@@ -1799,6 +1799,30 @@ BEGIN
 		  WHERE tr.tr_travel_fk = travelId AND tl.tl_loc_fk = locationId AND h.hot_loc_fk = locationId;
 END; $$
 LANGUAGE plpgsql;
+
+-- DROP FUNCTION updatetravel(integer,character varying,character varying,character varying,character varying);
+CREATE OR REPLACE FUNCTION UpdateTravel(
+	travelId INTEGER,
+	travelName VARCHAR,
+	travelDescription VARCHAR,
+	travelInit VARCHAR,
+	travelEnd VARCHAR
+)
+RETURNS BOOLEAN AS
+$$
+BEGIN
+	UPDATE travel
+	SET tra_name = travelName, tra_descr = travelDescription,
+	tra_ini = to_date(travelInit,'YYYY-MM-DD'), tra_end = to_date(travelEnd,'YYYY-MM-DD')
+	WHERE tra_id = travelId;
+	IF FOUND THEN
+		RETURN TRUE;
+	ELSE
+		RETURN FALSE;
+	END IF;
+END;
+$$
+LANGUAGE 'plpgsql';
 
 ------------------------------------fin de grupo 10---------------------------------
 
