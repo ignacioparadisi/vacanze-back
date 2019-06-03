@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 
@@ -20,6 +21,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
         /// <summary>
         /// Inicializa una nueva instancia de la clase ReservationAutomobile.
         /// </summary>
+        [JsonConstructor]
         public ReservationAutomobile(long id, DateTime CheckIn, DateTime CheckOut) : base(id)
         {
             this.CheckIn = CheckIn;
