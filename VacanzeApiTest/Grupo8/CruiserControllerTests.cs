@@ -64,7 +64,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
         public void GetCruiser_CruiserNotFound_ReturnBadRequest()
         {
             var getCruiser = _cruiserController.GetCruiser(-1);
-            Assert.IsInstanceOf<BadRequestObjectResult>(getCruiser.Result);
+            Assert.IsInstanceOf<NotFoundObjectResult>(getCruiser.Result);
         }
         [Test]
         public void PutCruiser_CruiserWithInvalidAttributes_BadRequestReturned_Test()
@@ -83,17 +83,17 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
             Assert.IsInstanceOf<OkObjectResult>(updatedCruiser.Result);
         }
         [Test]
-        public void PutCruiser_CruiserNotFound_BadRequestReturned_Test()
+        public void PutCruiser_CruiserNotFound_ReturnsNotFound_Test()
         {
             _cruiser.Id = -1;
             var updatedcruiser = _cruiserController.PutCruiser(_cruiser);
-            Assert.IsInstanceOf<BadRequestObjectResult>(updatedcruiser.Result);
+            Assert.IsInstanceOf<NotFoundObjectResult>(updatedcruiser.Result);
         }
         [Test]
-        public void DeleteCruiser_CruiserNotFound_BadRequestReturned_Test()
+        public void DeleteCruiser_CruiserNotFound_BadNotFound_Test()
         {
             var deletedCruiser = _cruiserController.DeleteCruiser(-1);
-            Assert.IsInstanceOf<BadRequestObjectResult>(deletedCruiser.Result);
+            Assert.IsInstanceOf<NotFoundObjectResult>(deletedCruiser.Result);
         }
         [Test]
         public void DeleteCruiser_returnOkResult()
@@ -122,11 +122,11 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
             Assert.IsInstanceOf<OkObjectResult>(addedlayover.Result);
         }
         [Test]
-        public void PostLayover_CruiserNotFound_ReturnsBadrequest_Test()
+        public void PostLayover_CruiserNotFound_ReturnsNotFound_Test()
         {
             var layover = new Layover(-1,"2019-01-01", "2019-01-02",2000,1,2);
             var addedlayover = _cruiserController.PostLayover(layover);
-            Assert.IsInstanceOf<BadRequestObjectResult>(addedlayover.Result);
+            Assert.IsInstanceOf<NotFoundObjectResult>(addedlayover.Result);
         }
         [Test]
         public void PostLayover_InvalidAttribute_ReturnsBadRequest_Test()
@@ -146,10 +146,10 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
             Assert.IsInstanceOf<OkObjectResult>(deletedlayover.Result);
         }
         [Test]
-        public void PostLayover_LayoverNotFound_ReturnsBadRequest_Test()
+        public void DeleteLayover_LayoverNotFound_ReturnsNotFound_Test()
         {
             var deletedlayover = _cruiserController.DeleteLayover(-1);
-            Assert.IsInstanceOf<BadRequestObjectResult>(deletedlayover.Result);
+            Assert.IsInstanceOf<NotFoundObjectResult>(deletedlayover.Result);
         }
         [Test]
         public void GetLayoversByLoc_ReturnsOkResult_Test()
@@ -162,10 +162,10 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
         }
         [Test]
-        public void GetLayoversByLoc_LayoverNotFound_ReturnsBadRequest_Test()
+        public void GetLayoversByLoc_LayoverNotFound_ReturnsNotFound_Test()
         {
             var result = _cruiserController.GetLayoverByLoc(-1,-1);
-            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
+            Assert.IsInstanceOf<NotFoundObjectResult>(result.Result);
         }
     }
 }
