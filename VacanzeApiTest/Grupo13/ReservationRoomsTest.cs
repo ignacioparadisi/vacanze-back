@@ -94,7 +94,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         [Test, Order(6)]
         public void AvailableRoomsTest()
         {
-            id = _connection.GetAvailableRoomReservations(1);
+            id = ReservationRoomRepository.GetAvailableRoomReservations(1);
             Assert.IsNotNull(id);
         }
 
