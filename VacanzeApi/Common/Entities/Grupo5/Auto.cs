@@ -10,8 +10,9 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo5
         public string _licence;
         public float _price;
         public int _place;
+        public string _picture;
         
-        public Auto (string make,string model,int capacity,bool isactive,string licence,float price,int place)
+        public Auto (string make , string model , int capacity, bool isactive ,string licence , float price , string picture, int place)
         {
             this._id= 0;
             this._make =make;
@@ -20,6 +21,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo5
             this._isActive=isactive ;
             this._licence = licence;
             this._price=price;
+            this._picture=picture;
             this._place=place;
         }
         public int getId()
@@ -73,5 +75,16 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo5
         public void setplace(int place){
             this._place=place;
         }
+        public string getpicture(){
+            return _picture;
+        }
+        public void  setpicture(string picture){
+            this._picture = picture;
+        }
+
+
     }
+
+
+
 }
