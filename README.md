@@ -7,6 +7,5 @@
 ### Ejecución del proyecto
 `dotnet build` Sirve para construir el proyecto<br/>
 `dotnet run` Construye el proyecto y lo ejecuta
+`dotnet test` Corre todas las pruebas unitarias en el proyecto
 
-## Recomendaciones
-- Mejores pácticas para hacer commit -> https://codigofacilito.com/articulos/buenas-practicas-en-commits-de-git
