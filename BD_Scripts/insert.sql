@@ -534,3 +534,8 @@ VALUES	(1, 1, null, null, null, null, 'HOTEL'), -- La Guaira
 
 Insert Into Cruise(cru_id,cru_shi_fk,cru_departuredate,cru_arrivaldate,cru_price,cru_loc_arrival,cru_loc_departure) values (default,2,'2019/2/11','2019/2/12',2000,1,2);
 
+INSERT INTO PAYMENT (PAY_METHOD, PAY_TOTAL, PAY_TIMESTAMP)
+VALUES ('EFECTIVO', 12837.32, '2019-08-12 21:00');
+
+INSERT INTO PAYMENT (PAY_METHOD, PAY_TOTAL, PAY_TIMESTAMP)
+VALUES ('TRANSFERENCIA', 21337.32, '2019-09-12 21:00');

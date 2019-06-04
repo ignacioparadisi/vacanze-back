@@ -1917,7 +1917,7 @@ $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION public.getsum(integer)
-  OWNER TO postgres;
+  OWNER TO vacanza;
 
 --Devolver id ciudad
 CREATE OR REPLACE FUNCTION GetIDLocation(name_city VARCHAR) 
