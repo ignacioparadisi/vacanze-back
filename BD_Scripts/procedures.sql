@@ -1845,7 +1845,155 @@ LANGUAGE plpgsql;
 
 
 ------------------------------------fin de grupo 10---------------------------------
+------------------------------------Grupo12-----------------------------------------
+------------------------------------------------------------------------------------
+--Agregar Reserva de Vuelo
+CREATE OR REPLACE FUNCTION AddReservationFlight(seatNum VARCHAR,tim VARCHAR,numPas INTEGER,
+id_user INTEGER,id_fli INTEGER)
+  RETURNS INTEGER AS $$
+  DECLARE 
+    ref_res_id INTEGER;
+  
+  BEGIN
+    INSERT INTO res_fli(rf_seatnum,rf_timestamp,rf_num_ps,rf_use_fk,rf_fli_fk)
+      VALUES(seatNum,TO_TIMESTAMP(tim, 'yyyy-mm-dd hh24:mi'),numPas,id_user,id_fli)RETURNING rf_id INTO ref_res_id;
+    
+    RETURN ref_res_id;
+  END;
+  $$ LANGUAGE plpgsql;
 
+--Cancelar Reservar de Vuelo
+CREATE OR  REPLACE FUNCTION deleteReservationFlight(id_reservation INTEGER) RETURNS INTEGER AS $$
+  DECLARE res_id_fli INTEGER;
+  BEGIN
+    DELETE FROM RES_FLI WHERE rf_id = id_reservation RETURNING rf_id INTO res_id_fli;
+
+    RETURN res_id_fli;
+  END;
+  $$ LANGUAGE plpgsql;
+
+  --retornar Reserva de vuelo de un Pasajero
+CREATE OR REPLACE FUNCTION getReservationFlight(usuario INTEGER) 
+RETURNS TABLE (id INTEGER,price numeric,fecha_res_fli timestamp,seatnum character varying(100),country_s varchar,city_s varchar,id_arrival integer,numpas integer) AS $$
+  BEGIN
+    RETURN QUERY select r.rf_id as id,f.fli_price ,f.fli_departuredate as salida, r.rf_seatnum as asiento, l.loc_country as pais_salida, l.loc_city as ciudad_salida,f.fli_loc_arrival,r.rf_num_ps
+    FROM res_fli r, flight f, plane p, location l, users u
+   where f.fli_id = r.rf_fli_fk and r.rf_use_fk = usuario and u.use_id = r.rf_use_fk and p.pla_id = f.fli_pla_fk and l.loc_id = f.fli_loc_departure;  
+  END;
+  $$ LANGUAGE plpgsql;
+
+  
+
+
+
+
+
+
+
+---Devuelve la capacidad de un vuelo
+  CREATE OR REPLACE FUNCTION getCapacity(idflight INTEGER)RETURNS integer AS $$  
+DECLARE capacity Integer;
+BEGIN
+ SELECT p.pla_capacity FROM flight as f ,plane as p WHERE f.fli_id=idflight into capacity ;
+ return capacity;
+END;
+$$ 
+LANGUAGE plpgsql;
+---Devuelve la cantidad de asientos reservados
+CREATE OR REPLACE FUNCTION public.getsum(idflight integer)
+  RETURNS integer AS
+$BODY$  
+DECLARE sum Integer;
+BEGIN
+ SELECT SUM(rf_num_ps) FROM res_fli as f WHERE f.rf_fli_fk=idflight into sum ;
+
+	IF(sum>0) then
+	  return sum;
+	END IF; 	
+	
+ return 0;
+END;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION public.getsum(integer)
+  OWNER TO postgres;
+
+--Devolver id ciudad
+CREATE OR REPLACE FUNCTION GetIDLocation(name_city VARCHAR) 
+RETURNS TABLE (id INTEGER) AS $$
+  BEGIN
+     RETURN QUERY SELECT loc.loc_id
+     FROM location as loc 
+     where loc.loc_city=name_city; 
+  END;   
+  $$ LANGUAGE plpgsql;
+
+ --Devuelve Lista validada de una reserva de vuelo (IDA)
+ CREATE OR REPLACE FUNCTION GetFlightsIDA(_departure integer,_arrival integer,_departuredate char varying)
+    RETURNS TABLE(id integer, price numeric, departuredate timestamp without time zone, arrivaldate timestamp without time zone, locdeparture integer, locarrival integer) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+	RETURN QUERY SELECT
+  fli_id,fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, fli_loc_arrival
+	FROM public.Flight WHERE fli_departuredate::date = _departuredate::timestamp without time zone  and fli_loc_departure = _departure and fli_loc_arrival = _arrival;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.GetFlightsIDA(integer, integer, char varying)
+    OWNER TO vacanza;  
+
+-----Devuelve los datos de la tabla location
+CREATE OR REPLACE FUNCTION GetNameLocation(_id_city integer)
+    RETURNS TABLE(id integer, namecity varchar,namecountry varchar) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+	RETURN QUERY SELECT
+		loc_id,loc_city,loc_country
+	FROM location WHERE location.loc_id=_id_city;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.GetNameLocation(integer)
+    OWNER TO vacanza; 
+
+--Devuelve Lista validada de una reserva de vuelo (IDA y Vuelta)
+CREATE OR REPLACE FUNCTION public.GetFlightsIDAVU(_departure integer,_arrival integer,_departuredate char varying,_arrivaldate char varying)
+    RETURNS TABLE(id integer, plane integer, price numeric, departuredate timestamp without time zone, arrivaldate timestamp without time zone, locdeparture integer, locarrival integer) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+BEGIN
+	RETURN QUERY SELECT
+  fli_id, fli_pla_fk, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, fli_loc_arrival
+	FROM public.Flight WHERE fli_departuredate::date = _departuredate::timestamp without time zone and fli_arrivaldate::date = _arrivaldate::timestamp without time zone 
+  and fli_loc_departure = _departure and fli_loc_arrival = _arrival;
+END;
+
+$BODY$;
+
+ALTER FUNCTION public.GetFlightsIDAVU(integer, integer, char varying, char varying)
+    OWNER TO vacanza; 
+
+------------------------------------Fin Grupo12--------------------------------------------------
 ----------------------------------- grupo 14 ---------------------------------
 
 --SP para insertar una reserva de hotel
@@ -1909,6 +2057,7 @@ CREATE OR REPLACE FUNCTION modifyReservationPayment(pay INTEGER,reservation INTE
   END;
   $$ LANGUAGE plpgsql;
 
+-----------------------------------fin grupo 14-----------------------------------------------------------
 --SP para traerme la cantidad de personas que ya han reservado en el restaurant seleccionado
 CREATE OR REPLACE FUNCTION getAvailability(_res_id INTEGER, _res_date VARCHAR) RETURNS INTEGER AS $$
   DECLARE 

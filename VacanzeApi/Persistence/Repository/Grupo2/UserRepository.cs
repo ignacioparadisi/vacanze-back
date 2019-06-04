@@ -113,15 +113,6 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
                    userid, roleid);
           }
 
-
-          // - MARK: DELETE
-          // TODO: Ver si eliminar este método o no
-          public static void DeleteUserByEmail(string email)
-          {
-               var table = PgConnection.Instance.ExecuteFunction("DeleteUserByEmail(@email_id)",
-                   email);
-          }
-
           /// <summary>
           /// Elimina un usario de la base de datos por su id
           /// </summary>
