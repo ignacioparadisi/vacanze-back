@@ -198,14 +198,14 @@ VALUES (6, '23613704', 'larry.page@vacanze.com', 'Page', 'Larry', MD5('google'))
 INSERT INTO USERS (use_id, use_document_id, use_email, use_last_name, use_name, use_password)
 VALUES (7, '23613704', 'reggaebob@vacanze.com', 'Marley', 'Bob', MD5('jah'));
 
-INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
-VALUES ('20766123', 'userp1@vacanze.com', 'prueba', '1', MD5('userp1123'));
+INSERT INTO Users(use_id, use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES (8, '20766123', 'userp1@vacanze.com', 'prueba', '1', MD5('userp1123'));
 
-INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
-VALUES ('20766124', 'userp2@vacanze.com', 'prueba', '2', MD5('userp2123'));
+INSERT INTO Users(use_id, use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES (9, '20766124', 'userp2@vacanze.com', 'prueba', '2', MD5('userp2123'));
 
-INSERT INTO Users(use_document_id, use_email, use_last_name, use_name, use_password)
-VALUES ('20766125', 'hombrehealth@hotmail.com', 'prueba', '3', MD5('userp3123'));
+INSERT INTO Users(use_id, use_document_id, use_email, use_last_name, use_name, use_password)
+VALUES (10, '20766125', 'hombrehealth@hotmail.com', 'prueba', '3', MD5('userp3123'));
 
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (2, 1 );
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (3, 2);
@@ -222,20 +222,6 @@ INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (5, 9);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (3, 10);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (4, 10);
 INSERT INTO User_Role(usr_rol_id, usr_use_id) VALUES (5, 10);
-
-------- grupo 6 ----------
-
-INSERT INTO hotel (hot_id, hot_name, hot_room_qty, hot_room_capacity, hot_is_active,
-                   hot_address_specs, hot_room_price, hot_website, hot_phone, hot_picture,
-                   hot_stars, hot_loc_fk)
-VALUES (1, 'Prueba 1', 30, 4, true, 'Alguna direccion, algun lugar', 234.5, null, null, null, 4, 1),
-       (2, 'Prueba 2', 40, 2, true, 'Alguna direccion, algun lugar', 500.5, null, '+58 4253 2732',
-        null, 5, 10),
-       (3, 'Prueba 3', 40, 2, true, 'Alguna direccion, algun lugar', 500.5, null, '+58 4253 2732',
-        null, 5, 10);
-
-=======
-
 
 -------------------------------Grupo 3---------------------------------------------------
 INSERT INTO public.Plane(
@@ -497,15 +483,15 @@ values ('02/03/2019', '02/07/2019','02/03/2019', 1, 4);
 INSERT INTO public.Res_Aut(ra_pickupdate, ra_returndate,ra_timestamp,ra_use_fk, ra_aut_fk)
 values ('02/03/2019', '02/09/2019','02/03/2019', 1, 1);	
 INSERT INTO res_roo(rr_checkindate, rr_checkoutdate, rr_timestamp, rr_use_fk, rr_hot_fk)
-VALUES	('2019-06-12', '2019-06-13', '2019-06-11', 5, 4),
-	('2019-06-14', '2019-06-15', '2019-06-13', 5, 5),
-	('2019-06-17', '2019-06-18', '2019-06-16', 5, 12),
-	('2019-06-25', '2019-06-26', '2019-06-24', 5, 15),
-	('2019-07-2', '2019-07-8', '2019-07-1', 5, 17),
-	('2019-08-12', '2019-08-13', '2019-08-11', 5, 18),
-	('2019-09-19', '2019-09-21', '2019-09-18', 6, 22),
-	('2019-09-23', '2019-09-22', '2019-09-21', 6, 25),
-	('2019-09-5', '2019-09-7', '2019-09-3', 6, 27);
+VALUES ('2019-06-12', '2019-06-13', '2019-06-11', 5, 4),
+       ('2019-06-14', '2019-06-15', '2019-06-13', 5, 5),
+       ('2019-06-17', '2019-06-18', '2019-06-16', 5, 12),
+       ('2019-06-25', '2019-06-26', '2019-06-24', 5, 15),
+       ('2019-07-2', '2019-07-8', '2019-07-1', 5, 17),
+       ('2019-08-12', '2019-08-13', '2019-08-11', 5, 18),
+       ('2019-09-19', '2019-09-21', '2019-09-18', 6, 22),
+       ('2019-09-23', '2019-09-22', '2019-09-21', 6, 2),
+       ('2019-09-5', '2019-09-7', '2019-09-3', 6, 1);
 
 ------- grupo 14 ----------
 
