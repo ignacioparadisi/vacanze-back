@@ -149,7 +149,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
             
             if (!isClient)
             {
-                Password = Name.Trim().ToLower()[0] + Lastname.Trim().ToLower()[0] + DocumentId.ToString();
+                Password = Name.Trim().ToLower()[0].ToString() + Lastname.Trim().ToLower()[0].ToString() + DocumentId.ToString();
                 Password = Encryptor.Encrypt(Password);
             }
             else if (string.IsNullOrEmpty(Password) || string.IsNullOrWhiteSpace(Password))
