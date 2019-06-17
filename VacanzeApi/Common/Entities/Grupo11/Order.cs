@@ -8,7 +8,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo11
         // private Lugar _direccion;
 
         [JsonConstructor]
-        public Order(long id, string descrip, string image,
+        public Order(int id, string descrip, string image,
             string brand, double qty, double price, double priceTotal) : base(id)
         {
             Descrip = descrip;

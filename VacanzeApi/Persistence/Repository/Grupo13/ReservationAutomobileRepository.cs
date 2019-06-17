@@ -37,7 +37,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                     var table = PgConnection.Instance.ExecuteFunction(SP_SELECT);
                             for (int i = 0; i < table.Rows.Count; i++)
                             {
-                            var id = Convert.ToInt64(table.Rows[i][0]);
+                            var id = Convert.ToInt32(table.Rows[i][0]);
                             var pickup = Convert.ToDateTime(table.Rows[i][1]);
                             var returndate = Convert.ToDateTime(table.Rows[i][2]);
                             var user_id = Convert.ToInt64(table.Rows[i][3]);
@@ -194,7 +194,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                     user_id);
                 for (int i = 0; i < table.Rows.Count; i++)
                 {
-                    var id = Convert.ToInt64(table.Rows[i][0]);
+                    var id = Convert.ToInt32(table.Rows[i][0]);
                     var pickup = Convert.ToDateTime(table.Rows[i][1]);
                     var returndate = Convert.ToDateTime(table.Rows[i][2]);
                     //current timestamp

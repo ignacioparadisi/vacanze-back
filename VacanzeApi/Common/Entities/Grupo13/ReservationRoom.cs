@@ -21,12 +21,12 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
         /// <summary>
         /// Inicializa una nueva instancia de la clase ReservationRoom.
         /// </summary>
-        public ReservationRoom(long id) : base(id)
-        {
-        }
+//        public ReservationRoom(int id) : base(id)
+//        {
+//        }
         [JsonConstructor]
         
-        public ReservationRoom(long id, DateTime CheckIn, DateTime CheckOut, Hotel hotel, int user_id, User user) : base(id)
+        public ReservationRoom(int id, DateTime CheckIn, DateTime CheckOut, Hotel hotel, int user_id, User user) : base(id)
         {
             this.CheckIn = CheckIn;
             this.CheckOut = CheckOut;
@@ -38,7 +38,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
         /// <summary>
         /// Inicializa una nueva instancia de la clase ReservationRoom.
         /// </summary>
-        public ReservationRoom(long id, DateTime CheckIn, DateTime CheckOut) : base(id)
+        public ReservationRoom(int id, DateTime CheckIn, DateTime CheckOut) : base(id)
         {
             this.CheckIn = CheckIn;
             this.CheckOut = CheckOut;
@@ -49,7 +49,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
             this.Fk_pay = payment;
         }
 
-        public ReservationRoom(long id, DateTime CheckIn, DateTime CheckOut, Hotel hotel, int user_id) : base(id)
+        public ReservationRoom(int id, DateTime CheckIn, DateTime CheckOut, Hotel hotel, int user_id) : base(id)
         {
             this.CheckIn = CheckIn;
             this.CheckOut = CheckOut;

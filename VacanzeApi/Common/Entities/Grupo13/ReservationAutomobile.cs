@@ -22,13 +22,13 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
         /// Inicializa una nueva instancia de la clase ReservationAutomobile.
         /// </summary>
         [JsonConstructor]
-        public ReservationAutomobile(long id, DateTime CheckIn, DateTime CheckOut) : base(id)
+        public ReservationAutomobile(int id, DateTime CheckIn, DateTime CheckOut) : base(id)
         {
             this.CheckIn = CheckIn;
             this.CheckOut = CheckOut;
         }
 
-        public ReservationAutomobile(long id, DateTime CheckIn, DateTime CheckOut, Auto automobile, int usuario) : base(id)
+        public ReservationAutomobile(int id, DateTime CheckIn, DateTime CheckOut, Auto automobile, int usuario) : base(id)
         {
             this.CheckIn = CheckIn;
             this.CheckOut = CheckOut;

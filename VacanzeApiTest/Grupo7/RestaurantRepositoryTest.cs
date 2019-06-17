@@ -16,7 +16,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo7
 		Restaurant res;
         Restaurant secondRes;
         List<Restaurant> restaurantList;
-		long id;
+		int id;
 		[SetUp]
 		public void setup()
 		{
@@ -68,7 +68,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo7
         [Test, Order(3)]
 		public void GetRestaurantByIDTest()
 		{   
-			secondRes = RestaurantRepository.GetRestaurant(Convert.ToInt32(id));
+			secondRes = RestaurantRepository.GetRestaurant(id);
 			Assert.AreEqual( secondRes.Id, id);
 		}
 
@@ -89,7 +89,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo7
         [Test, Order(6)]
 		public void DeleteRestaurantTest()
 		{   
-            var deletedid = RestaurantRepository.DeleteRestaurant(Convert.ToInt32(id));
+            var deletedid = RestaurantRepository.DeleteRestaurant(id);
 			Assert.AreEqual( deletedid, id);
 		}
 

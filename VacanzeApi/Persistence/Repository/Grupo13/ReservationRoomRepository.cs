@@ -44,11 +44,11 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
 
                 for (int i = 0; i < table.Rows.Count; i++)
                 {
-                    var id = Convert.ToInt64(table.Rows[i][0]);
+                    var id = Convert.ToInt32(table.Rows[i][0]);
                     var pickup = Convert.ToDateTime(table.Rows[i][1]);
                     var returndate = Convert.ToDateTime(table.Rows[i][2]);
                     var timestamp = Convert.ToDateTime(table.Rows[i][3]);
-                    var use_id = (int)Convert.ToInt64(table.Rows[i][5]);
+                    var use_id = (int)Convert.ToInt32(table.Rows[i][5]);
                     // var payment = Convert.ToInt64(table.Rows[i][6]);
 
                     ReservationRoom roomRes = new ReservationRoom(id, pickup, returndate);
@@ -87,11 +87,11 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
 
                 for (int i = 0; i < table.Rows.Count; i++)
                 {
-                    var id2 = Convert.ToInt64(table.Rows[i][0]);
+                    var id2 = Convert.ToInt32(table.Rows[i][0]);
                     var pickup = Convert.ToDateTime(table.Rows[i][1]);
                     var returndate = Convert.ToDateTime(table.Rows[i][2]);
                     var timestamp = Convert.ToDateTime(table.Rows[i][3]);
-                    var userid = (int)Convert.ToInt64(table.Rows[i][5]);
+                    var userid = Convert.ToInt32(table.Rows[i][5]);
                     var hot_fk = Convert.ToInt64(table.Rows[i][5]);
 
                     // var payfk = Convert.ToInt64(table.Rows[i][6]);
@@ -219,7 +219,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                     user_id);
                 for (int i = 0; i < table.Rows.Count; i++)
                 {
-                    var id = Convert.ToInt64(table.Rows[i][0]);
+                    var id = Convert.ToInt32(table.Rows[i][0]);
                     var pickup = Convert.ToDateTime(table.Rows[i][1]);
                     var returndate = Convert.ToDateTime(table.Rows[i][2]);
                     //current timestamp

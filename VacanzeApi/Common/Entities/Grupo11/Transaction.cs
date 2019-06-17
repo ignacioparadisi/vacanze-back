@@ -9,16 +9,14 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo11
        /// Clase de trnasaccion. Se utiliza para simular la transaccion entre calcular la cuenta de las reservaciones y
        /// luego proceder a hacer el pago de las mismas.
        /// </summary>
-        public long id { get; set; }
-        public string descrip { get; set; }
+       public string descrip { get; set; }
         public string pm { get; set; }
         public double amount { get; set; }
         public DateTime dateR { get; set; }
      
 
-        public Transaction(long _id , string _descrip, string _pm, double _amount, DateTime _dateR ) : base(_id)
+        public Transaction(int _id , string _descrip, string _pm, double _amount, DateTime _dateR ) : base(_id)
         {
-            id = _id;
             descrip = _descrip;
             pm =_pm;
             amount = _amount;
@@ -28,12 +26,12 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo11
 
         public long getId()
         {
-            return id;
+            return Id;
         }
 
-        public void setId(long _id)
+        public void setId(int _id)
         {
-            id = _id;
+            Id = _id;
         }
 
 

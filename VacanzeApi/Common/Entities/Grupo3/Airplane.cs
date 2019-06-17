@@ -14,11 +14,11 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo3
             
         }
 
-        public Airplane(long id):base(id){
+        public Airplane(int id):base(id){
             
         }
         
-        public Airplane(long id, string model, double load_capacity, int seats, double autonomy, bool isActive):base(id){
+        public Airplane(int id, string model, double load_capacity, int seats, double autonomy, bool isActive):base(id){
             this.model = model;
             this.loadCapacity = load_capacity;
             this.autonomy = autonomy;

@@ -2,11 +2,11 @@ namespace vacanze_back.VacanzeApi.Common.Entities
 {
     public abstract class Entity
     {
-        protected Entity(long id)
+        protected Entity(int id)
         {
             Id = id;
         }
 
-        public long Id { get; set; }
+        public int Id { get; set; }
     }
 }

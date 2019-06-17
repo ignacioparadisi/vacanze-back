@@ -202,7 +202,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
                roles.Add(new Role(Role.CARRIER, "Cargador"));
                _user.Roles = roles;
                _user.EncryptOrCreatePassword();
-               var userPassword = _user.Name.Trim().ToLower()[0] + _user.Lastname.Trim().ToLower()[0] + _user.DocumentId.ToString();
+               var userPassword = _user.Name.Trim().ToLower()[0].ToString() + _user.Lastname.Trim().ToLower()[0].ToString() + _user.DocumentId.ToString();
                var encrpytedPassword = Encryptor.Encrypt(userPassword);
                Assert.AreEqual(encrpytedPassword, _user.Password);
           }

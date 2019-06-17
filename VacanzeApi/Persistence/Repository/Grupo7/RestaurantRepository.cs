@@ -88,7 +88,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
                 var restaurantList = new List<Restaurant>();
                 for (var i = 0; i < table.Rows.Count; i++)
                 {
-                    var id = Convert.ToInt64(table.Rows[i][0]);
+                    var id = Convert.ToInt32(table.Rows[i][0]);
                     var name = table.Rows[i][1].ToString();
                     var capacity = Convert.ToInt32(table.Rows[i][2]); 
                     var isActive = Convert.ToBoolean(table.Rows[i][3]);
@@ -124,7 +124,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
             try
             {
                 var table = PgConnection.Instance.ExecuteFunction("GetRestaurant(@restaurant_id)" , restaurant_id);
-                var id = Convert.ToInt64(table.Rows[0][0]);
+                var id = Convert.ToInt32(table.Rows[0][0]);
                 var name = table.Rows[0][1].ToString();
                 var capacity = Convert.ToInt32(table.Rows[0][2]); 
                 var isActive = Convert.ToBoolean(table.Rows[0][3]);
@@ -161,7 +161,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo7
                 var restaurantList = new List<Restaurant>();
                 for (var i = 0; i < table.Rows.Count; i++)
                 {
-                    var id = Convert.ToInt64(table.Rows[i][0]);
+                    var id = Convert.ToInt32(table.Rows[i][0]);
                     var name = table.Rows[i][1].ToString();
                     var capacity = Convert.ToInt32(table.Rows[i][2]); 
                     var isActive = Convert.ToBoolean(table.Rows[i][3]);

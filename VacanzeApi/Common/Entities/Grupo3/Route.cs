@@ -14,7 +14,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo3
 
         }
 
-        public Route(long id):base(id)
+        public Route(int id):base(id)
         {
         }
 

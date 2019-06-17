@@ -8,15 +8,12 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo11
     /// </summary>
     public class PayRes :Entity
     {
-       
-        public long id { get; set; }
         public string name { get; set; }
         public DateTime dateR { get; set; }
      
 
-        public PayRes(long _id , string _name, DateTime _dateR ) : base(_id)
+        public PayRes(int _id , string _name, DateTime _dateR ) : base(_id)
         {
-            id = _id;
             name = _name;
             dateR =_dateR;
         }
@@ -24,12 +21,12 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo11
 
         public long getId()
         {
-            return id;
+            return Id;
         }
 
-        public void setId(long _id)
+        public void setId(int _id)
         {
-            id = _id;
+            Id = _id;
         }
 
 

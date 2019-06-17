@@ -11,7 +11,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo7
         /// </summary> 
 
         [JsonConstructor]
-        public Restaurant(long id, string name, int capacity,bool isActive,decimal qualify, string specialty, 
+        public Restaurant(int id, string name, int capacity,bool isActive,decimal qualify, string specialty, 
                           decimal price, string businessName, string picture, 
                           string description, string phone, int location, string address) : base(id)
         {

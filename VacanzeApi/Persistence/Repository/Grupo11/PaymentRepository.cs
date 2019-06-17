@@ -30,7 +30,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo11
                 {
                     _oListOrder.Add(
                         new Order(
-                        Convert.ToInt64( _table.Rows[i][0]),
+                        Convert.ToInt32( _table.Rows[i][0]),
                         Convert.ToString(_table.Rows[i][1]),
                         Convert.ToString(_table.Rows[i][2]),
                         Convert.ToString(_table.Rows[i][3]),
@@ -178,7 +178,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo11
                 {
                     _oListOrder.Add(
                         new PayRes(
-                        Convert.ToInt64(_table.Rows[i][0]),
+                        Convert.ToInt32(_table.Rows[i][0]),
                         Convert.ToString(_table.Rows[i][1]),
                         Convert.ToDateTime(_table.Rows[i][2])) 
                         );
@@ -271,7 +271,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo11
                 {
                     _oList.Add(
                         new Transaction(
-                        Convert.ToInt64(_table.Rows[i][0]),
+                        Convert.ToInt32(_table.Rows[i][0]),
                         Convert.ToString(_table.Rows[i][1]),
                         Convert.ToString(_table.Rows[i][2]),
                         Convert.ToDouble(_table.Rows[i][3]),
