@@ -561,3 +561,5 @@ vacanze-back.sln
 
 #sln
 *.sln
+
+.DS_Store
