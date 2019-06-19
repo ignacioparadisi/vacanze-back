@@ -1252,6 +1252,136 @@ $$ LANGUAGE plpgsql;
 ------------------------------------FIN DEL GRUPO 9--------------------------------
 
 -----------------------------------Grupo 5 ------------------------------------------------
+CREATE OR REPLACE FUNCTION AddVehicle( 
+	modelId INTEGER,
+	locationId INTEGER,
+	license VARCHAR,
+	price DECIMAL,
+	status BOOLEAN
+)
+RETURNS INTEGER AS
+$$
+DECLARE
+	vehicleId INTEGER;
+BEGIN
+	INSERT INTO VEHICLE(veh_model, veh_location, veh_license, veh_price, veh_status)
+	VALUES(modelId, locationId, license, price, status) RETURNING veh_id INTO vehicleId;
+	RETURN vehicleId;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION AddBrand(  
+	brandName VARCHAR)
+RETURNS INTEGER AS
+$$
+DECLARE
+	brandId INTEGER;
+BEGIN
+	INSERT INTO VEH_BRAND(vb_name)
+	VALUES(brandName) RETURNING vb_id INTO brandId;
+	RETURN brandId;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION AddModel( 
+	brandId INTEGER,
+	modelName VARCHAR,
+	capacity INTEGER,
+	picture VARCHAR
+)
+RETURNS INTEGER AS
+$$
+DECLARE
+	modelId INTEGER;
+BEGIN
+	INSERT INTO VEH_MODEL(vm_brand, vm_name, vm_capacity, vm_picture)
+	VALUES(brandId, modelName, capacity, picture) RETURNING vm_id INTO modelId;
+	RETURN modelId;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION GetVehiclesByLocation(locationId INTEGER) 
+RETURNS TABLE (
+	vehicleId INTEGER,
+	modelId INTEGER,
+	location_id INTEGER,
+	license VARCHAR,
+	price DECIMAL,
+	status BOOLEAN
+) AS $$
+BEGIN
+	RETURN QUERY 
+	SELECT veh_id, veh_model, veh_location, veh_license, veh_price, veh_status 
+	FROM VEHICLE WHERE veh_location = locationId;
+END; $$ 
+LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION GetVehicles() 
+RETURNS TABLE (
+	vehicleId INTEGER,
+	modelId INTEGER,
+	locationId INTEGER,
+	license VARCHAR,
+	price DECIMAL,
+	status BOOLEAN
+) AS $$
+BEGIN
+	RETURN QUERY 
+	SELECT veh_id, veh_model, veh_location, veh_license, veh_price, veh_status 
+	FROM VEHICLE;
+END; $$ 
+LANGUAGE 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION GetBrands() 
+RETURNS TABLE (
+	brandId INTEGER,
+	brandName VARCHAR
+) AS $$
+BEGIN
+	RETURN QUERY 
+	SELECT vb_id, vb_name FROM VEH_BRAND;
+END; $$ 
+LANGUAGE 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION GetModelsByBrand(brandId INTEGER) 
+RETURNS TABLE (
+	modelId INTEGER,
+	brand INTEGER,
+	modelName VARCHAR,
+	capacity INTEGER,
+	picture VARCHAR
+) AS $$
+BEGIN
+	RETURN QUERY 
+	SELECT vm_id, vm_brand, vm_name, vm_capacity, vm_picture FROM VEH_MODEL WHERE vm_brand = brandId;
+END; $$ 
+LANGUAGE 'plpgsql';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 -------------AGREGAR AUTO-----------------
 
 CREATE OR REPLACE FUNCTION 
