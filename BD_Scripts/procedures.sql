@@ -1365,15 +1365,93 @@ END; $$
 LANGUAGE 'plpgsql';
 
 
+CREATE OR REPLACE FUNCTION UpdateModel(
+  vmid INTEGER, 
+  vmbrand INTEGER, 
+  vmname VARCHAR, 
+  vmcapacity INTEGER, 
+  vmpicture VARCHAR
+)
+RETURNS BOOLEAN AS
+$$
+BEGIN
+  UPDATE veh_model
+  SET vm_brand = vmbrand,
+  vm_name = vmname, vm_capacity = vmcapacity,vm_picture = vmpicture
+  WHERE vm_id = vmid;
+  IF FOUND THEN
+    RETURN TRUE;
+  ELSE
+    RETURN FALSE;
+  END IF;
+END;
+$$
+LANGUAGE 'plpgsql';
 
 
+CREATE OR REPLACE FUNCTION UpdateBrand(
+  vbid INTEGER,
+  vbname VARCHAR
+)
+RETURNS BOOLEAN AS
+$$
+BEGIN
+  UPDATE veh_brand
+  SET vb_name = vbname
+  WHERE vb_id = vbid;
+  IF FOUND THEN
+    RETURN TRUE;
+  ELSE
+    RETURN FALSE;
+  END IF;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION UpdateVehicle(
+  vehid INTEGER,
+  vehmodel INTEGER,
+  vehlocation INTEGER,
+  vehlicense VARCHAR,
+  vehprice DECIMAL,
+  vehstatus BOOLEAN
+)
+RETURNS BOOLEAN AS
+$$
+BEGIN
+  UPDATE vehicle
+  SET veh_model = vehmodel, veh_location = vehlocation, 
+  veh_license = vehlicense, veh_price = vehprice, 
+  veh_status = vehstatus
+  WHERE veh_id = vehid;
+  IF FOUND THEN
+    RETURN TRUE;
+  ELSE
+    RETURN FALSE;
+  END IF;
+END;
+$$
+LANGUAGE 'plpgsql';
 
 
-
-
-
-
-
+CREATE OR REPLACE FUNCTION UpdateVehicleStatus(
+  vehid INTEGER,
+  vehstatus BOOLEAN
+)
+RETURNS BOOLEAN AS
+$$
+BEGIN
+  UPDATE vehicle
+  SET veh_status = vehstatus
+  WHERE veh_id = vehid;
+  IF FOUND THEN
+    RETURN TRUE;
+  ELSE
+    RETURN FALSE;
+  END IF;
+END;
+$$
+LANGUAGE 'plpgsql';
 
 
 
