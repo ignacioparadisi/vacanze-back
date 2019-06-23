@@ -1365,21 +1365,144 @@ END; $$
 LANGUAGE 'plpgsql';
 
 
+CREATE OR REPLACE FUNCTION GetModels() 
+RETURNS TABLE (
+  modelId INTEGER,
+  brand INTEGER,
+  modelName VARCHAR,
+  capacity INTEGER,
+  picture VARCHAR
+) AS $$
+BEGIN
+  RETURN QUERY 
+  SELECT vm_id, vm_brand, vm_name, vm_capacity, vm_picture FROM VEH_MODEL;
+END; $$ 
+LANGUAGE 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION UpdateModel(
+  vmid INTEGER, 
+  vmbrand INTEGER, 
+  vmname VARCHAR, 
+  vmcapacity INTEGER, 
+  vmpicture VARCHAR
+)
+RETURNS BOOLEAN AS
+$$
+BEGIN
+  UPDATE veh_model
+  SET vm_brand = vmbrand,
+  vm_name = vmname, vm_capacity = vmcapacity,vm_picture = vmpicture
+  WHERE vm_id = vmid;
+  IF FOUND THEN
+    RETURN TRUE;
+  ELSE
+    RETURN FALSE;
+  END IF;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION UpdateBrand(
+  vbid INTEGER,
+  vbname VARCHAR
+)
+RETURNS BOOLEAN AS
+$$
+BEGIN
+  UPDATE veh_brand
+  SET vb_name = vbname
+  WHERE vb_id = vbid;
+  IF FOUND THEN
+    RETURN TRUE;
+  ELSE
+    RETURN FALSE;
+  END IF;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION UpdateVehicle(
+  vehid INTEGER,
+  vehmodel INTEGER,
+  vehlocation INTEGER,
+  vehlicense VARCHAR,
+  vehprice DECIMAL,
+  vehstatus BOOLEAN
+)
+RETURNS BOOLEAN AS
+$$
+BEGIN
+  UPDATE vehicle
+  SET veh_model = vehmodel, veh_location = vehlocation, 
+  veh_license = vehlicense, veh_price = vehprice, 
+  veh_status = vehstatus
+  WHERE veh_id = vehid;
+  IF FOUND THEN
+    RETURN TRUE;
+  ELSE
+    RETURN FALSE;
+  END IF;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION UpdateVehicleStatus(
+  vehid INTEGER,
+  vehstatus BOOLEAN
+)
+RETURNS BOOLEAN AS
+$$
+BEGIN
+  UPDATE vehicle
+  SET veh_status = vehstatus
+  WHERE veh_id = vehid;
+  IF FOUND THEN
+    RETURN TRUE;
+  ELSE
+    RETURN FALSE;
+  END IF;
+END;
+$$
+LANGUAGE 'plpgsql';
 
 
 
+CREATE OR REPLACE FUNCTION GetVehicleByBrand(brandId INTEGER) 
+RETURNS TABLE (
+  vehid INTEGER,
+  vehmodel INTEGER,
+  vehlocation INTEGER,
+  vehlicense VARCHAR,
+  vehprice DECIMAL,
+  vehstatus BOOLEAN
+) AS $$
+BEGIN
+  RETURN QUERY 
+  SELECT veh_id, veh_model, veh_location, veh_license, veh_price, veh_status FROM vehicle, 
+  veh_model AS Model, veh_brand AS Brand WHERE veh_model = Model.vm_id 
+  AND Model.vm_brand = Brand.vb_id AND  Brand.vb_id = brandId;
+END; $$ 
+LANGUAGE 'plpgsql';
 
 
-
-
-
-
-
-
-
-
-
-
+CREATE OR REPLACE FUNCTION GetVehicleByModel(ModelId INTEGER) 
+RETURNS TABLE (
+  vehid INTEGER,
+  vehmodel INTEGER,
+  vehlocation INTEGER,
+  vehlicense VARCHAR,
+  vehprice DECIMAL,
+  vehstatus BOOLEAN
+) AS $$
+BEGIN
+  RETURN QUERY 
+  SELECT veh_id, veh_model, veh_location, veh_license, veh_price, veh_status FROM vehicle, 
+  veh_model AS Model WHERE veh_model = Model.vm_id AND Model.vm_id = ModelId;
+END; $$ 
+LANGUAGE 'plpgsql';
 
 
 -------------AGREGAR AUTO-----------------
