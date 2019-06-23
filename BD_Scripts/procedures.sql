@@ -1365,6 +1365,21 @@ END; $$
 LANGUAGE 'plpgsql';
 
 
+CREATE OR REPLACE FUNCTION GetModels() 
+RETURNS TABLE (
+  modelId INTEGER,
+  brand INTEGER,
+  modelName VARCHAR,
+  capacity INTEGER,
+  picture VARCHAR
+) AS $$
+BEGIN
+  RETURN QUERY 
+  SELECT vm_id, vm_brand, vm_name, vm_capacity, vm_picture FROM VEH_MODEL;
+END; $$ 
+LANGUAGE 'plpgsql';
+
+
 CREATE OR REPLACE FUNCTION UpdateModel(
   vmid INTEGER, 
   vmbrand INTEGER, 
