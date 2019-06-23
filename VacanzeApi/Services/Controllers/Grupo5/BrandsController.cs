@@ -7,6 +7,9 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo5;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo5;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo5;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5 {
@@ -19,9 +22,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5 {
 
         [Consumes ("application/json")]
         [HttpPost]
-        public IActionResult AddBrand ([FromBody] Brand brand) {
+        public IActionResult AddBrand ([FromBody] BrandDTO brandDTO) {
             try {
-                AddBrandCommand command = CommandFactory.createAddBrandCommand (brand);
+                BrandMapper brandMapper = MapperFactory.createBrandMapper();
+                Entity entity = brandMapper.CreateEntity(brandDTO);
+                AddBrandCommand command = CommandFactory.createAddBrandCommand ((Brand) entity);
                 command.Execute ();
                 return Ok ("ok " + command.GetResult ());
             } catch (InternalServerErrorException ex) {
