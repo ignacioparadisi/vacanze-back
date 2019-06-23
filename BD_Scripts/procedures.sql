@@ -1455,9 +1455,39 @@ LANGUAGE 'plpgsql';
 
 
 
+CREATE OR REPLACE FUNCTION GetVehicleByBrand(brandId INTEGER) 
+RETURNS TABLE (
+  vehid INTEGER,
+  vehmodel INTEGER,
+  vehlocation INTEGER,
+  vehlicense VARCHAR,
+  vehprice DECIMAL,
+  vehstatus BOOLEAN
+) AS $$
+BEGIN
+  RETURN QUERY 
+  SELECT veh_id, veh_model, veh_location, veh_license, veh_price, veh_status FROM vehicle, 
+  veh_model AS Model, veh_brand AS Brand WHERE veh_model = Model.vm_id 
+  AND Model.vm_brand = Brand.vb_id AND  Brand.vb_id = brandId;
+END; $$ 
+LANGUAGE 'plpgsql';
 
 
-
+CREATE OR REPLACE FUNCTION GetVehicleByModel(ModelId INTEGER) 
+RETURNS TABLE (
+  vehid INTEGER,
+  vehmodel INTEGER,
+  vehlocation INTEGER,
+  vehlicense VARCHAR,
+  vehprice DECIMAL,
+  vehstatus BOOLEAN
+) AS $$
+BEGIN
+  RETURN QUERY 
+  SELECT veh_id, veh_model, veh_location, veh_license, veh_price, veh_status FROM vehicle, 
+  veh_model AS Model WHERE veh_model = Model.vm_id AND Model.vm_id = ModelId;
+END; $$ 
+LANGUAGE 'plpgsql';
 
 
 -------------AGREGAR AUTO-----------------
