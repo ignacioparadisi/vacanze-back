@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using System.Threading.Tasks;
 using vacanze_back.VacanzeApi.Services.Controllers.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.Repository;
@@ -50,7 +47,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         {
 
             var result = controller.GetAllByUserID();
-            Assert.IsInstanceOf<ActionResult<IEnumerable<Entity>>>(result);
+            Assert.IsInstanceOf<ActionResult<IEnumerable<ReservationRoom>>>(result);
         }
 
         [Test, Order(2)]

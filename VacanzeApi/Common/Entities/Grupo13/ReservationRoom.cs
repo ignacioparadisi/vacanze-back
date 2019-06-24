@@ -21,11 +21,12 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
         /// <summary>
         /// Inicializa una nueva instancia de la clase ReservationRoom.
         /// </summary>
-//        public ReservationRoom(int id) : base(id)
-//        {
-//        }
-        [JsonConstructor]
+        /// 
+        public ReservationRoom() : base(0)
+        {
+        }
         
+        [JsonConstructor]
         public ReservationRoom(int id, DateTime CheckIn, DateTime CheckOut, Hotel hotel, int user_id, User user) : base(id)
         {
             this.CheckIn = CheckIn;
