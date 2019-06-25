@@ -241,6 +241,66 @@ INSERT INTO public.Plane(
 	VALUES (80,true, 10, 1000, 'Boeing 5');
 
 --------------Grupo 5 --------------------------------------------
+
+------------------Marcas-------------------------------------------------------------------------------
+INSERT INTO veh_brand (vb_name) VALUES ('Toyota');
+INSERT INTO veh_brand (vb_name) VALUES ('Chevrolet');
+INSERT INTO veh_brand (vb_name) VALUES ('Honda');
+
+------------------Modelos-------------------------------------------------------------------------------
+
+INSERT INTO veh_model (vm_brand, vm_name, vm_capacity, vm_picture) VALUES (1, 'Meru', 6, null);
+INSERT INTO veh_model (vm_brand, vm_name, vm_capacity, vm_picture) VALUES (1, 'Prius', 4, null);
+INSERT INTO veh_model (vm_brand, vm_name, vm_capacity, vm_picture) VALUES (1, 'Corolla', 4, null);
+
+INSERT INTO veh_model (vm_brand, vm_name, vm_capacity, vm_picture) VALUES (2, 'Aveo', 4, null);
+INSERT INTO veh_model (vm_brand, vm_name, vm_capacity, vm_picture) VALUES (2, 'Optra', 4, null);
+INSERT INTO veh_model (vm_brand, vm_name, vm_capacity, vm_picture) VALUES (2, 'Grand Blazer', 6, null);
+
+INSERT INTO veh_model (vm_brand, vm_name, vm_capacity, vm_picture) VALUES (3, 'Civic', 4, null);
+INSERT INTO veh_model (vm_brand, vm_name, vm_capacity, vm_picture) VALUES (3, 'Accord', 4, null);
+INSERT INTO veh_model (vm_brand, vm_name, vm_capacity, vm_picture) VALUES (3, 'CRV', 6, null);
+
+------------------Vehiculos--------------------------------------------------------------------------------
+
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (1, 37, 'AFGLK17', 550, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (1, 37, 'AFH1FHK', 450, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (1, 37, 'BJH1RHT', 350, TRUE);
+
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (2, 29, 'JAKFHBN', 550, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (2, 29, 'KALANFG', 450, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (2, 29, 'LAMBYEF', 350, TRUE);
+
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (3, 29, 'JAKBNFY', 550, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (3, 37, '172HVNG', 450, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (3, 29, '9GMFG4Y', 350, TRUE);
+
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (4, 37, '8GHJFNA', 550, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (4, 38, '098HGAG', 450, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (4, 49, '17HSHVB', 350, TRUE);
+
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (5, 37, 'JSAJASN', 550, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (5, 38, '18318AD', 450, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (5, 49, 'KASMNSA', 350, TRUE);
+
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (6, 38, 'KAJVMFA', 550, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (6, 38, '1123HMV', 450, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (6, 38, '173ADBG', 350, TRUE);
+
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (7, 37, '123SAAF', 550, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (7, 38, '9687GNA', 450, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (7, 29, '8FJAHSA', 350, TRUE);
+
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (8, 29, '95JASNS', 550, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (8, 29, 'JDJAH41', 450, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (8, 37, 'JASNJA3', 350, TRUE);
+
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (9, 49, '81231AF', 550, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (9, 37, '8A87ADS', 450, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (9, 29, '9ASDNAS', 350, TRUE);
+
+------------------------------------NO SIRVEN ESTOS DE ABAJO----------------------------------------------------------------------
+
 INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
 VALUES('Toyota','Corolla',3,true,55,'aa11ab1','auto1.jpg',1);
 INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
