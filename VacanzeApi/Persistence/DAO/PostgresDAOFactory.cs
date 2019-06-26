@@ -12,7 +12,12 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
 
         public override RoleDAO GetRoleDAO()
         {
-            throw new System.NotImplementedException(); //FALTA CREAR LA EXCEPTION.
+            return new PostgresRoleDAO(); 
+        }
+
+        public override UserDAO GetUserDAO()
+        {
+            return new PostgresUserDAO();
         }
     }
 }

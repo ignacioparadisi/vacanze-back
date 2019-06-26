@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using vacanze_back.VacanzeApi.Common;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
+using vacanze_back.VacanzeApi.LogicLayer.Command;
 using vacanze_back.VacanzeApi.Persistence.DAO;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
 
-namespace vacanze_back.VacanzeApi.LogicLayer.Grupo2
+namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
 {
-    public class GetUserByIdCommand : Command
+    public class GetUserByIdCommand : Command, CommandResult<int>
     {
 
         public Entity user { get; set; }
@@ -30,6 +30,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Grupo2
         public Entity Return()
         {
             return user;
+        }
+
+        public int GetResult()
+        {
+            throw new NotImplementedException();
         }
     }
 }
