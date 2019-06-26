@@ -3,7 +3,7 @@ using vacanze_back.VacanzeApi.Common.Exceptions;
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
 {
-    public class Role
+    public class Role : Entity
     {
         // Constantes que contienen el id de los roles que pueden tener los usuarios
         public const int CLIENT = 1;
@@ -13,12 +13,9 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         public const int CARRIER = 5;
         // Nombre del rol
         public string Name { get; set; }
-        // Id del rol 
-        public int Id { get; set; }
 
-        public Role(int id, string name)
+        public Role (int id, string name) : base (id)
         {
-            Id = id;
             Name = name;
         }
 

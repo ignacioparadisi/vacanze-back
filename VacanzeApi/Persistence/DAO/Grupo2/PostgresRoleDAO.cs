@@ -5,10 +5,7 @@ using vacanze_back.VacanzeApi.Common.Entities;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
 {
-    /// <summary> 
-    /// Clase que Realiza las Operaciones Contra la Tabla Roles.
-    /// </summary>
-    public class RoleRepository
+    public class DAORole 
     {
         /// <summary>
         /// Método que Consulta Todos los Roles Existentes en Base de Datos.
@@ -29,7 +26,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
 
             return roles;
         }
-        
+
         /// <summary>
         /// Método que Consulta los Roles Corresponden a un Determinado Usuario.
         /// </summary>
@@ -50,5 +47,4 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
             return roles;
         }
     }
-    
 }
