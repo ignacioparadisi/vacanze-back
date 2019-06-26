@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities;
 
-namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
+namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
 {
-    public class DAORole 
+    public class PostgresRoleDAO: RoleDAO 
     {
+        private const string SP_GETROLES = "GetRoles()";
+        private const string SP_GETROLESFORUSER = "GetRolesForUser(@userId)";
+        
         /// <summary>
         /// Método que Consulta Todos los Roles Existentes en Base de Datos.
         /// </summary>
         /// <returns>Una lista de Roles.</returns>
-        public static List<Entity> GetRoles()
+        public List<Entity> GetRoles()
         {
             var roles = new List<Entity>();
-            var table = PgConnection.Instance.ExecuteFunction("GetRoles()");
+            var table = PgConnection.Instance.ExecuteFunction(SP_GETROLES);
             
             for (var i = 0; i < table.Rows.Count; i++)
             {
@@ -32,10 +35,10 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
         /// </summary>
         /// <param name="userId">Id del Usuario a Consultar.</param>
         /// <returns>Una lista de Roles.</returns>
-        public static List<Role> GetRolesForUser(int userId)
+        public List<Role> GetRolesForUser(int userId)
         {
             var roles = new List<Role>();
-            var table = PgConnection.Instance.ExecuteFunction("GetRolesForUser(@userId)", userId);
+            var table = PgConnection.Instance.ExecuteFunction(SP_GETROLESFORUSER, userId);
             for (var i = 0; i < table.Rows.Count; i++)
             {
                 var id = Convert.ToInt32(table.Rows[i][0]);

@@ -3,37 +3,59 @@ using System.Collections.Generic;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
 
-namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
+namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
 {
     public class DAOUser
     {
+        private const string SP_GETEMPLOYEES = "getEmployees()";
+        private const string SP_GETUSERBYEMAIL = "GetUserByEmail(@email_id, @user_id)";
+        private const string SP_GETUSERBYID = "GetUserById(@user_id)";
+        private const string SP_ADD = "AddUser(@doc_id, @email, @lastname, @name, @password)";
+        private const string SP_ADDUSER_ROLE = "AddUser_Role(@use_id, @rol_id)";
+        private const string SP_DELETEUSER = "DeleteUserById(@user_id)";
+        private const string SP_DELETEUSER_ROLE = "DeleteUser_Role(@user_id)";
+        private const string SP_UPDATE = "ModifyUser(@id, @doc_id, @name, @lastname, @email)";
+
+
         // GETS
           /// <summary>
           ///  Se conecta con la base de datos para seleccionar todos los usuarios que no sean clientes
           /// </summary>
           /// <returns>Una lista de usuarios que no tienen como rol cliente</returns>
-          public static List<Entity> GetEmployees()
+          public List<Entity> GetEmployees()
           {
-               var users = new List<Entity>();
-               var table = PgConnection.Instance.ExecuteFunction("getEmployees()");
-
-               for (int i = 0; i < table.Rows.Count; i++)
+               try
                {
-                    var id = Convert.ToInt32(table.Rows[i][0]);
-                    var documentId = Convert.ToInt64(table.Rows[i][1]);
-                    var name = table.Rows[i][2].ToString();
-                    var lastname = table.Rows[i][3].ToString();
-                    var email = table.Rows[i][4].ToString();
-                    var user = new User(id, documentId, name, lastname, email);
+                    var users = new List<Entity>();
+                    var table = PgConnection.Instance.ExecuteFunction(SP_GETEMPLOYEES);
+                    DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
+                    RoleDAO roles = factory.GetRoleDAO();
+                    for (int i = 0; i < table.Rows.Count; i++)
+                    {
+                         var id = Convert.ToInt32(table.Rows[i][0]);
+                         var documentId = Convert.ToInt64(table.Rows[i][1]);
+                         var name = table.Rows[i][2].ToString();
+                         var lastname = table.Rows[i][3].ToString();
+                         var email = table.Rows[i][4].ToString();
+                         var user = new User(id, documentId, name, lastname, email);
 
-                    var roles = RoleRepository.GetRolesForUser(id);
-                    user.Roles = roles;
-                    users.Add(user);
+                         //Role roles = new List<Entity>();
+
+                         roles = RoleDAO.GetRolesForUser(id);
+                         user.Roles = roles;
+                         users.Add(user);
+                    }
+
+                    return users;
                }
-
-               return users;
+               catch(Exception e){
+                    e.ToString();
+                    throw;
+               }
           }
+          
 
           /// <summary>
           /// Verifica en la base de datos que no exista un usuario con el email
@@ -45,7 +67,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
           /// porque no pueden haber correos repetidos</exception>
           public static void VerifyEmail(string email, int id = 0)
           {
-               var table = PgConnection.Instance.ExecuteFunction("GetUserByEmail(@email_id, @user_id)",
+               var table = PgConnection.Instance.ExecuteFunction(SP_GETUSERBYEMAIL,
                    email, id);
                if (table.Rows.Count > 0)
                     throw new RepeatedEmailException("El Email Ingresado ya Existe");
@@ -58,24 +80,31 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
           /// <returns>El usuario que corresponde con el id</returns>
           /// <exception cref="UserNotFoundException">En caso de no encontrar ningun usuario se devuelve
           /// una excepcion para avisar que no se encontró ningún usuario con ese id</exception>
-          public static Entity GetUserById(int id)
+          public Entity GetUserById(int id)
           {
-               User user;
-               var table = PgConnection.Instance.ExecuteFunction("GetUserById(@user_id)", id);
-               if (table.Rows.Count == 0)
-                    throw new UserNotFoundException("No se Encontró Usuario");
+               try
+               {
+                    User user;
+                    var table = PgConnection.Instance.ExecuteFunction(SP_GETUSERBYID, id);
+                    if (table.Rows.Count == 0)
+                         throw new UserNotFoundException("No se Encontró Usuario");
 
-               var user_id = Convert.ToInt32(table.Rows[0][0]);
-               var documentId = Convert.ToInt64(table.Rows[0][1]);
-               var name = table.Rows[0][2].ToString();
-               var lastname = table.Rows[0][3].ToString();
-               var email = table.Rows[0][4].ToString();
-               user = new User(user_id, documentId, name, lastname, email);
+                    var user_id = Convert.ToInt32(table.Rows[0][0]);
+                    var documentId = Convert.ToInt64(table.Rows[0][1]);
+                    var name = table.Rows[0][2].ToString();
+                    var lastname = table.Rows[0][3].ToString();
+                    var email = table.Rows[0][4].ToString();
+                    user = new User(user_id, documentId, name, lastname, email);
 
-               var roles = RoleRepository.GetRolesForUser(id);
-               user.Roles = roles;
+                    var roles = RoleDAO.GetRolesForUser(id);
+                    user.Roles = roles;
 
-               return user;
+                    return user;
+               }
+               catch(Exception e){
+                    e.ToString();
+                    throw;
+               }
           }
 
           // - MARK: CREATES
@@ -84,21 +113,28 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
           /// </summary>
           /// <param name="user">Usuario que será almacenado en la base de datos</param>
           /// <returns>El usuario agregado en la base de datos con el ID</returns>
-          public static Entity AddUser(Entity entity)
+          public Entity AddUser(Entity entity)
           {
-               User user = (User)entity;
-               user.Validate();
-               VerifyEmail(user.Email);
-               user.EncryptOrCreatePassword();
-               var table = PgConnection.Instance.
-                   ExecuteFunction("AddUser(@doc_id, @email, @lastname, @name, @password)",
-                       user.DocumentId.ToString(), user.Email, user.Lastname, user.Name, user.Password);
+               try
+               {
+                    User user = (User)entity;
+                    user.Validate();
+                    VerifyEmail(user.Email);
+                    user.EncryptOrCreatePassword();
+                    var table = PgConnection.Instance.
+                    ExecuteFunction(SP_ADD,
+                         user.DocumentId.ToString(), user.Email, user.Lastname, user.Name, user.Password);
 
-               var id = Convert.ToInt32(table.Rows[0][0]);
-               user.Id = id;
-               user.Password = null;
+                    var id = Convert.ToInt32(table.Rows[0][0]);
+                    user.Id = id;
+                    user.Password = null;
 
-               return user;
+                    return user;
+               }
+               catch(Exception e){
+                    e.ToString();
+                    throw;
+               }
           }
 
           /// <summary>
@@ -109,8 +145,15 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
           /// <param name="roleid">Id del rol</param>
           public static void AddUser_Role(int userid, int roleid)
           {
-               var table = PgConnection.Instance.ExecuteFunction("AddUser_Role(@use_id, @rol_id)",
-                   userid, roleid);
+               try
+               {
+                    var table = PgConnection.Instance.ExecuteFunction(SP_ADDUSER_ROLE,
+                    userid, roleid);
+               }
+               catch(DatabaseException e){
+                    Console.WriteLine(e.ToString());
+                    throw new Exception();
+               }
           }
 
           /// <summary>
@@ -122,7 +165,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
           /// diciendo que el usuario no existe</exception>
           public static int DeleteUserById(int id)
           {
-               var table = PgConnection.Instance.ExecuteFunction("DeleteUserById(@user_id)", id);
+               var table = PgConnection.Instance.ExecuteFunction(SP_DELETEUSER, id);
                var userId = table.Rows[0][0];
                if (userId == DBNull.Value)
                {
@@ -138,7 +181,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
           /// <param name="id">Id del usuario al que se le quieren eliminar los roles</param>
           public static void DeleteUser_Role(int id)
           {
-               var table = PgConnection.Instance.ExecuteFunction("DeleteUser_Role(@user_id)", id);
+               var table = PgConnection.Instance.ExecuteFunction(SP_DELETEUSER_ROLE, id);
           }
 
           // - MARK: UPDATE
@@ -157,7 +200,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
                user.Validate();
                VerifyEmail(user.Email, id); //Hay que cambiar ese Id por user.Id en controller tambien
                var table = PgConnection.Instance
-                   .ExecuteFunction("ModifyUser(@id, @doc_id, @name, @lastname, @email)",
+                   .ExecuteFunction(SP_UPDATE,
                    id, user.DocumentId.ToString(), user.Name, user.Lastname, user.Email);
                var userId = table.Rows[0][0];
                if (userId == DBNull.Value)
