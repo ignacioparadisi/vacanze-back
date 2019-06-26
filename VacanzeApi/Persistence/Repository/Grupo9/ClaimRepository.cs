@@ -37,7 +37,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
                 table = PgConnection.Instance.ExecuteFunction("claim");
             else
                 table = PgConnection.Instance.ExecuteFunction("getclaim(@cla_id)", numero);
-            if (table.Rows.Count < 1) throw new NullClaimException("No existe el elemento");
+            if (table.Rows.Count < 1) throw new ClaimNotFoundException("No existe el elemento");
             return fillList(table);
         }
 
@@ -57,7 +57,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
         public List<Claim> GetClaimDocument(string numero)
         {
             var table = PgConnection.Instance.ExecuteFunction("GetClaimDocument(@cla_id)", numero);
-            if (table.Rows.Count < 1) throw new NullClaimException("No existe el elemento");
+            if (table.Rows.Count < 1) throw new ClaimNotFoundException("No existe el elemento");
             return fillList(table);
             ;
         }
@@ -68,7 +68,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
         public int DeleteClaim(int claimId)
         {
             var table = PgConnection.Instance.ExecuteFunction("getclaim(@cla_id)", claimId);
-            if (table.Rows.Count < 1) throw new NullClaimException("No existe el elemento que desea eliminar");
+            if (table.Rows.Count < 1) throw new ClaimNotFoundException("No existe el elemento que desea eliminar");
             PgConnection.Instance.ExecuteFunction("deleteclaim(@cla_id)", claimId);
             var id = Convert.ToInt32(table.Rows[0][0].ToString());
             return id;
@@ -80,7 +80,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
         public int ModifyClaimStatus(int claimId, Claim claim)
         {
             var table = PgConnection.Instance.ExecuteFunction("getclaim(@cla_id)", claimId);
-            if (table.Rows.Count < 1) throw new NullClaimException("No existe el elemento que desea modificar");
+            if (table.Rows.Count < 1) throw new ClaimNotFoundException("No existe el elemento que desea modificar");
             PgConnection.Instance.ExecuteFunction("modifyclaimstatus(@cla_id,@cla_status)", claimId, claim.Status);
             return claimId;
         }
@@ -91,7 +91,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
         public int ModifyClaimTitle(int claimId, Claim claim)
         {
             var table = PgConnection.Instance.ExecuteFunction("getclaim(@cla_id)", claimId);
-            if (table.Rows.Count < 1) throw new NullClaimException("nNo existe el elemento que desea modificar");
+            if (table.Rows.Count < 1) throw new ClaimNotFoundException("nNo existe el elemento que desea modificar");
             PgConnection.Instance.ExecuteFunction("modifyclaimtitle(@cla_id,@cla_title,@cla_descr)", claimId,
                 claim.Title, claim.Description);
             return claimId;
