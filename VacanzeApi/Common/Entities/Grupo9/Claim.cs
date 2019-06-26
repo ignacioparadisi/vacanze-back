@@ -38,6 +38,8 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo9
         public string Status { get; set; }
         public int BaggageId { get; set; }
 
+        // TODO: Extraer estas validaciones a una clase externa, y utilizar excepciones RequiredAttributeException etc
+
         public void Validate()
         {
             //excepcion para no permitir guardar otro valores que no sean el indicado
