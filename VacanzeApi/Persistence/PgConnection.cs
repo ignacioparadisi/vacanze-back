@@ -21,8 +21,8 @@ namespace vacanze_back.VacanzeApi.Persistence
         public static PgConnection Instance =>
             _instance ??
             (_instance = new PgConnection("127.0.0.1",
-                "vacanza",
-                "vacanza",
+                "postgres",
+                "1234",
                 "vacanza"));
 
 

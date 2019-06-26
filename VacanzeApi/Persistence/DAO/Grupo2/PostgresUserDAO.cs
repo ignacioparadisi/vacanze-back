@@ -43,8 +43,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
 
                          //Role roles = new List<Entity>();
 
-                         roles = RoleDAO.GetRolesForUser(id);
-                         user.Roles = roles;
+                         user.Roles = roles.GetRolesForUser(id);
                          users.Add(user);
                     }
 
@@ -85,7 +84,9 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
                try
                {
                     User user;
-                    var table = PgConnection.Instance.ExecuteFunction(SP_GETUSERBYID, id);
+                DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
+                RoleDAO roles = factory.GetRoleDAO();
+                var table = PgConnection.Instance.ExecuteFunction(SP_GETUSERBYID, id);
                     if (table.Rows.Count == 0)
                          throw new UserNotFoundException("No se Encontró Usuario");
 
@@ -96,9 +97,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
                     var email = table.Rows[0][4].ToString();
                     user = new User(user_id, documentId, name, lastname, email);
 
-                    var roles = RoleDAO.GetRolesForUser(id);
-                    user.Roles = roles;
-
+                    user.Roles = roles.GetRolesForUser(id);
                     return user;
                }
                catch(Exception e){
