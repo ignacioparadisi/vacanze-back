@@ -31,5 +31,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
 
         public abstract RoleDAO GetRoleDAO();
 
+        public abstract UserDAO GetUserDAO();
+
     }
 }

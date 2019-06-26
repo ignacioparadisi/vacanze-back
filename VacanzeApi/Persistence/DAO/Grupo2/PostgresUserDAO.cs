@@ -7,7 +7,7 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
 {
-    public class DAOUser
+    public class PostgresUserDAO : UserDAO
     {
         private const string SP_GETEMPLOYEES = "getEmployees()";
         private const string SP_GETUSERBYEMAIL = "GetUserByEmail(@email_id, @user_id)";
@@ -64,7 +64,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           /// por uno ya existente pero que lo deje guardar su propio correo</param>
           /// <exception cref="RepeatedEmailException">Si el correo existe, se devuelve esta exception
           /// porque no pueden haber correos repetidos</exception>
-          public static void VerifyEmail(string email, int id = 0)
+          public void VerifyEmail(string email, int id = 0)
           {
                var table = PgConnection.Instance.ExecuteFunction(SP_GETUSERBYEMAIL,
                    email, id);
@@ -142,7 +142,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           /// </summary>
           /// <param name="userid">Id del usuario</param>
           /// <param name="roleid">Id del rol</param>
-          public static void AddUser_Role(int userid, int roleid)
+          public void AddUser_Role(int userid, int roleid)
           {
                try
                {
@@ -162,7 +162,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           /// <returns>Si el usuario es eliminado satisfactoriamente, se devuelve su id</returns>
           /// <exception cref="UserNotFoundException">Si el id es inválido se devuelve la excepción
           /// diciendo que el usuario no existe</exception>
-          public static int DeleteUserById(int id)
+          public int DeleteUserById(int id)
           {
                var table = PgConnection.Instance.ExecuteFunction(SP_DELETEUSER, id);
                var userId = table.Rows[0][0];
@@ -178,7 +178,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           /// Elimina todos los roles del N a N entre roles y usuarios de un usuario especificado
           /// </summary>
           /// <param name="id">Id del usuario al que se le quieren eliminar los roles</param>
-          public static void DeleteUser_Role(int id)
+          public void DeleteUser_Role(int id)
           {
                var table = PgConnection.Instance.ExecuteFunction(SP_DELETEUSER_ROLE, id);
           }
@@ -193,7 +193,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           /// <exception cref="UserNotFoundException">Excepción que se devuelve cuando
           /// no se encuentra ningun usuario con el id especificado en la base de datos</exception>
           // TODO: Devolver el usuario y no el id nada más
-          public static int UpdateUser(Entity entity, int id)
+          public int UpdateUser(Entity entity, int id)
           {
                User user = (User)entity;
                user.Validate();
