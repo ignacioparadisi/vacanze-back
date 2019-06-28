@@ -23,7 +23,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
                 .WithPhone("04243240208")
                 .WithWebsite("HC.com")
                 .WithStars(2)
-                .LocatedAt(location)
+                .LocatedAt(location.Id)
                 .WithStatus(true)
                 .WithAddressDescription("Calle Los Almendrones")
                 .WithPictureUrl("alguncodigoenbase64")

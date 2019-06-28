@@ -2,11 +2,17 @@
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
-using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
+using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo6; //con el tiempo debemos quitar la entidad por a fabricaEntiti
+using vacanze_back.VacanzeApi.Common.Entities.Grupo8;  //dcon el tiempo debemos quitar la entitad por a fabricaentiti
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
-using vacanze_back.VacanzeApi.Persistence.Repository.Grupo6;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo6; //con el tiempo debemos quitar esta de repository
+using vacanze_back.VacanzeApi.LogicLayer.Command;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo6;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo6;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
 {
@@ -62,15 +68,24 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         {
             try
             {
+                // Metodo Original 
+                //cambiar el [FromBody] HotelDTO hotelDTO por [FromBody] Hotel hotel
                 var idFromDatabase = HotelRepository.AddHotel(hotel);
                 return CreatedAtAction("Get", "hotels",
-                    HotelRepository.GetHotelById(idFromDatabase));
-                /* herick probando patrones
-               HotelMapper HotelMapper = MapperFactory.createHotelMapper();
-                Entity entity = Mapper.CreateEntity(HotelDTO);
-                AddBrandCommand command = CommandFactory.createAddBrandCommand ((Brand) entity);
+                    HotelRepository.GetHotelById(idFromDatabase)); 
+
+                 // herick probando patrones 
+                 //cambiar el [FromBody] HotelDTO hotelDTO 
+                 /*
+                HotelMapper HotelMapper = MapperFactory.createHotelMapper();
+                Entity entity = HotelMapper.CreateEntity(hotelDTO);
+                AddHotelCommand command = CommandFactory.createAddHotelCommand ((Hotel) entity);
                 command.Execute ();
-                return Ok ("ok " + command.GetResult ());*/
+                int idFromData = command.GetResult(); 
+ 
+                GetHotelByIdCommand commandId =  CommandFactory.GetHotelByIdCommand(idFromData);
+                hotelDTO  = HotelMapper.CreateDTO(commandId.GetResult());               
+                    return CreatedAtAction ("Get", "hotels", hotelDTO);*/
             }
             catch (RequiredAttributeException e)
             {

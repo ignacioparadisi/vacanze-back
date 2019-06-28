@@ -22,7 +22,10 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         // +++++++++++++++++
         public static AddHotelCommand createAddHotelCommand(Hotel hotel){
             return new AddHotelCommand(hotel);
-        }    
+        }   
+        public static GetHotelByIdCommand GetHotelByIdCommand(int id){
+            return new GetHotelByIdCommand(id);
+        }     
 
     }
 }

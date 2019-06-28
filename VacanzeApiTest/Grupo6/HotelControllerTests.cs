@@ -26,7 +26,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
                 .WithPhone("04243240208")
                 .WithWebsite("HC.com")
                 .WithStars(2)
-                .LocatedAt(LocationRepository.GetLocationById(HotelTestSetup.LOCATION_ID))
+                .LocatedAt(HotelTestSetup.LOCATION_ID)
                 .WithStatus(true)
                 .WithAddressDescription("Calle Los Almendrones")
                 .WithPictureUrl("alguncodigoenbase64")
@@ -44,7 +44,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         private Hotel _hotel;
         private List<int> _insertedHotels;
 
-        [Test]
+       [Test]
         public void Create_HotelWithHigherBoundStarAmount_BadRequestReturned()
         {
             _hotel.Stars = 7;

@@ -26,7 +26,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
                 .WithWebsite(website)
                 .WithStars(stars)
                 .WithPictureUrl(picture)
-                //.LocatedAt(LocationRepository.GetLocationById(locationId)) 
+                .LocatedAt(locationId) 
                 .WithStatus(isActive)
                 .WithAddressDescription(addressSpecs)
                 .BuildSinVaidar();
