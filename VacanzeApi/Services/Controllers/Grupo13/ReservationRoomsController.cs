@@ -8,6 +8,8 @@ using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo13;
 using Npgsql;
+using vacanze_back.VacanzeApi.Persistence.DAO;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 {
@@ -21,14 +23,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         // GET api/reservationautomobiles/?id={user_id}]
         /* https://localhost:5001/api/reservationrooms/?user=1 */
         [HttpGet]
-        public ActionResult<IEnumerable<Entity>> GetAllByUserID([FromQuery] int user = -1)
+        public ActionResult<IEnumerable<ReservationRoomDAO>> GetAllByUserID([FromQuery] int user = -1)
         {
             try
             {
-                ReservationRoomRepository connection = new ReservationRoomRepository();
+                DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
+                ReservationRoomDAO reservationRoomDao = factory.GetReservationRoomDAO();
+                
+                // ReservationRoomRepository connection = new ReservationRoomRepository();
                 return user == -1
-                    ? connection.GetRoomReservations()
-                    : connection.GetAllByUserId(user);
+                    ? Ok(reservationRoomDao.GetRoomReservations())
+                    : Ok(reservationRoomDao.GetAllByUserId(user));
             }
             catch (SystemException)
             {
