@@ -197,7 +197,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           {
                User user = (User)entity;
                user.Validate();
-               VerifyEmail(user.Email, id); //Hay que cambiar ese Id por user.Id en controller tambien
+               VerifyEmail(user.Email, user.Id); //Hay que cambiar ese Id por user.Id en controller tambien
                var table = PgConnection.Instance
                    .ExecuteFunction(SP_UPDATE,
                    id, user.DocumentId.ToString(), user.Name, user.Lastname, user.Email);

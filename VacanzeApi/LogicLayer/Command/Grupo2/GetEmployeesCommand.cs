@@ -4,24 +4,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
-using vacanze_back.VacanzeApi.LogicLayer.Command;
 using vacanze_back.VacanzeApi.Persistence.DAO;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
 {
-    public class GetUserByIdCommand : Command, CommandResult<Entity>
+    public class GetEmployeesCommand : Command, CommandResult<List<Entity>>
     {
 
-        public Entity User { get; set; }
-        public int Id { get; set; }
+        private static List<Entity> Employees;
+
         public void Execute()
         {
             try
             {
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
                 UserDAO users = factory.GetUserDAO();
-                User = (User)users.GetUserById(Id);
+                Employees = users.GetEmployees();
             }
             catch(Exception e)
             {
@@ -29,13 +28,9 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
             }
         }
 
-        public GetUserByIdCommand(int id)
+        public List<Entity> GetResult()
         {
-            this.Id = id;
-        }
-        public Entity GetResult()
-        {
-            return User;
+            return Employees;
         }
     }
 }
