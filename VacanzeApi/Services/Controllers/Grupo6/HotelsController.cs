@@ -65,6 +65,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
                 var idFromDatabase = HotelRepository.AddHotel(hotel);
                 return CreatedAtAction("Get", "hotels",
                     HotelRepository.GetHotelById(idFromDatabase));
+                /* herick probando patrones
+               HotelMapper HotelMapper = MapperFactory.createHotelMapper();
+                Entity entity = Mapper.CreateEntity(HotelDTO);
+                AddBrandCommand command = CommandFactory.createAddBrandCommand ((Brand) entity);
+                command.Execute ();
+                return Ok ("ok " + command.GetResult ());*/
             }
             catch (RequiredAttributeException e)
             {

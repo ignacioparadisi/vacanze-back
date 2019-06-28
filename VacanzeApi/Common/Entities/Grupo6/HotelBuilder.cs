@@ -91,5 +91,10 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
             HotelValidator.Validate(_hotel);
             return _hotel;
         }
+
+        public Hotel BuildSinVaidar()
+        {
+            return _hotel;
+        }
     }
 }
