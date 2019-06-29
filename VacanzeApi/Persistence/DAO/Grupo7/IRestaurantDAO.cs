@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
 
 namespace DefaultNamespace
