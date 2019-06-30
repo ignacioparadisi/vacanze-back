@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Common.Exceptions;
@@ -17,9 +18,37 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo9
             return ExtractClaimFromRow(resultTable.Rows[0]);
         }
 
+        public List<Claim> GetByStatus(string status)
+        {
+            var claimsByStatus = new List<Claim>();
+            var resultTable = PgConnection.Instance.ExecuteFunction("getclaimstatus(@cla_status)", status);
+            for (var i = 0; i < resultTable.Rows.Count; i++)
+            {
+                var claim = ExtractClaimFromRow(resultTable.Rows[i]);
+                claimsByStatus.Add(claim);
+            }
+
+            return claimsByStatus;
+        }
+
+        public List<Claim> GetByDocument(string document)
+        {
+            var claimsByDocument = new List<Claim>();
+            var resultTable = PgConnection.Instance.ExecuteFunction("GetClaimDocument(@_users_document_id)", document);
+            for (var i = 0; i < resultTable.Rows.Count; i++)
+            {
+                var claim = ExtractClaimFromRow(resultTable.Rows[i]);
+                claimsByDocument.Add(claim);
+            }
+
+            return claimsByDocument;
+        }
+
         public void Add(Claim claim)
         {
-            throw new NotImplementedException();
+            PgConnection.Instance.ExecuteFunction(
+                "addclaim(@cla_title,@cla_descr, @bag_int)",
+                claim.Title, claim.Description, claim.BaggageId);
         }
 
         public void Delete(int id)

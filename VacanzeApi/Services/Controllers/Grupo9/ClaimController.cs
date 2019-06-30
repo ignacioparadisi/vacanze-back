@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Common.Exceptions;
-using vacanze_back.VacanzeApi.Persistence.DAO;
+using vacanze_back.VacanzeApi.LogicLayer.Command;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo9;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
@@ -44,10 +44,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
         [HttpGet("{id}")]
         public ActionResult<Claim> Get(int id)
         {
-            var daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
+            var commandFactory = new CommandFactory();
+            var getByIdCommand = commandFactory.CreateGetClaimByIdCommand(id);
+
             try
             {
-                return daoFactory.GetClaimDao().GetById(id);
+                getByIdCommand.Execute();
+                return getByIdCommand.GetResult();
             }
             catch (ClaimNotFoundException)
             {
@@ -55,60 +58,50 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             }
             catch (DatabaseException ex)
             {
-                return StatusCode(500, ex.Message);
-            }
-            catch (InvalidStoredProcedureSignatureException ex)
-            {
+                // TODO: Log
                 return StatusCode(500, ex.Message);
             }
         }
 
         /// <summary>
-        ///     GET api/values/5
         ///     Get para la tabla equipaje segun su documento de identidad
         /// </summary>
-        [HttpGet("document/{id}")]
-        public ActionResult<IEnumerable<Claim>> GetDocument(string id)
+        [HttpGet("document/{document}")]
+        public ActionResult<IEnumerable<Claim>> GetByDocument(string document)
         {
+            var commandFactory = new CommandFactory();
+            var getByDocumentCommand = commandFactory.CreateGetClaimsByDocumentCommand(document);
             try
             {
-                var conec = new ClaimRepository();
-                var ClaimList = conec.GetClaimDocument(id);
-                return ClaimList;
+                getByDocumentCommand.Execute();
+                return getByDocumentCommand.GetResult();
             }
             catch (DatabaseException ex)
             {
-                return StatusCode(500, ex.Message);
-            }
-            catch (InvalidStoredProcedureSignatureException ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-            catch (ClaimNotFoundException ex)
-            {
+                // TODO: Log
                 return StatusCode(500, ex.Message);
             }
         }
 
         /// <summary>
         ///     GET api/claim/admin/status
-        ///     usado para que el administrador consulte los reclamos por estatus
+        ///     usado para que el administrador consulte los reclamos por estatus.
+        ///     Status posibles: ABIERTO, CERRADO, EXTRAVIADO ... [TODO: Conseguir lista completa]
         /// </summary>
         [HttpGet("admin/{status}")]
         public ActionResult<IEnumerable<Claim>> GetStatus(string status)
         {
+            var commandFactory = new CommandFactory();
+            var getByStatusCommand = commandFactory.CreateGetClaimsByStatusCommand(status);
+
             try
             {
-                var conec = new ClaimRepository();
-                var claimList = conec.GetClaimStatus(status);
-                return claimList;
+                getByStatusCommand.Execute();
+                return getByStatusCommand.GetResult();
             }
             catch (DatabaseException ex)
             {
-                return StatusCode(500, ex.Message);
-            }
-            catch (InvalidStoredProcedureSignatureException ex)
-            {
+                // TODO: Log
                 return StatusCode(500, ex.Message);
             }
         }
