@@ -20,8 +20,30 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo6{
         public Location Location { get; set; }
         public int AvailableRooms { get; set; } = -1;
 
-
+        public bool ShouldSerializeAvailableRooms()
+        {
+            return AvailableRooms > -1;
+        }
+        
         [JsonConstructor]
+        public HotelDTO(string name , int amountOfRooms, int roomCapacity ,
+        bool isActive, string addressSpecs, decimal pricePerRoom, string website , string phone ,
+        string picture, int stars , Location location){
+            this.Name = name;
+            this.AmountOfRooms = amountOfRooms;
+            this.RoomCapacity=roomCapacity;
+            this.IsActive= isActive;
+            this.AddressSpecification =addressSpecs;
+            this.PricePerRoom = pricePerRoom;
+            this.Website = website;
+            this.Phone = phone ;
+            this.Picture = picture ;
+            this.Stars = stars;
+            this.Location = location;
+        }
+
+
+
         public HotelDTO(int id , string name , int amountOfRooms, int roomCapacity ,
         bool isActive, string addressSpecs, decimal pricePerRoom, string website , string phone ,
         string picture, int stars , int locationId){

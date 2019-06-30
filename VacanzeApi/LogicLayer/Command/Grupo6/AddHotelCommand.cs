@@ -1,3 +1,4 @@
+using System;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Persistence.DAO;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo6;
@@ -21,6 +22,9 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6 {
         }
 
         public int GetResult () {
+            Console.WriteLine("estoy aqui add") ; 
+            Console.WriteLine(_hotel.Name);
+            Console.WriteLine(_id);
             return _id;
         }
 

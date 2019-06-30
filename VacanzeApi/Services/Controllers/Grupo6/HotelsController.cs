@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo6; //con el tiempo debemos quitar esta de repository
 using vacanze_back.VacanzeApi.LogicLayer.Command;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
+using vacanze_back.VacanzeApi.LogicLayer.DTO;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo6;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo6;
@@ -42,11 +44,19 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         /// <returns>Objeto tipo json del hotel encontrado</returns>
         /// <exception cref="HotelNotFoundException">Lanzada si no existe el hotel</exception>
         [HttpGet("{hotelId}", Name = "GetHotelById")]
-        public ActionResult<Hotel> GetById([FromRoute] int hotelId)
+        public ActionResult<HotelDTO> GetById([FromRoute] int hotelId)
         {
             try
             {
-                return Ok(HotelRepository.GetHotelById(hotelId));
+                Console.WriteLine("aquiii controlgret");
+                HotelMapper HotelMapper = MapperFactory.createHotelMapper();
+                GetHotelByIdCommand commandId =  CommandFactory.GetHotelByIdCommand(hotelId);
+                commandId.Execute ();
+                DTO lDTO  = HotelMapper.CreateDTO((Hotel) commandId.GetResult());               
+                return Ok(lDTO);
+                
+                //Metodo original 
+                //return Ok(HotelRepository.GetHotelById(hotelId));
             }
             catch (HotelNotFoundException)
             {
@@ -64,19 +74,19 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Hotel> Create([FromBody] Hotel hotel)
+        public ActionResult<HotelDTO> Create([FromBody] HotelDTO hotelDTO)
         {
+        
             try
-            {
+            {     
+                Console.WriteLine("aquiii control add 1");
                 // Metodo Original 
                 //cambiar el [FromBody] HotelDTO hotelDTO por [FromBody] Hotel hotel
-                var idFromDatabase = HotelRepository.AddHotel(hotel);
+                /*var idFromDatabase = HotelRepository.AddHotel((Hotel) entity);
                 return CreatedAtAction("Get", "hotels",
-                    HotelRepository.GetHotelById(idFromDatabase)); 
+                    HotelRepository.GetHotelById(idFromDatabase)); */
 
                  // herick probando patrones 
-                 //cambiar el [FromBody] HotelDTO hotelDTO 
-                 /*
                 HotelMapper HotelMapper = MapperFactory.createHotelMapper();
                 Entity entity = HotelMapper.CreateEntity(hotelDTO);
                 AddHotelCommand command = CommandFactory.createAddHotelCommand ((Hotel) entity);
@@ -84,8 +94,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
                 int idFromData = command.GetResult(); 
  
                 GetHotelByIdCommand commandId =  CommandFactory.GetHotelByIdCommand(idFromData);
-                hotelDTO  = HotelMapper.CreateDTO(commandId.GetResult());               
-                    return CreatedAtAction ("Get", "hotels", hotelDTO);*/
+                commandId.Execute ();
+                DTO lDTO  = HotelMapper.CreateDTO((Hotel) commandId.GetResult());               
+                    return CreatedAtAction ("Get", "hotels", lDTO);
             }
             catch (RequiredAttributeException e)
             {
