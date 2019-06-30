@@ -125,7 +125,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
                 var addClaimCommand = CommandFactory.CreateAddClaimCommand(claim);
                 addClaimCommand.Execute();
                 claim.Id = addClaimCommand.GetResult();
-                return CreatedAtAction("GetById", "claim", claim);
+                return CreatedAtAction("Get", "claim", claim);
             }
             catch (RequiredAttributeException ex)
             {

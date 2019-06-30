@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
+using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
@@ -13,9 +14,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
           ///  Se conecta con la base de datos para seleccionar todos los usuarios que no sean clientes
           /// </summary>
           /// <returns>Una lista de usuarios que no tienen como rol cliente</returns>
-          public static List<User> GetEmployees()
+          public static List<Entity> GetEmployees()
           {
-               var users = new List<User>();
+               var users = new List<Entity>();
                var table = PgConnection.Instance.ExecuteFunction("getEmployees()");
 
                for (int i = 0; i < table.Rows.Count; i++)
@@ -58,7 +59,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
           /// <returns>El usuario que corresponde con el id</returns>
           /// <exception cref="UserNotFoundException">En caso de no encontrar ningun usuario se devuelve
           /// una excepcion para avisar que no se encontró ningún usuario con ese id</exception>
-          public static User GetUserById(int id)
+          public static Entity GetUserById(int id)
           {
                User user;
                var table = PgConnection.Instance.ExecuteFunction("GetUserById(@user_id)", id);
@@ -85,8 +86,9 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
           /// </summary>
           /// <param name="user">Usuario que será almacenado en la base de datos</param>
           /// <returns>El usuario agregado en la base de datos con el ID</returns>
-          public static User AddUser(User user)
+          public static Entity AddUser(Entity entity)
           {
+               User user = (User)entity;
                user.Validate();
                VerifyEmail(user.Email);
                user.EncryptOrCreatePassword();
@@ -151,10 +153,11 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
           /// <exception cref="UserNotFoundException">Excepción que se devuelve cuando
           /// no se encuentra ningun usuario con el id especificado en la base de datos</exception>
           // TODO: Devolver el usuario y no el id nada más
-          public static int UpdateUser(User user, int id)
+          public static int UpdateUser(Entity entity, int id)
           {
+               User user = (User)entity;
                user.Validate();
-               VerifyEmail(user.Email, id);
+               VerifyEmail(user.Email, id); //Hay que cambiar ese Id por user.Id en controller tambien
                var table = PgConnection.Instance
                    .ExecuteFunction("ModifyUser(@id, @doc_id, @name, @lastname, @email)",
                    id, user.DocumentId.ToString(), user.Name, user.Lastname, user.Email);

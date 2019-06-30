@@ -1,5 +1,6 @@
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo9;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO
@@ -9,7 +10,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         public enum Type
         {
             Postgres
-        }
+        };
 
         public static DAOFactory GetFactory(Type type)
         {
@@ -27,7 +28,10 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         // +++++++++++++++++
         public abstract ReservationRoomDAO GetReservationRoomDAO();
 
-        // Grupo 9 [6]
         public abstract IClaimDao GetClaimDao();
+        
+        public abstract RoleDAO GetRoleDAO();
+
+        public abstract UserDAO GetUserDAO();
     }
 }

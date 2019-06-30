@@ -6,6 +6,7 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo2;
 using vacanze_back.VacanzeApi.Services.Controllers.Grupo2;
+using vacanze_back.VacanzeApi.Common.Entities;
 
 namespace vacanze_back.VacanzeApiTest.Grupo2
 {
@@ -369,7 +370,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
                roles.Add(new Role(1, "Cliente"));
                roles.Add(new Role(1, "Cliente"));
                _user.Roles = roles;
-               var user = UserRepository.AddUser(_user);
+               var user = (User)UserRepository.AddUser(_user);
                _insertedUsers.Add(user.Id);
                Assert.AreEqual(1, user.Roles.Count);
           }
@@ -382,7 +383,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
                _user.Roles = roles;
                var user = UserRepository.AddUser(_user);
                _insertedUsers.Add(user.Id);
-               List<User> users = UserRepository.GetEmployees();
+               List<Entity> users = UserRepository.GetEmployees();
                Assert.AreNotEqual(0, users.Count);
           }
 
@@ -404,7 +405,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
           [Test]
           public void UpdateUserTest()
           {
-               var user = UserRepository.AddUser(_user);
+               var user = (User)UserRepository.AddUser(_user);
                _insertedUsers.Add(user.Id);
                user.Name = "Francisco";
                int userId = UserRepository.UpdateUser(user, user.Id);

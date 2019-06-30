@@ -33,7 +33,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
         public static List<Travel> GetTravels(int userId){
             List<Travel> listOfTravels = new List<Travel>();
             try{
-                User user = UserRepository.GetUserById(userId); //Throw Exception if it doesn'n exist
+                User user = (User)UserRepository.GetUserById(userId); //Throw Exception if it doesn'n exist
                 PgConnection pgConnection = PgConnection.Instance;
                 DataTable dataTable = pgConnection.ExecuteFunction("GetTravels(@userId)", userId);
                 if( dataTable.Rows.Count > 0){
@@ -176,7 +176,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
                 {
                     throw new RequiredAttributeException("Falta información importante para poder crear el viaje");
                 }
-                User user = UserRepository.GetUserById(travel.UserId); //Throw Exception if it doesn'n exist
+                User user = (User)UserRepository.GetUserById(travel.UserId); //Throw Exception if it doesn'n exist
                 PgConnection pgConnection = PgConnection.Instance;
                 DataTable dataTable = pgConnection.ExecuteFunction(
                     "AddTravel(@travelName, @travelInit, @travelEnd, @travelDescription, @userId)", 
