@@ -1,9 +1,12 @@
 using System.Collections.Generic;
+using System.Net.Http;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo9;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo9;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
@@ -42,10 +45,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
         ///     Obtener Claim segun su Id
         /// </summary>
         [HttpGet("{id}")]
-        public ActionResult<Claim> Get(int id)
+        public ActionResult<Claim> GetById(int id)
         {
-            var commandFactory = new CommandFactory();
-            var getByIdCommand = commandFactory.CreateGetClaimByIdCommand(id);
+            var getByIdCommand = CommandFactory.CreateGetClaimByIdCommand(id);
 
             try
             {
@@ -69,8 +71,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
         [HttpGet("document/{document}")]
         public ActionResult<IEnumerable<Claim>> GetByDocument(string document)
         {
-            var commandFactory = new CommandFactory();
-            var getByDocumentCommand = commandFactory.CreateGetClaimsByDocumentCommand(document);
+            var getByDocumentCommand = CommandFactory.CreateGetClaimsByDocumentCommand(document);
             try
             {
                 getByDocumentCommand.Execute();
@@ -86,13 +87,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
         /// <summary>
         ///     GET api/claim/admin/status
         ///     usado para que el administrador consulte los reclamos por estatus.
-        ///     Status posibles: ABIERTO, CERRADO, EXTRAVIADO ... [TODO: Conseguir lista completa]
+        ///     Status posibles: ABIERTO, CERRADO [Existe estado Extraviado pero no se puede postear]
         /// </summary>
         [HttpGet("admin/{status}")]
-        public ActionResult<IEnumerable<Claim>> GetStatus(string status)
+        public ActionResult<IEnumerable<Claim>> GetByStatus(string status)
         {
-            var commandFactory = new CommandFactory();
-            var getByStatusCommand = commandFactory.CreateGetClaimsByStatusCommand(status);
+            var getByStatusCommand = CommandFactory.CreateGetClaimsByStatusCommand(status);
 
             try
             {
@@ -107,42 +107,43 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
         }
 
         /// <summary>
-        ///     Post api/Claim/id
+        ///     Post api/claim/{baggage_id}
         ///     utilizado para crear un reclamo con una id del equipaje
         /// </summary>
-        [HttpPost("{id}")]
-        public ActionResult<string> Post(int id, [FromBody] ClaimSecundary ClaimAux)
+        [HttpPost]
+        public ActionResult<Claim> Post([FromBody] Claim claim)
         {
             try
             {
-                var bag = new BaggageRepository();
-                var a = bag.GetBaggage(id);
-                if (a.Count == 0) throw new NullBaggageException("No existe el Equipaje");
+                // TODO: Esta validacion no esta funcionando, le puedes pasar un id que no exista
+                // TODO: Refactorizar esto relacionado a baggage
+                // TODO: Meter esta validacion dentro del ClaimValidator
+                // var bag = new BaggageRepository();
+                // var a = bag.GetBaggage(claim.BaggageId);
+                // if (a.Count == 0) throw new NullBaggageException("No existe el Equipaje");
 
-                var conec = new ClaimRepository();
-                var claim = new Claim(ClaimAux.title, ClaimAux.description);
-                claim.Validate();
-                claim.ValidatePost();
-                conec.AddClaim(claim, id);
-                return Ok("Agregado correctamente");
+                var addClaimCommand = CommandFactory.CreateAddClaimCommand(claim);
+                addClaimCommand.Execute();
+                claim.Id = addClaimCommand.GetResult();
+                return CreatedAtAction("GetById", "claim", claim);
             }
-            catch (DatabaseException ex)
+            catch (RequiredAttributeException ex)
             {
-                return StatusCode(500, ex.Message);
+                return new BadRequestObjectResult(new ErrorMessage(ex.Message));
             }
-            catch (InvalidStoredProcedureSignatureException ex)
+            catch (AttributeSizeException ex)
             {
-                return StatusCode(500, ex.Message);
-            }
-            catch (AttributeSizeException exc)
-            {
-                return StatusCode(500, exc.Message);
+                return new BadRequestObjectResult(new ErrorMessage(ex.Message));
             }
             catch (AttributeValueException ex)
             {
-                return StatusCode(500, ex.Message);
+                return new BadRequestObjectResult(new ErrorMessage(ex.Message));
             }
-            catch (NullBaggageException ex)
+            catch (BaggageNotFoundException ex)
+            {
+                return new BadRequestObjectResult(new ErrorMessage(ex.Message));
+            }
+            catch (DatabaseException ex)
             {
                 return StatusCode(500, ex.Message);
             }
@@ -183,19 +184,23 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
         [HttpPut("{id}")]
         public ActionResult<string> Put(int id, [FromBody] ClaimSecundary ClaimAux)
         {
+            // TODO: Refacotrizar con comandos/dao y quitar ese ClaimSecundary
             try
             {
                 var conec = new ClaimRepository();
-                var claim = new Claim(ClaimAux.title, ClaimAux.description, ClaimAux.status);
-                claim.Validate();
-                claim.ValidatePut();
+                var claim = ClaimBuilder.Create()
+                    .WithTitle(ClaimAux.title)
+                    .WithDescription(ClaimAux.description)
+                    .WithStatus(ClaimAux.status)
+                    .Build();
+
+                ClaimValidator.Validate(claim, HttpMethod.Put);
                 var rows = 0;
                 if (ClaimAux.status != null)
                     rows = conec.ModifyClaimStatus(id, claim);
                 else if (ClaimAux.title != null && ClaimAux.description != null)
                     rows = conec.ModifyClaimTitle(id, claim);
                 else throw new ClaimNotFoundException("claim vacio");
-
 
                 return Ok("Modificado exitosamente");
             }

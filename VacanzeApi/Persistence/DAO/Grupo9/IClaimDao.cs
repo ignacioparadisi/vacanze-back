@@ -8,7 +8,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo9
         Claim GetById(int id);
         List<Claim> GetByStatus(string status);
         List<Claim> GetByDocument(string document);
-        void Add(Claim claim);
+        int Add(Claim claim);
         void Delete(int id);
         void Update(int id, Claim updatedFields);
     }

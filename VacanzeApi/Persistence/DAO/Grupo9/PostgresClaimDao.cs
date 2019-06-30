@@ -44,11 +44,14 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo9
             return claimsByDocument;
         }
 
-        public void Add(Claim claim)
+        public int Add(Claim claim)
         {
-            PgConnection.Instance.ExecuteFunction(
+            var resultTable = PgConnection.Instance.ExecuteFunction(
                 "addclaim(@cla_title,@cla_descr, @bag_int)",
                 claim.Title, claim.Description, claim.BaggageId);
+
+            var savedId = Convert.ToInt32(resultTable.Rows[0][0]);
+            return savedId;
         }
 
         public void Delete(int id)
@@ -80,7 +83,13 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo9
 //                claim = new Claim(id, titulo, descripcion, status, idEquipaje);
 //            }
 
-            return new Claim(id, title, description, status, baggageId);
+            return ClaimBuilder.Create()
+                .WithId(id)
+                .WithTitle(title)
+                .WithStatus(status)
+                .WithDescription(description)
+                .WithBagagge(baggageId)
+                .Build();
         }
     }
 }

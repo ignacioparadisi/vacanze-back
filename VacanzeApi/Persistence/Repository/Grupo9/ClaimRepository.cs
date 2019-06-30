@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Data;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 
@@ -8,15 +6,15 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
 {
     public class ClaimRepository
     {
-        /// <summary>
-        ///     Metodo para agregar un reclamo
-        /// </summary>
-        public void AddClaim(Claim claim, int id)
-        {
-            var table = PgConnection.Instance.ExecuteFunction(
-                "addclaim(@cla_title,@cla_descr, @bag_int)",
-                claim.Title, claim.Description, id);
-        }
+//        /// <summary>
+//        ///     Metodo para agregar un reclamo
+//        /// </summary>
+//        public void AddClaim(Claim claim, int id)
+//        {
+//            var table = PgConnection.Instance.ExecuteFunction(
+//                "addclaim(@cla_title,@cla_descr, @bag_int)",
+//                claim.Title, claim.Description, id);
+//        }
 
         /// <summary>
         ///     Metodo para obtener el numero de reclamos
@@ -27,40 +25,40 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
             return table.Rows.Count;
         }
 
-        /// <summary>
-        ///     Metodo para obtener un reclamo segun su id
-        /// </summary>
-        public List<Claim> GetClaim(int numero)
-        {
-            var table = new DataTable();
-            if (numero == 0)
-                table = PgConnection.Instance.ExecuteFunction("claim");
-            else
-                table = PgConnection.Instance.ExecuteFunction("getclaim(@cla_id)", numero);
-            if (table.Rows.Count < 1) throw new ClaimNotFoundException("No existe el elemento");
-            return fillList(table);
-        }
-
-        /// <summary>
-        // Metodo para obtener los reclamos segun un tipo de estatus
-        /// </summary>
-        public List<Claim> GetClaimStatus(string cla_status)
-        {
-            var table = PgConnection.Instance.ExecuteFunction("getclaimstatus(@cla_status)", cla_status);
-            return fillList(table);
-            ;
-        }
-
-        /// <summary>
-        // Metodo para obtener reclamo segun un documento de identidad
-        /// </summary>
-        public List<Claim> GetClaimDocument(string numero)
-        {
-            var table = PgConnection.Instance.ExecuteFunction("GetClaimDocument(@cla_id)", numero);
-            if (table.Rows.Count < 1) throw new ClaimNotFoundException("No existe el elemento");
-            return fillList(table);
-            ;
-        }
+//        /// <summary>
+//        ///     Metodo para obtener un reclamo segun su id
+//        /// </summary>
+//        public List<Claim> GetClaim(int numero)
+//        {
+//            var table = new DataTable();
+//            if (numero == 0)
+//                table = PgConnection.Instance.ExecuteFunction("claim");
+//            else
+//                table = PgConnection.Instance.ExecuteFunction("getclaim(@cla_id)", numero);
+//            if (table.Rows.Count < 1) throw new ClaimNotFoundException("No existe el elemento");
+//            return fillList(table);
+//        }
+//
+//        /// <summary>
+//        // Metodo para obtener los reclamos segun un tipo de estatus
+//        /// </summary>
+//        public List<Claim> GetClaimStatus(string cla_status)
+//        {
+//            var table = PgConnection.Instance.ExecuteFunction("getclaimstatus(@cla_status)", cla_status);
+//            return fillList(table);
+//            ;
+//        }
+//
+//        /// <summary>
+//        // Metodo para obtener reclamo segun un documento de identidad
+//        /// </summary>
+//        public List<Claim> GetClaimDocument(string numero)
+//        {
+//            var table = PgConnection.Instance.ExecuteFunction("GetClaimDocument(@cla_id)", numero);
+//            if (table.Rows.Count < 1) throw new ClaimNotFoundException("No existe el elemento");
+//            return fillList(table);
+//            ;
+//        }
 
         /// <summary>
         // eliminar un reclamo
@@ -97,33 +95,33 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
             return claimId;
         }
 
-        /// <summary>
-        // metodo que permite el llenado de las lista de los reclamos en los gets 
-        /// </summary>
-        private List<Claim> fillList(DataTable table)
-        {
-            var ClaimList = new List<Claim>();
-            for (var i = 0; i < table.Rows.Count; i++)
-            {
-                var id = Convert.ToInt32(table.Rows[i][0].ToString());
-                var titulo = table.Rows[i][1].ToString();
-                var descripcion = table.Rows[i][2].ToString();
-                var status = table.Rows[i][3].ToString();
-                Claim claim;
-                if (table.Columns.Count == 4)
-                {
-                    claim = new Claim(id, titulo, descripcion, status);
-                }
-                else
-                {
-                    var idEquipaje = Convert.ToInt32(table.Rows[i][4].ToString());
-                    claim = new Claim(id, titulo, descripcion, status, idEquipaje);
-                }
-
-                ClaimList.Add(claim);
-            }
-
-            return ClaimList;
-        }
+//        /// <summary>
+//        // metodo que permite el llenado de las lista de los reclamos en los gets 
+//        /// </summary>
+//        private List<Claim> fillList(DataTable table)
+//        {
+//            var ClaimList = new List<Claim>();
+//            for (var i = 0; i < table.Rows.Count; i++)
+//            {
+//                var id = Convert.ToInt32(table.Rows[i][0].ToString());
+//                var titulo = table.Rows[i][1].ToString();
+//                var descripcion = table.Rows[i][2].ToString();
+//                var status = table.Rows[i][3].ToString();
+//                Claim claim;
+//                if (table.Columns.Count == 4)
+//                {
+//                    claim = new Claim(id, titulo, descripcion, status);
+//                }
+//                else
+//                {
+//                    var idEquipaje = Convert.ToInt32(table.Rows[i][4].ToString());
+//                    claim = new Claim(id, titulo, descripcion, status, idEquipaje);
+//                }
+//
+//                ClaimList.Add(claim);
+//            }
+//
+//            return ClaimList;
+//        }
     }
 }

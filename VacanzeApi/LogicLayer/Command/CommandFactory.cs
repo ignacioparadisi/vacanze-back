@@ -17,24 +17,34 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new GetBrandsCommand();
         }
 
-        public GetClaimByIdCommand CreateGetClaimByIdCommand(int claimId)
+        public static GetClaimByIdCommand CreateGetClaimByIdCommand(int claimId)
         {
             return new GetClaimByIdCommand(claimId);
         }
 
-        public GetClaimsByStatusCommand CreateGetClaimsByStatusCommand(string status)
+        public static GetClaimsByStatusCommand CreateGetClaimsByStatusCommand(string status)
         {
             return new GetClaimsByStatusCommand(status);
         }
 
-        public GetClaimsByDocumentCommand CreateGetClaimsByDocumentCommand(string document)
+        public static GetClaimsByDocumentCommand CreateGetClaimsByDocumentCommand(string document)
         {
             return new GetClaimsByDocumentCommand(document);
         }
 
-        public AddClaimCommand CreateAddClaimCommand(Claim claim)
+        public static AddClaimCommand CreateAddClaimCommand(Claim claim)
         {
             return new AddClaimCommand(claim);
+        }
+
+        public static ValidateClaimUpdateCommand CreateValidateClaimUpdateCommand(Claim claim)
+        {
+            return new ValidateClaimUpdateCommand(claim);
+        }
+
+        public static ValidateClaimCreationCommand CreateValidateClaimCreationCommand(Claim claim)
+        {
+            return new ValidateClaimCreationCommand(claim);
         }
     }
 }

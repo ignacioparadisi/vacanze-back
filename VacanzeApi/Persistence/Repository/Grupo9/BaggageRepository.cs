@@ -47,7 +47,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
         public int ModifyBaggageStatus(int BaggageId, Baggage Baggage)
         {
             var table = PgConnection.Instance.ExecuteFunction("GetBaggage(@BAG_ID)", BaggageId);
-            if (table.Rows.Count < 1) throw new NullBaggageException("No existe el elemento que desea modificar");
+            if (table.Rows.Count < 1) throw new BaggageNotFoundException("No existe el elemento que desea modificar");
             PgConnection.Instance.ExecuteFunction("modifyBaggagestatus(@bag_id,@bag_status)", BaggageId,
                 Baggage.Status);
             return BaggageId;

@@ -3,7 +3,7 @@ using vacanze_back.VacanzeApi.Persistence.DAO;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9
 {
-    public class AddClaimCommand : Command
+    public class AddClaimCommand : CommandResult<int>
     {
         private readonly Claim _claim;
 
@@ -14,8 +14,15 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9
 
         public void Execute()
         {
+            CommandFactory.CreateValidateClaimCreationCommand(_claim).Execute();
             var daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-            daoFactory.GetClaimDao().Add(_claim);
+            var savedId = daoFactory.GetClaimDao().Add(_claim);
+            _claim.Id = savedId;
+        }
+
+        public int GetResult()
+        {
+            return _claim.Id;
         }
     }
 }

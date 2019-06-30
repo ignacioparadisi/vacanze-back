@@ -94,7 +94,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
                 if (Baggage.Status != null)
                     conec.ModifyBaggageStatus(id, Baggage);
                 else
-                    throw new NullBaggageException("no contiene un status");
+                    throw new BaggageNotFoundException("no contiene un status");
                 return Ok("Modificado exitosamente");
             }
             catch (DatabaseException ex)
@@ -105,7 +105,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             {
                 return StatusCode(500, ex.Message);
             }
-            catch (NullBaggageException ex)
+            catch (BaggageNotFoundException ex)
             {
                 return StatusCode(500, ex.Message);
             }
