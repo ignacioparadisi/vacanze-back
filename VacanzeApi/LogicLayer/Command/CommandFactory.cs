@@ -51,16 +51,20 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new ValidateClaimCreationCommand(claim);
         }
 
-        public static AddHotelCommand createAddHotelCommand(Hotel hotel){
+        public static AddHotelCommand createAddHotelCommand(Hotel hotel)
+        {
             return new AddHotelCommand(hotel);
         }   
-        public static GetHotelByIdCommand GetHotelByIdCommand(int id){
+        public static GetHotelByIdCommand GetHotelByIdCommand(int id)
+        {
             return new GetHotelByIdCommand(id);
         }  
-		public static DeleteHotelCommand DeleteHotelCommand(int id){
+		public static DeleteHotelCommand DeleteHotelCommand(int id)
+        {
             return new DeleteHotelCommand(id);
         }  
-		public static UpdateHotelCommand UpdateHotelCommand(int id, Hotel hotel){
+		public static UpdateHotelCommand UpdateHotelCommand(int id, Hotel hotel)
+        {
             return new UpdateHotelCommand(id,hotel);
         }
     }
