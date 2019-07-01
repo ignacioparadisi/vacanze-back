@@ -116,7 +116,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         [HttpDelete("{id}", Name = "DeleteHotel")]
         public ActionResult Delete([FromRoute] int id)
         {
-            HotelRepository.DeleteHotel(id);
+             DeleteHotelCommand command = CommandFactory.DeleteHotelCommand (id);
+             command.Execute ();
             return Ok();
         }
 
