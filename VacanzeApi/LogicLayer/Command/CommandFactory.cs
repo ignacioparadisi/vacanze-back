@@ -29,6 +29,9 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
 		public static DeleteHotelCommand DeleteHotelCommand(int id){
             return new DeleteHotelCommand(id);
         }  
+		public static UpdateHotelCommand UpdateHotelCommand(int id, Hotel hotel){
+            return new UpdateHotelCommand(id,hotel);
+        }
 
     }
 }

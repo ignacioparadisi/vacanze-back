@@ -182,7 +182,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
         }
 
-
+		/*
         [Test]
         public void Update_HotelWithHigherBoundStarAmount_BadRequestReturned()
         {
@@ -316,6 +316,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
             Assert.AreEqual(_hotel.AmountOfRooms, updatedHotel.AmountOfRooms);
             Assert.AreEqual(_hotel.AddressSpecification, updatedHotel.AddressSpecification);
         }
+		*/
         [Test]
         public void GetHotelImageTest()
         {

@@ -131,13 +131,21 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         /// <exception cref="RequiredAttributeException">Algun atributo requerido estaba como null</exception>
         /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
         [HttpPut("{hotelId}", Name = "UpdateHotel")]
-        public ActionResult<Hotel> Update([FromRoute] int hotelId, [FromBody] Hotel dataToUpdate)
+        public ActionResult<Hotel> Update([FromRoute] int hotelId, [FromBody] HotelDTO hotelDTO)
         {
             try
             {
-                HotelRepository.GetHotelById(hotelId);
-                var updated = HotelRepository.UpdateHotel(hotelId, dataToUpdate);
-                return Ok(updated);
+				GetHotelByIdCommand commandId =  CommandFactory.GetHotelByIdCommand(hotelId);
+                commandId.Execute ();
+               // DTO lDTO  = HotelMapper.CreateDTO((Hotel) commandId.GetResult());  
+
+                //var updated = HotelRepository.UpdateHotel(hotelId, dataToUpdate);
+				HotelMapper HotelMapper = MapperFactory.createHotelMapper();
+                Entity entity = HotelMapper.CreateEntity(hotelDTO);
+                UpdateHotelCommand command = CommandFactory.UpdateHotelCommand(hotelId, (Hotel) entity);
+                command.Execute ();
+                DTO lDTO  = HotelMapper.CreateDTO((Hotel) command.GetResult());               
+                return Ok(lDTO);
             }
             catch (HotelNotFoundException)
             {
