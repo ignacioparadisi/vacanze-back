@@ -15,6 +15,12 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
 
         public Entity User { get; set; }
         public int Id { get; set; }
+
+        public GetUserByIdCommand(int id)
+        {
+            this.Id = id;
+        }
+
         public void Execute()
         {
             try
@@ -29,10 +35,6 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
             }
         }
 
-        public GetUserByIdCommand(int id)
-        {
-            this.Id = id;
-        }
         public Entity GetResult()
         {
             return User;

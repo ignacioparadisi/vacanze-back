@@ -1,5 +1,7 @@
+using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9;
 
@@ -45,6 +47,31 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         public static ValidateClaimCreationCommand CreateValidateClaimCreationCommand(Claim claim)
         {
             return new ValidateClaimCreationCommand(claim);
+        }
+
+        public static GetEmployeesCommand CreateGetEmployeesCommand()
+        {
+            return new GetEmployeesCommand();
+        }
+
+        public static GetRolesCommand CreateGetRolesCommand()
+        {
+            return new GetRolesCommand();
+        }
+
+        public static GetRolesForUserCommand CreateGetRolesForUserCommand(User user)
+        {
+            return new GetRolesForUserCommand(user);
+        }
+
+        public static GetUserByIdCommand CreateGetUserByIdCommand(int id)
+        {
+            return new GetUserByIdCommand(id);
+        }
+
+        public static UpdateUserCommand CreateUpdateUserCommand(User user)
+        {
+            return new UpdateUserCommand(user);
         }
     }
 }

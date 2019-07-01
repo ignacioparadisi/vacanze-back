@@ -5,6 +5,10 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2;
+using vacanze_back.VacanzeApi.LogicLayer.Command;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo2;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo2;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
 {
@@ -34,5 +38,33 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
 
             return Ok(roles);
         }
+
+        /* FALTA PROBARLO
+        // GET api/values
+        /// <summary>
+        /// Obtienes los roles disponibles
+        /// </summary>
+        /// <returns>Una lista de roles</returns>
+        [HttpGet]
+        public ActionResult<IEnumerable<Entity>> GetRoles()
+        {
+            var roles = new List<Entity>();
+            var rolesDTO = new List<RoleDTO>();
+            try
+            {
+                GetRolesCommand command = CommandFactory.CreateGetRolesCommand();
+                command.Execute();
+                roles = command.GetResult();
+                RoleMapper mapper = new RoleMapper();
+                rolesDTO = mapper.CreateDTOList(roles);
+            }
+            catch (DatabaseException e)
+            {
+                return BadRequest("Error al Obtener Roles");
+            }
+
+            return Ok(rolesDTO);
+        }
+        */
     }
 }

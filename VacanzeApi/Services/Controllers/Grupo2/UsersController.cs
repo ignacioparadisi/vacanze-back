@@ -6,6 +6,8 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2;
+using vacanze_back.VacanzeApi.LogicLayer.Command;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
 {
@@ -35,13 +37,34 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
                return Ok(users);
           }
 
-          // GET api/users/5
-          /// <summary>
-          /// Busca un usuario con el id especificado
-          /// </summary>
-          /// <param name="id">Id del usuario que se desea buscar</param>
-          /// <returns>Un usuario que corresponde al id especificado</returns>
-          [HttpGet("{id}")]
+        /* FALTA PROBARLO #1
+        // GET api/users
+        /// <summary>
+        /// Obtiene solo los usuarios empleados
+        /// </summary>
+        /// <returns>Devuelve una lista de usuarios que son empleados</returns>
+        [HttpGet]
+        public ActionResult<IEnumerable<User>> GetEmployees(){
+            List<User> users = new List<User>();
+            try {
+                GetEmployeesCommand command = CommandFactory.CreateGetEmployeesCommand();
+                command.Execute ();
+                return Ok (command.GetResult ());
+            } catch (InternalServerErrorException ex) {
+                return StatusCode (500, ex.Message);
+            } catch (Exception) {
+                return StatusCode (400);
+            }
+        }
+         */
+
+        // GET api/users/5
+        /// <summary>
+        /// Busca un usuario con el id especificado
+        /// </summary>
+        /// <param name="id">Id del usuario que se desea buscar</param>
+        /// <returns>Un usuario que corresponde al id especificado</returns>
+        [HttpGet("{id}")]
           public ActionResult<Entity> Get(int id)
           {
                User user;
@@ -60,13 +83,42 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
                return Ok(user);
           }
 
-          // POST api/users
-          /// <summary>
-          /// Manda a guardar el usuario en la base de datos
-          /// </summary>
-          /// <param name="user">Usuario que se desea guardar</param>
-          /// <returns>Retorna el usuario almacenado</returns>
-          [HttpPost]
+        /* FALTA PROBARLO #2
+        // GET api/users/5
+        /// <summary>
+        /// Busca un usuario con el id especificado
+        /// </summary>
+        /// <param name="id">Id del usuario que se desea buscar</param>
+        /// <returns>Un usuario que corresponde al id especificado</returns>
+        [HttpGet("{id}")]
+        public ActionResult<Entity> Get(int id)
+        {
+            User user;
+            try
+            {
+                GetUserByIdCommand command = CommandFactory.CreateGetUserByIdCommand(id);
+                command.Execute();
+                user = (User) command.GetResult();
+            }
+            catch (GeneralException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Error de servidor");
+            }
+            return Ok(user);
+        }
+        */
+
+        // POST api/users
+        /// <summary>
+        /// Manda a guardar el usuario en la base de datos
+        /// </summary>
+        /// <param name="user">Usuario que se desea guardar</param>
+        /// <returns>Retorna el usuario almacenado</returns>
+        [HttpPost]
           public ActionResult<Entity> Post([FromBody] User user)
           {
                try
@@ -88,14 +140,14 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
                return Ok(user);
           }
 
-          // PUT api/users/5
-          /// <summary>
-          /// Manda a actualizar el usuario en la base de datos
-          /// </summary>
-          /// <param name="id">Id del usuario que se desea actualizar</param>
-          /// <param name="user">Información del usuario actualizada</param>
-          /// <returns>Retorna el usuario actualizado</returns>
-          [HttpPut("{id}")]
+        // PUT api/users/5
+        /// <summary>
+        /// Manda a actualizar el usuario en la base de datos
+        /// </summary>
+        /// <param name="id">Id del usuario que se desea actualizar</param>
+        /// <param name="user">Información del usuario actualizada</param>
+        /// <returns>Retorna el usuario actualizado</returns>
+        [HttpPut("{id}")]
           // TODO: Retornar el usuario actualizado
           public ActionResult<int> Put(int id, [FromBody] User user)
           {
