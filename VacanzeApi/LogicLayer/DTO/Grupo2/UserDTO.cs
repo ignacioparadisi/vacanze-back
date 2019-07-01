@@ -9,23 +9,23 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo2
     public class UserDTO : DTO
     {
 
-        public int _Id { get; set; }
-        public long _DocumentId { get; set; }
-        public string _Email { get; set; }
-        public string _Lastname { get; set; }
-        public string _Name { get; set; }
-        public string _Password { get; set; }
-        public List<Role> _Roles { get; set; }
+        public int Id { get; set; }
+        public long DocumentId { get; set; }
+        public string Email { get; set; }
+        public string Lastname { get; set; }
+        public string Name { get; set; }
+        public string Password { get; set; }
+        public List<Role> Roles { get; set; }
 
-        public UserDTO(int Id, long DocumentId, string Email, string Lastname, string Name, string Password, List<Role> Roles)
+        public UserDTO(int Id, long DocumentId, string Name, string Lastname, string Email, string Password, List<Role> Roles)
         {
-            _Id = Id;
-            _DocumentId = DocumentId;
-            _Email = Email;
-            _Lastname = Lastname;
-            _Name = Name;
-            _Password = Password;
-            _Roles = Roles;
+            this.Id = Id;
+            this.DocumentId = DocumentId;
+            this.Email = Email;
+            this.Lastname = Lastname;
+            this.Name = Name;
+            this.Password = Password;
+            this.Roles = Roles;
         }
 
         public UserDTO()

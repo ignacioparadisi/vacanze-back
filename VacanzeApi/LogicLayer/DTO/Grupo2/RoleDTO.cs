@@ -21,6 +21,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo2
 
         public RoleDTO(int id, string name)
         {
+            _Id = id;
             _Name = name;
         }
 
