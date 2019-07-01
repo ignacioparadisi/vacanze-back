@@ -5,11 +5,10 @@ using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo7;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo7
 {
-    public class RestaurantMapper : Mapper<RestaurantDTO>
+    public class RestaurantMapper : Mapper<RestaurantDTO,Restaurant>
     {
-        public RestaurantDTO CreateDTO(Entity entity)
+        public RestaurantDTO CreateDTO(Restaurant restaurant)
         {
-            var restaurant = (Restaurant) entity;
             return new RestaurantDTO
             {
                 Id = restaurant.Id,
@@ -28,12 +27,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo7
             };
         }
         
-        public List<RestaurantDTO> CreateDTOList(List<Entity> entities)
+        public List<RestaurantDTO> CreateDTOList(List<Restaurant> restaurants)
         {
             List<RestaurantDTO> dtoList= new List<RestaurantDTO>();
-            foreach (Entity entity in entities)
+            foreach (Restaurant restaurant in restaurants)
             {
-                var restaurant = (Restaurant) entity;
                 dtoList.Add(new RestaurantDTO
                 {
                     Id = restaurant.Id,
@@ -54,20 +52,20 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo7
             return dtoList;
         }
 
-        public Entity CreateEntity(RestaurantDTO dto)
+        public Restaurant CreateEntity(RestaurantDTO dto)
         {
             return EntityFactory.CreateRestaurant(dto.Id, dto.Name, dto.Capacity, dto.IsActive, dto.Qualify,
                 dto.Specialty, dto.Price, dto.BusinessName, dto.Picture, dto.Description, dto.Phone, dto.Location
                 ,dto.Address);
         }
 
-        public List<Entity> CreateEntityList(List<RestaurantDTO> dtoList)
+        public List<Restaurant> CreateEntityList(List<RestaurantDTO> dtoList)
         {
-            List<Entity> restaurants = new List<Entity>();
+            List<Restaurant> restaurants = new List<Restaurant>();
             foreach (RestaurantDTO dto in dtoList)
             {
                 restaurants.Add(
-                    (Restaurant) EntityFactory.CreateRestaurant(dto.Id, dto.Name, dto.Capacity, dto.IsActive, dto.Qualify,
+                     EntityFactory.CreateRestaurant(dto.Id, dto.Name, dto.Capacity, dto.IsActive, dto.Qualify,
                     dto.Specialty, dto.Price, dto.BusinessName, dto.Picture, dto.Description, dto.Phone, dto.Location
                     ,dto.Address));
             }

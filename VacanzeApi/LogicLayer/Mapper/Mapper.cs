@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Mapper{
 
-    public interface Mapper <T> {
+    public interface Mapper <T,E> {
 
-        T CreateDTO(Entity entity);
+        T CreateDTO(E entity);
 
-        Entity CreateEntity(T dto);
+        E CreateEntity(T dto);
 
-        List<T> CreateDTOList(List<Entity> entities);
+        List<T> CreateDTOList(List<E> entities);
 
-        List<Entity> CreateEntityList(List<T> dtos);
+        List<E> CreateEntityList(List<T> dtos);
     }
 }

@@ -5,11 +5,11 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
 
     public class EntityFactory{
 
-        public static Entity createBrand(string brandName){
+        public static Brand createBrand(string brandName){
             return new Brand(brandName);
         }
 
-        public static Entity CreateRestaurant(int id, string name, int capacity,bool isActive,decimal qualify, string specialty, 
+        public static Restaurant CreateRestaurant(int id, string name, int capacity,bool isActive,decimal qualify, string specialty, 
             decimal price, string businessName, string picture, 
             string description, string phone, int location, string address)
         {
