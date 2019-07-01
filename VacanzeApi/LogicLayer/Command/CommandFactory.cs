@@ -50,9 +50,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new ValidateClaimCreationCommand(claim);
         }
-        // +++++++++++++++++
-        //     GRUPO 6
-        // +++++++++++++++++
+
         public static AddHotelCommand createAddHotelCommand(Hotel hotel){
             return new AddHotelCommand(hotel);
         }   
@@ -64,5 +62,6 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         }  
 		public static UpdateHotelCommand UpdateHotelCommand(int id, Hotel hotel){
             return new UpdateHotelCommand(id,hotel);
+        }
     }
 }
