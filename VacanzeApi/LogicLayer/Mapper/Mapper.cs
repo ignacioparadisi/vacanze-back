@@ -12,6 +12,5 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper{
         List<T> CreateDTOList(List<Entity> entities);
 
         List<Entity> CreateEntityList(List<T> dtos);
-
     }
 }

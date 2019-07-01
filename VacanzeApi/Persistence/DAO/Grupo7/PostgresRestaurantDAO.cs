@@ -68,7 +68,6 @@ namespace DefaultNamespace
             catch(DatabaseException){
                 throw new GetRestaurantExcepcion("No se pudieron obtener los restaurants existentes");
             }
-            
         }
         
         public List<Restaurant> GetRestaurantsByCity(int location_id)
