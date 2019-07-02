@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using DefaultNamespace;
 using Npgsql;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
@@ -15,22 +16,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo7
             try
             {
                 var table = PgConnection.Instance.ExecuteFunction("GetRestaurant(@restaurant_id)" , id);
-                var restaurantId = Convert.ToInt32(table.Rows[0][0]);
-                var name = table.Rows[0][1].ToString();
-                var capacity = Convert.ToInt32(table.Rows[0][2]); 
-                var isActive = Convert.ToBoolean(table.Rows[0][3]);
-                var qualify = Convert.ToDecimal(table.Rows[0][4]);
-                var specialty = table.Rows[0][5].ToString();
-                var price = Convert.ToDecimal(table.Rows[0][6]);
-                var businessName = table.Rows[0][7].ToString();
-                var picture = table.Rows[0][8].ToString();
-                var description = table.Rows[0][9].ToString();
-                var phone = table.Rows[0][10].ToString();
-                var location = Convert.ToInt32(table.Rows[0][11]);
-                var address = table.Rows[0][12].ToString();
-                Console.WriteLine(name);
-                Restaurant restaurant = new Restaurant(restaurantId, name, capacity, isActive, qualify, specialty, price, businessName, picture, description, phone, location, address);
-                return restaurant;
+                return ExtractResturantFromRow(table.Rows[0]);
             }
             catch (DatabaseException)
             {
@@ -46,20 +32,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo7
                 var restaurantList = new List<Restaurant>();
                 for (var i = 0; i < table.Rows.Count; i++)
                 {
-                    var id = Convert.ToInt32(table.Rows[i][0]);
-                    var name = table.Rows[i][1].ToString();
-                    var capacity = Convert.ToInt32(table.Rows[i][2]); 
-                    var isActive = Convert.ToBoolean(table.Rows[i][3]);
-                    var qualify = Convert.ToDecimal(table.Rows[i][4]);
-                    var specialty = table.Rows[i][5].ToString();
-                    var price = Convert.ToDecimal(table.Rows[i][6]);
-                    var businessName = table.Rows[i][7].ToString();
-                    var picture = table.Rows[i][8].ToString();
-                    var description = table.Rows[i][9].ToString();
-                    var phone = table.Rows[i][10].ToString();
-                    var location = Convert.ToInt32(table.Rows[i][11]);
-                    var address = table.Rows[i][12].ToString();
-                    var restaurant = new Restaurant(id, name, capacity, isActive, qualify, specialty, price, businessName, picture, description, phone, location, address);
+                    var restaurant = ExtractResturantFromRow(table.Rows[i]);
                     restaurantList.Add(restaurant);
                 }
 
@@ -78,20 +51,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo7
                 var restaurantList = new List<Restaurant>();
                 for (var i = 0; i < table.Rows.Count; i++)
                 {
-                    var id = Convert.ToInt32(table.Rows[i][0]);
-                    var name = table.Rows[i][1].ToString();
-                    var capacity = Convert.ToInt32(table.Rows[i][2]); 
-                    var isActive = Convert.ToBoolean(table.Rows[i][3]);
-                    var qualify = Convert.ToDecimal(table.Rows[i][4]);
-                    var specialty = table.Rows[i][5].ToString();
-                    var price = Convert.ToDecimal(table.Rows[i][6]);
-                    var businessName = table.Rows[i][7].ToString();
-                    var picture = table.Rows[i][8].ToString();
-                    var description = table.Rows[i][9].ToString();
-                    var phone = table.Rows[i][10].ToString();
-                    var location = Convert.ToInt32(table.Rows[i][11]);
-                    var address = table.Rows[i][12].ToString();
-                    var restaurant = new Restaurant(id, name, capacity, isActive, qualify, specialty, price, businessName, picture, description, phone, location, address);
+                    var restaurant = ExtractResturantFromRow(table.Rows[i]);
                     restaurantList.Add(restaurant);
                 }
                 return restaurantList;
@@ -166,6 +126,25 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo7
             {
                 throw new DatabaseException(e.Message);
             }
+        }
+
+        public Restaurant ExtractResturantFromRow(DataRow row)
+        {
+            var restaurantId = Convert.ToInt32(row[0]);
+            var name = row[1].ToString();
+            var capacity = Convert.ToInt32(row[2]); 
+            var isActive = Convert.ToBoolean(row[3]);
+            var qualify = Convert.ToDecimal(row[4]);
+            var specialty =row[5].ToString();
+            var price = Convert.ToDecimal(row[6]);
+            var businessName = row[7].ToString();
+            var picture = row[8].ToString();
+            var description = row[9].ToString();
+            var phone = row[10].ToString();
+            var location = Convert.ToInt32(row[11]);
+            var address = row[12].ToString();
+            Restaurant restaurant = new Restaurant(restaurantId, name, capacity, isActive, qualify, specialty, price, businessName, picture, description, phone, location, address);
+            return restaurant;
         }
     }
 }
