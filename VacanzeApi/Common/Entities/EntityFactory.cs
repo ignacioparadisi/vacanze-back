@@ -17,7 +17,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
             return new Restaurant(id,name,capacity,isActive,qualify,specialty,price,businessName,picture,description,phone,location,address);
         }
 
-        public static Hotel createHotel(int id , string name , int amountOfRooms, int roomCapacity ,
+        public static Entity createHotel(int id , string name , int amountOfRooms, int roomCapacity ,
             bool isActive, string addressSpecs, decimal pricePerRoom, string website , string phone ,
             string picture, int stars , int locationId )
         {
