@@ -5,9 +5,12 @@ using System.Collections.Generic;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo7;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo7;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
+
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command
 {
@@ -62,6 +65,23 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         public static ValidateClaimCreationCommand CreateValidateClaimCreationCommand(Claim claim)
         {
             return new ValidateClaimCreationCommand(claim);
+        }
+
+        public static AddHotelCommand createAddHotelCommand(Hotel hotel)
+        {
+            return new AddHotelCommand(hotel);
+        }   
+        public static GetHotelByIdCommand GetHotelByIdCommand(int id)
+        {
+            return new GetHotelByIdCommand(id);
+        }  
+		public static DeleteHotelCommand DeleteHotelCommand(int id)
+        {
+            return new DeleteHotelCommand(id);
+        }  
+		public static UpdateHotelCommand UpdateHotelCommand(int id, Hotel hotel)
+        {
+            return new UpdateHotelCommand(id,hotel);
         }
     }
 }
