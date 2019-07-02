@@ -148,12 +148,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         /// <returns>Objeto de tipo JSON que contiene el identificador del restaurant eliminado</returns>
         /// <exception cref="DeleteRestaurantException">Ocurrio una excepcion en la ejecución del repository</exception>
         [HttpDelete("{id}")]
-        public ActionResult<int> DeleteRestaurant(int id)
+        public IActionResult DeleteRestaurant(int id)
         {
             try
             {
-                var deletedid = RestaurantRepository.DeleteRestaurant(id);
-                return StatusCode(200, "Eliminado satisfactoriamente");
+                DeleteRestaurantCommand deleteRestaurantCommand = CommandFactory.CreateDeleteRestaurantCommand(id);
+                deleteRestaurantCommand.Execute();
+                return Ok("Eliminado satisfactoriamente");
             }
             catch(DeleteRestaurantException e)
             {
