@@ -55,7 +55,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         {
             try
             {
-                return RestaurantRepository.GetRestaurantsByCity(id);
+                GetRestaurantsByCityCommand getRestaurantsByCityCommand = CommandFactory.CreateGetRestaurantsByCityCommand(id);
+                getRestaurantsByCityCommand.Execute();
+                List<RestaurantDTO> restaurantsDtoList = getRestaurantsByCityCommand.GetResult();
+                return Ok(JsonConvert.SerializeObject(restaurantsDtoList));
             }
             catch(GetRestaurantExcepcion e)
             {
