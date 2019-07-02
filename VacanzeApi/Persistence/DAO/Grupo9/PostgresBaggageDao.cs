@@ -42,14 +42,18 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo9
             return baggagesBySatus;
         }
 
-        public void Update(int id, Baggage updatedBaggage)
+        public Baggage Update(int id, Baggage updatedBaggage)
         {
-            throw new System.NotImplementedException();
+            //TODO: Hacer validator del baggage
+            var table = PgConnection.Instance.ExecuteFunction("GetBaggage(@BAG_ID)", id);
+            if (table.Rows.Count == 0) throw new BaggageNotFoundException("No existe el elemento que desea modificar");
+            PgConnection.Instance.ExecuteFunction("modifyBaggagestatus(@bag_id,@bag_status)", id,
+                updatedBaggage.Status);
+            return GetById(id);
         }
 
         private Baggage ExtractBaggageFromRow(DataRow row)
         {
-            // TODO: Hacer BaggageBuilder para agregar fk de vuelo o crucero
             var id = Convert.ToInt32(row[0]);
             var descripcion = row[1].ToString();
             var status = row[2].ToString();

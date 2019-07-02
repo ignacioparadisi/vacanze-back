@@ -11,6 +11,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo9
         
         List<Baggage> GetByStatus(string status);
 
-        void Update(int id, Baggage updatedBaggage);
+        Baggage Update(int id, Baggage updatedBaggage);
     }
 }
