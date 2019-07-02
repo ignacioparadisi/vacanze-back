@@ -48,6 +48,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new UpdateRestaurantCommand(restaurantDto);
         }
+        
+        public static DeleteRestaurantCommand CreateDeleteRestaurantCommand(int id)
+        {
+            return new DeleteRestaurantCommand(id);
+        }
 
         public static GetClaimByIdCommand CreateGetClaimByIdCommand(int claimId)
         {

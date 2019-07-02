@@ -125,12 +125,14 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         /// <returns>Objeto tipo JSON del restaurant modificado</returns>
         /// <exception cref="UpdateRestaurantException">Ocurrio una excepcion en la ejecución del repository</exception>
         [HttpPut]
-         public ActionResult<Restaurant> PutRestaurant([FromBody] Restaurant restaurant)
+         public ActionResult<Restaurant> PutRestaurant([FromBody] RestaurantDTO restaurant)
          {
              try
              {
-                var UpdatedRestaurant = RestaurantRepository.UpdateRestaurant(restaurant);
-                return StatusCode(200, restaurant);
+                 UpdateRestaurantCommand updateRestaurantCommand = CommandFactory.CreateUpdateRestaurantCommand(restaurant);
+                 updateRestaurantCommand.Execute();
+                 RestaurantDTO updatedRestaurant = updateRestaurantCommand.GetResult();
+                 return Ok(updatedRestaurant);
              }
              catch(UpdateRestaurantException e)
              {

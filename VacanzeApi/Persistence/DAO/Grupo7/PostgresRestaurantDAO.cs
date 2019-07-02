@@ -151,13 +151,12 @@ namespace DefaultNamespace
            
         }
 
-        public int DeleteRestaurant(int id)
+        public void DeleteRestaurant(int id)
         {
             try
             {
                 var table = PgConnection.Instance.ExecuteFunction("DeleteRestaurant(@id)",id);
                 var deletedid = Convert.ToInt32(table.Rows[0][0]);
-                return deletedid;
             }
             catch (InvalidCastException)
             {
