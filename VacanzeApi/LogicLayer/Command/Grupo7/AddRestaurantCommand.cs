@@ -1,18 +1,15 @@
-using DefaultNamespace;
-using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
+
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo7;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper;
-using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo7;
 using vacanze_back.VacanzeApi.Persistence.DAO;
-using vacanze_back.VacanzeApi.Persistence.DAO.Grupo7;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo7
 {
     public class AddRestaurantCommand
     {
-        private RestaurantDTO _restaurantDto;
+        private RestaurantDto _restaurantDto;
         
-        public AddRestaurantCommand(RestaurantDTO restaurantDto)
+        public AddRestaurantCommand(RestaurantDto restaurantDto)
         {
             _restaurantDto = restaurantDto;
         }
@@ -24,7 +21,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo7
             CommandFactory.CreateGetRestaurantValidatorCommand(restaurant).Execute();
             _restaurantDto.Id = daoFactory.GetRestaurantDAO().AddRestaurant(restaurant);
         }
-        public RestaurantDTO GetResult()
+        public RestaurantDto GetResult()
         {
             return _restaurantDto;
         }

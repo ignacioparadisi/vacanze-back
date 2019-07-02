@@ -35,7 +35,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new GetRestaurantCommand(id);
         }
 
-        public static AddRestaurantCommand CreateAddRestaurantCommand(RestaurantDTO restaurantDto)
+        public static AddRestaurantCommand CreateAddRestaurantCommand(RestaurantDto restaurantDto)
         {
             return new AddRestaurantCommand(restaurantDto);
         }
@@ -50,7 +50,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new GetRestaurantsByCityCommand(locationId);
         }
         
-        public static UpdateRestaurantCommand CreateUpdateRestaurantCommand(RestaurantDTO restaurantDto)
+        public static UpdateRestaurantCommand CreateUpdateRestaurantCommand(RestaurantDto restaurantDto)
         {
             return new UpdateRestaurantCommand(restaurantDto);
         }
