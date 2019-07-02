@@ -6,9 +6,9 @@ using vacanze_back.VacanzeApi.LogicLayer.DTO;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo6{
 
-    public class HotelMapper : Mapper<HotelDTO> {
+    public class HotelMapper : Mapper<HotelDTO, Hotel> {
 
-        public HotelDTO CreateDTO(Entity entity){
+        public HotelDTO CreateDTO(Hotel entity){
             Hotel hotel =  (Hotel) entity;
             HotelDTO HotelDTO = DTOFactory.CreateHotelDTO(hotel.Id, hotel.Name, hotel.AmountOfRooms, 
                                             hotel.RoomCapacity , hotel.IsActive, hotel.AddressSpecification,
@@ -17,8 +17,8 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo6{
             return HotelDTO;
         }
 
-        public Entity CreateEntity(HotelDTO hotelDto){
-            Entity entity = EntityFactory.createHotel(hotelDto.Id, hotelDto.Name, hotelDto.AmountOfRooms, 
+        public Hotel CreateEntity(HotelDTO hotelDto){
+            Hotel entity = EntityFactory.createHotel(hotelDto.Id, hotelDto.Name, hotelDto.AmountOfRooms, 
                                             hotelDto.RoomCapacity, hotelDto.IsActive, hotelDto.AddressSpecification,
                                             hotelDto.PricePerRoom, hotelDto.Website, hotelDto.Phone ,
                                             hotelDto.Picture, hotelDto.Stars, hotelDto.Location.Id);
@@ -26,7 +26,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo6{
             return entity;
         }
 
-        public List<HotelDTO> CreateDTOList(List<Entity> entities){
+        public List<HotelDTO> CreateDTOList(List<Hotel> entities){
             List<HotelDTO> dtos = new List<HotelDTO>();
             foreach(Entity entity in entities){
                 Hotel hotel = (Hotel) entity;
@@ -38,8 +38,8 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo6{
             return dtos;
         }
 
-        public List<Entity> CreateEntityList(List<HotelDTO> dtos){
-            List<Entity> entities = new List<Entity>();
+        public List<Hotel> CreateEntityList(List<HotelDTO> dtos){
+            List<Hotel> entities = new List<Hotel>();
             foreach(HotelDTO hotelDto in dtos){
                 entities.Add(EntityFactory.createHotel(hotelDto.Id, hotelDto.Name, hotelDto.AmountOfRooms, 
                                             hotelDto.RoomCapacity, hotelDto.IsActive, hotelDto.AddressSpecification,

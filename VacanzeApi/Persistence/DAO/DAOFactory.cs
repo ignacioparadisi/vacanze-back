@@ -1,3 +1,4 @@
+using DefaultNamespace;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
@@ -32,7 +33,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         //     GRUPO 13
         // +++++++++++++++++
         public abstract ReservationRoomDAO GetReservationRoomDAO();
-
+        // +++++++++++++++++
+        //     GRUPO 7
+        // +++++++++++++++++
+        public abstract IRestaurantDAO GetRestaurantDAO();
+        
         public abstract IClaimDao GetClaimDao();
         
         public abstract RoleDAO GetRoleDAO();

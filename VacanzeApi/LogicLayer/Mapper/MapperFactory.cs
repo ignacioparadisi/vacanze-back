@@ -1,5 +1,6 @@
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo5;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo6;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo7;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Mapper
 {
@@ -10,12 +11,13 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper
             return new BrandMapper();
         }
 
-        // +++++++++++++++++
-        //     GRUPO 6
-        // +++++++++++++++++
+        public static RestaurantMapper CreateRestaurantMapper()
+        {
+            return new RestaurantMapper();
+        }
+
         public static HotelMapper createHotelMapper(){
             return new HotelMapper();
         }
-
     }
 }
