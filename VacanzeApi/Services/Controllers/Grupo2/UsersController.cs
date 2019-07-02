@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo2;
+using vacanze_back.VacanzeApi.Common.Entities;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
 {
@@ -20,9 +21,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
           /// </summary>
           /// <returns>Devuelve una lista de usuarios que son empleados</returns>
           [HttpGet]
-          public ActionResult<IEnumerable<User>> GetEmployees()
+          public ActionResult<IEnumerable<Entity>> GetEmployees()
           {
-               var users = new List<User>();
+               var users = new List<Entity>();
                try
                {
                     users = UserRepository.GetEmployees();
@@ -41,12 +42,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
           /// <param name="id">Id del usuario que se desea buscar</param>
           /// <returns>Un usuario que corresponde al id especificado</returns>
           [HttpGet("{id}")]
-          public ActionResult<User> Get(int id)
+          public ActionResult<Entity> Get(int id)
           {
                User user;
                try
                {
-                    user = UserRepository.GetUserById(id);
+                    user = (User)UserRepository.GetUserById(id);
                }
                catch (GeneralException e)
                {
@@ -66,11 +67,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
           /// <param name="user">Usuario que se desea guardar</param>
           /// <returns>Retorna el usuario almacenado</returns>
           [HttpPost]
-          public ActionResult<User> Post([FromBody] User user)
+          public ActionResult<Entity> Post([FromBody] User user)
           {
                try
                {
-                    user = UserRepository.AddUser(user);
+                    user = (User)UserRepository.AddUser(user);
                     foreach (var roles in user.Roles)
                     {
                          UserRepository.AddUser_Role(user.Id, roles.Id);

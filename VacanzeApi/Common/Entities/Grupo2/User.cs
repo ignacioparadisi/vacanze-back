@@ -9,9 +9,8 @@ using vacanze_back.VacanzeApi.Common.Exceptions;
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
 {
-    public class User
+    public class User : Entity
     {
-        public int Id;
         public long DocumentId;
         public string Email;
         public string Lastname;
@@ -20,9 +19,8 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         public List<Role> Roles;
 
         public User(int id, long documentId, string name, string lastname, string email,
-            string password, List<Role> roles)
+            string password, List<Role> roles) : base(id)
         {
-            Id = id;
             DocumentId = documentId;
             Name = name.Trim();
             Lastname = lastname.Trim();
@@ -31,9 +29,8 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
             Roles = roles;
         }
 
-        public User(int id, long documentId, string name, string lastname, string email)
+        public User(int id, long documentId, string name, string lastname, string email) : base(id)
         {
-            Id = id;
             DocumentId = documentId;
             Name = name.Trim();
             Lastname = lastname.Trim();
@@ -49,7 +46,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo2
         /// <param name="email">Correo electrónico del usuario</param>
         /// <param name="password">Contraseña del usuario</param>
         [JsonConstructor]
-        public User(long documentId, string name, string lastname, string email, string password)
+        public User(int id, long documentId, string name, string lastname, string email, string password) : base(id)
         {
             DocumentId = documentId;
             Name = name.Trim();
