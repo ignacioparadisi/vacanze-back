@@ -33,7 +33,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         {
             try
             {
-                return RestaurantRepository.GetRestaurants();
+                GetRestaurantsCommand getRestaurantsCommand = CommandFactory.CreateGetRestaurantsCommand();
+                getRestaurantsCommand.Execute();
+                List<RestaurantDTO> restaurantsDtoList = getRestaurantsCommand.GetResult();
+                return Ok(JsonConvert.SerializeObject(restaurantsDtoList));
             }
             catch (GetRestaurantExcepcion e)
             {

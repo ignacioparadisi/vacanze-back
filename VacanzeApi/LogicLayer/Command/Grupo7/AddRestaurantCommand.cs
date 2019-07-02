@@ -20,7 +20,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo7
             DAOFactory daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
             PostgresRestaurantDAO restaurantDao = (PostgresRestaurantDAO) daoFactory.GetRestaurantDAO();
             RestaurantMapper restaurantMapper = MapperFactory.CreateRestaurantMapper();
-            Restaurant restaurant = (Restaurant) restaurantMapper.CreateEntity(_restaurantDto);
+            Restaurant restaurant = restaurantMapper.CreateEntity(_restaurantDto);
             _restaurantDto.Id = restaurantDao.AddRestaurant(restaurant);
         }
         public RestaurantDTO GetResult()
