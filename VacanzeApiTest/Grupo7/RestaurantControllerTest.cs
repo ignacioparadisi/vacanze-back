@@ -63,20 +63,20 @@ namespace vacanze_back.VacanzeApiTest.Grupo7
             Assert.NotNull(res);
         }
 
-        [Test]
-        public void PutRestaurantTest()
-        {
-            ActionResult<Restaurant> res = restaurantsController.PutRestaurant(restaurant);
-            Assert.NotNull(res);
-        }
+//        [Test]
+////        public void PutRestaurantTest()
+////        {
+////            ActionResult<Restaurant> res = restaurantsController.PutRestaurant(restaurant);
+////            Assert.NotNull(res);
+////        }
 
         [Test]
-        public void DeleteRestaurantTest()
-        {
-            ActionResult<int> res = restaurantsController.DeleteRestaurant(id);
-            id = 0;
-            Assert.NotNull(res);
-        }
+//        public void DeleteRestaurantTest()
+//        {
+//            ActionResult<int> res = restaurantsController.DeleteRestaurant(id);
+//            id = 0;
+//            Assert.NotNull(res);
+//        }
 
         [TearDown]
         public void TearDown()
