@@ -4,6 +4,7 @@ using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo7;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo7;
 using vacanze_back.VacanzeApi.Persistence.DAO;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo7;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo7
 {
@@ -19,9 +20,8 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo7
         public void Execute()
         {
             DAOFactory daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-            PostgresRestaurantDAO restaurantDao = (PostgresRestaurantDAO) daoFactory.GetRestaurantDAO();
             RestaurantMapper restaurantMapper = MapperFactory.CreateRestaurantMapper();
-            _restaurantDto = restaurantMapper.CreateDTO(restaurantDao.GetRestaurant(_id));
+            _restaurantDto = restaurantMapper.CreateDTO(daoFactory.GetRestaurantDAO().GetRestaurant(_id));
         }
         public RestaurantDTO GetResult()
         {

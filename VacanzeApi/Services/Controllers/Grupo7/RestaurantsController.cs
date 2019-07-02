@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using Newtonsoft.Json;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo7;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo7;
@@ -21,7 +23,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
     [Route("api/[controller]")]
     [EnableCors("MyPolicy")]
     [ApiController]
-    public class RestaurantsController : ControllerBase
+    public class RestaurantsController : Controller
     {
         /// <summary>
         ///     Metodo para obtener todos los restaurantes
@@ -29,14 +31,14 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         /// <returns>Objeto tipo JSON con los restaurantes obtenidos</returns>
         /// <exception cref="GetRestaurantExcepcion">Ocurrio una excepcion en la ejecución del repository</exception>
         [HttpGet]
-        public ActionResult<IEnumerable<Restaurant>> Get()
+        public ActionResult<IEnumerable<RestaurantDTO>> Get()
         {
             try
             {
                 GetRestaurantsCommand getRestaurantsCommand = CommandFactory.CreateGetRestaurantsCommand();
                 getRestaurantsCommand.Execute();
                 List<RestaurantDTO> restaurantsDtoList = getRestaurantsCommand.GetResult();
-                return Ok(JsonConvert.SerializeObject(restaurantsDtoList));
+                return Ok(restaurantsDtoList);
             }
             catch (GetRestaurantExcepcion e)
             {
@@ -51,14 +53,14 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         /// <returns>Objeto tipo JSON con los restaurantes obtenidos</returns>
         /// <exception cref="GetRestaurantExcepcion">Ocurrio una excepcion en la ejecución del repository</exception>
         [HttpGet("location/{id}")]
-        public ActionResult<IEnumerable<Restaurant>> GetRestaurantByLocation(int id)
+        public ActionResult<IEnumerable<RestaurantDTO>> GetRestaurantByLocation(int id)
         {
             try
             {
                 GetRestaurantsByCityCommand getRestaurantsByCityCommand = CommandFactory.CreateGetRestaurantsByCityCommand(id);
                 getRestaurantsByCityCommand.Execute();
                 List<RestaurantDTO> restaurantsDtoList = getRestaurantsByCityCommand.GetResult();
-                return Ok(JsonConvert.SerializeObject(restaurantsDtoList));
+                return Ok(restaurantsDtoList);
             }
             catch(GetRestaurantExcepcion e)
             {
@@ -74,14 +76,14 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         /// <exception cref="DatabaseException">Ocurrio una excepcion en la ejecución de la función</exception>
         /// <exception cref="IndexOutOfRangeException">El restaurant buscado no existe</exception>
         [HttpGet("{id}")]
-        public IActionResult GetRestaurant(int id)
+        public ActionResult<RestaurantDTO> GetRestaurant(int id)
         {
             try
             {
                 GetRestaurantCommand getRestaurantCommand = CommandFactory.CreateGetRestaurantCommand(id);
                 getRestaurantCommand.Execute();
                 RestaurantDTO restaurant = getRestaurantCommand.GetResult();
-                return Ok(JsonConvert.SerializeObject(restaurant));
+                return Ok(restaurant);
             }
             catch (IndexOutOfRangeException)
             {
@@ -102,7 +104,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Restaurant> PostRestaurant([FromBody] RestaurantDTO restaurant)
+        public ActionResult<RestaurantDTO> PostRestaurant([FromBody] RestaurantDTO restaurant)
         {
             try
             {
@@ -115,6 +117,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
             {
                 return StatusCode(500, e.Message);
             }
+            catch (InvalidAttributeException e)
+            {
+                return BadRequest(new ErrorMessage(e.Message));
+            }
             
         }
 
@@ -125,7 +131,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         /// <returns>Objeto tipo JSON del restaurant modificado</returns>
         /// <exception cref="UpdateRestaurantException">Ocurrio una excepcion en la ejecución del repository</exception>
         [HttpPut]
-         public ActionResult<Restaurant> PutRestaurant([FromBody] RestaurantDTO restaurant)
+         public ActionResult<RestaurantDTO> PutRestaurant([FromBody] RestaurantDTO restaurant)
          {
              try
              {
@@ -137,6 +143,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
              catch(UpdateRestaurantException e)
              {
                  return StatusCode(500, e.Message);
+             }
+             catch (InvalidAttributeException e)
+             {
+                 return BadRequest(new ErrorMessage(e.Message));
              }
             
          }

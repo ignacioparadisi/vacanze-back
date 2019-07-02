@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
+using DefaultNamespace;
 using Npgsql;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
 using vacanze_back.VacanzeApi.Common.Exceptions;
-using vacanze_back.VacanzeApi.Persistence;
 
-namespace DefaultNamespace
+namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo7
 {
     public class PostgresRestaurantDAO: IRestaurantDAO
     {
@@ -15,7 +15,7 @@ namespace DefaultNamespace
             try
             {
                 var table = PgConnection.Instance.ExecuteFunction("GetRestaurant(@restaurant_id)" , id);
-                var restaurant_id = Convert.ToInt32(table.Rows[0][0]);
+                var restaurantId = Convert.ToInt32(table.Rows[0][0]);
                 var name = table.Rows[0][1].ToString();
                 var capacity = Convert.ToInt32(table.Rows[0][2]); 
                 var isActive = Convert.ToBoolean(table.Rows[0][3]);
@@ -29,7 +29,7 @@ namespace DefaultNamespace
                 var location = Convert.ToInt32(table.Rows[0][11]);
                 var address = table.Rows[0][12].ToString();
                 Console.WriteLine(name);
-                Restaurant restaurant = new Restaurant(restaurant_id, name, capacity, isActive, qualify, specialty, price, businessName, picture, description, phone, location, address);
+                Restaurant restaurant = new Restaurant(restaurantId, name, capacity, isActive, qualify, specialty, price, businessName, picture, description, phone, location, address);
                 return restaurant;
             }
             catch (DatabaseException)
@@ -70,11 +70,11 @@ namespace DefaultNamespace
             }
         }
         
-        public List<Restaurant> GetRestaurantsByCity(int location_id)
+        public List<Restaurant> GetRestaurantsByCity(int locationId)
         {
             try
             {
-                var table = PgConnection.Instance.ExecuteFunction("GetRestaurantsByCity(@location_id)", location_id);
+                var table = PgConnection.Instance.ExecuteFunction("GetRestaurantsByCity(@location_id)", locationId);
                 var restaurantList = new List<Restaurant>();
                 for (var i = 0; i < table.Rows.Count; i++)
                 {
@@ -164,8 +164,7 @@ namespace DefaultNamespace
             }
             catch (NpgsqlException e)
             {
-                e.ToString();
-                throw;
+                throw new DatabaseException(e.Message);
             }
         }
     }

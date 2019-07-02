@@ -43,12 +43,12 @@ namespace vacanze_back.VacanzeApiTest.Grupo7
 //            Assert.NotNull(res);
 //        }
 
-        [Test]
-        public void GetRestaurantsTest()
-        {
-            ActionResult<IEnumerable<Restaurant>> res = restaurantsController.Get();
-            Assert.NotNull(res);
-        }
+//        [Test]
+//        public void GetRestaurantsTest()
+//        {
+//            ActionResult<IEnumerable<Restaurant>> res = restaurantsController.Get();
+//            Assert.NotNull(res);
+//        }
 
         [Test]
         public void GetRestaurantTest()
@@ -56,12 +56,12 @@ namespace vacanze_back.VacanzeApiTest.Grupo7
             Assert.IsInstanceOf<IActionResult>(restaurantsController.GetRestaurant(id));
         }
 
-        [Test]
-        public void GetRestaurantsByLocationTest()
-        {
-            ActionResult<IEnumerable<Restaurant>> res = restaurantsController.GetRestaurantByLocation(1);
-            Assert.NotNull(res);
-        }
+//        [Test]
+//        public void GetRestaurantsByLocationTest()
+//        {
+//            ActionResult<IEnumerable<Restaurant>> res = restaurantsController.GetRestaurantByLocation(1);
+//            Assert.NotNull(res);
+//        }
 
 //        [Test]
 ////        public void PutRestaurantTest()
