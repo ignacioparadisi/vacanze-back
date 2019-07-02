@@ -43,6 +43,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new GetRestaurantsByCityCommand(locationId);
         }
+        
+        public static UpdateRestaurantCommand CreateUpdateRestaurantCommand(RestaurantDTO restaurantDto)
+        {
+            return new UpdateRestaurantCommand(restaurantDto);
+        }
 
         public static GetClaimByIdCommand CreateGetClaimByIdCommand(int claimId)
         {
