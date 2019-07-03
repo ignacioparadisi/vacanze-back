@@ -13,13 +13,6 @@ namespace vacanze_back.VacanzeApi.Common.Entities
             City = city;
         }
 
-        public Location(string country, string city) : base(0)
-        {
-            Id = 0;
-            Country = country;
-            City = city;
-        }
-
         public int Id { get; set; }
         public string Country { get; set; }
         public string City { get; set; }

@@ -26,11 +26,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
             LocationMapper locationMapper = MapperFactory.createLocationMapper();
             GetLocationsCommand commandGetLocations =  CommandFactory.GetLocationsCommand();
             commandGetLocations.Execute ();
-            return(locationMapper.CreateDTOList( commandGetLocations.GetResult()));               
-
-            //return LocationRepository.GetLocations();
+            return(locationMapper.CreateDTOList( commandGetLocations.GetResult()));  
         }
-
         /// <summary>
         ///     Metodo para obtener los paises
         /// </summary>
@@ -42,10 +39,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
             GetCountriesCommand commandGetCountries =  CommandFactory.GetCountriesCommand();
             commandGetCountries.Execute ();
             return (locationMapper.CreateDTOList(commandGetCountries.GetResult()));               
-
-            //return LocationRepository.GetCountries();
         }
-
         /// <summary>
         ///     Metodo para buscar los ciudades por pais
         /// </summary>
@@ -59,8 +53,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
             {
                 GetLocationByIdCommand commandId =  CommandFactory.GetLocationByIdCommand(countryId);
                 commandId.Execute ();
-                commandId.GetResult(); 
-                // LocationRepository.GetLocationById(countryId);
             }
             catch (LocationNotFoundException)
             {
@@ -70,8 +62,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
                 GetCitiesByCountryCommand commandIByCountry =  CommandFactory.GetCitiesByCountryCommand(countryId);
                 commandIByCountry.Execute ();
                 return( locationMapper.CreateDTOList(commandIByCountry.GetResult()));               
-
-            //return LocationRepository.GetCitiesByCountry(countryId);
         }
     }
 }

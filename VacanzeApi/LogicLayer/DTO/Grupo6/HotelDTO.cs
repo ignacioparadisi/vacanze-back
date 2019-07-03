@@ -64,25 +64,5 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo6{
             commandId.Execute ();
             this.Location = commandId.GetResult(); 
         }
-
-        public HotelDTO(string name , int amountOfRooms, int roomCapacity ,
-        bool isActive, string addressSpecs, decimal pricePerRoom, string website , string phone ,
-        string picture, int stars , int locationId ){
-
-            this.Name = name;
-            this.AmountOfRooms = amountOfRooms;
-            this.RoomCapacity=roomCapacity;
-            this.IsActive= isActive;
-            this.AddressSpecification =addressSpecs;
-            this.PricePerRoom = pricePerRoom;
-            this.Website = website;
-            this.Phone = phone ;
-            this.Picture = picture ;
-            this.Stars = stars;
-            
-            GetLocationByIdCommand commandId =  CommandFactory.GetLocationByIdCommand(locationId);
-            commandId.Execute ();
-            this.Location = commandId.GetResult(); 
-        }
     }
 }

@@ -1,5 +1,7 @@
 using vacanze_back.VacanzeApi.LogicLayer.Command.Locations; 
 using vacanze_back.VacanzeApi.LogicLayer.Command; 
+using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
 {
@@ -73,9 +75,16 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
 
         public HotelBuilder LocatedAt(int locationid)
         {
-            GetLocationByIdCommand commandId =  CommandFactory.GetLocationByIdCommand(locationid);
-            commandId.Execute ();
-            _hotel.Location = commandId.GetResult(); 
+            try
+            {
+                GetLocationByIdCommand commandId =  CommandFactory.GetLocationByIdCommand(locationid);
+                commandId.Execute ();
+                _hotel.Location = commandId.GetResult(); 
+            }catch (LocationNotFoundException)
+            {
+                _hotel.Location= null;
+            }
+ 
             return this;
         }
 
