@@ -57,9 +57,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
                 commandId.Execute ();
                 DTO lDTO  = HotelMapper.CreateDTO((Hotel) commandId.GetResult());               
                 return Ok(lDTO);
-                
-                //Metodo original 
-                //return Ok(HotelRepository.GetHotelById(hotelId));
             }
             catch (HotelNotFoundException)
             {
@@ -79,17 +76,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<HotelDTO> Create([FromBody] HotelDTO hotelDTO)
         {
-        
             try
             {     
-                Console.WriteLine("aquiii control add 1");
-                // Metodo Original 
-                //cambiar el [FromBody] HotelDTO hotelDTO por [FromBody] Hotel hotel
-                /*var idFromDatabase = HotelRepository.AddHotel((Hotel) entity);
-                return CreatedAtAction("Get", "hotels",
-                    HotelRepository.GetHotelById(idFromDatabase)); */
-
-                 // herick probando patrones 
                 HotelMapper HotelMapper = MapperFactory.createHotelMapper();
                 Entity entity = HotelMapper.CreateEntity(hotelDTO);
                 AddHotelCommand command = CommandFactory.createAddHotelCommand ((Hotel) entity);
@@ -119,8 +107,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         [HttpDelete("{id}", Name = "DeleteHotel")]
         public ActionResult Delete([FromRoute] int id)
         {
-             DeleteHotelCommand command = CommandFactory.DeleteHotelCommand (id);
-             command.Execute ();
+            DeleteHotelCommand command = CommandFactory.DeleteHotelCommand (id);
+            command.Execute ();
             return Ok();
         }
 
@@ -141,6 +129,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
 				GetHotelByIdCommand commandId =  CommandFactory.GetHotelByIdCommand(hotelId);
                 commandId.Execute ();
 				HotelMapper HotelMapper = MapperFactory.createHotelMapper();
+
                 Entity entity = HotelMapper.CreateEntity(hotelDTO);
                 UpdateHotelCommand command = CommandFactory.UpdateHotelCommand(hotelId, (Hotel) entity);
                 command.Execute ();
@@ -172,7 +161,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         {
 			GetHotelImageCommand commandImage =  CommandFactory.GetHotelImageCommand(hotelId);
                 commandImage.Execute ();
-            return commandImage.GetResult();
+            return commandImage.GetResult(hotelId);
         }
     }
 }
