@@ -53,15 +53,16 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
             {
                 GetLocationByIdCommand commandId =  CommandFactory.GetLocationByIdCommand(countryId);
                 commandId.Execute ();
+                
+				LocationMapper locationMapper = MapperFactory.createLocationMapper();
+                GetCitiesByCountryCommand commandIByCountry =  CommandFactory.GetCitiesByCountryCommand(countryId);
+                commandIByCountry.Execute ();
+                return( locationMapper.CreateDTOList(commandIByCountry.GetResult()));      
             }
             catch (LocationNotFoundException)
             {
                 return NotFound($"Location with id {countryId} not found");
             }
-                LocationMapper locationMapper = MapperFactory.createLocationMapper();
-                GetCitiesByCountryCommand commandIByCountry =  CommandFactory.GetCitiesByCountryCommand(countryId);
-                commandIByCountry.Execute ();
-                return( locationMapper.CreateDTOList(commandIByCountry.GetResult()));               
         }
     }
 }

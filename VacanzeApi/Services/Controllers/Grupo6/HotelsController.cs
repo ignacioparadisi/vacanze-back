@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities;
-using vacanze_back.VacanzeApi.Common.Entities.Grupo6; //con el tiempo debemos quitar la entidad por a fabricaEntiti
-using vacanze_back.VacanzeApi.Common.Entities.Grupo8;  //dcon el tiempo debemos quitar la entitad por a fabricaentiti
+using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
-using vacanze_back.VacanzeApi.Persistence.Repository.Grupo6; //con el tiempo debemos quitar esta de repository
 using vacanze_back.VacanzeApi.LogicLayer.Command;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
 using vacanze_back.VacanzeApi.LogicLayer.DTO;
@@ -30,13 +28,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         /// <param name="location">id de la ubicacion donde se encuentran los hoteles</param>
         /// <returns>Objeto tipo json de los hoteles</returns>
         [HttpGet]
-        public ActionResult<IEnumerable<Hotel>> Get([FromQuery] int location = -1)
+        public ActionResult<IEnumerable<HotelDTO>> Get([FromQuery] int location = -1)
         {
-            return location == -1
-                ? HotelRepository.GetHotels()
-                : HotelRepository.GetHotelsByCity(location);
-        }
+			GetHotelsCommand commandHotels = CommandFactory.GetHotelsCommand();
+			GetHotelsByCityCommand commandByCity = CommandFactory.GetHotelsByCityCommand(location);
+            commandHotels.Execute();
+            commandByCity.Execute();
 
+            HotelMapper hotelMapper = MapperFactory.createHotelMapper(); 
+            return location == -1
+                ?  hotelMapper.CreateDTOList(commandHotels.GetResult())
+                :  hotelMapper.CreateDTOList(commandByCity.GetResult());
+        }
         /// <summary>
         ///     Metodo para buscar los hoteles por id
         /// </summary>
@@ -48,11 +51,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         {
             try
             {
-                Console.WriteLine("aquiii controlgret");
                 HotelMapper HotelMapper = MapperFactory.createHotelMapper();
                 GetHotelByIdCommand commandId =  CommandFactory.GetHotelByIdCommand(hotelId);
                 commandId.Execute ();
-                DTO lDTO  = HotelMapper.CreateDTO((Hotel) commandId.GetResult());               
+                DTO lDTO  = HotelMapper.CreateDTO(commandId.GetResult());               
                 return Ok(lDTO);
             }
             catch (HotelNotFoundException)
@@ -60,7 +62,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
                 return NotFound();
             }
         }
-
         /// <summary>
         ///     Metodo para crear un hotel
         /// </summary>
@@ -77,13 +78,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
             {     
                 HotelMapper HotelMapper = MapperFactory.createHotelMapper();
                 Entity entity = HotelMapper.CreateEntity(hotelDTO);
-                AddHotelCommand command = CommandFactory.createAddHotelCommand ((Hotel) entity);
+                AddHotelCommand command = CommandFactory.createAddHotelCommand ((Hotel)entity);
                 command.Execute ();
                 int idFromData = command.GetResult(); 
  
                 GetHotelByIdCommand commandId =  CommandFactory.GetHotelByIdCommand(idFromData);
                 commandId.Execute ();
-                DTO lDTO  = HotelMapper.CreateDTO((Hotel) commandId.GetResult());               
+                DTO lDTO  = HotelMapper.CreateDTO( commandId.GetResult());               
                     return CreatedAtAction ("Get", "hotels", lDTO);
             }
             catch (RequiredAttributeException e)
@@ -95,7 +96,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
                 return new BadRequestObjectResult(new ErrorMessage(e.Message));
             }
         }
-
         /// <summary>
         ///     Metodo para eliminar un hotel
         /// </summary>
@@ -108,7 +108,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
             command.Execute ();
             return Ok();
         }
-
         /// <summary>
         ///     Metodo para modifcar un hotel
         /// </summary>
@@ -119,17 +118,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         /// <exception cref="RequiredAttributeException">Algun atributo requerido estaba como null</exception>
         /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
         [HttpPut("{hotelId}", Name = "UpdateHotel")]
-        public ActionResult<Hotel> Update([FromRoute] int hotelId, [FromBody] HotelDTO hotelDTO)
+        public ActionResult<HotelDTO> Update([FromRoute] int hotelId, [FromBody] HotelDTO hotelDTO)
         {
             try
             {
 				GetHotelByIdCommand commandId =  CommandFactory.GetHotelByIdCommand(hotelId);
                 commandId.Execute ();
-                HotelMapper HotelMapper = MapperFactory.createHotelMapper();
+				HotelMapper HotelMapper = MapperFactory.createHotelMapper();
+
                 Entity entity = HotelMapper.CreateEntity(hotelDTO);
                 UpdateHotelCommand command = CommandFactory.UpdateHotelCommand(hotelId, (Hotel) entity);
                 command.Execute ();
-                DTO lDTO  = HotelMapper.CreateDTO((Hotel) command.GetResult());               
+                DTO lDTO  = HotelMapper.CreateDTO( command.GetResult());               
                 return Ok(lDTO);
             }
             catch (HotelNotFoundException)
@@ -146,7 +146,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
                 return new BadRequestObjectResult(new ErrorMessage(e.Message));
             }
         }
-
         /// <summary>
         ///     Metodo para obtener la imagen de un hotel
         /// </summary>
@@ -155,7 +154,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         [HttpGet("{hotelId}/image")]
         public string GetHotelImage([FromRoute] int hotelId)
         {
-            return HotelRepository.GetHotelImage(hotelId);
+			GetHotelImageCommand commandImage =  CommandFactory.GetHotelImageCommand(hotelId);
+            commandImage.Execute();
+            return commandImage.GetResult();
         }
     }
 }
