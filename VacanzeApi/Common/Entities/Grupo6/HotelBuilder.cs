@@ -1,3 +1,5 @@
+using vacanze_back.VacanzeApi.Persistence.Repository;  //con el tiempo quitar esta directiva cuando se resuelva lo de location 
+
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
 {
     public class HotelBuilder
@@ -68,8 +70,9 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
             return this;
         }
 
-        public HotelBuilder LocatedAt(Location location)
+        public HotelBuilder LocatedAt(int locationid)
         {
+             Location location = LocationRepository.GetLocationById(locationid);
             _hotel.Location = location;
             return this;
         }
@@ -89,6 +92,11 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
         public Hotel Build()
         {
             HotelValidator.Validate(_hotel);
+            return _hotel;
+        }
+
+        public Hotel BuildSinVaidar()
+        {
             return _hotel;
         }
     }
