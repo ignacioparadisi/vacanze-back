@@ -1,19 +1,19 @@
-namespace vacanze_back.VacanzeApi.Common.Entities
+namespace vacanze_back.VacanzeApi.LogicLayer.DTO
 {
-    public class Location : Entity
+    public class LocationDTO
     {
-        public Location() : base(0)
+        public LocationDTO()
         {
         }
 
-        public Location(int id, string country, string city) : base(id)
+        public LocationDTO(int id, string country, string city)
         {
             Id = id;
             Country = country;
             City = city;
         }
 
-        public Location(string country, string city) : base(0)
+        public LocationDTO(string country, string city)
         {
             Id = 0;
             Country = country;

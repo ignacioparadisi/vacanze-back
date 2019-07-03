@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Exceptions;
-using vacanze_back.VacanzeApi.Persistence.Repository;
+using vacanze_back.VacanzeApi.LogicLayer.Command;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Locations;
+using vacanze_back.VacanzeApi.LogicLayer.DTO;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers
 {
@@ -19,9 +21,14 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
         /// <returns>Objeto tipo json de los locations</returns>
         // GET api/location/[?countries={}]
         [HttpGet]
-        public ActionResult<IEnumerable<Location>> Get()
+        public ActionResult<IEnumerable<LocationDTO>> Get()
         {
-            return LocationRepository.GetLocations();
+            LocationMapper locationMapper = MapperFactory.createLocationMapper();
+            GetLocationsCommand commandGetLocations =  CommandFactory.GetLocationsCommand();
+            commandGetLocations.Execute ();
+            return(locationMapper.CreateDTOList( commandGetLocations.GetResult()));               
+
+            //return LocationRepository.GetLocations();
         }
 
         /// <summary>
@@ -29,9 +36,14 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
         /// </summary>
         /// <returns>Objeto tipo json de los paises</returns>
         [HttpGet("countries")]
-        public ActionResult<IEnumerable<Location>> GetCountries()
+        public ActionResult<IEnumerable<LocationDTO>> GetCountries()
         {
-            return LocationRepository.GetCountries();
+            LocationMapper locationMapper = MapperFactory.createLocationMapper();
+            GetCountriesCommand commandGetCountries =  CommandFactory.GetCountriesCommand();
+            commandGetCountries.Execute ();
+            return (locationMapper.CreateDTOList(commandGetCountries.GetResult()));               
+
+            //return LocationRepository.GetCountries();
         }
 
         /// <summary>
@@ -41,18 +53,25 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
         /// <returns>Objeto tipo json de las ciudades de un pais en especifico</returns>
         /// <exception cref="LocationNotFoundException">Lanzada si no existe el location</exception>
         [HttpGet("countries/{countryId}/cities")]
-        public ActionResult<IEnumerable<Location>> GetCitiesByCountry([FromRoute] int countryId)
+        public ActionResult<IEnumerable<LocationDTO>> GetCitiesByCountry([FromRoute] int countryId)
         {
             try
             {
-                LocationRepository.GetLocationById(countryId);
+                GetLocationByIdCommand commandId =  CommandFactory.GetLocationByIdCommand(countryId);
+                commandId.Execute ();
+                commandId.GetResult(); 
+                // LocationRepository.GetLocationById(countryId);
             }
             catch (LocationNotFoundException)
             {
                 return NotFound($"Location with id {countryId} not found");
             }
+                LocationMapper locationMapper = MapperFactory.createLocationMapper();
+                GetCitiesByCountryCommand commandIByCountry =  CommandFactory.GetCitiesByCountryCommand(countryId);
+                commandIByCountry.Execute ();
+                return( locationMapper.CreateDTOList(commandIByCountry.GetResult()));               
 
-            return LocationRepository.GetCitiesByCountry(countryId);
+            //return LocationRepository.GetCitiesByCountry(countryId);
         }
     }
 }

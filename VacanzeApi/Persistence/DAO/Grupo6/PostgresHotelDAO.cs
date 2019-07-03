@@ -5,7 +5,6 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
 using System.Data;
-using vacanze_back.VacanzeApi.Persistence.Repository; //lo puse por que todavia no se a migrado las location 
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo6
 {

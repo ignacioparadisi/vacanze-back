@@ -1,4 +1,5 @@
-using vacanze_back.VacanzeApi.Persistence.Repository;  //con el tiempo quitar esta directiva cuando se resuelva lo de location 
+using vacanze_back.VacanzeApi.LogicLayer.Command.Locations; 
+using vacanze_back.VacanzeApi.LogicLayer.Command; 
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
 {
@@ -72,8 +73,9 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
 
         public HotelBuilder LocatedAt(int locationid)
         {
-             Location location = LocationRepository.GetLocationById(locationid);
-            _hotel.Location = location;
+            GetLocationByIdCommand commandId =  CommandFactory.GetLocationByIdCommand(locationid);
+            commandId.Execute ();
+            _hotel.Location = commandId.GetResult(); 
             return this;
         }
 
