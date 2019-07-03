@@ -1,6 +1,7 @@
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 
 namespace vacanze_back.VacanzeApi.Common.Entities{
 
@@ -36,5 +37,16 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
                 .WithAddressDescription(addressSpecs)
                 .BuildSinVaidar();
         }
+
+        public static Cruiser CreateCruiser(int id , string name , bool status , int capacity , int loadingShipCap , string model , string line,string picture)
+        {
+            return new Cruiser(id,name,status,capacity,loadingShipCap,model,line,picture);
+        }
+
+        public static Layover CreateLayover(int id, int cruiserId, string departureDate,string arrivalDate, decimal price, int locDeparture, int locArrival)
+        {
+            return new Layover(id,cruiserId,departureDate,arrivalDate,price,locDeparture,locArrival);
+        }
+
     }
 }

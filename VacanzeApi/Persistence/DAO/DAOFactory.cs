@@ -43,5 +43,9 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         public abstract RoleDAO GetRoleDAO();
 
         public abstract UserDAO GetUserDAO();
+        // +++++++++++++++++
+        //     GRUPO 8
+        // +++++++++++++++++
+        public abstract ICruiserDAO GetCruiserDAO();
     }
 }

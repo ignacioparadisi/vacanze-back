@@ -37,5 +37,10 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         {
             return new PostgresHotelDAO();
         }
+
+        public override ICruiserDAO GetCruiserDAO()
+        {
+            return new PostgresCruiserDAO();
+        }
     }
 }
