@@ -77,6 +77,18 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new GetHotelByIdCommand(id);
         }  
+		public static GetHotelImageCommand GetHotelImageCommand(int id)
+        {
+            return new GetHotelImageCommand(id);
+        }  
+		public static GetHotelsCommand GetHotelsCommand()
+        {
+            return new GetHotelsCommand();
+        } 
+		public static GetHotelsByCityCommand GetHotelsByCityCommand(int city)
+        {
+            return new GetHotelsByCityCommand(city);
+        }  
 		public static DeleteHotelCommand DeleteHotelCommand(int id)
         {
             return new DeleteHotelCommand(id);

@@ -32,9 +32,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         [HttpGet]
         public ActionResult<IEnumerable<Hotel>> Get([FromQuery] int location = -1)
         {
+			GetHotelscommand commandHotels = CommandFactory.GetHotelsCommand();
+			GetHotelsByCityCommand commandByCity = CommandFactory.GetHotelsByCityCommand(location);
+			//commandHotels.execute();
             return location == -1
-                ? HotelRepository.GetHotels()
-                : HotelRepository.GetHotelsByCity(location);
+                ? commandHotels.execute()
+                : commandByCity.execute();
         }
 
         /// <summary>
@@ -137,9 +140,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
             {
 				GetHotelByIdCommand commandId =  CommandFactory.GetHotelByIdCommand(hotelId);
                 commandId.Execute ();
-               // DTO lDTO  = HotelMapper.CreateDTO((Hotel) commandId.GetResult());  
-
-                //var updated = HotelRepository.UpdateHotel(hotelId, dataToUpdate);
 				HotelMapper HotelMapper = MapperFactory.createHotelMapper();
                 Entity entity = HotelMapper.CreateEntity(hotelDTO);
                 UpdateHotelCommand command = CommandFactory.UpdateHotelCommand(hotelId, (Hotel) entity);
@@ -170,7 +170,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         [HttpGet("{hotelId}/image")]
         public string GetHotelImage([FromRoute] int hotelId)
         {
-            return HotelRepository.GetHotelImage(hotelId);
+			GetHotelImageCommand commandImage =  CommandFactory.GetHotelImageCommand(hotelId);
+                commandImage.Execute ();
+            return commandImage.GetResult();
         }
     }
 }
