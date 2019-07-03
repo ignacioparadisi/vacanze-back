@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using vacanze_back.VacanzeApi.LogicLayer.DTO;
 using vacanze_back.VacanzeApi.Common.Entities;
@@ -7,6 +8,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper{
     public class LocationMapper : Mapper<LocationDTO, Location> {
 
         public LocationDTO CreateDTO(Location entity){
+                        Console.WriteLine("matantmem" +entity.Id);
             Location location =  (Location) entity;
             LocationDTO LocationDTO = DTOFactory.CreateLocationDTO(location.Id, location.Country, location.City);
             return LocationDTO;

@@ -12,12 +12,12 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Locations {
         private Location _location;
 
         public AddLocationCommand (Location location) {
-            this._location = _location;
+            this._location = location;
         }
 
         public void Execute () {
             DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-            LocationDAO locationDao = factory.GetLocationDAO();
+            LocationDAO locationDao = factory.GetLocationDAO(); 
             _id = locationDao.AddLocation(_location);
         }
 

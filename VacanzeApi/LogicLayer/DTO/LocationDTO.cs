@@ -1,11 +1,14 @@
+using Newtonsoft.Json;
+
 namespace vacanze_back.VacanzeApi.LogicLayer.DTO
 {
-    public class LocationDTO
+    public class LocationDTO : DTO
     {
         public LocationDTO()
         {
         }
 
+        [JsonConstructor]
         public LocationDTO(int id, string country, string city)
         {
             Id = id;
