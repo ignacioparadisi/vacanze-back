@@ -71,6 +71,21 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new ValidateClaimCreationCommand(claim);
         }
 
+        public static GetBaggageByPassportCommand CreateGetBaggageByPassportCommand(string passport)
+        {
+            return new GetBaggageByPassportCommand(passport);
+        }
+        
+        public static GetBaggageByStatusCommand CreateGetBaggageByStatusCommand(string status)
+        {
+            return new GetBaggageByStatusCommand(status);
+        }
+        
+        public static UpdateBaggageCommand CreateUpdateBaggageCommand(int id, Baggage baggage)
+        {
+            return new UpdateBaggageCommand(id,baggage);
+        }
+        
         public static GetBaggageByIdCommand CreateGetBaggageByIdCommand(int id)
         {
             return new GetBaggageByIdCommand(id);
