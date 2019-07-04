@@ -1,12 +1,10 @@
 using System.Collections.Generic;
-using System.Net.Http;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
-using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo9;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo9;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
@@ -163,65 +161,33 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
         }
 
         /// <summary>
-        ///     api/Clain/status/id
-        ///     modificar un reclamo , tanto por status o por titulo y descripcion
+        ///     PUT /api/claim/{id}
+        ///     Endpoint para modificar un reclamo.
         /// </summary>
         [HttpPut("{id}")]
-        public ActionResult<string> Put(int id, [FromBody] ClaimSecundary ClaimAux)
+        public ActionResult<string> Put(int id, [FromBody] Claim fieldsToUpdate)
         {
-            // TODO: Refacotrizar con comandos/dao y quitar ese ClaimSecundary
             try
             {
-                var conec = new ClaimRepository();
-                var claim = ClaimBuilder.Create()
-                    .WithTitle(ClaimAux.title)
-                    .WithDescription(ClaimAux.description)
-                    .WithStatus(ClaimAux.status)
-                    .Build();
-
-                ClaimValidator.Validate(claim, HttpMethod.Put);
-                var rows = 0;
-                if (ClaimAux.status != null)
-                    rows = conec.ModifyClaimStatus(id, claim);
-                else if (ClaimAux.title != null && ClaimAux.description != null)
-                    rows = conec.ModifyClaimTitle(id, claim);
-                else throw new ClaimNotFoundException("claim vacio");
-
-                return Ok("Modificado exitosamente");
+                CommandFactory.CreateUpdateClaimCommand(id, fieldsToUpdate).Execute();
+                return Ok();
+            }
+            catch (ClaimNotFoundException ex)
+            {
+                return new BadRequestObjectResult(new ErrorMessage(ex.Message));
+            }
+            catch (AttributeSizeException ex)
+            {
+                return new BadRequestObjectResult(new ErrorMessage(ex.Message));
+            }
+            catch (AttributeValueException ex)
+            {
+                return new BadRequestObjectResult(new ErrorMessage(ex.Message));
             }
             catch (DatabaseException ex)
             {
                 return StatusCode(500, ex.Message);
             }
-            catch (InvalidStoredProcedureSignatureException ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-            catch (ClaimNotFoundException ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-            catch (AttributeSizeException ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-            catch (AttributeValueException ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-    }
-
-
-    public class ClaimSecundary
-    {
-        public string title { get; set; }
-        public string description { get; set; }
-        public string status { get; set; }
-
-        public string getStatus()
-        {
-            return status;
         }
     }
 }

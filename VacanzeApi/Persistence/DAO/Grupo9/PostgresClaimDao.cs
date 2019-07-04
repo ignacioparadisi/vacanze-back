@@ -61,7 +61,18 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo9
 
         public void Update(int id, Claim updatedFields)
         {
-            throw new NotImplementedException();
+            GetById(id);
+            if (updatedFields.Status != null)
+                PgConnection.Instance.ExecuteFunction(
+                    "modifyclaimstatus(@cla_id,@cla_status)",
+                    id,
+                    updatedFields.Status);
+            if (updatedFields.Title != null && updatedFields.Description != null)
+                PgConnection.Instance.ExecuteFunction(
+                    "modifyclaimtitle(@cla_id,@cla_title,@cla_descr)",
+                    id,
+                    updatedFields.Title,
+                    updatedFields.Description);
         }
 
         private Claim ExtractClaimFromRow(DataRow row)

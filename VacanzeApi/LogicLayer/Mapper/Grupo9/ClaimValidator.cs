@@ -36,10 +36,10 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo9
 
                 if (claim.BaggageId == 0)
                     throw new RequiredAttributeException("Atributo \"BaggageId\" es obligatorio y diferente a 0");
-            }
 
-            // Si no se consigue la maleta lanzara un BaggageNotFoundException
-            CommandFactory.CreateGetBaggageByIdCommand(claim.BaggageId).Execute();
+                // Si no se consigue la maleta lanzara un BaggageNotFoundException
+                CommandFactory.CreateGetBaggageByIdCommand(claim.BaggageId).Execute();
+            }
 
             // No permitir guardar otros valores que no sean el indicado
             if (claim.Status != null && claim.Status != "ABIERTO" && claim.Status != "CERRADO")
