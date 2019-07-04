@@ -9,13 +9,12 @@ using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo2;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo2
 {
-    public class RoleMapper : Mapper<RoleDTO>
+    public class RoleMapper : Mapper<RoleDTO,Role>
     {
-        public RoleDTO CreateDTO(Entity entity)
+        public RoleDTO CreateDTO(Role role)
         {
             try
             {
-                Role role = (Role)entity;
                 return DTOFactory.CreateRoleDTO(role.Id, role.Name);
             }
             catch (NullReferenceException e)
@@ -28,14 +27,13 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo2
             }
         }
 
-        public List<RoleDTO> CreateDTOList(List<Entity> entities)
+        public List<RoleDTO> CreateDTOList(List<Role> roles)
         {
             try
             {
                 List<RoleDTO> dtos = new List<RoleDTO>();
-                foreach (Entity entity in entities)
+                foreach (Role role in roles)
                 {
-                    Role role = (Role) entity;
                     dtos.Add(DTOFactory.CreateRoleDTO(role.Id, role.Name));
                 }
                 return dtos;
@@ -46,11 +44,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo2
             }
         }
 
-        public Entity CreateEntity(RoleDTO dto)
+        public Role CreateEntity(RoleDTO dto)
         {
             try
             {
-                return EntityFactory.CreateRol(dto._Id, dto._Name);
+                return (Role) EntityFactory.CreateRol(dto._Id, dto._Name);
             }
             catch (Exception e)
             {
@@ -58,16 +56,16 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo2
             }
         }
 
-        public List<Entity> CreateEntityList(List<RoleDTO> dtos)
+        public List<Role> CreateEntityList(List<RoleDTO> dtos)
         {
             try
             {
-                List<Entity> entities = new List<Entity>();
+                List<Role> roles = new List<Role>();
                 foreach (RoleDTO dto in dtos)
                 {
-                    entities.Add(EntityFactory.CreateRol(dto._Id, dto._Name));
+                    roles.Add((Role) EntityFactory.CreateRol(dto._Id, dto._Name));
                 }
-                return entities;
+                return roles;
             }
             catch (Exception e)
             {

@@ -9,13 +9,12 @@ using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo2;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo2
 {
-    public class UserMapper : Mapper<UserDTO>
+    public class UserMapper : Mapper<UserDTO,User>
     {
-        public UserDTO CreateDTO(Entity entity)
+        public UserDTO CreateDTO(User user)
         {
             try
             {
-                User user = (User)entity;
                 return DTOFactory.CreateUserDTO(user.Id, user.DocumentId, user.Email, user.Lastname, user.Name, user.Password, user.Roles);
             }
             catch(NullReferenceException e)
@@ -28,14 +27,13 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo2
             }
         }
 
-        public List<UserDTO> CreateDTOList(List<Entity> entities)
+        public List<UserDTO> CreateDTOList(List<User> users)
         {
             try
             {
                 List<UserDTO> dtos = new List<UserDTO>();
-                foreach (Entity entity in entities)
+                foreach (User user in users)
                 {
-                    User user = (User)entity;
                     dtos.Add(DTOFactory.CreateUserDTO(user.Id, user.DocumentId, user.Email, user.Lastname, user.Name, user.Password, user.Roles));
                 }
                 return dtos;
@@ -46,7 +44,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo2
             }
         }
 
-        public Entity CreateEntity(UserDTO dto)
+        public User CreateEntity(UserDTO dto)
         {
             try
             {
@@ -58,16 +56,16 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo2
             }
         }
 
-        public List<Entity> CreateEntityList(List<UserDTO> dtos)
+        public List<User> CreateEntityList(List<UserDTO> dtos)
         {
             try
             {
-                List<Entity> entities = new List<Entity>();
+                List<User> users = new List<User>();
                 foreach (UserDTO dto in dtos)
                 {
-                    entities.Add(EntityFactory.CreateUser(dto.Id,dto.DocumentId,dto.Name,dto.Lastname,dto.Email,dto.Password,dto.Roles));
+                    users.Add(EntityFactory.CreateUser(dto.Id,dto.DocumentId,dto.Name,dto.Lastname,dto.Email,dto.Password,dto.Roles));
                 }
-                return entities;
+                return users;
             }
             catch(Exception e)
             {
