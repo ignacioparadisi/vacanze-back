@@ -9,7 +9,6 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6
 	{
 		private int _id;
 		private Hotel _hotel;
-		public int Id { get { return _id; } set { _id = value; } }
 		public UpdateHotelCommand(int id,Hotel hotel)
 		{
 			_id = id;

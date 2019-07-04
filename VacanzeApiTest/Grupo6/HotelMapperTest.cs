@@ -8,6 +8,8 @@ using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.LogicLayer.Command;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Locations;
 
 namespace vacanze_back.VacanzeApiTest.Grupo6
 {
@@ -150,6 +152,60 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
                 var result = _HotelMapper.CreateEntity(HotelDTO);
             });
         }
-                   
+        
+        [Test]       
+        [Order(10)]
+        public void EntitySetAvaibleRoomTest()
+        {
+            _hotel.AvailableRooms = 100;
+           Assert.AreEqual(_hotel.AvailableRooms,100);
+        }
+        
+        [Test]       
+        [Order(11)]
+        public void EntityGetAvaibleRoomTest()
+        { 
+            _hotel.AvailableRooms = 100;
+            var respuesta = _hotel.AvailableRooms;
+            Assert.AreEqual(respuesta, 100);
+        }
+        
+        [Test]       
+        [Order(12)]
+        public void EntityShouldSerializableAvaibleTest()
+        {
+            _hotel.AvailableRooms = -1;
+            var respuesta = _hotel.ShouldSerializeAvailableRooms();
+            Assert.AreEqual(false,respuesta);
+        }
+        
+        [Test]       
+        [Order(13)]
+        public void DtoGetAvaibleRoomTest()
+        {
+            HotelDTO HotelDTO = DTOFactory.CreateHotelDTO(_hotel.Id, _hotel.Name, _hotel.AmountOfRooms, 
+                _hotel.RoomCapacity , _hotel.IsActive, _hotel.AddressSpecification,
+                _hotel.PricePerRoom, _hotel.Website, _hotel.Phone, _hotel.Picture,
+                _hotel.Stars, _hotel.Location.Id);
+            HotelDTO.AvailableRooms = 1000;
+            var respuesta = HotelDTO.AvailableRooms;
+            Assert.AreEqual(respuesta,1000);
+        }
+                  
+         
+        [Test]       
+        [Order(14)]
+        public void DtoShouldSerializableTest()
+        {
+            GetLocationByIdCommand command = CommandFactory.GetLocationByIdCommand(_hotel.Location.Id);
+            Location location= command.GetResult();
+            HotelDTO HotelDTO =new HotelDTO( _hotel.Name, _hotel.AmountOfRooms, 
+                _hotel.RoomCapacity , _hotel.IsActive, _hotel.AddressSpecification,
+                _hotel.PricePerRoom, _hotel.Website, _hotel.Phone, _hotel.Picture,
+                _hotel.Stars, location);
+            HotelDTO.AvailableRooms = 1000;
+            var respuesta = HotelDTO.ShouldSerializeAvailableRooms();
+            Assert.AreEqual(respuesta,true);
+        }
     }
 }

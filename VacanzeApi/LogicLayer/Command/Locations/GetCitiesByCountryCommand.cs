@@ -7,7 +7,6 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Locations {
 
     public class GetCitiesByCountryCommand : Command, CommandResult<List<Location>> {
         private int _id;
-        public int Id { get { return _id; } set{ _id = value; } }
 
         private List<Location> _location;
 

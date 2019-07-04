@@ -6,7 +6,6 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6 {
 
     public class GetHotelByIdCommand : Command, CommandResult<Hotel> {
         private int _id;
-        public int Id { get { return _id; } set{ _id = value; } }
 
         private Hotel _hotel;
 

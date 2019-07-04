@@ -10,7 +10,6 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6
 	{
 		private int _id;
 		private String _image;
-		public int Id { get { return _id; } set { _id = value; } }
 		public GetHotelImageCommand(int id)
 		{
 			_id = id;
