@@ -140,6 +140,38 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
                return Ok(user);
           }
 
+        /*
+        // POST api/users
+        /// <summary>
+        /// Manda a guardar el usuario en la base de datos
+        /// </summary>
+        /// <param name="user">Usuario que se desea guardar</param>
+        /// <returns>Retorna el usuario almacenado</returns>
+        [HttpPost]
+        public ActionResult<Entity> Post([FromBody] User user)
+        {
+            try
+            {
+                PostUserCommand command = new PostUserCommand(user);
+                command.Execute();
+                foreach (var role in user.Roles)
+                {
+                    PostUser_RoleCommand postRoleCommand = new PostUser_RoleCommand(user,role);
+                    postRoleCommand.Execute();
+                }
+            }
+            catch (GeneralException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Error agregando al usuario");
+            }
+            return Ok(user);
+        }
+        */
+
         // PUT api/users/5
         /// <summary>
         /// Manda a actualizar el usuario en la base de datos
@@ -196,5 +228,31 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
                     return BadRequest("Error eliminando al usuario");
                }
           }
-     }
+        /*
+        // DELETE api/users/1
+        /// <summary>
+        /// Manda a eliminar un usario por su id de la base de datos
+        /// </summary>
+        /// <param name="id">Id del usuario que se desea eliminar</param>
+        /// <returns>Retorna el id del usuario que fue eliminado</returns>
+        [HttpDelete("{id}")]
+        public ActionResult<int> Delete(int id)
+        {
+            try
+            {
+                DeleteUserByIdCommand command = new DeleteUserByIdCommand(id);
+                command.Execute();
+                return Ok();
+            }
+            catch (GeneralException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Error eliminando al usuario");
+            }
+        }
+        */
+    }
 }
