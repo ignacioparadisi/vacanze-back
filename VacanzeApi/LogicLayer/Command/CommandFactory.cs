@@ -51,6 +51,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new AddClaimCommand(claim);
         }
 
+        public static DeleteClaimByIdCommand CreateDeleteClaimByIdCommand(int id)
+        {
+            return new DeleteClaimByIdCommand(id);
+        }
+
         public static ValidateClaimUpdateCommand CreateValidateClaimUpdateCommand(Claim claim)
         {
             return new ValidateClaimUpdateCommand(claim);

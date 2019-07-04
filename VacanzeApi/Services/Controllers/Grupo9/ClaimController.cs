@@ -144,29 +144,19 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             }
         }
 
-        // DELETE api/Claim/5
         /// <summary>
-        ///     DELETE api/Claim/id
-        ///     eliminar un reclamo
+        ///     DELETE api/claim/{id}
+        ///     Endpoint para eliminar reclamos por id
         /// </summary>
         [HttpDelete("{id}")]
-        public ActionResult<string> Delete(int id)
+        public ActionResult Delete(int id)
         {
             try
             {
-                var conec = new ClaimRepository();
-                var rows = conec.DeleteClaim(id);
-                return Ok("eliminado exitosamente");
+                CommandFactory.CreateDeleteClaimByIdCommand(id).Execute();
+                return Ok();
             }
             catch (DatabaseException ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-            catch (InvalidStoredProcedureSignatureException ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-            catch (ClaimNotFoundException ex)
             {
                 return StatusCode(500, ex.Message);
             }

@@ -1,4 +1,3 @@
-using System;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 
@@ -60,17 +59,17 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
 //            ;
 //        }
 
-        /// <summary>
-        // eliminar un reclamo
-        /// </summary>
-        public int DeleteClaim(int claimId)
-        {
-            var table = PgConnection.Instance.ExecuteFunction("getclaim(@cla_id)", claimId);
-            if (table.Rows.Count < 1) throw new ClaimNotFoundException("No existe el elemento que desea eliminar");
-            PgConnection.Instance.ExecuteFunction("deleteclaim(@cla_id)", claimId);
-            var id = Convert.ToInt32(table.Rows[0][0].ToString());
-            return id;
-        }
+//        /// <summary>
+//        // eliminar un reclamo
+//        /// </summary>
+//        public int DeleteClaim(int claimId)
+//        {
+//            var table = PgConnection.Instance.ExecuteFunction("getclaim(@cla_id)", claimId);
+//            if (table.Rows.Count < 1) throw new ClaimNotFoundException("No existe el elemento que desea eliminar");
+//            PgConnection.Instance.ExecuteFunction("deleteclaim(@cla_id)", claimId);
+//            var id = Convert.ToInt32(table.Rows[0][0].ToString());
+//            return id;
+//        }
 
         /// <summary>
         // modificar el estatus de un reclamo 

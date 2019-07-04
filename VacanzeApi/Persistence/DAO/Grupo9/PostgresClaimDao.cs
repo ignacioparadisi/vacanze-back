@@ -56,7 +56,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo9
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            PgConnection.Instance.ExecuteFunction("deleteclaim(@cla_id)", id);
         }
 
         public void Update(int id, Claim updatedFields)
