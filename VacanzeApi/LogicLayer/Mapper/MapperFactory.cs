@@ -19,5 +19,9 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper
         public static HotelMapper createHotelMapper(){
             return new HotelMapper();
         }
+
+        public static LocationMapper createLocationMapper(){
+            return new LocationMapper();
+        }
     }
 }

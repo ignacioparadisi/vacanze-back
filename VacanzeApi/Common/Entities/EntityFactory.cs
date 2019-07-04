@@ -36,5 +36,9 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
                 .WithAddressDescription(addressSpecs)
                 .BuildSinVaidar();
         }
+
+        public static Location CreateLocation(int id, string country, string city){
+            return new Location(id, country, city);
+        }
     }
 }

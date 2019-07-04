@@ -7,9 +7,11 @@ using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo7;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
+using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Locations;
 
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command
@@ -75,6 +77,18 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new GetHotelByIdCommand(id);
         }  
+		public static GetHotelImageCommand GetHotelImageCommand(int id)
+        {
+            return new GetHotelImageCommand(id);
+        }  
+		public static GetHotelsCommand GetHotelsCommand()
+        {
+            return new GetHotelsCommand();
+        } 
+		public static GetHotelsByCityCommand GetHotelsByCityCommand(int city)
+        {
+            return new GetHotelsByCityCommand(city);
+        }  
 		public static DeleteHotelCommand DeleteHotelCommand(int id)
         {
             return new DeleteHotelCommand(id);
@@ -83,5 +97,31 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new UpdateHotelCommand(id,hotel);
         }
+
+
+        public static AddLocationCommand createAddLocationCommand(Location location)
+        {
+            return new AddLocationCommand(location);
+        }   
+        public static GetLocationByIdCommand GetLocationByIdCommand(int id)
+        {
+            return new GetLocationByIdCommand(id);
+        }  
+		public static DeleteLocationCommand DeleteLocationCommand(int id)
+        {
+            return new DeleteLocationCommand(id);
+        }  
+        public static GetLocationsCommand GetLocationsCommand()
+        {
+            return new GetLocationsCommand();
+        }  
+        public static GetCountriesCommand GetCountriesCommand()
+        {
+            return new GetCountriesCommand();
+        }  
+        public static GetCitiesByCountryCommand GetCitiesByCountryCommand(int id)
+        {
+            return new GetCitiesByCountryCommand(id);
+        }  
     }
 }
