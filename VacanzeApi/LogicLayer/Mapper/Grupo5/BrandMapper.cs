@@ -6,34 +6,32 @@ using vacanze_back.VacanzeApi.LogicLayer.DTO;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo5{
 
-    public class BrandMapper : Mapper<BrandDTO> {
+    public class BrandMapper : Mapper<BrandDTO,Brand> {
 
-        public BrandDTO CreateDTO(Entity entity){
-            Brand brand =  (Brand) entity;
-            BrandDTO brandDTO = DTOFactory.CreateBrandDTO(brand.BrandName);
-            return brandDTO;
+        public BrandDTO CreateDTO(Brand brand){
+            BrandDTO brandDto = DTOFactory.CreateBrandDTO(brand.BrandName);
+            return brandDto;
         }
 
-        public Entity CreateEntity(BrandDTO dto){
-            Entity entity = EntityFactory.createBrand(dto.BrandName);
-            return entity;
+        public Brand CreateEntity(BrandDTO dto){
+            Brand brand = EntityFactory.createBrand(dto.BrandName);
+            return brand;
         }
 
-        public List<BrandDTO> CreateDTOList(List<Entity> entities){
+        public List<BrandDTO> CreateDTOList(List<Brand> brands){
             List<BrandDTO> dtos = new List<BrandDTO>();
-            foreach(Entity entity in entities){
-                Brand brand = (Brand) entity;
+            foreach(Brand brand in brands){
                 dtos.Add(DTOFactory.CreateBrandDTO(brand.BrandName));
             }
             return dtos;
         }
 
-        public List<Entity> CreateEntityList(List<BrandDTO> dtos){
-            List<Entity> entities = new List<Entity>();
+        public List<Brand> CreateEntityList(List<BrandDTO> dtos){
+            List<Brand> brands = new List<Brand>();
             foreach(BrandDTO dto in dtos){
-                entities.Add(EntityFactory.createBrand(dto.BrandName));
+                brands.Add(EntityFactory.createBrand(dto.BrandName));
             }
-            return entities;
+            return brands;
         }
 
     }

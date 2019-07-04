@@ -209,7 +209,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
                 .WithWebsite(website)
                 .WithStars(stars)
                 .WithPictureUrl(picture)
-                .LocatedAt(LocationRepository.GetLocationById(locationId))
+                .LocatedAt((locationId))
                 .WithStatus(isActive)
                 .WithAddressDescription(addressSpecs)
                 .Build();

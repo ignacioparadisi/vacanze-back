@@ -1,6 +1,8 @@
+using DefaultNamespace;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo9;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo6;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO
 {
@@ -11,9 +13,14 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
             return new PostgresReservationRoomDAO();
         }
 
+        public override IRestaurantDAO GetRestaurantDAO()
+        {
+            return new PostgresRestaurantDAO();
+        }
+
         public override RoleDAO GetRoleDAO()
         {
-            return new PostgresRoleDAO(); 
+            return new PostgresRoleDAO();
         }
 
         public override UserDAO GetUserDAO()
@@ -29,6 +36,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         public override IClaimDao GetClaimDao()
         {
             return new PostgresClaimDao();
+        }
+
+        public override HotelDAO GetHotelDAO()
+        {
+            return new PostgresHotelDAO();
         }
     }
 }
