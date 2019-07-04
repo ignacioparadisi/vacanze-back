@@ -49,5 +49,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5 {
                 return StatusCode (400);
             }
         }
+
+        [HttpPut]
+        public IActionResult UpdateBrand([FromBody] BrandDTO brandDTO){
+            return Ok("ok");
+        }
     }
 }
