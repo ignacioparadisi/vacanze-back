@@ -107,7 +107,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
         }
 
         /// <summary>
-        ///     Post api/claim/{baggage_id}
+        ///     Post api/claim/
         ///     utilizado para crear un reclamo con una id del equipaje
         /// </summary>
         [HttpPost]
@@ -115,17 +115,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
         {
             try
             {
-                // TODO: Esta validacion no esta funcionando, le puedes pasar un id que no exista
-                // TODO: Refactorizar esto relacionado a baggage
-                // TODO: Meter esta validacion dentro del ClaimValidator
-                // var bag = new BaggageRepository();
-                // var a = bag.GetBaggage(claim.BaggageId);
-                // if (a.Count == 0) throw new NullBaggageException("No existe el Equipaje");
-
                 var addClaimCommand = CommandFactory.CreateAddClaimCommand(claim);
                 addClaimCommand.Execute();
-                claim.Id = addClaimCommand.GetResult();
-                return CreatedAtAction("Get", "claim", claim);
+                var registeredClaimId = addClaimCommand.GetResult();
+                var getClaimByIdCommand = CommandFactory.CreateGetClaimByIdCommand(registeredClaimId);
+                getClaimByIdCommand.Execute();
+                return StatusCode(201, getClaimByIdCommand.GetResult());
             }
             catch (RequiredAttributeException ex)
             {

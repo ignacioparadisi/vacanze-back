@@ -11,15 +11,16 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo9
         public Baggage GetById(int id)
         {
             var resultTable = PgConnection.Instance.ExecuteFunction("GetBaggage(@BAG_ID)", id);
-            
+
             if (resultTable.Rows.Count == 0)
-                throw new BaggageNotFoundException("No existe el elemento con id " + id);
+                throw new BaggageNotFoundException("No existe la maleta con id " + id);
+
             return ExtractBaggageFromRow(resultTable.Rows[0]);
         }
 
         public List<Baggage> GetByPassport(string passportId)
         {
-            var baggagesByPassport= new List<Baggage>();
+            var baggagesByPassport = new List<Baggage>();
             var resultTable = PgConnection.Instance.ExecuteFunction("GetBaggageDocumentPasaport(@bag_id)", passportId);
             for (var i = 0; i < resultTable.Rows.Count; i++)
             {
@@ -32,13 +33,14 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo9
 
         public List<Baggage> GetByStatus(string status)
         {
-            var baggagesBySatus= new List<Baggage>();
+            var baggagesBySatus = new List<Baggage>();
             var resultTable = PgConnection.Instance.ExecuteFunction("getBaggagestatus(@bag_status)", status);
             for (var i = 0; i < resultTable.Rows.Count; i++)
             {
                 var baggage = ExtractBaggageFromRow(resultTable.Rows[i]);
                 baggagesBySatus.Add(baggage);
             }
+
             return baggagesBySatus;
         }
 
