@@ -1,10 +1,8 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using NUnit.Framework;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
-using vacanze_back.VacanzeApi.Common.Exceptions;
-using vacanze_back.VacanzeApi.Persistence.Repository;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo9;
 using vacanze_back.VacanzeApi.Services.Controllers.Grupo9;
 
@@ -13,13 +11,6 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
     [TestFixture]
     public class ClaimControllerTest
     {
-
-        private ClaimController _claimControllerTest;
-        private Claim _claim;
-        private List<int> _insertedClaims;
-        private PostgresClaimDao _postgresClaimDaoTest;
-
-
         [SetUp]
         public void Setup()
         {
@@ -33,26 +24,31 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
                 .WithBagagge(6)
                 .Build();
         }
-        
+
         [TearDown]
         public void TearDown()
         {
-            foreach (var clamId in _insertedClaims) _postgresClaimDaoTest.Delete(clamId);
+            foreach (var claimId in _insertedClaims) _postgresClaimDaoTest.Delete(claimId);
             _insertedClaims.Clear();
         }
 
-        [Test]
-        public void GetById_InvalidClimId_NotFoundResultReturned()
-        {
-            var result = _claimControllerTest.GetById(-1);
-            Assert.IsInstanceOf<NotFoundResult>(result.Result);
-        }
+        private ClaimController _claimControllerTest;
+        private Claim _claim;
+        private List<int> _insertedClaims;
+        private PostgresClaimDao _postgresClaimDaoTest;
 
         [Test]
         public void GetByDocument_InvalidDocumentId_EmptyListReturned()
         {
             var result = _claimControllerTest.GetByDocument("-1");
             Assert.AreEqual(0, result.Value.Count());
+        }
+
+        [Test]
+        public void GetById_InvalidClaimId_NotFoundResultReturned()
+        {
+            var result = _claimControllerTest.GetById(-1);
+            Assert.IsInstanceOf<NotFoundResult>(result.Result);
         }
 
         [Test]
@@ -73,19 +69,19 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
         }
 
-        [Test]
-        public void Post_ClaimWithNoValidStatus_BadRequestReturned()
-        {
-            _claim.Status = "NOTVALIDSTATUS";
-            var result = _claimControllerTest.Post(_claim);
-            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
-        }
-
 
         [Test]
         public void Post_ClaimWithNoExistingBaggage_BadRequestReturned()
         {
-            _claim.BaggageId = 6;
+            _claim.BaggageId = -10;
+            var result = _claimControllerTest.Post(_claim);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
+        }
+
+        [Test]
+        public void Post_ClaimWithNoValidStatus_BadRequestReturned()
+        {
+            _claim.Status = "NOTVALIDSTATUS";
             var result = _claimControllerTest.Post(_claim);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }

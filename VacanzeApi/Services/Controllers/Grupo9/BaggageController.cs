@@ -5,7 +5,6 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
-using vacanze_back.VacanzeApi.Persistence.Repository.Grupo9;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 {

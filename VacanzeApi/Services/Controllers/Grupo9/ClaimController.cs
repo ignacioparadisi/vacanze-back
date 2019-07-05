@@ -5,7 +5,6 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
-using vacanze_back.VacanzeApi.Persistence.Repository.Grupo9;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 {
@@ -15,29 +14,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
     [ApiController]
     public class ClaimController : ControllerBase
     {
-        /// <summary>
-        ///     GET api/Claim
-        ///     se usara para consultar la cantidad de reclamos en la base de datos
-        /// </summary>
-        [HttpGet]
-        public int Get()
-        {
-            try
-            {
-                var conec = new ClaimRepository();
-                var rows = conec.GetClaim();
-                return rows;
-            }
-            catch (DatabaseException)
-            {
-                return -1;
-            }
-            catch (InvalidStoredProcedureSignatureException)
-            {
-                return -1;
-            }
-        }
-
         /// <summary>
         ///     GET api/claim/{id}
         ///     Obtener Claim segun su Id
