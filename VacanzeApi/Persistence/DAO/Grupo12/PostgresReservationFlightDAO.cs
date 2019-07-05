@@ -15,6 +15,10 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
         private const string ADD_RES_FLIGHT = "AddReservationFlight(@seatNum,@tim,@numPas,@id_user,@id_fli)";
         private const string GET_RES_FLIGHT = "getReservationFlight(@rf_use_fk)";
         private const string GET_NAME_LOCATION = "GetNameLocation(@_id_city)";
+        private const string GET_ROUNDTRIP_RESERVATION = "GetFlightsIDAVU(@_departure,@_arrival,@_departuredate,@arrivaldate)";
+        private const string GET_OUTBOUND_RESERVATION = "GetFlightsIDA(@_departure,@_arrival,@_departuredate)";
+        private const string GET_ID_LOCATION = "GetIDLocation(@name_city)";
+        private const string GET_SUM = "getSum(@idflight)";
         
         /// <param name="Entity">Es on objeto de tipo FightRes </param>
         /// <returns>Devuelve el id que se agrego</returns>
@@ -134,7 +138,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
             var res=new FlightRes();
             var table=new DataTable();
             try{
-                table=PgConnection.Instance.ExecuteFunction("GetIDLocation(@name_city)",name_city);
+                table=PgConnection.Instance.ExecuteFunction(GET_ID_LOCATION,name_city);
                 res._id_city=Convert.ToInt32(table.Rows[0][0].ToString());
                 return res._id_city;
             }catch(InvalidStoredProcedureSignatureException){
@@ -162,7 +166,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
             var table5= new DataTable();
             try{
                 
-                table1 = PgConnection.Instance.ExecuteFunction("GetFlightsIDA(@_departure,@_arrival,@_departuredate)"
+                table1 = PgConnection.Instance.ExecuteFunction(GET_OUTBOUND_RESERVATION
                 ,id_city_i,id_city_v,date_i);
                 listres._price=table1.Rows.Count;
                
@@ -190,7 +194,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
                     cont=listres._sum_capacity-listres._sum_pas;
                    
                      if(cont>=numpas){
-                         Console.WriteLine(cont);
                         listres._id=Convert.ToInt32(table1.Rows[i][0].ToString());
                         listres._price=Convert.ToInt32(table1.Rows[i][1].ToString());
                         listres._priceupdate=Convert.ToInt32(table1.Rows[i][1].ToString())*numpas;
@@ -230,7 +233,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
             var res=new FlightRes();
             try{
                 
-                table1=PgConnection.Instance.ExecuteFunction("getSum(@idflight)",_id_fli);
+                table1=PgConnection.Instance.ExecuteFunction(GET_SUM,_id_fli);
                 res._sum_pas=Convert.ToInt32(table1.Rows[0][0].ToString());
                  Console.WriteLine(res._sum_pas);
                 int cont=res._sum_pas;
@@ -270,7 +273,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
             var table5= new DataTable();
             try{
                 
-                table1 = PgConnection.Instance.ExecuteFunction("GetFlightsIDAVU(@_departure,@_arrival,@_departuredate,@arrivaldate)"
+                table1 = PgConnection.Instance.ExecuteFunction(GET_ROUNDTRIP_RESERVATION
                 ,departure,arrival,departuredate,arrivaldate);
                 listres._price=table1.Rows.Count;
                
@@ -293,7 +296,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
                     cont=listres._sum_capacity-listres._sum_pas;
                    
                      if(cont>=numpas){
-                        Console.WriteLine(cont);
                         listres._id=Convert.ToInt32(table1.Rows[i][0].ToString());
                         listres._price=Convert.ToInt32(table1.Rows[i][2].ToString());
                         listres._priceupdate=Convert.ToInt32(table1.Rows[i][2].ToString())*numpas;
