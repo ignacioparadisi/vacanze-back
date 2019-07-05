@@ -29,17 +29,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         [HttpGet]
         public ActionResult<IEnumerable<RestaurantDto>> Get()
         {
-            try
-            {
-                GetRestaurantsCommand getRestaurantsCommand = CommandFactory.CreateGetRestaurantsCommand();
+            GetRestaurantsCommand getRestaurantsCommand = CommandFactory.CreateGetRestaurantsCommand();
                 getRestaurantsCommand.Execute();
                 List<RestaurantDto> restaurantsDtoList = getRestaurantsCommand.GetResult();
-                return Ok(restaurantsDtoList);
-            }
-            catch (GetRestaurantExcepcion e)
-            {
-                return StatusCode(500, e.Message);
-            }
+                return restaurantsDtoList; 
         }
 
         /// <summary>
@@ -51,17 +44,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         [HttpGet("location/{id}")]
         public ActionResult<IEnumerable<RestaurantDto>> GetRestaurantByLocation(int id)
         {
-            try
-            {
-                GetRestaurantsByCityCommand getRestaurantsByCityCommand = CommandFactory.CreateGetRestaurantsByCityCommand(id);
+            GetRestaurantsByCityCommand getRestaurantsByCityCommand = CommandFactory.CreateGetRestaurantsByCityCommand(id);
                 getRestaurantsByCityCommand.Execute();
                 List<RestaurantDto> restaurantsDtoList = getRestaurantsByCityCommand.GetResult();
-                return Ok(restaurantsDtoList);
-            }
-            catch(GetRestaurantExcepcion e)
-            {
-                return StatusCode(500, e.Message);
-            }
+                return restaurantsDtoList;
         }
 
         /// <summary>
@@ -79,15 +65,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
                 GetRestaurantCommand getRestaurantCommand = CommandFactory.CreateGetRestaurantCommand(id);
                 getRestaurantCommand.Execute();
                 RestaurantDto restaurant = getRestaurantCommand.GetResult();
-                return Ok(restaurant);
+                return restaurant;
             }
-            catch (IndexOutOfRangeException)
+            catch (RestaurantNotFoundExeption e)
             {
-                return StatusCode(500,"El Restaurant no fue encontrado");
-            }
-            catch(GetRestaurantExcepcion e)
-            {
-                return StatusCode(500, e.Message);
+                return BadRequest(new ErrorMessage(e.Message));
             }
         }
 
@@ -107,17 +89,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
                 AddRestaurantCommand addRestaurantCommand = CommandFactory.CreateAddRestaurantCommand(restaurant);
                 addRestaurantCommand.Execute();
                 RestaurantDto savedRestaurant = addRestaurantCommand.GetResult();
-                return Ok(savedRestaurant);
-            }
-            catch(AddRestaurantException e)
-            {
-                return StatusCode(500, e.Message);
+                return savedRestaurant;
             }
             catch (InvalidAttributeException e)
             {
                 return BadRequest(new ErrorMessage(e.Message));
             }
-            
         }
 
         /// <summary>
@@ -134,17 +111,16 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
                  UpdateRestaurantCommand updateRestaurantCommand = CommandFactory.CreateUpdateRestaurantCommand(restaurant);
                  updateRestaurantCommand.Execute();
                  RestaurantDto updatedRestaurant = updateRestaurantCommand.GetResult();
-                 return Ok(updatedRestaurant);
+                 return updatedRestaurant;
              }
-             catch(UpdateRestaurantException e)
+             catch(RestaurantNotFoundExeption e)
              {
-                 return StatusCode(500, e.Message);
+                 return BadRequest(new ErrorMessage(e.Message));
              }
              catch (InvalidAttributeException e)
              {
                  return BadRequest(new ErrorMessage(e.Message));
              }
-            
          }
         
         /// <summary>
@@ -156,18 +132,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         [HttpDelete("{id}")]
         public IActionResult DeleteRestaurant(int id)
         {
-            try
-            {
-                DeleteRestaurantCommand deleteRestaurantCommand = CommandFactory.CreateDeleteRestaurantCommand(id);
+            DeleteRestaurantCommand deleteRestaurantCommand = CommandFactory.CreateDeleteRestaurantCommand(id);
                 deleteRestaurantCommand.Execute();
                 return Ok("Eliminado satisfactoriamente");
-            }
-            catch(DeleteRestaurantException e)
-            {
-                return StatusCode(500, e.Message);
-            }
-            
         }
-
     }
 }
