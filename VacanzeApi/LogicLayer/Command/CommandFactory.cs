@@ -7,10 +7,12 @@ using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo7;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Locations;
 
 
@@ -123,5 +125,15 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new GetCitiesByCountryCommand(id);
         }  
+
+        public static AddReservationFlightCommand CreateAddReservationFlightCommand( FlightRes flight)
+        {
+            return new AddReservationFlightCommand( flight );
+        }  
+
+        public static GetReservationFlightByUserCommand CreateGetReservationFlightByUserCommand( int id_user )
+        {
+            return new GetReservationFlightByUserCommand( id_user );
+        } 
     }
 }

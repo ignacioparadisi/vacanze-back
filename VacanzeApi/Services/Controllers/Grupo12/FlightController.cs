@@ -8,6 +8,12 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo12;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo12;
 using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.LogicLayer.DTO;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo12;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo12;
+using vacanze_back.VacanzeApi.LogicLayer.Command;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
 {
@@ -25,17 +31,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         [Route("~/api/flight-reservation")] 
         // POST api/flight-reservation
         [HttpPost]
-        public ActionResult<IEnumerable<string>> Post(FlightRes flight){
+        public ActionResult<IEnumerable<string>> Post(FlightResDTO flightDTO){
 
             try{
 
-                FlightResConnection con=new FlightResConnection();
-                string seat=con.conSeatNum(flight._numPas,flight._id_fli);
-                FlightRes f=new FlightRes(seat,flight._timestamp,
-                flight._numPas,flight._id_user,flight._id_fli);
-                int i = con.AddReservationFlight(f);
+                ReservationFlightMapper ResFlightMapper = MapperFactory.CreateReservationFlightMapper();
+                Entity entity = ResFlightMapper.CreateEntity(flightDTO);
+                AddReservationFlightCommand command = CommandFactory.CreateAddReservationFlightCommand ((FlightRes)entity);
+                command.Execute ();
+                int _id = command.GetResult();
                 
-                return StatusCode(200, "Se agrego satisfactoriamente id:"+i);
+                return StatusCode(200, "Se agrego satisfactoriamente id: " + _id);
 
             }catch(Exception ex){
                 return BadRequest(ex.Message);
@@ -51,11 +57,16 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         [Route("~/api/list-reservation-flight/{id_user}")] 
         // GET api/list-reservation-flight
         [HttpGet("{id_user}")]
-        public ActionResult<IEnumerable<FlightRes>> Get(int id_user){
+        public ActionResult<IEnumerable<Entity>> Get(int id_user){
 
             try{
-                FlightResConnection con=new FlightResConnection();
-                List<FlightRes> listFlight = con.GetReservationFlight(id_user);
+                
+                GetReservationFlightByUserCommand command = 
+                    CommandFactory.CreateGetReservationFlightByUserCommand(id_user);
+
+                command.Execute();
+                List<Entity> listFlight = command.GetResult();
+
                 return listFlight;
 
             }catch(Exception ex ){
