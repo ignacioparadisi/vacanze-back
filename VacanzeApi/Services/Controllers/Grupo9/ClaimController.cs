@@ -52,7 +52,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             try
             {
                 getByIdCommand.Execute();
-                return getByIdCommand.GetResult();
+                return Ok(getByIdCommand.GetResult());
             }
             catch (ClaimNotFoundException)
             {
@@ -97,7 +97,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             try
             {
                 getByStatusCommand.Execute();
-                return getByStatusCommand.GetResult();
+                return Ok(getByStatusCommand.GetResult());
             }
             catch (DatabaseException ex)
             {
