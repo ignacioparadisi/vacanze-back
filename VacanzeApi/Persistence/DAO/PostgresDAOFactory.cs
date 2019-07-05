@@ -2,6 +2,7 @@ using DefaultNamespace;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo9;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
+using vacanze_back.VacanzeApi.Persistence.DAO.Locations;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo6;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO
@@ -41,6 +42,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         public override HotelDAO GetHotelDAO()
         {
             return new PostgresHotelDAO();
+        }
+
+        public override LocationDAO GetLocationDAO()
+        {
+            return new PostgresLocationDAO();
         }
     }
 }
