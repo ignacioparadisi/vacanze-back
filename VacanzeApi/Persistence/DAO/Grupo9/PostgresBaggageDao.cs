@@ -21,7 +21,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo9
         public List<Baggage> GetByPassport(string passportId)
         {
             var baggagesByPassport = new List<Baggage>();
-            var resultTable = PgConnection.Instance.ExecuteFunction("GetBaggageDocumentPasaport(@bag_id)", passportId);
+            var resultTable = PgConnection.Instance.ExecuteFunction("getBaggageDOcumentpasaport(@passportId)", passportId);
             for (var i = 0; i < resultTable.Rows.Count; i++)
             {
                 var baggage = ExtractBaggageFromRow(resultTable.Rows[i]);

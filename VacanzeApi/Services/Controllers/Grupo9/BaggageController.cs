@@ -28,7 +28,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
                 getByIdCommand.Execute();
                 return getByIdCommand.GetResult();
             }
-            catch (ClaimNotFoundException)
+            catch (BaggageNotFoundException)
             {
                 return new NotFoundResult();
             }
@@ -52,7 +52,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
                 getByPassportCommand.Execute();
                 return getByPassportCommand.GetResult();
             }
-            catch (ClaimNotFoundException)
+            catch (BaggageNotFoundException)
             {
                 return new NotFoundResult();
             }
@@ -69,13 +69,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
         [HttpGet("admin/getStatus/{status}")]
         public ActionResult<IEnumerable<Baggage>> GetStatus(string status)
         {
-            var getByStatusCommand = CommandFactory.CreateGetBaggageByPassportCommand(status);
+            var getByStatusCommand = CommandFactory.CreateGetBaggageByStatusCommand(status);
             try
             {
                 getByStatusCommand.Execute();
                 return getByStatusCommand.GetResult();
             }
-            catch (ClaimNotFoundException)
+            catch (BaggageNotFoundException)
             {
                 return new NotFoundResult();
             }

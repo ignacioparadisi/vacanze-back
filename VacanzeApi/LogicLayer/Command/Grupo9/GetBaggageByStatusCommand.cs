@@ -6,12 +6,12 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9
 {
     public class GetBaggageByStatusCommand : CommandResult<List<Baggage>>
     {
-        private readonly string _passportNumber;
+        private readonly string _status;
         private List<Baggage> _result;
 
-        public GetBaggageByStatusCommand(string passportNumber)
+        public GetBaggageByStatusCommand(string status)
         {
-            this._passportNumber = passportNumber;
+            _status = status;
         }
         
         public List<Baggage> GetResult()
@@ -22,7 +22,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9
         public void Execute()
         {
             var daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-            _result = daoFactory.GetBaggageDao().GetByPassport(_passportNumber);
+            _result = daoFactory.GetBaggageDao().GetByStatus(_status);
         }
     }
 }
