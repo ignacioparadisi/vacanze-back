@@ -5,6 +5,9 @@ using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo6;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo6;
 
 namespace vacanze_back.VacanzeApiTest.Grupo6
 {
@@ -205,6 +208,66 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
             var base64ImageCode = GetHotelImage.GetResult(); 
             Assert.IsNotNull(base64ImageCode);
         }
-
+        [Test]
+        public void ValidHotelCommand_NoExceptionThrown()
+        {
+            Assert.DoesNotThrow(() =>
+            {         
+                HotelValidatorCommand command =  CommandFactory.HotelValidatorCommand(_hotel);
+                command.Execute ();
+            });
+        }
+        [Test]
+        public void ValidHotelDTOCommand_NoExceptionThrown()
+        {
+            Assert.DoesNotThrow(() =>
+            {         
+                
+                HotelMapper _HotelMapper = MapperFactory.createHotelMapper();
+                HotelDTO result = _HotelMapper.CreateDTO(_hotel);
+                HotelDTOValidatorCommand command =  CommandFactory.HotelDTOValidatorCommand(result);
+                command.Execute ();
+            });
+        }
+        [Test]
+        public void ValidHotelCommand_ExceptionThrown()
+        {
+            Assert.Throws<RequiredAttributeException>(() =>
+            {         
+                HotelValidatorCommand command =  CommandFactory.HotelValidatorCommand(null);
+                command.Execute ();
+            });
+        }
+        [Test]
+        public void ValidHotelDTOCommand_ExceptionThrown()
+        {
+            Assert.Throws<RequiredAttributeException>(() =>
+            {         
+                HotelDTOValidatorCommand command =  CommandFactory.HotelDTOValidatorCommand(null);
+                command.Execute ();
+            });
+        }
+        [Test]
+        public void ValidHotelCommand_LocationExceptionThrown()
+        {
+            Assert.Throws<RequiredAttributeException>(() =>
+            {         
+                _hotel.Location = null;
+                HotelValidatorCommand command =  CommandFactory.HotelValidatorCommand(_hotel);
+                command.Execute ();
+            });
+        }
+        [Test]
+        public void ValidHotelDTOCommand_LocationExceptionThrown()
+        {
+            Assert.Throws<RequiredAttributeException>(() =>
+            {      
+                HotelMapper _HotelMapper = MapperFactory.createHotelMapper();
+                HotelDTO result = _HotelMapper.CreateDTO(_hotel);
+                result.Location= null;
+                HotelDTOValidatorCommand command =  CommandFactory.HotelDTOValidatorCommand(result);
+                command.Execute ();
+            });
+        }
     }
 }

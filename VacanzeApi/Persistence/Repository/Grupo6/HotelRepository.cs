@@ -19,7 +19,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
         /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
         public static int AddHotel(Hotel hotel)
         {
-            HotelValidator.Validate(hotel);
+            //HotelValidator.Validate(hotel);
             var table = PgConnection.Instance.ExecuteFunction(
                 "addhotel(@name, @amountOfRooms, @capacityPerRoom, @active, @addressSpecs, " +
                 "@roomPrice, @website, @phone, @picture, @stars, @location)",
@@ -133,7 +133,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
         /// </exception>
         public static Hotel UpdateHotel(int id, Hotel newData)
         {
-            HotelValidator.Validate(newData);
+            //HotelValidator.Validate(newData);
             PgConnection.Instance.ExecuteFunction(
                 "updatehotel(@_id, @name, @amountOfRooms, @capacityPerRoom, @active, @addressSpecs, " +
                 "@roomPrice, @website, @phone, @picture, @stars, @location)",
