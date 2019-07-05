@@ -6,11 +6,13 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9
     public class UpdateBaggageCommand : CommandResult<Baggage>
     {
         private readonly int _idToSearch;
+        private Baggage _fieldsToUpdate;
         private Baggage _result;
 
-        public UpdateBaggageCommand(int idToSearch)
+        public UpdateBaggageCommand(int idToSearch, Baggage fieldsToUpdate)
         {
-            this._idToSearch = idToSearch;
+            _idToSearch = idToSearch;
+            _fieldsToUpdate = fieldsToUpdate;
         }
         
         public Baggage GetResult()
@@ -21,7 +23,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9
         public void Execute()
         {
             var daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-            _result = daoFactory.GetBaggageDao().GetById(_idToSearch);
+            _result = daoFactory.GetBaggageDao().Update(_idToSearch, _fieldsToUpdate);
         }
     }
 }

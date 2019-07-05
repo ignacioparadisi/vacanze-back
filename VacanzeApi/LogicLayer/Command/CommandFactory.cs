@@ -56,6 +56,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new DeleteClaimByIdCommand(id);
         }
 
+        public static UpdateClaimCommand CreateUpdateClaimCommand(int id, Claim fieldsToUpdate)
+        {
+            return new UpdateClaimCommand(id, fieldsToUpdate);
+        }
+
         public static ValidateClaimUpdateCommand CreateValidateClaimUpdateCommand(Claim claim)
         {
             return new ValidateClaimUpdateCommand(claim);
@@ -66,6 +71,21 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new ValidateClaimCreationCommand(claim);
         }
 
+        public static GetBaggageByPassportCommand CreateGetBaggageByPassportCommand(string passport)
+        {
+            return new GetBaggageByPassportCommand(passport);
+        }
+        
+        public static GetBaggageByStatusCommand CreateGetBaggageByStatusCommand(string status)
+        {
+            return new GetBaggageByStatusCommand(status);
+        }
+        
+        public static UpdateBaggageCommand CreateUpdateBaggageCommand(int id, Baggage baggage)
+        {
+            return new UpdateBaggageCommand(id,baggage);
+        }
+        
         public static GetBaggageByIdCommand CreateGetBaggageByIdCommand(int id)
         {
             return new GetBaggageByIdCommand(id);

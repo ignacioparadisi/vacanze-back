@@ -1,6 +1,3 @@
-using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
-using vacanze_back.VacanzeApi.Common.Exceptions;
-
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
 {
     public class ClaimRepository
@@ -71,28 +68,28 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo9
 //            return id;
 //        }
 
-        /// <summary>
-        // modificar el estatus de un reclamo 
-        /// </summary>
-        public int ModifyClaimStatus(int claimId, Claim claim)
-        {
-            var table = PgConnection.Instance.ExecuteFunction("getclaim(@cla_id)", claimId);
-            if (table.Rows.Count < 1) throw new ClaimNotFoundException("No existe el elemento que desea modificar");
-            PgConnection.Instance.ExecuteFunction("modifyclaimstatus(@cla_id,@cla_status)", claimId, claim.Status);
-            return claimId;
-        }
-
-        /// <summary>
-        // modificar el titulo y descripcion  de un reclamo 
-        /// </summary>
-        public int ModifyClaimTitle(int claimId, Claim claim)
-        {
-            var table = PgConnection.Instance.ExecuteFunction("getclaim(@cla_id)", claimId);
-            if (table.Rows.Count < 1) throw new ClaimNotFoundException("nNo existe el elemento que desea modificar");
-            PgConnection.Instance.ExecuteFunction("modifyclaimtitle(@cla_id,@cla_title,@cla_descr)", claimId,
-                claim.Title, claim.Description);
-            return claimId;
-        }
+//        /// <summary>
+//        // modificar el estatus de un reclamo 
+//        /// </summary>
+//        public int ModifyClaimStatus(int claimId, Claim claim)
+//        {
+//            var table = PgConnection.Instance.ExecuteFunction("getclaim(@cla_id)", claimId);
+//            if (table.Rows.Count < 1) throw new ClaimNotFoundException("No existe el elemento que desea modificar");
+//            PgConnection.Instance.ExecuteFunction("modifyclaimstatus(@cla_id,@cla_status)", claimId, claim.Status);
+//            return claimId;
+//        }
+//
+//        /// <summary>
+//        // modificar el titulo y descripcion  de un reclamo 
+//        /// </summary>
+//        public int ModifyClaimTitle(int claimId, Claim claim)
+//        {
+//            var table = PgConnection.Instance.ExecuteFunction("getclaim(@cla_id)", claimId);
+//            if (table.Rows.Count < 1) throw new ClaimNotFoundException("nNo existe el elemento que desea modificar");
+//            PgConnection.Instance.ExecuteFunction("modifyclaimtitle(@cla_id,@cla_title,@cla_descr)", claimId,
+//                claim.Title, claim.Description);
+//            return claimId;
+//        }
 
 //        /// <summary>
 //        // metodo que permite el llenado de las lista de los reclamos en los gets 

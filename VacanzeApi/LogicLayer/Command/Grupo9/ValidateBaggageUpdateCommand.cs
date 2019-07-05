@@ -1,4 +1,6 @@
+using System.Net.Http;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo9;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9
 {
@@ -13,8 +15,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9
         
         public void Execute()
         {
-            //TODO: Llammar al validator de Baggage con el http method Update
-            throw new System.NotImplementedException();
+            BaggageValidator.Validate(_baggage,HttpMethod.Put);
         }
     }
 }
