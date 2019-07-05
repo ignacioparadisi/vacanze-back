@@ -15,7 +15,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
         public void Setup()
         {
             _postgresClaimDaoTest = new PostgresClaimDao();
-            _claimControllerTest = new ClaimController();
+            _claimControllerTest = new ClaimController(null);
             _insertedClaims = new List<int>();
             _claim = ClaimBuilder.Create()
                 .WithStatus("ABIERTO")

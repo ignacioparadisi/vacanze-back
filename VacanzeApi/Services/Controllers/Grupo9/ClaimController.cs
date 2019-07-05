@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Common.Exceptions;
@@ -14,6 +15,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
     [ApiController]
     public class ClaimController : ControllerBase
     {
+        private readonly ILogger<ClaimController> _logger;
+
+        public ClaimController(ILogger<ClaimController> logger)
+        {
+            _logger = logger;
+        }
+
         /// <summary>
         ///     GET api/claim/{id}
         ///     Obtener Claim segun su Id
@@ -34,7 +42,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             }
             catch (DatabaseException ex)
             {
-                // TODO: Log
+                _logger?.LogError(ex, "Database exception when trying to get a claim by id");
                 return StatusCode(500, ex.Message);
             }
         }
