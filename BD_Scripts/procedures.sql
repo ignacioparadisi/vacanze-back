@@ -1505,6 +1505,30 @@ END; $$
 LANGUAGE 'plpgsql';
 
 
+CREATE OR REPLACE FUNCTION BrandUniqueness(
+  brandName VARCHAR
+)
+RETURNS BOOLEAN AS
+$$
+DECLARE 
+	same INTEGER;
+BEGIN
+  same := 
+  (SELECT COUNT(*) FROM VEH_BRAND 
+  WHERE LOWER(vb_name) = LOWER(brandName));
+
+  IF same >= 1 THEN
+	RETURN TRUE;
+  ELSE
+	RETURN FALSE;
+  END IF;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+
+
+
 -------------AGREGAR AUTO-----------------
 
 CREATE OR REPLACE FUNCTION 

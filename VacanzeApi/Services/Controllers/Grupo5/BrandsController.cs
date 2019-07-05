@@ -29,6 +29,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5 {
                 AddBrandCommand command = CommandFactory.CreateAddBrandCommand ((Brand) entity);
                 command.Execute ();
                 return Ok ("ok " + command.GetResult ());
+            } catch (UniqueAttributeException ex){
+                return StatusCode (500, ex.Message);
             } catch (InternalServerErrorException ex) {
                 return StatusCode (500, ex.Message);
             } catch (Exception) {
@@ -40,9 +42,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5 {
         public ActionResult<IEnumerable<Brand>> GetBrands(){
             List<Brand> brands = new List<Brand>();
             try {
+                BrandMapper brandMapper = MapperFactory.createBrandMapper();
                 GetBrandsCommand command = CommandFactory.CreateGetBrandsCommand();
                 command.Execute ();
-                return Ok (command.GetResult ());
+                return Ok (brandMapper.CreateDTOList(command.GetResult()));
             } catch (InternalServerErrorException ex) {
                 return StatusCode (500, ex.Message);
             } catch (Exception) {
@@ -59,9 +62,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5 {
                 UpdateBrandCommand command = CommandFactory.CreateUpdateBrandCommand ((Brand) entity);
                 command.Execute ();
                 if(command.GetResult())
-                    return Ok("Las modificaciones fueron realizadas exitosamente");
+                    return Ok("La modificación fue realizada exitosamente");
                 else
                     return StatusCode(400);
+            }catch (UniqueAttributeException ex){
+                return StatusCode (500, ex.Message);
             }catch(InternalServerErrorException ex){
                 return StatusCode(500, ex.Message);
             }catch(Exception){
