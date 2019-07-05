@@ -2,6 +2,7 @@ using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo9;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo1;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO
 {
@@ -25,7 +26,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
 
         // +++++++++++++++++
         //     GRUPO 13
-        // +++++++++++++++++
+        // +++++++++++++++++               
         public abstract ReservationRoomDAO GetReservationRoomDAO();
 
         public abstract IClaimDao GetClaimDao();
@@ -33,5 +34,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         public abstract RoleDAO GetRoleDAO();
 
         public abstract UserDAO GetUserDAO();
+
+        public abstract LoginDAO GetLoginDAO();
     }
 }
