@@ -49,6 +49,32 @@ namespace vacanze_back.VacanzeApiTest.Grupo7
 		}
 		
 		[Test]
+		public void GetRestaurantTest_Returns_RestaurantNotFoundExeption()
+		{
+			Assert.Throws<RestaurantNotFoundExeption>(() => _restaurantDao.GetRestaurant(-1));
+		}
+
+		[Test]
+
+		public void GetRestaurantsTest()
+		{
+			var id = _restaurantDao.AddRestaurant(_restaurant);
+			_addedRestaurantList.Add(id);
+			List<Restaurant> restaurantList = _restaurantDao.GetRestaurants();
+			Assert.IsTrue(restaurantList.Count > 0);
+		}
+		
+		
+		[Test]
+		public void GetRestaurantsByCityTest()
+		{
+			var id = _restaurantDao.AddRestaurant(_restaurant);
+			_addedRestaurantList.Add(id);
+			List<Restaurant> restaurantList = _restaurantDao.GetRestaurantsByCity(_restaurant.Location);
+			Assert.IsTrue(restaurantList.Count > 0);
+		}
+		
+		[Test]
 		public void AddRestaurantTest()
 		{
 			var id = _restaurantDao.AddRestaurant(_restaurant);
@@ -67,6 +93,14 @@ namespace vacanze_back.VacanzeApiTest.Grupo7
 			var updatedRestaurant = _restaurantDao.UpdateRestaurant(toUpdateRestaurant);
 			var actualRestaurant = _restaurantDao.GetRestaurant(id);
 			Assert.AreEqual(updatedRestaurant.Name,actualRestaurant.Name);
+		}
+
+		[Test]
+
+		public void UpdateRestaurantTest_Returns_RestaurantNotFoundExeption()
+		{
+			_restaurant.Id = -1;
+			Assert.Throws<RestaurantNotFoundExeption>(() => _restaurantDao.UpdateRestaurant(_restaurant));
 		}
 		
 		[TearDown]

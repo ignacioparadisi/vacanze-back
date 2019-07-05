@@ -13,114 +13,67 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo7
         
         public Restaurant GetRestaurant(int id)
         {       
-            try
-            {
+
                 var table = PgConnection.Instance.ExecuteFunction("GetRestaurant(@restaurant_id)" , id);
+                if (table.Rows.Count == 0 )
+                    throw new RestaurantNotFoundExeption("No se encontro ningun restaurante con el Id " + id);
                 return ExtractRestaurantFromRow(table.Rows[0]);
-            }
-            catch (DatabaseException)
-            {
-                throw new GetRestaurantExcepcion("No se pudo obtener el restaurant solicitado");
-            }
         }
         
         public List<Restaurant> GetRestaurants()
         {
-            try
-            {
-                var table = PgConnection.Instance.ExecuteFunction("getrestaurants()");
-                var restaurantList = new List<Restaurant>();
-                for (var i = 0; i < table.Rows.Count; i++)
-                {
-                    var restaurant = ExtractRestaurantFromRow(table.Rows[i]);
-                    restaurantList.Add(restaurant);
-                }
 
-                return restaurantList; 
+            var table = PgConnection.Instance.ExecuteFunction("getrestaurants()");
+            var restaurantList = new List<Restaurant>();
+            for (var i = 0; i < table.Rows.Count; i++)
+            {
+                var restaurant = ExtractRestaurantFromRow(table.Rows[i]);
+                restaurantList.Add(restaurant);
             }
-            catch(DatabaseException){
-                throw new GetRestaurantExcepcion("No se pudieron obtener los restaurants existentes");
-            }
+            return restaurantList;
         }
         
         public List<Restaurant> GetRestaurantsByCity(int locationId)
         {
-            try
-            {
-                var table = PgConnection.Instance.ExecuteFunction("GetRestaurantsByCity(@location_id)", locationId);
+            var table = PgConnection.Instance.ExecuteFunction("GetRestaurantsByCity(@location_id)", locationId);
                 var restaurantList = new List<Restaurant>();
                 for (var i = 0; i < table.Rows.Count; i++)
                 {
                     var restaurant = ExtractRestaurantFromRow(table.Rows[i]);
                     restaurantList.Add(restaurant);
                 }
-                return restaurantList;
-            }
-            catch(DatabaseException)
-            {
-                throw new GetRestaurantExcepcion("No se pudo obtener los restaurantes para esa ciudad");
-            }
+            return restaurantList;
         }
         
         public int AddRestaurant(Restaurant restaurant)
         {
-            try
-            {
-                var table = PgConnection.Instance.ExecuteFunction(
+            var table = PgConnection.Instance.ExecuteFunction(
                     "addrestaurant(@name,@capacity,@isActive,@qualify,@specialty,@price,@businessName,@picture,@description,@phone,@location,@address)",
                     restaurant.Name, restaurant.Capacity, restaurant.IsActive, restaurant.Qualify, restaurant.Specialty, restaurant.Price, restaurant.BusinessName, 
                     restaurant.Picture, restaurant.Description, restaurant.Phone, restaurant.Location, restaurant.Address
                 );
-                var savedId = Convert.ToInt32(table.Rows[0][0]);
-                return savedId;
-            }
-            catch(DatabaseException)
-            {
-                throw new AddRestaurantException("No se pudo agregar el restaurant");
-            }
-            catch(InvalidOperationException)
-            {
-                throw new AddRestaurantException("No se llenaron los campos necesarios para poder crear un restaurant");
-            } 
+            var savedId = Convert.ToInt32(table.Rows[0][0]);
+            return savedId;
         }
         
         public Restaurant UpdateRestaurant(Restaurant restaurant)
         {
-            try
-            {
-                var table = PgConnection.Instance.ExecuteFunction(
-                    "ModifyRestaurant(@id,@name,@capacity,@isActive,@qualify,@specialty,@price,@businessName,@picture,@description,@phone,@location,@address)",Convert.ToInt32(restaurant.Id),
-                    restaurant.Name, restaurant.Capacity, restaurant.IsActive, restaurant.Qualify, restaurant.Specialty, restaurant.Price, restaurant.BusinessName, 
-                    restaurant.Picture, restaurant.Description, restaurant.Phone, restaurant.Location, restaurant.Address
-                );
-                var id = Convert.ToInt32(table.Rows[0][0]);
-                return restaurant;
-            }
-            catch (InvalidOperationException)
-            {
-                throw new UpdateRestaurantException("Error, no se pudo actualizar el restaurant");
-            }
-            catch (InvalidCastException)
-            {
-                throw new UpdateRestaurantException("Error, no se pudo actualizar el restaurant");
-            }
-            catch (DatabaseException)
-            {
-                throw new UpdateRestaurantException("Error, no se pudo conectar con la base de datos");
-            }
-           
+            var table = PgConnection.Instance.ExecuteFunction("GetRestaurant(@restaurant_id)" , restaurant.Id);
+            
+            if (table.Rows.Count == 0)
+                throw new RestaurantNotFoundExeption("No se encontro el Restaurante que se desea actualizar");
+            
+            PgConnection.Instance.ExecuteFunction(
+                "ModifyRestaurant(@id,@name,@capacity,@isActive,@qualify,@specialty,@price,@businessName,@picture,@description,@phone,@location,@address)",Convert.ToInt32(restaurant.Id),
+                restaurant.Name, restaurant.Capacity, restaurant.IsActive, restaurant.Qualify, restaurant.Specialty, restaurant.Price, restaurant.BusinessName, 
+                restaurant.Picture, restaurant.Description, restaurant.Phone, restaurant.Location, restaurant.Address);
+            
+            return GetRestaurant(restaurant.Id);
         }
 
         public void DeleteRestaurant(int id)
         {
-            try
-            {
-                PgConnection.Instance.ExecuteFunction("DeleteRestaurant(@id)",id);
-            }
-            catch (NpgsqlException e)
-            {
-                throw new DatabaseException(e.Message);
-            }
+            PgConnection.Instance.ExecuteFunction("DeleteRestaurant(@id)",id);
         }
 
         private Restaurant ExtractRestaurantFromRow(DataRow row)
