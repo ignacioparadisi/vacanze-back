@@ -6,7 +6,6 @@ using vacanze_back.VacanzeApi.LogicLayer.DTO;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
-using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Locations;
@@ -50,11 +49,8 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
                     .WithWebsite("HC.com")
                     .WithStars(2)
                     .LocatedAt(0)
-                    .WithStatus(true)
-                    .WithAddressDescription("Calle Los Almendrones")
-                    .WithPictureUrl("alguncodigoenbase64")
                     .Build();
-            });
+                    });
         }
 
         [Test]       
@@ -111,8 +107,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
             {
                 HotelMapper _HotelMapper = MapperFactory.createHotelMapper();
                 var result = _HotelMapper.CreateDTO(null);
-                Assert.IsInstanceOf<HotelDTO>(result);
-            });
+                Assert.IsInstanceOf<HotelDTO>(result);});
         }
         [Test]        
         [Order(7)]
@@ -120,8 +115,8 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         {                
             Assert.Throws<RequiredAttributeException>(() =>
             {           
-            HotelMapper _HotelMapper = MapperFactory.createHotelMapper();   
-            var result = _HotelMapper.CreateEntity(null);
+                HotelMapper _HotelMapper = MapperFactory.createHotelMapper();   
+                _HotelMapper.CreateEntity(null);
             });
         }
         [Test]       
@@ -132,10 +127,11 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
             {
                 _hotel.Location = null;
                 HotelMapper _HotelMapper = MapperFactory.createHotelMapper();
-                var result = _HotelMapper.CreateDTO(_hotel);
+                _HotelMapper.CreateDTO(_hotel);
+                
             });
         }
-                [Test]       
+        [Test]       
         [Order(9)]
         public void CreateEtityTest_RequiredAttributeException_location()
         {
@@ -149,7 +145,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
                 
                 HotelDTO.Location = null;                     
                 HotelMapper _HotelMapper = MapperFactory.createHotelMapper();
-                var result = _HotelMapper.CreateEntity(HotelDTO);
+                _HotelMapper.CreateEntity(HotelDTO);
             });
         }
         
