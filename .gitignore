@@ -563,3 +563,5 @@ vacanze-back.sln
 *.sln
 
 .DS_Store
+
+internal-nlog.txt
