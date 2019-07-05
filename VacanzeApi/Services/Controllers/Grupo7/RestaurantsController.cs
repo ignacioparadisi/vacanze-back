@@ -6,6 +6,10 @@ using System;
 using Newtonsoft.Json;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.LogicLayer.Command;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo7;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo7;
+using vacanze_back.VacanzeApi.Persistence.DAO;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo7;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
@@ -68,8 +72,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         {
             try
             {
-                 Restaurant restaurant=  RestaurantRepository.GetRestaurant(id);
-                 return Ok(JsonConvert.SerializeObject(restaurant));
+                GetRestaurantCommand getRestaurantCommand = CommandFactory.CreateGetRestaurantCommand(id);
+                getRestaurantCommand.Execute();
+                RestaurantDTO restaurant = getRestaurantCommand.GetResult();
+                return Ok(JsonConvert.SerializeObject(restaurant));
             }
             catch (IndexOutOfRangeException)
             {
@@ -90,17 +96,14 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Restaurant> Create([FromBody] Restaurant restaurant)
+        public ActionResult<Restaurant> PostRestaurant([FromBody] RestaurantDTO restaurant)
         {
             try
             {
-                var receivedId = RestaurantRepository.AddRestaurant(restaurant);
-                var savedrestaurant = new Restaurant(receivedId, restaurant.Name, restaurant.Capacity, restaurant.IsActive,
-                                             restaurant.Qualify, restaurant.Specialty, restaurant.Price, restaurant.BusinessName, 
-                                             restaurant.Picture, restaurant.Description, restaurant.Phone,
-                                             restaurant.Location,
-                                             restaurant.Address);
-                return CreatedAtAction("Get", "restaurants", savedrestaurant); 
+                AddRestaurantCommand addRestaurantCommand = CommandFactory.CreateAddRestaurantCommand(restaurant);
+                addRestaurantCommand.Execute();
+                RestaurantDTO savedRestaurant = addRestaurantCommand.GetResult();
+                return Ok(savedRestaurant);
             }
             catch(AddRestaurantException e)
             {
