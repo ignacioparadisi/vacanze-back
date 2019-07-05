@@ -10,15 +10,15 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo12;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12
 {
-    public class GetReservationFlightByUserCommand : Command, CommandResult<List<Entity>>
+    public class GetIdReturnCityCommand : Command, CommandResult<List<int>>
     {
-        private int IdUser;
-        private List<Entity> FlightReservations;
+        private List<int> id_locations = new List<int>();
+        private List<string> names_city = new List<string>();
 
         
-        public GetReservationFlightByUserCommand(int idUser) 
+        public GetIdReturnCityCommand(List<string> names_city) 
         {
-            this.IdUser = idUser;
+            this.names_city = names_city;
         } 
         
 
@@ -26,12 +26,13 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12
 
             DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
             ReservationFlightDAO ResFlightDao = factory.GetReservationFlightDAO();
-            this.FlightReservations = ResFlightDao.GetReservationFlight(this.IdUser);
+            id_locations.Add( ResFlightDao.GetIDLocation(names_city[0]) );
+            id_locations.Add( ResFlightDao.GetIDLocation(names_city[1]) );
 
         }
 
-        public List<Entity> GetResult(){
-            return this.FlightReservations;
+        public List<int> GetResult(){
+            return this.id_locations;
         }
     }
 }

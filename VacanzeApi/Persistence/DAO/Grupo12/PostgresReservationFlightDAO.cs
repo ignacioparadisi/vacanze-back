@@ -71,8 +71,8 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
                     res._price=Convert.ToInt32(table.Rows[i][1]);
                     res._timestamp=Convert.ToString(table.Rows[i][2].ToString());
                     res._seatNum=Convert.ToString(table.Rows[i][3].ToString());
-                    res._namecityI=table.Rows[i][4].ToString();
-                    res._namecountryI=table.Rows[i][5].ToString();
+                    res._namecountryI=table.Rows[i][4].ToString();
+                    res._namecityI=table.Rows[i][5].ToString();
                     res._numPas=Convert.ToInt32(table.Rows[i][7].ToString());
                     res._namecityV=table2.Rows[0][1].ToString();
                     res._namecountryV=table2.Rows[0][2].ToString();

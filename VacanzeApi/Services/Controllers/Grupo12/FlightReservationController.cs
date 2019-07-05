@@ -22,7 +22,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
     [EnableCors("MyPolicy")]
 	[ApiController]
     
-    public class FlightController : ControllerBase
+    public class FlightReservationController : ControllerBase
     {
 
         /// <summary> POST api/flight-reservation</summary>
@@ -88,13 +88,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         public ActionResult<IEnumerable<int>> Get(string name_city_i,string name_city_v){
             
             try{
-                List<int> lis_id=new List<int>();
-                FlightResConnection con=new FlightResConnection();
-                int id_locationI = con.GetIDLocation(name_city_i);
-                int id_locationV = con.GetIDLocation(name_city_v);
-                lis_id.Add(id_locationI);
-                lis_id.Add(id_locationV);
-                return lis_id;
+                List<string> city_names = new List<string>();
+                city_names.Add(name_city_i);
+                city_names.Add(name_city_v);
+
+                GetIdReturnCityCommand command = 
+                    CommandFactory.CreateGetIdReturnCityCommand(city_names);
+
+                command.Execute();
+                List<int> city_ids = command.GetResult();
+
+                return city_ids;
             }catch(Exception ex ){
 
                  return BadRequest(ex.Message);
@@ -113,9 +117,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         public ActionResult<IEnumerable<String>> Delete(int id_res){
 
             try{
-                Console.Write(id_res);
-                FlightResConnection con=new FlightResConnection();
-                con.DeleteReservationFlight(id_res);
+                DeleteReservationCommand command = 
+                    CommandFactory.CreateDeleteReservationCommand(id_res);
+
+                command.Execute();
+
                 return StatusCode(200, "Se elimino satisfactoriamente");
 
             }catch(Exception ex ){
@@ -135,12 +141,15 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         
         [Route("~/api/reservation-flight/{departure}/{arrival}/{departuredate}/{numpas}")] 
         [HttpGet("{departure}/{arrival}/{departuredate}/{numpas}")]
-        public ActionResult<IEnumerable<ListRes>> Get(int departure, int arrival, string departuredate,int numpas)
+        public ActionResult<IEnumerable<Entity>> Get(int departure, int arrival, string departuredate,int numpas)
         {
             try
             {
-                FlightResConnection con=new FlightResConnection();
-                List<ListRes> listFlight=con.GetFlightValidateI(departure, arrival, departuredate,numpas);
+                GetReservationsByDateICommand command = 
+                    CommandFactory.CreateGetReservationsByDateICommand(departure, arrival, departuredate,numpas);
+                command.Execute();
+                List<Entity> listFlight = command.GetResult();
+
                 return listFlight;
             }
             catch (DatabaseException ex)
@@ -162,12 +171,15 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
 
         [Route("~/api/reservation-flight/{departure}/{arrival}/{departuredate}/{arrivaldate}/{numpas}")] 
         [HttpGet("{departure}/{arrival}/{departuredate}/{arrivaldate}/{numpas}")]
-        public ActionResult<IEnumerable<ListRes>> Get(int departure, int arrival, string departuredate,string arrivaldate,int numpas)
+        public ActionResult<IEnumerable<Entity>> Get(int departure, int arrival, string departuredate,string arrivaldate,int numpas)
         {
             try
             {
-                FlightResConnection con=new FlightResConnection();
-                List<ListRes> listFlight=con.GetReservationFlightIV(departure, arrival, departuredate,arrivaldate,numpas);
+                GetReservationsByDateIVCommand command = 
+                    CommandFactory.CreateGetReservationsByDateIVCommand(departure, arrival, departuredate, arrivaldate, numpas);
+                command.Execute();
+                List<Entity> listFlight = command.GetResult();
+
                 return listFlight;
             }
             catch (DatabaseException ex)

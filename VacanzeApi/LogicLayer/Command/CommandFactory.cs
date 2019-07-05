@@ -135,5 +135,25 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new GetReservationFlightByUserCommand( id_user );
         } 
+
+        public static GetIdReturnCityCommand CreateGetIdReturnCityCommand( List<string> city_names )
+        {
+            return new GetIdReturnCityCommand( city_names );
+        } 
+
+        public static DeleteReservationCommand CreateDeleteReservationCommand( int id )
+        {
+            return new DeleteReservationCommand( id );
+        } 
+
+        public static GetReservationsByDateICommand CreateGetReservationsByDateICommand( int departure, int arrival, string departuredate, int numpas)
+        {
+            return new GetReservationsByDateICommand( departure, arrival, departuredate, numpas );
+        } 
+
+        public static GetReservationsByDateIVCommand CreateGetReservationsByDateIVCommand( int departure, int arrival, string departuredate, string arrivaldate, int numpas)
+        {
+            return new GetReservationsByDateIVCommand( departure, arrival, departuredate, arrivaldate, numpas );
+        } 
     }
 }
