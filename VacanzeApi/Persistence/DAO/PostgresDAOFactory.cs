@@ -30,6 +30,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
             return new PostgresUserDAO();
         }
 
+        public override IBaggageDao GetBaggageDao()
+        {
+            return  new PostgresBaggageDao();
+        }
+
         public override IClaimDao GetClaimDao()
         {
             return new PostgresClaimDao();
