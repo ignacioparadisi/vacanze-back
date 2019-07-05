@@ -16,7 +16,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo7
             try
             {
                 var table = PgConnection.Instance.ExecuteFunction("GetRestaurant(@restaurant_id)" , id);
-                return ExtractResturantFromRow(table.Rows[0]);
+                return ExtractRestaurantFromRow(table.Rows[0]);
             }
             catch (DatabaseException)
             {
@@ -32,7 +32,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo7
                 var restaurantList = new List<Restaurant>();
                 for (var i = 0; i < table.Rows.Count; i++)
                 {
-                    var restaurant = ExtractResturantFromRow(table.Rows[i]);
+                    var restaurant = ExtractRestaurantFromRow(table.Rows[i]);
                     restaurantList.Add(restaurant);
                 }
 
@@ -51,7 +51,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo7
                 var restaurantList = new List<Restaurant>();
                 for (var i = 0; i < table.Rows.Count; i++)
                 {
-                    var restaurant = ExtractResturantFromRow(table.Rows[i]);
+                    var restaurant = ExtractRestaurantFromRow(table.Rows[i]);
                     restaurantList.Add(restaurant);
                 }
                 return restaurantList;
@@ -115,12 +115,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo7
         {
             try
             {
-                var table = PgConnection.Instance.ExecuteFunction("DeleteRestaurant(@id)",id);
-                var deletedid = Convert.ToInt32(table.Rows[0][0]);
-            }
-            catch (InvalidCastException)
-            {
-                throw new DeleteRestaurantException("El restaurant no existe");
+                PgConnection.Instance.ExecuteFunction("DeleteRestaurant(@id)",id);
             }
             catch (NpgsqlException e)
             {
@@ -128,7 +123,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo7
             }
         }
 
-        public Restaurant ExtractResturantFromRow(DataRow row)
+        private Restaurant ExtractRestaurantFromRow(DataRow row)
         {
             var restaurantId = Convert.ToInt32(row[0]);
             var name = row[1].ToString();
