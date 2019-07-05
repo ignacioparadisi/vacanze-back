@@ -43,6 +43,14 @@ namespace vacanze_back.VacanzeApiTest.Grupo7
             _addedRestaurantList.Add(result.Id);
             Assert.AreEqual(_restaurantDto.Name,result.Name);
         }
+
+        [Test]
+
+        public void PostRestaurantTest_InvalidAttributeExeption_ReturnsBadRequest()
+        {
+            _restaurantDto.Capacity = 0;
+            Assert.IsInstanceOf<BadRequestObjectResult>(_restaurantsController.PostRestaurant(_restaurantDto).Result);
+        }
         
         [Test]
 
@@ -58,12 +66,21 @@ namespace vacanze_back.VacanzeApiTest.Grupo7
             _addedRestaurantList.Add(addedRestaurant.Id);
             Assert.IsInstanceOf<List<RestaurantDto>>(_restaurantsController.GetRestaurantByLocation(addedRestaurant.Location).Value);
         }
+
+        [Test]
+        public void GetRestaurantTest()
+        {
+            var addedRestaurant = _restaurantsController.PostRestaurant(_restaurantDto).Value;
+            _addedRestaurantList.Add(addedRestaurant.Id);
+            var result = _restaurantsController.GetRestaurant(addedRestaurant.Id).Value;
+            Assert.AreEqual(addedRestaurant.Id,result.Id);
+        }
+        
         [Test]
 
-        public void PostRestaurantTest_InvalidAtributteExeption_ReturnsBadRequest()
+        public void GetRestaurantTest_RestaurantNotFoundExeption_ReturnBadRequest()
         {
-            _restaurantDto.Capacity = 0;
-            Assert.IsInstanceOf<BadRequestObjectResult>(_restaurantsController.PostRestaurant(_restaurantDto).Result);
+            Assert.IsInstanceOf<BadRequestObjectResult>(_restaurantsController.GetRestaurant(-1).Result);
         }
 
         [Test]
@@ -76,6 +93,22 @@ namespace vacanze_back.VacanzeApiTest.Grupo7
             _restaurantDto.Name = "Updated";
             var result = _restaurantsController.PutRestaurant(_restaurantDto).Value;
             Assert.AreEqual(_restaurantDto.Name,result.Name);
+        }
+        
+        [Test]
+
+        public void PutRestaurantTest_InvalidAttributeExeption_ReturnsBadRequest()
+        {
+            _restaurantDto.Capacity = 0;
+            Assert.IsInstanceOf<BadRequestObjectResult>(_restaurantsController.PutRestaurant(_restaurantDto).Result);
+        }
+
+        [Test]
+
+        public void PutRestaurantTest_RestaurantNotFoundExeption_ReturnBadRequest()
+        {
+            _restaurantDto.Id = -1;
+            Assert.IsInstanceOf<BadRequestObjectResult>(_restaurantsController.PutRestaurant(_restaurantDto).Result);
         }
         
         [Test]
