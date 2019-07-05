@@ -2361,16 +2361,15 @@ CREATE OR REPLACE FUNCTION loginFindInfo(email VARCHAR, password VARCHAR) RETURN
   END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION recoveryPassword(email VARCHAR) RETURNS TABLE (nombre_usuario VARCHAR, apellido_usuario VARCHAR,
-  email_usuario VARCHAR,new_password VARCHAR) AS $$
-
+CREATE OR REPLACE FUNCTION recoveryPassword(email VARCHAR) RETURNS VARCHAR AS $$
+  DECLARE new_password VARCHAR;
   BEGIN
-    UPDATE users set use_password = ((SELECT trunc(random() * 9999999999999 + 1000000000000) FROM generate_series(1,1))::text)
-    WHERE users.use_email = email;
+    new_password = ((SELECT trunc(random() * 9999999999999 + 1000000000000) FROM generate_series(1,1))::text);
 
-    RETURN QUERY select u.use_name, u.use_last_name, u.use_email ,u.use_password
-    FROM users u
-    WHERE u.use_email = email;
+    UPDATE users set use_password = MD5(new_password)
+    WHERE users.use_email = email;
+    
+    RETURN new_password;
   END;
 $$ LANGUAGE plpgsql;
 ---------------------------------finGrupo1---------------------------------------------------------------------------

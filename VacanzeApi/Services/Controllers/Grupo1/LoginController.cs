@@ -24,11 +24,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
             LoginRepository lg = new LoginRepository();
             try
             {
-                var objUser = lg.SessionLogin(log.Email, log.Password);
+                var objUser = lg.SessionLogin(log.email, log.password);
                 
                 if (objUser != null)
                 {
-                    Login login = new Login(objUser.Id,objUser.Roles, log.Email, log.Password);
+                    Login login = new Login(objUser.Id,objUser.roles, log.email, log.password);
                     return Ok(login);
                 }
                 else

@@ -27,15 +27,15 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
             try
             {
                 EmailRepository msg = new EmailRepository();
-                var objUser = msg.Recovery(Log.Email);
-                 if (objUser != null)
+                var objUser = msg.Recovery(Log.email);
+                if (objUser != null)
                 {
                     //logica correo
                     var message = new MimeMessage();
                     //From Address
                     message.From.Add(new MailboxAddress("Vacanze Administracion", "vacanzeucab@gmail.com"));
                     //To Address
-                    message.To.Add(new MailboxAddress("Usuario", Log.Email));
+                    message.To.Add(new MailboxAddress("Usuario", Log.email));
                     //Subject
                     message.Subject = "Recuperacion De Contraseña : ";
 
@@ -51,7 +51,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
                         client.Disconnect(true);
                         client.Dispose();
                     }
-                    return Ok(Log.Email);
+                    return Ok(Log.email);
                 }
                 else
                 {
