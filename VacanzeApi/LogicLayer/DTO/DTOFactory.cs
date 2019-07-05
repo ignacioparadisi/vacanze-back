@@ -5,8 +5,8 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO{
 
     public class DTOFactory{
 
-        public static BrandDTO CreateBrandDTO(string brandName){
-            return new BrandDTO(brandName);
+        public static BrandDTO CreateBrandDTO(int id, string brandName){
+            return new BrandDTO(id, brandName);
         }
     
 

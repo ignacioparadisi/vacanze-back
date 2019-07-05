@@ -26,7 +26,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5 {
             try {
                 BrandMapper brandMapper = MapperFactory.createBrandMapper();
                 Entity entity = brandMapper.CreateEntity(brandDTO);
-                AddBrandCommand command = CommandFactory.createAddBrandCommand ((Brand) entity);
+                AddBrandCommand command = CommandFactory.CreateAddBrandCommand ((Brand) entity);
                 command.Execute ();
                 return Ok ("ok " + command.GetResult ());
             } catch (InternalServerErrorException ex) {
@@ -40,7 +40,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5 {
         public ActionResult<IEnumerable<Brand>> GetBrands(){
             List<Brand> brands = new List<Brand>();
             try {
-                GetBrandsCommand command = CommandFactory.createGetBrandsCommand();
+                GetBrandsCommand command = CommandFactory.CreateGetBrandsCommand();
                 command.Execute ();
                 return Ok (command.GetResult ());
             } catch (InternalServerErrorException ex) {
@@ -50,9 +50,24 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5 {
             }
         }
 
+        [Consumes ("application/json")]
         [HttpPut]
         public IActionResult UpdateBrand([FromBody] BrandDTO brandDTO){
-            return Ok("ok");
+            try{
+                BrandMapper brandMapper = MapperFactory.createBrandMapper();
+                Entity entity = brandMapper.CreateEntity(brandDTO);
+                UpdateBrandCommand command = CommandFactory.CreateUpdateBrandCommand ((Brand) entity);
+                command.Execute ();
+                if(command.GetResult())
+                    return Ok("Las modificaciones fueron realizadas exitosamente");
+                else
+                    return StatusCode(400);
+            }catch(InternalServerErrorException ex){
+                return StatusCode(500, ex.Message);
+            }catch(Exception){
+                return StatusCode(400);
+            }
+            
         }
     }
 }

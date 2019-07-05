@@ -48,7 +48,21 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5{
         }
 
         public bool UpdateBrand(Brand brand){
-            return true;
+            bool updated = false;
+            try{
+                //Throw Exception User Doesn't exist
+                PgConnection pgConnection = PgConnection.Instance;
+                DataTable dataTable = pgConnection.ExecuteFunction("UpdateBrand(@vbid, @vbname)",brand.Id, brand.BrandName);
+                if(Convert.ToBoolean(dataTable.Rows[0][0])){
+                    updated = true;
+                }
+            }catch(DatabaseException ex){
+                throw new InternalServerErrorException("Error en el servidor : Conexion a base de datos", ex);
+            }catch(InvalidStoredProcedureSignatureException ex){
+                throw new InternalServerErrorException("Error en el servidor", ex);
+            }
+            
+            return updated;
         }
     }
 }

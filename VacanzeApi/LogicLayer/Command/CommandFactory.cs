@@ -19,14 +19,19 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
     public class CommandFactory
     {
 
-        public static AddBrandCommand createAddBrandCommand(Brand brand)
+        public static AddBrandCommand CreateAddBrandCommand(Brand brand)
         {
             return new AddBrandCommand(brand);
         }
 
-        public static GetBrandsCommand createGetBrandsCommand()
+        public static GetBrandsCommand CreateGetBrandsCommand()
         {
             return new GetBrandsCommand();
+        }
+
+        public static UpdateBrandCommand CreateUpdateBrandCommand(Brand brand)
+        {
+            return new UpdateBrandCommand(brand);
         }
 
         public static GetRestaurantCommand CreateGetRestaurantCommand(int id)
