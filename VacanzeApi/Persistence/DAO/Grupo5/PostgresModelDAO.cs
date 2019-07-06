@@ -24,5 +24,32 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5
             }
             return id;
         }
+
+        public List<Model> GetModels(){
+            List<Model> models = new List<Model>();
+            try{
+                PgConnection pgConnection = PgConnection.Instance;
+                DataTable dataTable = pgConnection.ExecuteFunction("GetModels()");
+                if( dataTable.Rows.Count > 0){
+                    foreach (DataRow dataRow in dataTable.Rows){
+                        Model model = new Model(
+                            Convert.ToInt32(dataRow[0]),
+                            Convert.ToInt32(dataRow[1]),
+                            dataRow[2].ToString(),
+                            Convert.ToInt32(dataRow[3]),
+                            dataRow[4].ToString()
+                        );
+                    models.Add(model);
+                    }
+                }else{
+                    // Throw Exception
+                }
+            }catch(DatabaseException ex){
+                throw new InternalServerErrorException("Error en el servidor : Conexion a base de datos", ex);
+            }catch(InvalidStoredProcedureSignatureException ex){
+                throw new InternalServerErrorException("Error en el servidor", ex);
+            }
+            return models;
+        }
     }
 }

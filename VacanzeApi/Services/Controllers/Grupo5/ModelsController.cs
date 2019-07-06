@@ -36,5 +36,20 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5{
                 return StatusCode (400);
             }
         }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<Model>> GetModels(){
+             List<Model> models = new List<Model>();
+            try {
+                ModelMapper modelMapper = MapperFactory.CreateModelMapper();
+                GetModelsCommand command = CommandFactory.CreateGetModelsCommand();
+                command.Execute ();
+                return Ok (modelMapper.CreateDTOList(command.GetResult()));
+            } catch (InternalServerErrorException ex) {
+                return StatusCode (500, ex.Message);
+            } catch (Exception) {
+                return StatusCode (400);
+            }
+        }
     }
 }
