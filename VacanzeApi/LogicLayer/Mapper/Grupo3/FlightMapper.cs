@@ -12,7 +12,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo3{
         public FlightDTO CreateDTO(Flight entity){
             AirplaneDTO airplaneDto =new AirplaneDTO(); 
             Flight flight =  (Flight) entity;
-            FlightDTO FlightDTO = DTOFactory.CreateFlightDTO(airplaneDto,flight.price,flight.departure,
+            FlightDTO FlightDTO = DTOFactory.CreateFlightDTO(flight.plane,flight.price,flight.departure,
             flight.arrival,flight.loc_departure,flight.loc_arrival);
             return FlightDTO;
         }

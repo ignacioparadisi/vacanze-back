@@ -22,9 +22,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo3
         {
             try
             {
+                 Console.WriteLine("id="+_id);
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
                 IFlightDAO flightDao = factory.GetFlight();
                 _id = flightDao.Add(_flight);
+                Console.WriteLine("id="+_id);
             }
             catch(Exception e)
             {
