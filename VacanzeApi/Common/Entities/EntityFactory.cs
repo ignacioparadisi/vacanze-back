@@ -1,3 +1,5 @@
+
+using vacanze_back.VacanzeApi.Common.Entities.Grupo3;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
@@ -5,6 +7,13 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
 namespace vacanze_back.VacanzeApi.Common.Entities{
 
     public class EntityFactory{
+
+        //-----------------------------------------Grupo 3---------------------------------------------------//  
+        public static Flight CreateFlight(Airplane plane, double price, string departure, string arrival,
+         Location loc_departure, Location loc_arrival){
+            return new Flight(plane,price,departure,arrival,loc_departure,loc_arrival);
+        }
+        //-----------------------------------------Fin-------------------------------------------------------//
 
         public static Brand createBrand(string brandName){
             return new Brand(brandName);
@@ -36,5 +45,6 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
                 .WithAddressDescription(addressSpecs)
                 .BuildSinVaidar();
         }
+       
     }
 }

@@ -7,6 +7,12 @@ using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo3;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo3;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo3;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo3;
+using vacanze_back.VacanzeApi.LogicLayer.Command;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo3;
+using vacanze_back.VacanzeApi.LogicLayer.DTO;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo3;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
 {
@@ -156,10 +162,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
             try
             {
                 var validator = new FlightValidator(flight);
-
                 validator.Validate();
-
-                FlightRepository.Add(flight);
+                FlightMapper _flightMapper = MapperFactory.createFlightMapper();
+                FlightDTO _flight=_flightMapper.CreateDTO(flight);
+                AddFlightCommand _addFlightCommand=CommandFactory.AddFlightCommand(_flight);
+                _addFlightCommand.Execute();
+                _addFlightCommand.GetResult();
                 return Ok(new {Message = "¡Vuelo creado con éxito!"});
             }
             catch (ValidationErrorException ex)

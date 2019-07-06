@@ -1,4 +1,5 @@
 using DefaultNamespace;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo3;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo9;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
@@ -37,5 +38,17 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         {
             return new PostgresHotelDAO();
         }
+
+         public override IAirplaneDAO GetAirplane()
+        {
+            return new AirplanesRepositoryDAO();
+        }
+
+         public override IFlightDAO GetFlight()
+        {
+            return new FlightRepositoryDAO();
+        }
+
+        
     }
 }

@@ -1,4 +1,7 @@
 using System;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo3;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo3;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo3;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using System.Collections.Generic;
@@ -83,5 +86,12 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new UpdateHotelCommand(id,hotel);
         }
+
+        public static AddFlightCommand AddFlightCommand(FlightDTO _flight)
+        {
+            return new AddFlightCommand(_flight);
+        }
+
+
     }
 }

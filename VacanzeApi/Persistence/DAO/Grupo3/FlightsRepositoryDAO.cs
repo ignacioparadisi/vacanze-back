@@ -5,12 +5,14 @@ using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo3;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo3;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo3;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo3;
 using System.Data;
 
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
 {
-    public static class FlightRepositoryDAO
+    public  class FlightRepositoryDAO: IFlightDAO
     {
         static string GET_ALL_FLIGHTS = "getflights()";
         static string ADD_FLIGHT =
@@ -27,7 +29,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
 
         /// <summary>Devuelve lista de vuelos de la DB</summary>
         /// <returns>List<Entity> con el resultado de la query</returns>
-        public static List<Entity> Get()
+        public List<Entity> Get()
         {
             try
             {
@@ -61,15 +63,12 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
 
         /// <summary>Agrega vuelo a la DB</summary>
         /// <param name="entity">Entidad con vuelo a agregar a la DB</param>
-        public static int Add(Entity entity)
+        public int Add(FlightDTO flight)
         {
             try
             {
-                Flight flight = (Flight)entity;
-
                 var table = PgConnection.Instance.ExecuteFunction(
-                    ADD_FLIGHT,
-                    (int)flight.plane.Id, flight.price, flight.departure, flight.arrival, flight.loc_departure.Id, flight.loc_arrival.Id
+                    ADD_FLIGHT,flight.plane, flight.price, flight.departure, flight.arrival, flight.loc_departure.Id, flight.loc_arrival.Id
                 );
 
                 if (table.Rows.Count > 0){
@@ -93,7 +92,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
 
         /// <summary>Edita vuelo a la DB</summary>
         /// <param name="entity">Entidad con vuelo a editar en la DB</param>
-        public static void Update(Entity entity)
+        public void Update(Entity entity)
         {
             try
             {
@@ -117,7 +116,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
 
         /// <summary>Funcion para borrar un vuelo de la DB</summary>
         /// <param name="entiry">Entidad con id a borrar</param>
-        public static void Delete(Entity entity)
+        public void Delete(Entity entity)
         {
             try
             {
@@ -144,14 +143,16 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
         /// <summary>Busca vuelo especifico en la DB</summary>
         /// <param name="id">Id del vuelo a busac</param>
         /// <returns>Entity con el resultado de la query</returns>
-        public static Entity Find(int id)
+        public Entity Find(int id)
         {
 
             try
             {
                 var table = PgConnection.Instance.ExecuteFunction(FIND_FLIGHT, id);
-                Flight flight = null;
+               Flight flight = null;
+                //DAOFactory Flight=DAOFactory
 
+                AirplanesRepositoryDAO airplane=new AirplanesRepositoryDAO();
                 if (table.Rows.Count > 0)
                 {
                     flight = new Flight(Convert.ToInt32(table.Rows[0][0]));
@@ -161,13 +162,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
                     flight.arrival = table.Rows[0][3].ToString();
                     flight.loc_departure = LocationDAO.GetLocationById(Convert.ToInt32(table.Rows[0][4]));
                     flight.loc_arrival = LocationDAO.GetLocationById(Convert.ToInt32(table.Rows[0][5]));
-                    flight.plane = (Airplane)AirplanesRepositoryDAO.Find(Convert.ToInt32(table.Rows[0][6]));
+                    flight.plane = airplane.Find(Convert.ToInt32(table.Rows[0][6]));
                 }
-
                 return flight;
-
-
             }
+
             catch (DatabaseException ex)
             {
                 Console.WriteLine(ex.ToString());
@@ -178,9 +177,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
 
                 throw;
             }
-            finally
-            {
-            }
+           
 
         }
 
@@ -188,7 +185,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
         /// <param name="begin">Fecha menor a buscar</param>
         /// <param name="end">Fecha mayor a buscar</param>
         /// <returns> List<Entity> con el resultado de la query</returns>
-        public static List<Entity> GetByDate(string begin, string end)
+        public List<Entity> GetByDate(string begin, string end)
         {
             try
             {
@@ -224,7 +221,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
         /// <param name="departure">Locacion de salida del vuelo</param>
         /// <param name="arrival">Locacion de llegada del vuelo</param>
         /// <returns> List<Entity> con el resultado de la query</returns>
-        public static List<Entity> GetByLocation(int departure, int arrival)
+        public List<Entity> GetByLocation(int departure, int arrival)
         {
             try
             {
@@ -261,7 +258,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
         /// <param name="arrival">Ciudad de llegada del vuelo</param>
         /// <param name="departuredate">Fecha de salida del vuelo</param>
         /// <returns> List<Entity> con el resultado de la query</returns>
-        public static List<Entity> GetOutboundFlights(int departure, int arrival, string departuredate)
+        public List<Entity> GetOutboundFlights(int departure, int arrival, string departuredate)
         {
             try
             {
@@ -298,7 +295,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
         /// <param name="departuredate">Fecha de salida del vuelo</param>
         /// <param name="arrivaldate">Fecha de llegada del vuelo</param>
         /// <returns> List<Entity> con el resultado de la query</returns>
-        public static List<Entity> GetRoundTripFlights(int departure, int arrival, string departuredate, string arrivaldate)
+        public List<Entity> GetRoundTripFlights(int departure, int arrival, string departuredate, string arrivaldate)
         {
             try
             {
@@ -330,10 +327,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
         }
 
         static private Flight GetRow(DataTable table, int i){
+            AirplanesRepositoryDAO airplane=new AirplanesRepositoryDAO();
 
             Flight flight = new Flight(Convert.ToInt32(table.Rows[i][0]));
             flight.Id = Convert.ToInt32(table.Rows[i][0]);
-            flight.plane = (Airplane)AirplanesRepositoryDAO.Find(Convert.ToInt32(table.Rows[i][1]));
+            flight.plane = airplane.Find(Convert.ToInt32(table.Rows[i][1]));
             flight.price = Convert.ToDouble(table.Rows[i][2]);
             flight.departure = table.Rows[i][3].ToString();
             flight.arrival = table.Rows[i][4].ToString();

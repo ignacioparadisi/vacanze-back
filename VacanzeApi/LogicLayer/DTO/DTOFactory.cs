@@ -1,9 +1,18 @@
+using vacanze_back.VacanzeApi.Common.Entities;
+using  vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo3;
 using  vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo5;
 using  vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo6;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.DTO{
 
     public class DTOFactory{
+
+        //-----------------------------------------Grupo 3---------------------------------------------------//  
+        public static FlightDTO CreateFlightDTO(AirplaneDTO plane, double price, string departure, string arrival,
+         Location loc_departure, Location loc_arrival){
+            return new FlightDTO(plane,price,departure,arrival,loc_departure,loc_arrival);
+        }
+        //-----------------------------------------Fin-------------------------------------------------------//
 
         public static BrandDTO CreateBrandDTO(string brandName){
             return new BrandDTO(brandName);

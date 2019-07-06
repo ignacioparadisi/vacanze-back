@@ -6,6 +6,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo3
     public class FlightDTO : DTO
     {
 
+         public int id { get; set; }
         public AirplaneDTO plane { get; set; }
         public double price { get; set; }
         public string departure { get; set; }

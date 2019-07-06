@@ -5,18 +5,19 @@ using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo3;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo3;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo3;
 
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
 {
-    public static class AirplanesRepositoryDAO
+    public class AirplanesRepositoryDAO : IAirplaneDAO
     {
         static string GET_ALL_PLANES = "getplanes()";
         static string FIND_PLANE = "findplane(@_id)";
 
         /// <summary>Busca aviones en la DB</summary>
         /// <returns> List<Entity> con el resultado de la query </returns>
-        public static List<Entity> Get()
+        public List<Entity> Get()
         {
             try
             {
@@ -43,15 +44,12 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
                 throw new DbErrorException(
                     "Ups, a ocurrido un error al conectarse a la base de datos", ex);
             }
-            finally
-            {
-            }
         }
 
         /// <summary>Busca vuelo especifico en la DB</summary>
         /// <param name="id">Id del avion a buscar</param>
         /// <returns>Entity con el resultado de la query</returns>
-        public static Entity Find(long id)
+        public Airplane Find(long id)
         {
             try
             {
@@ -79,6 +77,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
             finally
             {
             }
+        }
+
+        public static explicit operator AirplanesRepositoryDAO(Entity v)
+        {
+            throw new NotImplementedException();
         }
     }
 }
