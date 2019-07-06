@@ -117,16 +117,13 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
 
         /// <summary>Funcion para borrar un vuelo de la DB</summary>
         /// <param name="entiry">Entidad con id a borrar</param>
-        public void Delete(Entity entity)
+        public void Delete(int id)
         {
             try
             {
-                Flight flight = (Flight)entity;
 
                 var table = PgConnection.Instance.ExecuteFunction(
-                   DELETE_FLIGHT,
-                   (int)flight.Id
-               );
+                   DELETE_FLIGHT,id);
 
                 // throw new DbErrorException(flight.Id.ToString());
             }

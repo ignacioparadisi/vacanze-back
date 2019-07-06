@@ -13,7 +13,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo3
     {
 
         private int _id;
-         int i;
+     
         public DeleteFlightCommand (int _id) {
             this._id = _id;
         }
@@ -24,7 +24,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo3
             {
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
                 IFlightDAO flightDao = factory.GetFlight();
-                i = flightDao.Delete(_id);
+                _id = flightDao.Delete(_id);
             }
             catch(Exception e)
             {
@@ -34,7 +34,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo3
 
         public int GetResult()
         {
-            return i;
+            return _id;
         }
     }
 }
