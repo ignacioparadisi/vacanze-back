@@ -29,6 +29,10 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO{
             return new HotelDTO(id, name, amountOfRooms, roomCapacity , isActive, addressSpecs, pricePerRoom,
                                 website, phone, picture, stars, locationId );
         }
+
+        public static LocationDTO CreateLocationDTO(int id, string country, string city){
+            return new LocationDTO(id, country, city);
+        }
     }
 
 }

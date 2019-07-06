@@ -26,5 +26,8 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper
         }
 
 
+        public static LocationMapper createLocationMapper(){
+            return new LocationMapper();
+        }
     }
 }
