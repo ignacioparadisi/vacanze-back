@@ -43,5 +43,10 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         {
             return new PostgresLocationDAO();
         }
+
+        public override ReservationAutomobileDAO GetReservationAutomobileDAO()
+        {
+            return new PostgresReservationAutomobileDAO();
+        }
     }
 }
