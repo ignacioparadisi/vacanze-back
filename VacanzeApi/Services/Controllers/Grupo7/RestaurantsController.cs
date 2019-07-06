@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
@@ -22,10 +21,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
     public class RestaurantsController : Controller
     {
         /// <summary>
+        ///     Get api/Restaurants
         ///     Metodo para obtener todos los restaurantes
         /// </summary>
         /// <returns>Objeto tipo JSON con los restaurantes obtenidos</returns>
-        /// <exception cref="GetRestaurantExcepcion">Ocurrio una excepcion en la ejecución del repository</exception>
         [HttpGet]
         public ActionResult<IEnumerable<RestaurantDto>> Get()
         {
@@ -36,11 +35,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         }
 
         /// <summary>
+        ///     Get api/Restaurants/location/id
         ///     Metodo para obtener todos los restaurantes de una ciudad dada
         /// </summary>
         /// <param name="id">Identificador unico de la ciudad a la que pertenecen los restaurantes</param>
         /// <returns>Objeto tipo JSON con los restaurantes obtenidos</returns>
-        /// <exception cref="GetRestaurantExcepcion">Ocurrio una excepcion en la ejecución del repository</exception>
         [HttpGet("location/{id}")]
         public ActionResult<IEnumerable<RestaurantDto>> GetRestaurantByLocation(int id)
         {
@@ -51,12 +50,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         }
 
         /// <summary>
+        ///     Get api/Restaurants/id
         ///     Metodo para obtener un unico restaurant
         /// </summary>
         /// <param name="id">Identificador unico del restaurant a obtener</param>
         /// <returns>Objeto tipo JSON con el restaurant obtenido</returns>
         /// <exception cref="DatabaseException">Ocurrio una excepcion en la ejecución de la función</exception>
-        /// <exception cref="IndexOutOfRangeException">El restaurant buscado no existe</exception>
+        /// <exception cref="RestaurantNotFoundExeption">El restaurant buscado no existe</exception>
         [HttpGet("{id}")]
         public ActionResult<RestaurantDto> GetRestaurant(int id)
         {
@@ -74,11 +74,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         }
 
         /// <summary>
-        ///     Metodo para crear un restaurant
+        ///     Post /api/Restaurants
+        ///     Endpoint para crear un restaurant
         /// </summary>
         /// <param name="restaurant">Objeto Restaurant a crear</param>
         /// <returns>Objeto tipo JSON del restaurant creado</returns>
-        /// <exception cref="AddRestaurantException">Ocurrio una excepcion en la ejecución del repository</exception>
+        /// <exception cref="InvalidAttributeException">Alguno de los campos ingresados en el dto no es valido</exception>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -98,11 +99,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         }
 
         /// <summary>
-        ///     Metodo para modifcar un restaurant
+        ///    Put api/Restaurants
+        ///     Endpoint para modifcar un restaurant
         /// </summary>
         /// <param name="restaurant">Objeto restaurant con la data para el restaurant a modificar</param>
         /// <returns>Objeto tipo JSON del restaurant modificado</returns>
-        /// <exception cref="UpdateRestaurantException">Ocurrio una excepcion en la ejecución del repository</exception>
+        /// <exception cref="RestaurantNotFoundExeption">Retorna BadRequest en caso de no encontrar el restaurante a actualizar</exception>
+        /// <exception cref="InvalidAttributeException">Alguno de los campos ingresados en el ResturantDto no es valido</exception>
         [HttpPut]
          public ActionResult<RestaurantDto> PutRestaurant([FromBody] RestaurantDto restaurant)
          {
@@ -124,11 +127,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
          }
         
         /// <summary>
+        ///     Delete api/Restaurants/{id}
         ///     Metodo para eliminar un restaurante 
         /// </summary>
         /// <param name="id">Identificador unico del restaurant a eliminar</param>
-        /// <returns>Objeto de tipo JSON que contiene el identificador del restaurant eliminado</returns>
-        /// <exception cref="DeleteRestaurantException">Ocurrio una excepcion en la ejecución del repository</exception>
+        /// <returns>Ok Result</returns>
         [HttpDelete("{id}")]
         public IActionResult DeleteRestaurant(int id)
         {
