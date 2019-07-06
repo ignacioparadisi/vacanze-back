@@ -4,6 +4,9 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo7;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo7
 {
+    /// <summary>  
+    ///  Comando para eliminar un Restaurante
+    /// </summary> 
     public class DeleteRestaurantCommand : Command
     {
         private int _id;

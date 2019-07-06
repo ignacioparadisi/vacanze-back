@@ -6,6 +6,9 @@ using vacanze_back.VacanzeApi.Persistence.DAO;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo7
 {
+    /// <summary>  
+    ///  Comando para retornar todos los restaurantes existentes
+    /// </summary> 
     public class GetRestaurantsCommand: CommandResult<List<RestaurantDto>>
     {
         private List<RestaurantDto> _restaurantDtoList;

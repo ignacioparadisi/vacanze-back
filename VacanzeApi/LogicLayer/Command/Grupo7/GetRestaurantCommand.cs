@@ -6,6 +6,9 @@ using vacanze_back.VacanzeApi.Persistence.DAO;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo7
 {
+    /// <summary>  
+    ///  Comando para buscar un restaurante por su id un Restaurante
+    /// </summary> 
     public class GetRestaurantCommand: CommandResult<RestaurantDto>
     {
         private int _id;

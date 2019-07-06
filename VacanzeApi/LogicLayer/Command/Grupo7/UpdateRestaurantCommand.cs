@@ -8,6 +8,9 @@ using vacanze_back.VacanzeApi.Persistence.DAO;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo7
 {
+    /// <summary>  
+    ///  Comando para actualizar un Restaurante
+    /// </summary> 
     public class UpdateRestaurantCommand : CommandResult<RestaurantDto>
     {
         private RestaurantDto _restaurantDto;
