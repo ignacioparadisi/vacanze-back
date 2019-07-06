@@ -7,6 +7,7 @@ using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo3;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo3;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo3;
+using vacanze_back.VacanzeApi.Persistence.Repository;
 using System.Data;
 
 
@@ -160,8 +161,8 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
                     flight.price = Convert.ToDouble(table.Rows[0][1]);
                     flight.departure = table.Rows[0][2].ToString();
                     flight.arrival = table.Rows[0][3].ToString();
-                    flight.loc_departure = LocationDAO.GetLocationById(Convert.ToInt32(table.Rows[0][4]));
-                    flight.loc_arrival = LocationDAO.GetLocationById(Convert.ToInt32(table.Rows[0][5]));
+                    flight.loc_departure = LocationRepository.GetLocationById(Convert.ToInt32(table.Rows[0][4]));
+                    flight.loc_arrival = LocationRepository.GetLocationById(Convert.ToInt32(table.Rows[0][5]));
                     flight.plane = airplane.Find(Convert.ToInt32(table.Rows[0][6]));
                 }
                 return flight;
@@ -335,8 +336,8 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
             flight.price = Convert.ToDouble(table.Rows[i][2]);
             flight.departure = table.Rows[i][3].ToString();
             flight.arrival = table.Rows[i][4].ToString();
-            flight.loc_departure = LocationDAO.GetLocationById(Convert.ToInt32(table.Rows[i][5]));
-            flight.loc_arrival = LocationDAO.GetLocationById(Convert.ToInt32(table.Rows[i][6]));
+            flight.loc_departure = LocationRepository.GetLocationById(Convert.ToInt32(table.Rows[i][5]));
+            flight.loc_arrival = LocationRepository.GetLocationById(Convert.ToInt32(table.Rows[i][6]));
 
             return flight;
 
