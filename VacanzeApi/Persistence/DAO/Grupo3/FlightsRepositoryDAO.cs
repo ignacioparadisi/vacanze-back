@@ -68,8 +68,9 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
         {
             try
             {
+                Console.WriteLine("IDD="+flight.plane);
                 var table = PgConnection.Instance.ExecuteFunction(
-                    ADD_FLIGHT,flight.plane, flight.price, flight.departure, flight.arrival, flight.loc_departure.Id, flight.loc_arrival.Id
+                    ADD_FLIGHT,flight.plane.Id, flight.price, flight.departure, flight.arrival, flight.loc_departure.Id, flight.loc_arrival.Id
                 );
 
                 if (table.Rows.Count > 0){

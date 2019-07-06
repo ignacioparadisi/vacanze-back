@@ -8,7 +8,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo3
         public int seats {get; set;}
         public double autonomy {get; set;}
         public bool isActive { get; set; }
-
+        public int Id { get; set; } 
         public AirplaneDTO(){
             
         }
@@ -18,6 +18,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo3
         }
         
         public AirplaneDTO(int id, string model, double load_capacity, int seats, double autonomy, bool isActive){
+            this.Id=id;
             this.model = model;
             this.loadCapacity = load_capacity;
             this.autonomy = autonomy;

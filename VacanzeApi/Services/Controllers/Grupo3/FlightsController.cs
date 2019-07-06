@@ -159,15 +159,24 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
         [HttpPost]
         public ActionResult<Entity> Post([FromBody] Flight flight)
         {
+           // Console.WriteLine("entro al try");
             try
             {
+                Console.WriteLine("ID TIENE:"+flight.plane.Id);
+                Console.WriteLine("entro al try antes de validator");
                 var validator = new FlightValidator(flight);
                 validator.Validate();
                 FlightMapper _flightMapper = MapperFactory.createFlightMapper();
+
                 FlightDTO _flight=_flightMapper.CreateDTO(flight);
+                                Console.WriteLine("ID TIENE _:"+_flight.plane.Id);
+
                 AddFlightCommand _addFlightCommand=CommandFactory.AddFlightCommand(_flight);
+                Console.WriteLine("entro al try antes de execute");
                 _addFlightCommand.Execute();
-                _addFlightCommand.GetResult();
+                Console.WriteLine(1);
+
+               Console.WriteLine(_addFlightCommand.GetResult()) ;
                 return Ok(new {Message = "¡Vuelo creado con éxito!"});
             }
             catch (ValidationErrorException ex)

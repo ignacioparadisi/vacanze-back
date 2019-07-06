@@ -136,6 +136,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
 
         public static AddFlightCommand AddFlightCommand(FlightDTO _flight)
         {
+            Console.WriteLine("id=");
             return new AddFlightCommand(_flight);
         }
 
