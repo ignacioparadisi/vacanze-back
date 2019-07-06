@@ -41,9 +41,24 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5{
         public ActionResult<IEnumerable<Model>> GetModels(){
              List<Model> models = new List<Model>();
             try {
-                ModelMapper modelMapper = MapperFactory.CreateModelMapper();
                 GetModelsCommand command = CommandFactory.CreateGetModelsCommand();
                 command.Execute ();
+                ModelMapper modelMapper = MapperFactory.CreateModelMapper();
+                return Ok (modelMapper.CreateDTOList(command.GetResult()));
+            } catch (InternalServerErrorException ex) {
+                return StatusCode (500, ex.Message);
+            } catch (Exception) {
+                return StatusCode (400);
+            }
+        }
+
+        [HttpGet("~/api/brands/{brandId:int}/[controller]")]
+        public ActionResult<IEnumerable<Model>> GetModelsByBrand(int brandId){
+             List<Model> models = new List<Model>();
+            try {
+                GetModelsByBrandCommand command = CommandFactory.CreateGetModelsByBrandCommand(brandId);
+                command.Execute ();
+                ModelMapper modelMapper = MapperFactory.CreateModelMapper();
                 return Ok (modelMapper.CreateDTOList(command.GetResult()));
             } catch (InternalServerErrorException ex) {
                 return StatusCode (500, ex.Message);
