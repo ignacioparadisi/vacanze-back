@@ -76,7 +76,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo1{
         /// <exception cref="PasswordRecoveryException">Lanzada si la consulta no retorna nada </exception>
         /// <exception cref="DatabaseException">Lanzada si ocurre un fallo al ejecutar la funcion en la base de datos </exception>
 
-        public String RecoveryPassword(string email){
+        public String Recovery(string email){
             try{
                 var table = PgConnection.Instance.ExecuteFunction("recoveryPassword(@email)",email);
 

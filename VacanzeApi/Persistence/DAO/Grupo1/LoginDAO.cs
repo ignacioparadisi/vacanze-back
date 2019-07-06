@@ -9,6 +9,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo1
     public interface LoginDAO
     {
         Login SessionLogin(string email, string password);
-        String RecoveryPassword(string email);
+        String Recovery(string email);
     }
 }

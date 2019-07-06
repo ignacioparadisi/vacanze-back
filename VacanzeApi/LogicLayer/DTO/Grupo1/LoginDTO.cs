@@ -13,11 +13,5 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo1
         public string email { get; set; }
         public string password { get; set; }
 
-        public LoginDTO(int id,List<RoleDTO> roles, string email, string password)
-        {
-            this.roles = roles;
-            this.email = email;
-            this.password = password;
-        }
     }
 }
