@@ -132,6 +132,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new UpdateHotelCommand(id, hotel);
         }
         
+
 		public static HotelValidatorCommand HotelValidatorCommand(Hotel hotel)
         {
             return new HotelValidatorCommand(hotel);

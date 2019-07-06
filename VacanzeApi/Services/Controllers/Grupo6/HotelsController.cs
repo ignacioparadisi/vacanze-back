@@ -65,7 +65,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         /// <summary>
         ///     Metodo para crear un hotel
         /// </summary>
-        /// <param name="hotel">Objeto Hotel a crear</param>
+        /// <param name="hotelDTo">Objeto Hotel a crear</param>
         /// <returns>Objeto tipo json del hotel creado</returns>
         /// <exception cref="RequiredAttributeException">Algun atributo requerido estaba como null</exception>
         /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
@@ -112,7 +112,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         ///     Metodo para modifcar un hotel
         /// </summary>
         /// <param name="hotelId">ID del hotel a modificar</param>
-        /// <param name="dataToUpdate">Objeto hotel con la data para el hotel a modificar</param>
+        /// <param name="HotelDTo">Objeto hotel con la data para el hotel a modificar</param>
         /// <returns>Objeto tipo json del hotel modificado</returns>
         /// <exception cref="HotelNotFoundException">El hotel a modifcar no existe</exception>
         /// <exception cref="RequiredAttributeException">Algun atributo requerido estaba como null</exception>
