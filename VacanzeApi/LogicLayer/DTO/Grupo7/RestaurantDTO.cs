@@ -1,5 +1,8 @@
 namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo7
 {
+    /// <summary>  
+    ///  Dto de Restaurantes
+    /// </summary>
     public class RestaurantDto
     {
         public int Id { get; set; }
