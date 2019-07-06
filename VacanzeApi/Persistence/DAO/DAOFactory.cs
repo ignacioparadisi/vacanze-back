@@ -47,8 +47,10 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
 
         public abstract UserDAO GetUserDAO();
 
+        public abstract IBaggageDao GetBaggageDao();
+
         // +++++++++++++++++
-        //     GRUPO 7
+        //     GRUPO 12
         // +++++++++++++++++
         public abstract ReservationFlightDAO GetReservationFlightDAO();
     }
