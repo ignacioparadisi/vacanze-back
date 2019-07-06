@@ -14,7 +14,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo5{
         }
 
         public Brand CreateEntity(BrandDTO dto){
-            Brand brand = EntityFactory.createBrand(dto.Id, dto.BrandName);
+            Brand brand = EntityFactory.CreateBrand(dto.Id, dto.BrandName);
             return brand;
         }
 
@@ -29,7 +29,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo5{
         public List<Brand> CreateEntityList(List<BrandDTO> dtos){
             List<Brand> brands = new List<Brand>();
             foreach(BrandDTO dto in dtos){
-                brands.Add(EntityFactory.createBrand(dto.Id, dto.BrandName));
+                brands.Add(EntityFactory.CreateBrand(dto.Id, dto.BrandName));
             }
             return brands;
         }

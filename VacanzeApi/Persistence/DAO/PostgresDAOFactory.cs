@@ -13,6 +13,10 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         public override IBrandDAO GetBrandDAO(){
             return new PostgresBrandDAO();
         }
+
+        public override IModelDAO GetModelDAO(){
+            return new PostgresModelDAO();
+        }
         
         public override ReservationRoomDAO GetReservationRoomDAO()
         {

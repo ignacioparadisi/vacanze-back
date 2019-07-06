@@ -24,7 +24,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5 {
         [HttpPost]
         public IActionResult AddBrand ([FromBody] BrandDTO brandDTO) {
             try {
-                BrandMapper brandMapper = MapperFactory.createBrandMapper();
+                BrandMapper brandMapper = MapperFactory.CreateBrandMapper();
                 Entity entity = brandMapper.CreateEntity(brandDTO);
                 AddBrandCommand command = CommandFactory.CreateAddBrandCommand ((Brand) entity);
                 command.Execute ();
@@ -42,7 +42,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5 {
         public ActionResult<IEnumerable<Brand>> GetBrands(){
             List<Brand> brands = new List<Brand>();
             try {
-                BrandMapper brandMapper = MapperFactory.createBrandMapper();
+                BrandMapper brandMapper = MapperFactory.CreateBrandMapper();
                 GetBrandsCommand command = CommandFactory.CreateGetBrandsCommand();
                 command.Execute ();
                 return Ok (brandMapper.CreateDTOList(command.GetResult()));
@@ -57,7 +57,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5 {
         [HttpPut]
         public IActionResult UpdateBrand([FromBody] BrandDTO brandDTO){
             try{
-                BrandMapper brandMapper = MapperFactory.createBrandMapper();
+                BrandMapper brandMapper = MapperFactory.CreateBrandMapper();
                 Entity entity = brandMapper.CreateEntity(brandDTO);
                 UpdateBrandCommand command = CommandFactory.CreateUpdateBrandCommand ((Brand) entity);
                 command.Execute ();

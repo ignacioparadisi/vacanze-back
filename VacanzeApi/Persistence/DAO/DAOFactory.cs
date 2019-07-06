@@ -30,6 +30,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         //     GRUPO 5
         // +++++++++++++++++
         public abstract IBrandDAO GetBrandDAO();
+        public abstract IModelDAO GetModelDAO();
         // +++++++++++++++++
         //     GRUPO 6
         // +++++++++++++++++

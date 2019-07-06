@@ -8,7 +8,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO{
         public static BrandDTO CreateBrandDTO(int id, string brandName){
             return new BrandDTO(id, brandName);
         }
-    
+
+        public static ModelDTO CreateModelDTO(int id, int brandId, string modelName, int capacity, 
+            string picture){
+                return new ModelDTO(id, brandId, modelName, capacity, picture);
+        }
 
         // +++++++++++++++++
         //     GRUPO 6
