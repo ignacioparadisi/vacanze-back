@@ -11,15 +11,24 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6
 		private List<Hotel> _hotels;
 		public GetHotelsCommand()
 		{
-
 		}
-
+    	/// <summary>
+    	///     Metodo para ejecutar la orden de obtener todos los hoteles guardados.
+    	/// </summary>
+    	/// <exception cref="DatabaseException">
+    	///     Lanzada si ocurre un fallo al ejecutar la funcion en la bse de
+    	///     datos
+    	/// </exception>
 		public void Execute()
 		{
 			DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
 			HotelDAO HotelDao = factory.GetHotelDAO();
 			_hotels = HotelDao.GetHotels();
 		}
+    	/// <summary>
+    	///     Metodo para obtener todos los hoteles guardados.
+    	/// </summary>
+    	/// <returns>Lista de hoteles</returns>
 		public List<Hotel> GetResult()
 		{
 			return _hotels;

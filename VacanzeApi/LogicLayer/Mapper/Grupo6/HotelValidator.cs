@@ -52,12 +52,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo6
                     $"El location (id: {hotel.Location.Id}) no es valido");
             }
         }
-                /// <summary>
+        /// <summary>
         ///     Valida que los campos de un <see cref="Hotel" /> sean correctos, lanzando excepciones
         ///     segun los errores detectados.
         /// </summary>
         /// <exception cref="RequiredAttributeException">Algun atributo requerido estaba como null</exception>
-        /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
         public static void Validate(HotelDTO hotel)
         {
             if (hotel == null)

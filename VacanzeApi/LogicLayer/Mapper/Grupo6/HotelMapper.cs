@@ -11,7 +11,13 @@ using vacanze_back.VacanzeApi.Common.Exceptions;
 namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo6{
 
     public class HotelMapper : Mapper<HotelDTO, Hotel> {
-
+        /// <summary>
+        ///     Metodo para crear un DTO a partir de una entidad
+        /// </summary>
+        /// <param name="entity">entidad de tipo hotel a ser convertida</param>
+        /// <returns>un Hotel de tipo DTO</returns>
+        /// <exception cref="RequiredAttributeException">Algun atributo requerido estaba como null</exception>
+        /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
         public HotelDTO CreateDTO(Hotel entity){
             HotelValidatorCommand command =  CommandFactory.HotelValidatorCommand(entity);
             command.Execute();
@@ -22,7 +28,12 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo6{
                                             hotel.Stars, hotel.Location.Id);
             return HotelDTO;
         }
-
+        /// <summary>
+        ///     Metodo para crear una Entidad  a partir de una DTO
+        /// </summary>
+        /// <param name="hotelDto">DTO de tipo hotel a ser convertida</param>
+        /// <returns>un Hotel de tipo Entitidad</returns>
+        /// <exception cref="RequiredAttributeException">Algun atributo requerido estaba como null</exception>
         public Hotel CreateEntity(HotelDTO hotelDto){
             HotelDTOValidatorCommand command =  CommandFactory.HotelDTOValidatorCommand(hotelDto);
             command.Execute();
@@ -33,7 +44,13 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo6{
             
             return entity;
         }
-
+        /// <summary>
+        ///     Metodo para crear una lista de DTO a partir de una lista de hoteles entidad
+        /// </summary>
+        /// <param name="entities">ista entidad de tipo hotel a ser convertida</param>
+        /// <returns>Lista de Hoteles de tipo DTO</returns>
+        /// <exception cref="RequiredAttributeException">Algun atributo requerido estaba como null</exception>
+        /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
         public List<HotelDTO> CreateDTOList(List<Hotel> entities){
             List<HotelDTO> dtos = new List<HotelDTO>();
             foreach(Entity entity in entities){
@@ -47,7 +64,12 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo6{
             }
             return dtos;
         }
-
+        /// <summary>
+        ///     Metodo para crear una lista Entidad  a partir de una lista DTO
+        /// </summary>
+        /// <param name="dtos">lista deto de tipo hotel a ser convertida</param>
+        /// <returns>Lista de Hotel de tipo Entitidad</returns>
+        /// <exception cref="RequiredAttributeException">Algun atributo requerido estaba como null</exception>
         public List<Hotel> CreateEntityList(List<HotelDTO> dtos){
             List<Hotel> entities = new List<Hotel>();
             foreach(HotelDTO hotelDto in dtos){
