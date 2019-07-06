@@ -5,6 +5,9 @@ using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo7;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo7
 {
+    /// <summary>  
+    ///  Mapper de RestaurantDto a Restaurant Entity 
+    /// </summary>
     public class RestaurantMapper : Mapper<RestaurantDto,Restaurant>
     {
         public RestaurantDto CreateDTO(Restaurant restaurant)
