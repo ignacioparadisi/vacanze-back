@@ -145,9 +145,9 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new GetUserByIdCommand(id);
         }
 
-        public static UpdateUserCommand CreateUpdateUserCommand(User user)
+        public static UpdateUserCommand CreateUpdateUserCommand(User user, int id)
         {
-            return new UpdateUserCommand(user);
+            return new UpdateUserCommand(user, id);
         }
     }
 }

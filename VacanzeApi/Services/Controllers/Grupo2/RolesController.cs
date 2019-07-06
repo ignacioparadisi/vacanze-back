@@ -18,6 +18,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
     [ApiController]
     public class RolesController : ControllerBase
     {
+        /*
         // GET api/values
         /// <summary>
         /// Obtienes los roles disponibles
@@ -38,17 +39,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
 
             return Ok(roles);
         }
+        */
 
-        /* FALTA PROBARLO
         // GET api/values
         /// <summary>
         /// Obtienes los roles disponibles
         /// </summary>
         /// <returns>Una lista de roles</returns>
         [HttpGet]
-        public ActionResult<IEnumerable<Entity>> GetRoles()
+        public ActionResult<IEnumerable<Role>> GetRoles()
         {
-            var roles = new List<Entity>();
+            var roles = new List<Role>();
             var rolesDTO = new List<RoleDTO>();
             try
             {
@@ -65,6 +66,5 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
 
             return Ok(rolesDTO);
         }
-        */
     }
 }

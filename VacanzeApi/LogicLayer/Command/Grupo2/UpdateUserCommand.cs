@@ -14,9 +14,10 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
         public User User { get; set; }
         public int Id { get; set; }
 
-        public UpdateUserCommand(User user)
+        public UpdateUserCommand(User user, int id)
         {
             User = user;
+            Id = id;
         }
 
         public void Execute()

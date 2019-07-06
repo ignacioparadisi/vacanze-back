@@ -17,6 +17,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
      [ApiController]
      public class UsersController : ControllerBase
      {
+        /* Este es el viejo
           // GET api/users
           /// <summary>
           /// Obtiene solo los usuarios empleados
@@ -37,7 +38,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
                return Ok(users);
           }
 
-        /* FALTA PROBARLO #1
+        */
         // GET api/users
         /// <summary>
         /// Obtiene solo los usuarios empleados
@@ -56,8 +57,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
                 return StatusCode (400);
             }
         }
-         */
 
+
+            /* Este es el viejo
         // GET api/users/5
         /// <summary>
         /// Busca un usuario con el id especificado
@@ -82,8 +84,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
                }
                return Ok(user);
           }
+          */
 
-        /* FALTA PROBARLO #2
         // GET api/users/5
         /// <summary>
         /// Busca un usuario con el id especificado
@@ -110,8 +112,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             }
             return Ok(user);
         }
-        */
 
+        /*
         // POST api/users
         /// <summary>
         /// Manda a guardar el usuario en la base de datos
@@ -139,8 +141,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
                }
                return Ok(user);
           }
+          */
 
-        /*
         // POST api/users
         /// <summary>
         /// Manda a guardar el usuario en la base de datos
@@ -170,8 +172,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             }
             return Ok(user);
         }
-        */
 
+        
         // PUT api/users/5
         /// <summary>
         /// Manda a actualizar el usuario en la base de datos
@@ -205,7 +207,48 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
                     return BadRequest("Error actualizando al usuario");
                }
           }
+          
+        /*
+        // PUT api/users/5
+        /// <summary>
+        /// Manda a actualizar el usuario en la base de datos
+        /// </summary>
+        /// <param name="id">Id del usuario que se desea actualizar</param>
+        /// <param name="user">Información del usuario actualizada</param>
+        /// <returns>Retorna el usuario actualizado</returns>
+        [HttpPut("{id}")]
+        // TODO: Retornar el usuario actualizado
+        public ActionResult<int> Put(int id, [FromBody] User user)
+        {
+            int user_id;
+            try
+            {
+                UpdateUserCommand updateUserCommand = new UpdateUserCommand(user,id);
+                updateUserCommand.Execute();
+                user_id = updateUserCommand.GetResult();
+                DeleteUser_RoleCommand deleteUser_RoleCommand = new DeleteUser_RoleCommand(id);
+                deleteUser_RoleCommand.Execute();
+                PostUser_RoleCommand postUser_RoleCommand; 
+                foreach (var role in user.Roles)
+                {
+                    postUser_RoleCommand = new PostUser_RoleCommand(user, role);
+                    postUser_RoleCommand.Execute();
+                }
 
+                return Ok(user_id);
+
+            }
+            catch (GeneralException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Error actualizando al usuario");
+            }
+        }
+
+        /* el viejo
           // DELETE api/users/1
           /// <summary>
           /// Manda a eliminar un usario por su id de la base de datos
@@ -228,7 +271,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
                     return BadRequest("Error eliminando al usuario");
                }
           }
-        /*
+            */
+
         // DELETE api/users/1
         /// <summary>
         /// Manda a eliminar un usario por su id de la base de datos
@@ -253,6 +297,5 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
                 return BadRequest("Error eliminando al usuario");
             }
         }
-        */
     }
 }
