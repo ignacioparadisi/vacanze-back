@@ -167,7 +167,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
                 FlightDTO _flight=_flightMapper.CreateDTO(flight);
                 AddFlightCommand _addFlightCommand=CommandFactory.AddFlightCommand(_flight);
                 _addFlightCommand.Execute();
-                _addFlightCommand.GetResult();
                 return Ok(new {Message = "¡Vuelo creado con éxito!"});
             }
             catch (ValidationErrorException ex)
@@ -193,18 +192,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
         {
            try
             {
-                
-                Flight f = (Flight) FlightRepository.Find( (int)flight.Id );
+                GetFindFlightCommand id=CommandFactory.GetFlightIdCommand((int)flight.Id);
+                id.Execute();
 
-                if(f == null){
+                if(id.GetResult().Equals(null)){
                     throw new ValidationErrorException("El vuelo que quiere editar no existe");
                 }
  
                 FlightValidator validator = new FlightValidator(flight);
-
-
                 validator.Validate();
-                FlightRepository.Update(flight);
+                UpdateFlightCommand _updateFlight=CommandFactory.UpdateFlightCommand(flight);
+                _updateFlight.Execute();
 
                 return Ok( new {Message = "¡Vuelo editado con éxito!"});
             }

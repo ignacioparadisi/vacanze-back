@@ -139,7 +139,16 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new AddFlightCommand(_flight);
         }
 
+        public static GetFindFlightCommand GetFlightIdCommand(int _id)
+        {
+            return new GetFindFlightCommand(_id);
+        }
 
+        
+        public static UpdateFlightCommand UpdateFlightCommand(Flight _flight)
+        {
+            return new UpdateFlightCommand(_flight);
+        }
         
         public static AddLocationCommand createAddLocationCommand(Location location)
         {

@@ -144,7 +144,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
         /// <summary>Busca vuelo especifico en la DB</summary>
         /// <param name="id">Id del vuelo a busac</param>
         /// <returns>Entity con el resultado de la query</returns>
-        public Entity Find(int id)
+        public int Find(int id)
         {
 
             try
@@ -165,7 +165,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
                     flight.loc_arrival = LocationRepository.GetLocationById(Convert.ToInt32(table.Rows[0][5]));
                     flight.plane = airplane.Find(Convert.ToInt32(table.Rows[0][6]));
                 }
-                return flight;
+                return flight.Id;
             }
 
             catch (DatabaseException ex)
