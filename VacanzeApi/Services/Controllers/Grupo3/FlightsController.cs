@@ -162,17 +162,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
            // Console.WriteLine("entro al try");
             try
             {
-                Console.WriteLine("ID TIENE:"+flight.plane.Id);
-                Console.WriteLine("entro al try antes de validator");
+           
                 var validator = new FlightValidator(flight);
                 validator.Validate();
                 FlightMapper _flightMapper = MapperFactory.createFlightMapper();
-
                 FlightDTO _flight=_flightMapper.CreateDTO(flight);
-                                Console.WriteLine("ID TIENE _:"+_flight.plane.Id);
-
                 AddFlightCommand _addFlightCommand=CommandFactory.AddFlightCommand(_flight);
-                Console.WriteLine("entro al try antes de execute");
                 _addFlightCommand.Execute();
                 return Ok(new {Message = "¡Vuelo creado con éxito!"});
             }
@@ -205,7 +200,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
                 if(id.GetResult().Equals(null)){
                     throw new ValidationErrorException("El vuelo que quiere editar no existe");
                 }
- 
+
                 FlightValidator validator = new FlightValidator(flight);
                 validator.Validate();
                 UpdateFlightCommand _updateFlight=CommandFactory.UpdateFlightCommand(flight);
@@ -237,15 +232,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
             try
             {
 
-                Flight f = (Flight)FlightRepository.Find((int)id);
+                
+                GetFindFlightCommand _idFlight=CommandFactory.GetFlightIdCommand((int)id);
+                _idFlight.Execute();
 
-                if (f == null)
+                if (_idFlight.Equals(null))
                 {
                     throw new ValidationErrorException("El vuelo que quiere borrar no existe");
                 }
 
-                
-                FlightRepository.Delete(f);
+                DeleteFlightCommand _iddelet=CommandFactory.DeleteFlightCommand(_idFlight.GetResult());
+                _iddelet.Execute();
 
                 return Ok(new { Message = "¡Vuelo borrado con éxito!" });
             }

@@ -150,6 +150,12 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new UpdateFlightCommand(_flight);
         }
+
+         public static DeleteFlightCommand DeleteFlightCommand(int _idflight)
+        {
+            return new DeleteFlightCommand(_idflight);
+        }
+        
         
         public static AddLocationCommand createAddLocationCommand(Location location)
         {
