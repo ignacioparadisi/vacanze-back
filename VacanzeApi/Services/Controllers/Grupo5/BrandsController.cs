@@ -72,7 +72,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5 {
             }catch(Exception){
                 return StatusCode(400);
             }
-            
         }
     }
 }

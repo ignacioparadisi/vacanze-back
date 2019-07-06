@@ -51,5 +51,26 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5
             }
             return models;
         }
+
+        public bool UpdateModel(Model model){
+            bool updated = false;
+            try{
+                //Throw Exception 
+                PgConnection pgConnection = PgConnection.Instance;
+                DataTable dataTable = pgConnection.ExecuteFunction(
+                    "UpdateModel(@vmid, @vmbrand, @vmname, @vmcapacity, @vmpicture)",
+                    model.Id, model.ModelBrandId, model.ModelName, model.Capacity, model.Picture);
+                    if(Convert.ToBoolean(dataTable.Rows[0][0])){
+                        updated = true;
+                    
+                }
+            }catch(DatabaseException ex){
+                throw new InternalServerErrorException("Error en el servidor : Conexion a base de datos", ex);
+            }catch(InvalidStoredProcedureSignatureException ex){
+                throw new InternalServerErrorException("Error en el servidor", ex);
+            }
+            
+            return updated;
+        }
     }
 }

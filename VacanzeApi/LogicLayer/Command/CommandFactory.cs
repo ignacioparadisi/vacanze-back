@@ -40,6 +40,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new GetModelsCommand();
         }
 
+        public static UpdateModelCommand CreateUpdateModelCommand(Model model)
+        {
+            return new UpdateModelCommand(model);
+        }
+
         public static GetRestaurantCommand CreateGetRestaurantCommand(int id)
         {
             return new GetRestaurantCommand(id);

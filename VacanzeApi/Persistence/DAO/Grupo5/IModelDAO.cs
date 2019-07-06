@@ -6,5 +6,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5{
     public interface IModelDAO{
         int AddModel(Model model);
         List<Model> GetModels();
+        bool UpdateModel(Model model);
     }
 }

@@ -51,5 +51,25 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5{
                 return StatusCode (400);
             }
         }
+        
+        [Consumes ("application/json")]
+        [HttpPut]
+        public IActionResult UpdateModel([FromBody] ModelDTO modelDTO){
+            try{
+                ModelMapper modelMapper = MapperFactory.CreateModelMapper();
+                Entity entity = modelMapper.CreateEntity(modelDTO);
+                UpdateModelCommand command = CommandFactory.CreateUpdateModelCommand ((Model) entity);
+                command.Execute ();
+                if(command.GetResult())
+                    return Ok("La modificación fue realizada exitosamente");
+                else
+                    return StatusCode(400);
+            }catch(InternalServerErrorException ex){
+                return StatusCode(500, ex.Message);
+            }catch(Exception){
+                return StatusCode(400);
+            }
+      
+        }
     }
 }
