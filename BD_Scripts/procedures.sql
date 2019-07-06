@@ -2352,16 +2352,16 @@ CREATE OR REPLACE FUNCTION getAvailabilityRest(_res_id INTEGER) RETURNS INTEGER 
 
 ------Grupo1-----------------------------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION loginFindInfo(email VARCHAR, password VARCHAR) RETURNS TABLE (usuario_id INTEGER,
-  nombre_usuario VARCHAR, apellido_usuario VARCHAR, user_rol_id INTEGER, rol_name VARCHAR) AS $$
+  nombre_usuario VARCHAR, apellido_usuario VARCHAR, rol_id INTEGER, rol_name VARCHAR) AS $$
 
   BEGIN
-    RETURN QUERY select u.use_id, u.use_name, u.use_last_name, ur.usr_id, r.rol_name
+    RETURN QUERY select u.use_id, u.use_name, u.use_last_name, r.rol_id, r.rol_name
     FROM users u, user_role ur, role r
     WHERE u.use_email = email and u.use_password = password and r.rol_id = ur.usr_rol_id and u.use_id = ur.usr_use_id;
   END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION recoveryPassword(email VARCHAR) RETURNS VARCHAR AS $$
+CREATE OR REPLACE FUNCTION recoveryPassword(email VARCHAR) RETURNS TABLE (id INTEGER, user_email VARCHAR, password VARCHAR) AS $$
   DECLARE new_password VARCHAR;
   BEGIN
     new_password = ((SELECT trunc(random() * 9999999999999 + 1000000000000) FROM generate_series(1,1))::text);
@@ -2369,7 +2369,9 @@ CREATE OR REPLACE FUNCTION recoveryPassword(email VARCHAR) RETURNS VARCHAR AS $$
     UPDATE users set use_password = MD5(new_password)
     WHERE users.use_email = email;
     
-    RETURN new_password;
+    RETURN QUERY select use_id, use_email, use_password
+    FROM users
+    WHERE use_email = email;
   END;
 $$ LANGUAGE plpgsql;
 ---------------------------------finGrupo1---------------------------------------------------------------------------

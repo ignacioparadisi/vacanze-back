@@ -76,7 +76,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo1{
         /// <exception cref="PasswordRecoveryException">Lanzada si la consulta no retorna nada </exception>
         /// <exception cref="DatabaseException">Lanzada si ocurre un fallo al ejecutar la funcion en la base de datos </exception>
 
-        public String Recovery(string email){
+        public Login Recovery(string email){
             try{
                 var table = PgConnection.Instance.ExecuteFunction("recoveryPassword(@email)",email);
 
@@ -84,8 +84,13 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo1{
                     throw new PasswordRecoveryException("El correo no existe");
                 }
                 else{
+                    var Id = Convert.ToInt32(table.Rows[0][0]);
+                    var user_email = table.Rows[0][1].ToString();
                     var password = table.Rows[0][2].ToString();
-                    return password;
+                    Console.WriteLine("Clave en texto plano: ");
+                    Console.WriteLine(password);
+                    var user = new Login(Id, user_email,password );
+                    return user;
                 }
             }
             catch (DatabaseException){

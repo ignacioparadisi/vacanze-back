@@ -63,5 +63,9 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
         public static Login createLogin(int id, string email, string password){
             return new Login(id,email, password);
         }
+
+        public static Login createLogin(string password){
+            return new Login(password);
+        }
     }
 }

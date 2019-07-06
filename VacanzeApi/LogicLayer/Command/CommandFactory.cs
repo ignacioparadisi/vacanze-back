@@ -166,8 +166,8 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new GetUserCommand(loginE);
         } 
 
-        public static RecoveryPasswordCommand RecoveryPasswordCommand(string email){
-            return new RecoveryPasswordCommand(email);
+        public static RecoveryPasswordCommand RecoveryPasswordCommand(Login loginE){
+            return new RecoveryPasswordCommand(loginE);
         }
     }
 }

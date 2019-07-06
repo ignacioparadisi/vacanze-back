@@ -16,13 +16,23 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo1
 
         public LoginDTO CreateDTO(Login login)
         {            
-            return new LoginDTO{
-                id = login.Id,
-                roles = roleObject.CreateDTOList(login.roles),
-                email = login.email,
-                password = login.password
-                
-            };
+            if (login.roles == null){
+                return new LoginDTO{
+                    id = login.Id,
+                    email = login.email,
+                    password = login.password
+                    
+                };  
+            }
+            else{
+                return new LoginDTO{
+                    id = login.Id,
+                    roles = roleObject.CreateDTOList(login.roles),
+                    email = login.email,
+                    password = login.password
+                    
+                };  
+            }
         }
 
         public List<LoginDTO> CreateDTOList(List<Login> logins)

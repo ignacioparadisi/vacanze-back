@@ -24,5 +24,10 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo1
             this.email = email;
             this.password = password;
         }
+
+        public Login(String password):base(0)
+        {
+            this.password = password;
+        }
     }
 }

@@ -3,14 +3,14 @@ using vacanze_back.VacanzeApi.Persistence.DAO;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo1;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo1 {
-    public class RecoveryPasswordCommand : Command, CommandResult<string>
+    public class RecoveryPasswordCommand : Command, CommandResult<Login>
     {
-        private string _newPassword; 
+        private Login _newPassword; 
 
         private string _email;
 
-        public RecoveryPasswordCommand(string email){
-            _email = email;
+        public RecoveryPasswordCommand(Login loginE){
+            _email = loginE.email;
         }
 
         public void Execute()
@@ -20,7 +20,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo1 {
             _newPassword = LoginDAO.Recovery(_email);
         }
 
-        public string GetResult(){
+        public Login GetResult(){
             return _newPassword;
         }
     }
