@@ -10,9 +10,9 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo1 {
 
         private string _password;
 
-        public GetUserCommand(string email, string password){
-            _email = email;
-            _password = password;
+        public GetUserCommand(Login loginE){
+            _email = loginE.email;
+            _password = loginE.password;
         }
 
         public void Execute(){

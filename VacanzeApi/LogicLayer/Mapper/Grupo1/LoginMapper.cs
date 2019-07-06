@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo1;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo1;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo2;
 
@@ -39,9 +41,13 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo1
 
         public Login CreateEntity(LoginDTO loginDTO)
         {
-            var roles = roleObject.CreateEntityList(loginDTO.roles);
-            return EntityFactory.createLogin(loginDTO.id, roles, loginDTO.email, loginDTO.password);
-            
+            if (loginDTO.roles == null){
+                return EntityFactory.createLogin(loginDTO.id, loginDTO.email, loginDTO.password);
+            }
+            else{
+                List<Role> roles = roleObject.CreateEntityList(loginDTO.roles);
+                return EntityFactory.createLogin(loginDTO.id, roles, loginDTO.email, loginDTO.password);
+            }
         }
 
         public List<Login> CreateEntityList(List<LoginDTO> dtoList)
