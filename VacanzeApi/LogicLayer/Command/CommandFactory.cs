@@ -6,6 +6,7 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo1;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Locations;
 
@@ -158,6 +159,14 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         public static GetCitiesByCountryCommand GetCitiesByCountryCommand(int id)
         {
             return new GetCitiesByCountryCommand(id);
-        }  
+        } 
+
+        public static GetUserCommand GetUserCommand(string email, string password){
+            return new GetUserCommand(email, password);
+        } 
+
+        public static RecoveryPasswordCommand RecoveryPasswordCommand(string email){
+            return new RecoveryPasswordCommand(email);
+        }
     }
 }
