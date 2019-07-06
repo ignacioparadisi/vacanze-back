@@ -8,6 +8,10 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo9
             Status = status;
         }
 
+        public Baggage(): base(0)
+        {
+        }
+
         public string Description { get; set; }
         public string Status { get; set; }
     }
