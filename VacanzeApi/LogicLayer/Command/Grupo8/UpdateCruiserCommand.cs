@@ -6,6 +6,7 @@ using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo8;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo8;
 using vacanze_back.VacanzeApi.Persistence.DAO;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo8;
 
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo8

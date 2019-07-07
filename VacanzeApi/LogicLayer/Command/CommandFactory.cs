@@ -12,6 +12,7 @@ using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo8;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo8;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command
@@ -111,9 +112,15 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new DeleteCruiserCommand(id);
         }
 
-        public static UpdateCruiserCommand CreateUpdateCruiserCommand(int id, CruiserDTO cruiserDto)
+        public static CruiserValidatorCommand CreateGetCruiserValidatorCommand(Cruiser cruiser)
         {
-            return new UpdateCruiserCommand(id, cruiserDto);
+            return new CruiserValidatorCommand(cruiser);
         }
+
+        public static UpdateCruiserCommand CreateUpdateCruiserCommand(CruiserDTO cruiserDto)
+        {
+            return new UpdateCruiserCommand(cruiserDto);
+        }
+
     }
 }
