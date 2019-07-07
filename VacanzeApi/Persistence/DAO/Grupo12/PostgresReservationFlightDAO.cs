@@ -19,6 +19,12 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
         private const string GET_OUTBOUND_RESERVATION = "GetFlightsIDA(@_departure,@_arrival,@_departuredate)";
         private const string GET_ID_LOCATION = "GetIDLocation(@name_city)";
         private const string GET_SUM = "getSum(@idflight)";
+        private const string GET_CAPACITY = "getCapacity(@idfligh)";
+        private const string FIND_FLIGHT = "findflight(@_id)";
+        private const string FIND_RESERVATION = "getReservationFlightById(@id)";
+        private const string FIND_LOCATION = "getLocationById(@id_loc)";
+        private const string GET_USER =  "GetUserById(@user_id)";
+        private const string DELETE_RESERVATION = "deletereservationflight(@id_reservation)";
         
         /// <param name="Entity">Es on objeto de tipo FightRes </param>
         /// <returns>Devuelve el id que se agrego</returns>
@@ -27,18 +33,22 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
             var resflight=(FlightRes) entity; 
             try{
                 
+                //Llama al stored procedure para el almacenamiento de la reserva
                 flight=PgConnection.Instance.ExecuteFunction(ADD_RES_FLIGHT,
                 resflight._seatNum,resflight._timestamp,resflight._numPas,
                 resflight._id_user,resflight._id_fli);
+
+                //Almacena el id de la respuesta del intento de reserva que se acaba de hacer
                 resflight._idres=Convert.ToInt32(flight.Rows[0][0].ToString());
 
+                //Si es cero no se hizo ninguna reserva
                 if(resflight._idres.Equals(0)){
 
                     throw new EmptyReservationException("Ha ocurrido un error agregando la reserva");
 
                 }
 
-                return resflight._id_user;
+                return resflight._idres;
             
             } catch(DBFailedException e){
             
@@ -116,8 +126,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
     
           try{
                
-            var i=PgConnection.Instance.ExecuteFunction
-            ("deletereservationflight(@id_reservation)",id_reservation);
+            var i=PgConnection.Instance.ExecuteFunction(DELETE_RESERVATION,id_reservation);
           
             }catch(DBFailedException e){
 
@@ -138,8 +147,21 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
             var res=new FlightRes();
             var table=new DataTable();
             try{
+
                 table=PgConnection.Instance.ExecuteFunction(GET_ID_LOCATION,name_city);
-                res._id_city=Convert.ToInt32(table.Rows[0][0].ToString());
+
+
+                if( table.Rows.Count > 0 ){
+
+                     res._id_city=Convert.ToInt32(table.Rows[0][0].ToString());
+
+                }else{
+
+                    res._id_city = -1;
+
+                }
+
+
                 return res._id_city;
             }catch(InvalidStoredProcedureSignatureException){
 
@@ -150,6 +172,163 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
         }
 
 
+
+
+        /// <param name="numseat">Cantidad de asientos a reservar</param>
+        /// <param name="_id_fli">Id del vuelo</param>
+        /// <returns>Devuelve los numeros de asientos a reservar</returns>
+        public string ConSeatNum(int numseat,int _id_fli){
+            var table1 = new DataTable();
+            var capacitytable = new DataTable();
+            var res=new FlightRes();
+            try{
+                
+                //Obtiene la capacidad del vuelo
+                capacitytable=PgConnection.Instance.ExecuteFunction(GET_CAPACITY,_id_fli);
+                int planecapacity = Convert.ToInt32(capacitytable.Rows[0][0].ToString());
+
+                //Obtengo la cantidad de reservas del vuelo (asientos reservados)
+                table1=PgConnection.Instance.ExecuteFunction(GET_SUM,_id_fli);
+
+                //Almacena la cantidad de reservas en la instancia reserva
+                res._sum_pas=Convert.ToInt32(table1.Rows[0][0].ToString());
+
+                Console.WriteLine("Cant reservada: "+res._sum_pas);
+                Console.WriteLine("Capacidad del avión: "+planecapacity);
+                
+                int cont=res._sum_pas;
+                string seat="";
+
+                //Si la cantidad de puestos disponibles es mayor o igual a la cantidad de puestos a reservar
+                if( (planecapacity -  res._sum_pas) >=  numseat){
+
+                    //Concatena un string con el numero de cada nueva reserva
+                    //Si existen N reservas entonces las nuevas reservas sera: A-N+1, A-N+2, A-N+3...
+                    for (int i = 0; i < numseat; i++){
+                        cont=cont+1;
+                        seat+="A-"+cont+",";
+                    }
+
+                }else{                 
+                    return "0";
+                }
+                return seat;    
+            }catch(InvalidStoredProcedureSignatureException){
+
+                throw new InvalidStoredProcedureSignatureException("Tienes un error en el Stored Procedure");
+            
+            }
+        }
+
+        /// <summary>Busca vuelo especifico en la DB</summary>
+        /// <param name="id">Id del vuelo a buscar</param>
+        /// <returns>bool</returns>
+        public bool FindFlight(int id)
+        {
+
+            try
+            {
+                var table = PgConnection.Instance.ExecuteFunction(FIND_FLIGHT, id);
+                
+
+                if (table.Rows.Count > 0)
+                {
+                    return true;
+                }
+
+                return false;
+
+            }
+            catch(InvalidStoredProcedureSignatureException){
+
+                throw new InvalidStoredProcedureSignatureException("Tienes un error en el Stored Procedure");
+            
+            }
+
+        }
+
+        /// <summary>Busca reserva en la DB</summary>
+        /// <param name="id">Id de la reserva a buscar</param>
+        /// <returns>bool</returns>
+        public bool FindReservation(int id)
+        {
+
+            try
+            {
+                var table = PgConnection.Instance.ExecuteFunction(FIND_RESERVATION, id);
+                
+
+                if (table.Rows.Count > 0)
+                {
+                    return true;
+                }
+
+                return false;
+
+            }
+            catch(InvalidStoredProcedureSignatureException){
+
+                throw new InvalidStoredProcedureSignatureException("Tienes un error en el Stored Procedure");
+            
+            }
+
+        }
+
+         /// <summary>Busca usuario en la DB</summary>
+        /// <param name="id">Id del usuario a buscar</param>
+        /// <returns>bool</returns>
+        public bool FindUser(int id)
+        {
+
+            try
+            {
+                var table = PgConnection.Instance.ExecuteFunction(GET_USER, id);
+                
+
+                if (table.Rows.Count > 0)
+                {
+                    return true;
+                }
+
+                return false;
+
+            }
+            catch(InvalidStoredProcedureSignatureException){
+
+                throw new InvalidStoredProcedureSignatureException("Tienes un error en el Stored Procedure");
+            
+            }
+
+        }
+
+        /// <summary>Busca location en la DB</summary>
+        /// <param name="id">Id de la location a buscar</param>
+        /// <returns>bool</returns>
+        public bool FindLocation(int id)
+        {
+
+            try
+            {
+                var table = PgConnection.Instance.ExecuteFunction(FIND_LOCATION, id);
+                
+
+                if (table.Rows.Count > 0)
+                {
+                    return true;
+                }
+
+                return false;
+
+            }
+            catch(InvalidStoredProcedureSignatureException){
+
+                throw new InvalidStoredProcedureSignatureException("Tienes un error en el Stored Procedure");
+            
+            }
+
+        }
+
+
         /// <param name="id_city_i">Id de la ciudad de origen</param>
         /// <param name="id_city_v">Id de la ciudad de destino</param>
         /// <param name="date_i">Fecha de ida de una reserva</param>
@@ -157,43 +336,61 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
         /// <returns>Devuelve la lista de reservas validado (IDA)</returns>        
         public List<Entity> GetFlightValidateI(int id_city_i,int id_city_v,string date_i,int numpas){
             int cont=0;
+
+            //Lista de reservas que coinciden con la busqueda
             var ListRes = new List<Entity>();
+
+            //
             var listres=new ListRes();
             var table1= new DataTable();
             var table2= new DataTable();
             var table3= new DataTable();
             var table4= new DataTable();
             var table5= new DataTable();
+
             try{
                 
-                table1 = PgConnection.Instance.ExecuteFunction(GET_OUTBOUND_RESERVATION
-                ,id_city_i,id_city_v,date_i);
+                //Trae la lista de vuelos
+                table1 = PgConnection.Instance.ExecuteFunction(GET_OUTBOUND_RESERVATION,id_city_i,id_city_v,date_i);
+
+                //
                 listres._price=table1.Rows.Count;
                
-               if(listres._price.Equals("0")){
-                   throw new EmptyListFlight("Disculpe no se Encontraron Vuelos Disponibles para esa Fecha");
-               }
+               //Valida que existen vuelos
+                if(listres._price.Equals("0")){
+                    throw new EmptyListFlight("Disculpe no se encontraron vuelos disponibles para esa fecha");
+                }
 
+                
+                //Recorre la lista de vuelos
                 for(int i = 0; i < table1.Rows.Count; i++){
 
+                    //Almacena el nombre de la locacion de salida
                     table4 = PgConnection.Instance.ExecuteFunction(GET_NAME_LOCATION
                     ,Convert.ToInt32(table1.Rows[i][4]));
 
+                    //Almacena el nombre de la locacion de llegada
                     table5= PgConnection.Instance.ExecuteFunction(GET_NAME_LOCATION
                     ,Convert.ToInt32(table1.Rows[i][5]));
                     
+                    //Almacena la cantidad de reservas del vuelo
                     table2 = PgConnection.Instance.ExecuteFunction("getSum(@id_flight)",
                     Convert.ToInt32(table1.Rows[i][0].ToString()));
 
-                    table3 = PgConnection.Instance.ExecuteFunction("getCapacity(@idfligh)",
+                    //Almacena la capacidad del avión del vuelo
+                    table3 = PgConnection.Instance.ExecuteFunction(GET_CAPACITY,
                     Convert.ToInt32(table1.Rows[i][0].ToString()));
                     
+                    //Almacena la cant de reservas y la capacidad del avión
                     listres._sum_pas=Convert.ToInt32(table2.Rows[0][0].ToString());
                     listres._sum_capacity= Convert.ToInt32(table3.Rows[0][0].ToString());
                     
+                    //Almacena la cantidad de reservas disponibles
                     cont=listres._sum_capacity-listres._sum_pas;
                    
-                     if(cont>=numpas){
+                    //Si la cantidad de reservas disponibles es mayor entonces almacena el vuelo
+                     if( cont >= numpas ){
+                         
                         listres._id=Convert.ToInt32(table1.Rows[i][0].ToString());
                         listres._price=Convert.ToInt32(table1.Rows[i][1].ToString());
                         listres._priceupdate=Convert.ToInt32(table1.Rows[i][1].ToString())*numpas;
@@ -204,7 +401,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
                         listres._name_city_i=table4.Rows[0][1].ToString();
                         listres._name_city_V=table5.Rows[0][1].ToString();
                          
-                         var listreservationflight = new ListRes( listres._id,listres._price,
+                        var listreservationflight = new ListRes( listres._id,listres._price,
                         listres._priceupdate,listres._dateI,listres._name_country_i,
                         listres._name_country_V,listres._seatavailable,listres._name_city_i,
                         listres._name_city_V);
@@ -223,37 +420,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
                 throw new InvalidStoredProcedureSignatureException("Tienes un error en el Stored Procedure");
             }
         }
-
-
-        /// <param name="numseat">Cantidad de asiento</param>
-        /// <param name="_id_fli">Id del vuelo</param>
-        /// <returns>Devuelve los numeros de asientos de una reserva</returns>
-        public string ConSeatNum(int numseat,int _id_fli){
-            var table1= new DataTable();
-            var res=new FlightRes();
-            try{
-                
-                table1=PgConnection.Instance.ExecuteFunction(GET_SUM,_id_fli);
-                res._sum_pas=Convert.ToInt32(table1.Rows[0][0].ToString());
-                 Console.WriteLine(res._sum_pas);
-                int cont=res._sum_pas;
-                string seat="";
-                if(numseat!=0){
-                    for (int i = 0; i < numseat; i++){
-                        cont=cont+1;
-                        seat+="A-"+cont+",";
-                    }
-                }else{
-                    return "0";
-                }
-                return seat;    
-            }catch(InvalidStoredProcedureSignatureException){
-
-                throw new InvalidStoredProcedureSignatureException("Tienes un error en el Stored Procedure");
-            
-            }
-        }
-
 
 
         /// <param name="departure">Id de la ciudad de origen</param>
@@ -278,7 +444,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
                 listres._price=table1.Rows.Count;
                
                if(listres._price.Equals("0")){
-                   throw new EmptyListFlight("Disculpe no se Encontraron Vuelos Disponibles para esa Fecha");
+                  throw new EmptyListFlight("Disculpe no se encontraron vuelos disponibles para esa fecha");
                }
                
                 for(int i = 0; i < table1.Rows.Count; i++){
@@ -288,7 +454,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
                     ,Convert.ToInt32(table1.Rows[i][6]));
                     table2 = PgConnection.Instance.ExecuteFunction("getSum(@id_flight)",
                     Convert.ToInt32(table1.Rows[i][0].ToString()));
-                    table3 = PgConnection.Instance.ExecuteFunction("getCapacity(@idfligh)",
+                    table3 = PgConnection.Instance.ExecuteFunction(GET_CAPACITY,
                     Convert.ToInt32(table1.Rows[i][0].ToString()));
                     listres._sum_pas=Convert.ToInt32(table2.Rows[0][0].ToString());
                     listres._sum_capacity= Convert.ToInt32(table3.Rows[0][0].ToString());

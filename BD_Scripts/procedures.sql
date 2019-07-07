@@ -1779,6 +1779,23 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+----------------------------------------- consulta location por id-----------------------------------
+DROP FUNCTION IF EXISTS getlocationbyid(integer);
+CREATE OR REPLACE FUNCTION getLocationById(id_loc INTEGER)
+    RETURNS TABLE
+            (
+                id integer,
+                city VARCHAR(30),
+                country VARCHAR(30)
+               
+            )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT * FROM location WHERE location.loc_id = id_loc;
+END;
+$$ LANGUAGE plpgsql;
+
 ------------------------fin de grupo 5-------------------------------------------
 
 ------------------------------------inicio de grupo 7---------------------------------
@@ -2135,12 +2152,15 @@ RETURNS TABLE (id INTEGER,price numeric,fecha_res_fli timestamp,seatnum characte
   END;
   $$ LANGUAGE plpgsql;
 
-  
-
-
-
-
-
+ --retornar Reserva de vuelo 
+CREATE OR REPLACE FUNCTION getReservationFlightById(id_res INTEGER) 
+RETURNS TABLE (id INTEGER,seatnum character varying(100),ti timestamp, num_ps integer,use_fk integer,pay_fk integer,fli_fk integer) AS $$
+  BEGIN    
+    RETURN QUERY SELECT *
+    FROM res_fli
+    WHERE rf_id = id_res;  
+  END;
+  $$ LANGUAGE plpgsql;
 
 
 ---Devuelve la capacidad de un vuelo
@@ -2182,7 +2202,7 @@ RETURNS TABLE (id INTEGER) AS $$
   END;   
   $$ LANGUAGE plpgsql;
 
- --Devuelve Lista validada de una reserva de vuelo (IDA)
+ --Devuelve Lista de vuelos (IDA)
  CREATE OR REPLACE FUNCTION GetFlightsIDA(_departure integer,_arrival integer,_departuredate char varying)
     RETURNS TABLE(id integer, price numeric, departuredate timestamp without time zone, arrivaldate timestamp without time zone, locdeparture integer, locarrival integer) 
     LANGUAGE 'plpgsql'

@@ -24,10 +24,34 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12
 
         public void Execute(){
 
-            DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-            ReservationFlightDAO ResFlightDao = factory.GetReservationFlightDAO();
-            id_locations.Add( ResFlightDao.GetIDLocation(names_city[0]) );
-            id_locations.Add( ResFlightDao.GetIDLocation(names_city[1]) );
+            try
+            {
+
+                //Obtiene el DAO correspondiente por medio de las factories
+                DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
+                ReservationFlightDAO ResFlightDao = factory.GetReservationFlightDAO();
+
+                int ida = ResFlightDao.GetIDLocation(names_city[0]);
+                int idb = ResFlightDao.GetIDLocation(names_city[1]);
+
+                if( ida == -1 || idb == -1 ){
+
+                    throw new ValidationErrorException("Una de las ciudades no existe");
+
+                }
+
+                id_locations.Add( ida );
+                id_locations.Add( idb );
+
+            }
+            catch (ValidationErrorException ex)
+            {
+            throw new Exception(ex.Message);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
 
         }
 

@@ -35,12 +35,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
 
             try{
 
+                //Crea la entidad por medio del mapper devuelvo del factory
                 ReservationFlightMapper ResFlightMapper = MapperFactory.CreateReservationFlightMapper();
                 Entity entity = ResFlightMapper.CreateEntity(flightDTO);
+
+                //Instancia el comando por medio del factory pasandole la entidad al constructor
                 AddReservationFlightCommand command = CommandFactory.CreateAddReservationFlightCommand ((FlightRes)entity);
+
+                //Ejecuta y obtiene el resultado del comando
                 command.Execute ();
                 int _id = command.GetResult();
-                
+
+
                 return StatusCode(200, "Se agrego satisfactoriamente id: " + _id);
 
             }catch(Exception ex){
@@ -49,7 +55,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         }
        
 
-       
+
         /// <summary> GET api/list-reservation-flight/id_user</summary>
         /// <param name="id_user">Id del usuario</param>
         /// <returns>Devuelve una lista de todas las reservas de realizo</returns>
@@ -61,15 +67,15 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
 
             try{
                 
-                GetReservationFlightByUserCommand command = 
-                    CommandFactory.CreateGetReservationFlightByUserCommand(id_user);
 
+                GetReservationFlightByUserCommand command = 
+                CommandFactory.CreateGetReservationFlightByUserCommand(id_user);
                 command.Execute();
                 List<Entity> listFlight = command.GetResult();
 
                 return listFlight;
 
-            }catch(Exception ex ){
+            }catch(Exception ex){
 
                  return BadRequest(ex.Message);
             }
@@ -92,8 +98,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
                 city_names.Add(name_city_i);
                 city_names.Add(name_city_v);
 
-                GetIdReturnCityCommand command = 
-                    CommandFactory.CreateGetIdReturnCityCommand(city_names);
+                GetIdReturnCityCommand command = CommandFactory.CreateGetIdReturnCityCommand(city_names);
 
                 command.Execute();
                 List<int> city_ids = command.GetResult();
@@ -117,8 +122,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         public ActionResult<IEnumerable<String>> Delete(int id_res){
 
             try{
-                DeleteReservationCommand command = 
-                    CommandFactory.CreateDeleteReservationCommand(id_res);
+
+                DeleteReservationCommand command = CommandFactory.CreateDeleteReservationCommand(id_res);
 
                 command.Execute();
 
@@ -132,11 +137,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         }
 
        
-
-        /// <summary> GET api/reservation-flight/departure/arrival/departuredate</summary>
+//
+        /// <summary> GET api/reservation-flight/departure/arrival/departuredate/numpas</summary>
         /// <param name="departure">Ciudad de salida del vuelor</param>
         /// <param name="arrival">Ciudad de llegada del vuelo</param>
         /// <param name="departuredate">Fecha de salida del vuelo</param>
+        /// <param name="numpas"></param>
         /// <returns>Devuelve todas las reservas en una fecha indicada</returns>
         
         [Route("~/api/reservation-flight/{departure}/{arrival}/{departuredate}/{numpas}")] 
@@ -146,21 +152,20 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
             try
             {
                 GetReservationsByDateICommand command = 
-                    CommandFactory.CreateGetReservationsByDateICommand(departure, arrival, departuredate,numpas);
+                    CommandFactory.CreateGetReservationsByDateICommand(departure, arrival, departuredate, numpas);
                 command.Execute();
                 List<Entity> listFlight = command.GetResult();
 
                 return listFlight;
-            }
-            catch (DatabaseException ex)
-            {
+            }catch(Exception ex ){
+
                 return BadRequest(ex.Message);
             }
            
         }
 
 
-
+//
         /// <summary> GET api/reservation-flight/departure/arrival/departuredate/arrivaldate/numpas</summary>
         /// <param name="departure">Ciudad de salida del vuelor</param>
         /// <param name="arrival">Ciudad de llegada del vuelo</param>
@@ -182,13 +187,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
 
                 return listFlight;
             }
-            catch (DatabaseException ex)
-            {
+            catch(Exception ex ){
+
                 return BadRequest(ex.Message);
-            }
-            catch (Exception)
-            {
-                return null;
             }
         }
         
