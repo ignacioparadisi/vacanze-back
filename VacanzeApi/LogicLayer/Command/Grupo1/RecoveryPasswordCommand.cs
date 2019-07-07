@@ -3,7 +3,7 @@ using vacanze_back.VacanzeApi.Persistence.DAO;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo1;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo1 {
-    public class RecoveryPasswordCommand : Command, CommandResult<Login>
+    public class RecoveryPasswordCommand : CommandResult<Login>
     {
         private Login _newPassword; 
 
