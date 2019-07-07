@@ -7,7 +7,7 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
 {
-    public class DeleteUserByIdCommand : Command
+    public class DeleteUserByIdCommand : Command, CommandResult<int>
     {
         public int Id { get; set; }
         public DeleteUserByIdCommand(int id)
@@ -26,6 +26,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
             {
                 Console.WriteLine(e.ToString());
             }
+        }
+
+        public int GetResult()
+        {
+            return this.Id;
         }
     }
 }
