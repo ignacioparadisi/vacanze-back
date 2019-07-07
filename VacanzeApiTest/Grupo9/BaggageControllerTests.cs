@@ -3,7 +3,7 @@ using NUnit.Framework;
 namespace vacanze_back.VacanzeApiTest.Grupo9
 {
     [TestFixture]
-    public class BaggagesTest
+    public class BaggageControllerTests
     {
         /*
         [SetUp]
