@@ -8,8 +8,9 @@ using vacanze_back.VacanzeApi.Common.Exceptions.Grupo14;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo14
 {
-    public class PostgresReservationRestaurantDAO
+    public class PostgresReservationRestaurantDAO : ReservationRestaurantDAO
     {
+
         // VARIABLES PARA LA DEFINICION DE LOS SP
 
 
@@ -18,7 +19,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo14
         ///     Metodo para agregar una reserva de restaurant
         /// </summary>
         /// <param name="reserva"></param>
-        public static int addReservation(Restaurant_res reserva)
+        public int addReservation(Restaurant_res reserva)
         {
 
             var table = PgConnection.Instance.ExecuteFunction("getAvailability(@res_id, @res_date)",
@@ -64,7 +65,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo14
         }
 
 
-        public static List<Restaurant_res> getResRestaurant(int user)
+        public List<Restaurant_res> getResRestaurant(int user)
         {
 
             var ReservationList = new List<Restaurant_res>();
@@ -86,7 +87,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo14
             return ReservationList;
         }
 
-        public static List<Restaurant_res> getReservationNotPay(int user)
+        public List<Restaurant_res> getReservationNotPay(int user)
         {
 
             var ReservationList = new List<Restaurant_res>();
