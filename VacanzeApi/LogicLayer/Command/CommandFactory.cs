@@ -15,6 +15,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
     public class CommandFactory
     {
 
+        public static AddVehicleCommand CreateAddVehicleCommand(Vehicle vehicle)
+        {
+            return new AddVehicleCommand(vehicle);
+        }
+
         public static AddBrandCommand CreateAddBrandCommand(Brand brand)
         {
             return new AddBrandCommand(brand);

@@ -6,6 +6,12 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
 
     public class EntityFactory{
 
+        public static Vehicle CreateVehicle(int Id, int _vehicleModelId, int _vehicleLocationId, 
+            string _license, double _price, bool _status)
+        {
+            return new Vehicle(Id, _vehicleModelId, _vehicleLocationId, _license, _price, _status);
+        }
+
         public static Brand CreateBrand(int id, string brandName){
             return new Brand(id, brandName);
         }

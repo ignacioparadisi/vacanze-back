@@ -17,6 +17,10 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         public override IModelDAO GetModelDAO(){
             return new PostgresModelDAO();
         }
+
+        public override IVehicleDAO GetVehicleDAO(){
+            return new PostgresVehicleDAO();
+        }
         
         public override ReservationRoomDAO GetReservationRoomDAO()
         {

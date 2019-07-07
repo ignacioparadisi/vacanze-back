@@ -60,7 +60,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5 {
 
         [HttpGet("{brandId:int}")]
         public ActionResult<Brand> GetBrandById(int brandId){
-            Brand brand = null;
             try {
                 GetBrandByIdCommand command = CommandFactory.CreateGetBrandByIdCommand(brandId);
                 command.Execute ();
