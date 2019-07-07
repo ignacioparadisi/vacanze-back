@@ -29,8 +29,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
         {
             try
             {
-                var result = FlightRepository.Get();
-                return Ok(result.ToList());
+                GetFlightListCommand command=CommandFactory.getListFlightCommand();
+                command.Execute();
+
+                //var result = FlightRepository.Get();
+                return Ok(command.GetResult());
             }
             catch (DbErrorException ex)
             {
