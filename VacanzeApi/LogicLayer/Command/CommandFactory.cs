@@ -100,5 +100,10 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new AddLayoverCommand(layoverDto);
         }
+
+        public static DeleteCruiserCommand CreateDeleteCruiserCommand(int id)
+        {
+            return new DeleteCruiserCommand(id);
+        }
     }
 }
