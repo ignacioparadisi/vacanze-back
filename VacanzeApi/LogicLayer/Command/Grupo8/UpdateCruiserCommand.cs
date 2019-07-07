@@ -13,10 +13,10 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo8
     /// <summary>  
     ///  Comando para actualizar un Crucero
     /// </summary> 
-    public class UpdateCruiserCommand : CommandResult<CruiserDto>
+    public class UpdateCruiserCommand : CommandResult<CruiserDTO>
     {
-        private CruiserDto _cruiserDto;
-        public UpdateCruiserCommand(CruiserDto cruiserDto)
+        private CruiserDTO _cruiserDto;
+        public UpdateCruiserCommand(CruiserDTO cruiserDto)
         {
             _cruiserDto = cruiserDto;
         }
@@ -28,7 +28,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo8
             CommandFactory.CreateGetCruiserValidatorCommand(cruiser).Execute();
             _cruiserDto = cruiserMapper.CreateDTO(daoFactory.GetCruiserDAO().UpdateCruiser(cruiser));
         }
-        public CruiserDto GetResult()
+        public CruiserDTO GetResult()
         {
             return _cruiserDto;
         }

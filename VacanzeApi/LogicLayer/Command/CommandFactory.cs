@@ -101,9 +101,19 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new AddLayoverCommand(layoverDto);
         }
 
+        public static DeleteLayoverCommand CreateDeleteLayoverCommand(int id)
+        {
+            return new DeleteLayoverCommand(id);
+        }
+
         public static DeleteCruiserCommand CreateDeleteCruiserCommand(int id)
         {
             return new DeleteCruiserCommand(id);
+        }
+
+        public static UpdateCruiserCommand CreateUpdateCruiserCommand(int id, CruiserDTO cruiserDto)
+        {
+            return new UpdateCruiserCommand(id, cruiserDto);
         }
     }
 }
