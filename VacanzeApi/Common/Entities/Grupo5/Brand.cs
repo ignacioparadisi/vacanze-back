@@ -1,5 +1,6 @@
 using System;
-using Newtonsoft.Json;
+using vacanze_back.VacanzeApi.Common.Exceptions;
+
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo5 {
     public class Brand : Entity {
 
@@ -7,7 +8,13 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo5 {
         public string BrandName 
         { 
             get { return _brandName; } 
-            set { _brandName = value; } 
+            set 
+            { 
+                if(value == null || value.Equals(""))
+                    throw new RequiredAttributeException("Debe indicar el nombre de la marca");
+                else
+                    _brandName = value; 
+            } 
         }
 
         public Brand (string brandName) : base (0) {

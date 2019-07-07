@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo5;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo5;
@@ -29,6 +30,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5 {
                 AddBrandCommand command = CommandFactory.CreateAddBrandCommand ((Brand) entity);
                 command.Execute ();
                 return Ok ("ok " + command.GetResult ());
+            } catch(RequiredAttributeException ex){
+                return StatusCode (400, ex.Message);
             } catch (UniqueAttributeException ex){
                 return StatusCode (500, ex.Message);
             } catch (InternalServerErrorException ex) {
@@ -46,6 +49,25 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5 {
                 GetBrandsCommand command = CommandFactory.CreateGetBrandsCommand();
                 command.Execute ();
                 return Ok (brandMapper.CreateDTOList(command.GetResult()));
+            } catch(WithoutExistenceOfBrandsException ex){
+                return StatusCode (404, ex.Message);
+            } catch (InternalServerErrorException ex) {
+                return StatusCode (500, ex.Message);
+            } catch (Exception) {
+                return StatusCode (400);
+            }
+        }
+
+        [HttpGet("{brandId:int}")]
+        public ActionResult<Brand> GetBrandById(int brandId){
+            Brand brand = null;
+            try {
+                GetBrandByIdCommand command = CommandFactory.CreateGetBrandByIdCommand(brandId);
+                command.Execute ();
+                BrandMapper brandMapper = MapperFactory.CreateBrandMapper();
+                return Ok (brandMapper.CreateDTO(command.GetResult()));
+            } catch (BrandNotFoundException ex){
+                return StatusCode(404,ex.Message + ex.BrandId);
             } catch (InternalServerErrorException ex) {
                 return StatusCode (500, ex.Message);
             } catch (Exception) {
@@ -65,11 +87,15 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5 {
                     return Ok("La modificación fue realizada exitosamente");
                 else
                     return StatusCode(400);
-            }catch (UniqueAttributeException ex){
+            } catch (RequiredAttributeException ex){
+                return StatusCode (400, ex.Message);
+            } catch (UniqueAttributeException ex){
                 return StatusCode (500, ex.Message);
-            }catch(InternalServerErrorException ex){
+            } catch (BrandNotFoundException ex){
+                return StatusCode (404, ex.Message + ex.BrandId);
+            } catch(InternalServerErrorException ex){
                 return StatusCode(500, ex.Message);
-            }catch(Exception){
+            } catch(Exception){
                 return StatusCode(400);
             }
         }

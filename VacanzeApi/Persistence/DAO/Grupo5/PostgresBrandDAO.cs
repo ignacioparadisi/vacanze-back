@@ -3,25 +3,17 @@ using System.Data;
 using System.Collections.Generic;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo5;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5{
 
     public class PostgresBrandDAO : IBrandDAO {
 
-        ///<sumary>
-        /// Creación de una marca de carro
-        ///</sumary>
-        ///<param name="brand">Instancia de Brand, contiene todos los atributos necesarios
-        ///   para realizar la creación de una marca</param>
-        ///<returns>
-        /// El id del Brand que fue creado
-        ///</returns>
+        ///<sumary>Creación de una marca de carro</sumary>
+        ///<param name="brand">Instancia de Brand</param>
+        ///<returns>Id de marca</returns>
         ///<exception cref="UniqueAttributeException">
         /// Es excepción es lanzada cuando el nombre de la marca ya existe
-        ///</exception>
-        ///<exception cref="InternalServerErrorException">
-        /// Es lanzada cuando ocurre un problema de conexión en la base de datos, o
-        /// cuando un error en el servidor
         ///</exception>
         public int AddBrand (Brand brand) {
             int id = 0;
@@ -58,7 +50,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5{
                         brands.Add(brand);
                     }
                 }else{
-                    // Throw Exception
+                    throw new WithoutExistenceOfBrandsException("Sin existencia de marcas");
                 }
              }catch(DatabaseException ex){
                 throw new InternalServerErrorException("Error en el servidor : Conexion a base de datos", ex);
@@ -68,10 +60,32 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5{
             return brands;
         }
 
+        public Brand GetBrandById(int brandId){
+            Brand brand = null;
+             try{
+                PgConnection pgConnection = PgConnection.Instance;
+                DataTable dataTable = pgConnection.ExecuteFunction("GetBrandById(@brandId)", brandId);
+                if(dataTable.Rows.Count == 0){
+                    throw new BrandNotFoundException(brandId, "No se ha encontrado una Marca con Id ");
+                }
+                else{
+                    brand = new Brand(
+                        Convert.ToInt32(dataTable.Rows[0][0]),
+                        dataTable.Rows[0][1].ToString()
+                    );
+                }
+             }catch(DatabaseException ex){
+                throw new InternalServerErrorException("Error en el servidor : Conexion a base de datos", ex);
+            }catch(InvalidStoredProcedureSignatureException ex){
+                throw new InternalServerErrorException("Error en el servidor", ex);
+            }
+            return brand;
+        }
+
         public bool UpdateBrand(Brand brand){
             bool updated = false;
             try{
-                //Throw Exception If User Doesn't exist
+                GetBrandById(brand.Id);//Throw BrandNotFoundException
                 PgConnection pgConnection = PgConnection.Instance;
                 DataTable dataTable = pgConnection.ExecuteFunction (
                     "BrandUniqueness(@brandName)", brand.BrandName);
@@ -88,7 +102,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5{
             }catch(InvalidStoredProcedureSignatureException ex){
                 throw new InternalServerErrorException("Error en el servidor", ex);
             }
-            
             return updated;
         }
     }

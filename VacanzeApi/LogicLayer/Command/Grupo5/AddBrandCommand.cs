@@ -7,7 +7,6 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5
     public class AddBrandCommand : CommandResult<int> 
     {
         private int _id;
-        public int Id { get { return _id; } set{ _id = value; } }
 
         private Brand _brand;
         public Brand Brand { get{ return _brand; } set{ _brand = value; } }

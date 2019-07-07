@@ -20,6 +20,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new AddBrandCommand(brand);
         }
 
+        public static GetBrandByIdCommand CreateGetBrandByIdCommand(int brandId)
+        {
+            return new GetBrandByIdCommand(brandId);
+        }
+
         public static GetBrandsCommand CreateGetBrandsCommand()
         {
             return new GetBrandsCommand();
@@ -33,6 +38,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         public static AddModelCommand CreateAddModelCommand(Model model)
         {
             return new AddModelCommand(model);
+        }
+
+        public static GetModelByIdCommand CreateGetModelByIdCommand(int modelId)
+        {
+            return new GetModelByIdCommand(modelId);
         }
 
         public static GetModelsCommand CreateGetModelsCommand()

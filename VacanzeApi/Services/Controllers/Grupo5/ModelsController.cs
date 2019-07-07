@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo5;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo5;
@@ -30,6 +31,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5{
                 AddModelCommand command = CommandFactory.CreateAddModelCommand((Model) model);
                 command.Execute();
                 return Ok ("ok " + command.GetResult ());
+            } catch (RequiredAttributeException ex){
+                return StatusCode (400, ex.Message);
+            } catch (BrandNotFoundException ex){
+                return StatusCode (404, ex.Message + ex.BrandId);
+            } catch (UniqueAttributeException ex){
+                return StatusCode (500, ex.Message);
             } catch (InternalServerErrorException ex) {
                 return StatusCode (500, ex.Message);
             } catch (Exception) {
@@ -45,6 +52,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5{
                 command.Execute ();
                 ModelMapper modelMapper = MapperFactory.CreateModelMapper();
                 return Ok (modelMapper.CreateDTOList(command.GetResult()));
+            } catch (WithoutExistenceOfModelsException ex){
+                return StatusCode (404, ex.Message);
             } catch (InternalServerErrorException ex) {
                 return StatusCode (500, ex.Message);
             } catch (Exception) {
@@ -60,6 +69,27 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5{
                 command.Execute ();
                 ModelMapper modelMapper = MapperFactory.CreateModelMapper();
                 return Ok (modelMapper.CreateDTOList(command.GetResult()));
+            } catch (BrandNotFoundException ex){
+                return StatusCode (404, ex.Message + ex.BrandId);
+            } catch (WithoutExistenceOfModelsException ex){
+                 return StatusCode (404, ex.Message);
+            } catch (InternalServerErrorException ex) {
+                return StatusCode (500, ex.Message);
+            } catch (Exception) {
+                return StatusCode (400);
+            }
+        }
+
+        [HttpGet("{modelId:int}")]
+        public ActionResult<Model> GetModelById(int modelId){
+             Model model = null;
+            try {
+                GetModelByIdCommand command = CommandFactory.CreateGetModelByIdCommand(modelId);
+                command.Execute ();
+                ModelMapper modelMapper = MapperFactory.CreateModelMapper();
+                return Ok (modelMapper.CreateDTO(command.GetResult()));
+            } catch (ModelNotFoundException ex){
+                return StatusCode (404, ex.Message + ex.ModelId);
             } catch (InternalServerErrorException ex) {
                 return StatusCode (500, ex.Message);
             } catch (Exception) {
@@ -79,9 +109,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5{
                     return Ok("La modificación fue realizada exitosamente");
                 else
                     return StatusCode(400);
-            }catch(InternalServerErrorException ex){
+            } catch (RequiredAttributeException ex){
+                return StatusCode (400, ex.Message);
+            } catch (ModelNotFoundException ex){
+                return StatusCode (404, ex.Message + ex.ModelId);
+            } catch (BrandNotFoundException ex){
+                return StatusCode (404, ex.Message + ex.BrandId);
+            } catch(UniqueAttributeException ex){
+                return StatusCode (500, ex.Message);
+            } catch(InternalServerErrorException ex){
                 return StatusCode(500, ex.Message);
-            }catch(Exception){
+            } catch(Exception){
                 return StatusCode(400);
             }
       
