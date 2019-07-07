@@ -1,3 +1,4 @@
+using vacanze_back.VacanzeApi.Common.Entities.Grupo14;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
@@ -39,6 +40,14 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
 
         public static Location CreateLocation(int id, string country, string city){
             return new Location(id, country, city);
+        }
+
+        /*Grupo14*/
+        public static Restaurant_res CreateResRestaurant(int id, string locationName, string pais, string restName,
+         string address, string fecha_reservacion, int cant_persona)
+        {
+            return new Restaurant_res(id,locationName,pais,restName,
+            address,fecha_reservacion,cant_persona);
         }
     }
 }

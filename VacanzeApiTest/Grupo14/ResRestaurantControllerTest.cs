@@ -9,6 +9,7 @@ using vacanze_back.VacanzeApi.Persistence.Repository.Grupo14;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo7;
 using vacanze_back.VacanzeApi.Services.Controllers.Grupo7;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo14;
 
 namespace vacanze_back.VacanzeApiTest.Grupo14
 {
@@ -63,7 +64,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo14
         [Test]
         public void getResRestaurantTest(){
 
-            ActionResult<IEnumerable<Restaurant_res>> res = controller.Get(5);
+            ActionResult<IEnumerable<ResRestaurantDTO>> res = controller.Get(5);
             Assert.NotNull(res);
         }
 

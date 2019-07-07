@@ -10,6 +10,9 @@ using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo14;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo14;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo14;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo14;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 {
@@ -48,13 +51,15 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 
 		//GET /ResRestaurant/{id}
 		[HttpGet("{id}")]
-		public ActionResult<IEnumerable<Restaurant_res>> Get(int id){
+		public ActionResult<IEnumerable<ResRestaurantDTO>> Get(int id){
             var getByIdCommand = CommandFactory.GetResRestaurantByIdCommand(id);
             try {
 				Console.WriteLine(id);
                 //return ResRestaurantRepository.getResRestaurant(id);
                 getByIdCommand.Execute();
-                return getByIdCommand.GetResult();
+                //return getByIdCommand.GetResult();
+                ResRestaurantMapper resRestMapper = MapperFactory.createResRestaurantMapper();
+                return resRestMapper.CreateDTOList(getByIdCommand.GetResult());
             }
             catch (DatabaseException ){            
 				return StatusCode(500);

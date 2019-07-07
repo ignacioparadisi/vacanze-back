@@ -1,3 +1,4 @@
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo14;
 using  vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo5;
 using  vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo6;
 
@@ -23,6 +24,16 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO{
 
         public static LocationDTO CreateLocationDTO(int id, string country, string city){
             return new LocationDTO(id, country, city);
+        }
+        // +++++++++++++++++
+        //     GRUPO 14
+        // +++++++++++++++++
+        public static ResRestaurantDTO CreateResRestaurantDTO(int id, string locationName, string pais, string restName,
+         string address, string fecha_reservacion, int cant_person)
+        {
+
+            return new ResRestaurantDTO( id,  locationName,  pais,  restName,
+          address,  fecha_reservacion,  cant_person);
         }
     }
 
