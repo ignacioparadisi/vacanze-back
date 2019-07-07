@@ -158,7 +158,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
                 command.Execute();
                 foreach (var role in user.Roles)
                 {
-                    PostUser_RoleCommand postRoleCommand = new PostUser_RoleCommand(user,role);
+                    PostUser_RoleCommand postRoleCommand = new PostUser_RoleCommand(user.Id,role);
                     postRoleCommand.Execute();
                 }
             }
@@ -173,7 +173,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             return Ok(user);
         }
 
-        
+        /*
         // PUT api/users/5
         /// <summary>
         /// Manda a actualizar el usuario en la base de datos
@@ -186,15 +186,21 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
           public ActionResult<int> Put(int id, [FromBody] User user)
           {
                int user_id;
+            List<Role> roles;
                try
                {
+                    roles = RoleRepository.GetRolesForUser(id);
                     user_id = UserRepository.UpdateUser(user, id);
                     UserRepository.DeleteUser_Role(id);
                     foreach (var role in user.Roles)
                     {
                          UserRepository.AddUser_Role(id, role.Id);
                     }
-
+                    if(user.Roles.Count <= 0)
+                    foreach(var role in roles)
+                    {
+                        UserRepository.AddUser_Role(id, role.Id);
+                    }
                     return Ok(user_id);
 
                }
@@ -207,8 +213,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
                     return BadRequest("Error actualizando al usuario");
                }
           }
-          
-        /*
+          */
         // PUT api/users/5
         /// <summary>
         /// Manda a actualizar el usuario en la base de datos
@@ -231,7 +236,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
                 PostUser_RoleCommand postUser_RoleCommand; 
                 foreach (var role in user.Roles)
                 {
-                    postUser_RoleCommand = new PostUser_RoleCommand(user, role);
+                  //  UserRepository.AddUser_Role(id, role.Id);
+                    postUser_RoleCommand = new PostUser_RoleCommand(id, role);
                     postUser_RoleCommand.Execute();
                 }
 

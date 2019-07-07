@@ -25,8 +25,8 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
             try
             {
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-                UserDAO user = factory.GetUserDAO();
-                Id = user.UpdateUser(User, Id);
+                UserDAO dao = factory.GetUserDAO();
+                dao.UpdateUser(User, Id);
             }
             catch (Exception e)
             {

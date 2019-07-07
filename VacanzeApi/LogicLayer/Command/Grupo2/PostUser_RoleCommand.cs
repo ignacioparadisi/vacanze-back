@@ -9,14 +9,14 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
 {
-    public class PostUser_RoleCommand : Command, CommandResult<Entity>
+    public class PostUser_RoleCommand : Command
     {
         public Role Role { get; set; }
-        public User User { get; set; }
+        public int Id { get; set; }
 
-        public PostUser_RoleCommand(User user, Role role)
+        public PostUser_RoleCommand(int id, Role role)
         {
-            this.User = user;
+            this.Id = id;
             this.Role = role;
         }
 
@@ -26,17 +26,12 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
             {
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
                 UserDAO dao = factory.GetUserDAO();
-                dao.AddUser_Role(this.User.Id,this.Role.Id);
+                dao.AddUser_Role(this.Id,this.Role.Id);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
             }
-        }
-
-        public Entity GetResult()
-        {
-            return this.User;
         }
     }
 }
