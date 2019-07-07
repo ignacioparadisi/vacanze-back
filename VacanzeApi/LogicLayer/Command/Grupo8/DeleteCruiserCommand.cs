@@ -8,7 +8,7 @@ using vacanze_back.VacanzeApi.Persistence.DAO;
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo8
 {
     /// <summary>  
-    ///  Comando para eliminar un Restaurante
+    ///  Comando para eliminar un Crucero
     /// </summary> 
     public class DeleteCruiserCommand : Command
     {
