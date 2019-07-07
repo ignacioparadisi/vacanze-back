@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo2;
+using vacanze_back.VacanzeApi.Common.Entities;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
 {
@@ -19,9 +20,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
         /// </summary>
         /// <returns>Una lista de roles</returns>
         [HttpGet]
-        public ActionResult<IEnumerable<Role>> GetRoles()
+        public ActionResult<IEnumerable<Entity>> GetRoles()
         {
-            var roles = new List<Role>();
+            var roles = new List<Entity>();
             try
             {
                 roles = RoleRepository.GetRoles();

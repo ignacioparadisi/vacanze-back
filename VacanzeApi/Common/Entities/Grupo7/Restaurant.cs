@@ -8,8 +8,20 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo7
         // private Lugar _direccion;
         /// <summary>  
         ///  Clase para crear objetos de tipo Restaurant, almacenando la información de cada restaurant  
-        /// </summary> 
-
+        /// </summary>
+        public string Name  { get; }
+        public int Capacity  { get; }
+        public bool IsActive { get; }
+        public decimal Qualify { get; }
+        public string Specialty { get; }
+        public decimal Price { get; }
+        public string BusinessName { get; }
+        public string Picture { get; }
+        public string Description { get; }
+        public string Phone { get; }
+        public int Location { get; }
+        public string Address { get; }
+        
         [JsonConstructor]
         public Restaurant(int id, string name, int capacity,bool isActive,decimal qualify, string specialty, 
                           decimal price, string businessName, string picture, 
@@ -47,19 +59,5 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo7
             Location = location;
             Address = address;
         }
-
-        public string Name  { get; }
-        public int Capacity  { get; }
-        public bool IsActive { get; }
-        public decimal Qualify { get; }
-        public string Specialty { get; }
-        public decimal Price { get; }
-        public string BusinessName { get; }
-        public string Picture { get; }
-        public string Description { get; }
-        public string Phone { get; }
-        public int Location { get; }
-        public string Address { get; }
-
     }
 }

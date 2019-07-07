@@ -1,6 +1,7 @@
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
-using vacanze_back.VacanzeApi.Persistence.Repository;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Locations; 
+using vacanze_back.VacanzeApi.LogicLayer.Command; 
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
 {
@@ -36,8 +37,9 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
                     "El precio por habitacion no puede ser negativo");
 
             try
-            {
-                LocationRepository.GetLocationById(hotel.Location.Id);
+            {     
+                GetLocationByIdCommand commandId =  CommandFactory.GetLocationByIdCommand(hotel.Location.Id);
+                commandId.Execute ();
             }
             catch (LocationNotFoundException)
             {

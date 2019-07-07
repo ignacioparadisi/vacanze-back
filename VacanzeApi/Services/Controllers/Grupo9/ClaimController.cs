@@ -1,244 +1,177 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Common.Exceptions;
-using vacanze_back.VacanzeApi.Persistence.Repository.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.Command;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 {
-[Produces("application/json")] 
-	[Route("api/[controller]")]
-	[EnableCors("MyPolicy")]
-	[ApiController]
-	public class ClaimController : ControllerBase
-	{
-		/// <summary>
-		// GET api/Claim
-		//se usara para consultar la cantidad de reclamos en la base de datos
-        /// </summary>
-		[HttpGet]
-		public int Get()
-		{
-			try
-			{ 
-				ClaimRepository conec= new ClaimRepository();
-				int rows= conec.GetClaim();
-				return rows; 
-			}catch (DatabaseException )
-			{            
-				return -1;
-			}
-			catch (InvalidStoredProcedureSignatureException )
-			{
-				return -1;
-			}
-		}
+    [Produces("application/json")]
+    [Route("api/[controller]")]
+    [EnableCors("MyPolicy")]
+    [ApiController]
+    public class ClaimController : ControllerBase
+    {
+        private readonly ILogger<ClaimController> _logger;
+
+        public ClaimController(ILogger<ClaimController> logger)
+        {
+            _logger = logger;
+        }
+
         /// <summary>
-		// GET api/claim/id
-		// usado para consultar un claim segun id
-		/// </summary>
-		[HttpGet("{id}")]
-		public ActionResult<IEnumerable<Claim>> Get(int id)
-		{
-			try
-			{
-				ClaimRepository conec= new ClaimRepository();
-				List<Claim> claimList = conec.GetClaim(id);
-				return claimList; 
-			}catch (DatabaseException ex)
-			{            
-				return StatusCode(500, ex.Message);
-			}
-			catch (InvalidStoredProcedureSignatureException ex)
-			{
-				return StatusCode(500, ex.Message);
-			}
-			catch (NullClaimException ex)
-			{			
-				return StatusCode(500, ex.Message);
-			}
-		}		
-		/// <summary>
-		// GET api/values/5
-		// Get para la tabla equipaje segun su documento de identidad
-		/// </summary>
-		[HttpGet("document/{id}")]
-		public ActionResult<IEnumerable<Claim>> GetDocument(string id)
-		{
-			try
-			{                 
-				ClaimRepository conec= new ClaimRepository();
-				List<Claim> ClaimList = conec.GetClaimDocument(id);
-				return ClaimList;                          
-			}catch (DatabaseException ex)
-			{            
-				return StatusCode(500, ex.Message);
-			}
-			catch (InvalidStoredProcedureSignatureException ex)
-			{
-				return StatusCode(500, ex.Message);
-			}
-			catch (NullClaimException ex)
-			{
-				
-				return StatusCode(500, ex.Message);
-			}
-		}
-		/// <summary>
-		// GET api/claim/admin/status
-		// usado para que el administrador consulte los reclamos por estatus
-		/// </summary>
-		[HttpGet("admin/{status}")]
-		public ActionResult<IEnumerable<Claim>> GetStatus(string status)
-		{
-			try
-			{
-				ClaimRepository conec= new ClaimRepository();
-				List<Claim> claimList = conec.GetClaimStatus(status);
-				return claimList; 
-			}catch (DatabaseException ex)
-			{            
-				return StatusCode(500, ex.Message);
-			}
-			catch (InvalidStoredProcedureSignatureException ex )
-			{
-				return StatusCode(500, ex.Message);
-			}
-		}
-		/// <summary>
-		// Post api/Claim/id
-		//utilizado para crear un reclamo con una id del equipaje
-		/// </summary>	
-		[HttpPost("{id}")]
-		public ActionResult<string> Post(int id, [FromBody] ClaimSecundary ClaimAux)
-		{
-			try
-			{
-				BaggageRepository bag = new BaggageRepository();
-				var a = bag.GetBaggage(id);
-				if (a.Count == 0)
-				{
-					throw new NullBaggageException("No existe el Equipaje");
-				}
+        ///     GET api/claim/{id}
+        ///     Obtener Claim segun su Id
+        /// </summary>
+        [HttpGet("{id}")]
+        public ActionResult<Claim> GetById(int id)
+        {
+            var getByIdCommand = CommandFactory.CreateGetClaimByIdCommand(id);
 
-				ClaimRepository conec = new ClaimRepository();
-				Claim claim = new Claim(ClaimAux.title, ClaimAux.description);
-				claim.Validate();
-				claim.ValidatePost();
-				conec.AddClaim(claim, id);
-				return Ok("Agregado correctamente");
-			}
-			catch (DatabaseException ex)
-			{
-				return StatusCode(500, ex.Message);
-			}
-			catch (InvalidStoredProcedureSignatureException ex)
-			{
-				return StatusCode(500, ex.Message);
-			}
-			catch (AttributeSizeException exc)
-			{
-				return StatusCode(500, exc.Message);
-			}
-			catch (AttributeValueException ex)
-			{
-				return StatusCode(500, ex.Message);
-			}
-			catch (NullBaggageException ex)
-			{
-				return StatusCode(500, ex.Message);
-			}
-		}
+            try
+            {
+                getByIdCommand.Execute();
+                return Ok(getByIdCommand.GetResult());
+            }
+            catch (ClaimNotFoundException)
+            {
+                return new NotFoundResult();
+            }
+            catch (DatabaseException ex)
+            {
+                _logger?.LogError(ex, "Database exception when trying to get a claim by id");
+                return StatusCode(500, ex.Message);
+            }
+        }
 
-		// DELETE api/Claim/5
-		/// <summary>
-		// DELETE api/Claim/id
-		//eliminar un reclamo
-		/// </summary>
+        /// <summary>
+        ///     Get para la tabla equipaje segun su documento de identidad
+        /// </summary>
+        [HttpGet("document/{document}")]
+        public ActionResult<IEnumerable<Claim>> GetByDocument(string document)
+        {
+            var getByDocumentCommand = CommandFactory.CreateGetClaimsByDocumentCommand(document);
+            try
+            {
+                getByDocumentCommand.Execute();
+                return getByDocumentCommand.GetResult();
+            }
+            catch (DatabaseException ex)
+            {
+                // TODO: Log
+                return StatusCode(500, ex.Message);
+            }
+        }
 
-		[HttpDelete("{id}")]
-		public ActionResult<string> Delete(int id)
-		{
-			try
-			{
-				ClaimRepository conec = new ClaimRepository();
-				int rows = conec.DeleteClaim(id);
-				return Ok("eliminado exitosamente");
-			}
-			catch (DatabaseException ex)
-			{
-				return StatusCode(500, ex.Message);
-			}
-			catch (InvalidStoredProcedureSignatureException ex)
-			{
-				return StatusCode(500, ex.Message);
-			}
-			catch (NullClaimException ex)
-			{
-				
-				return StatusCode(500, ex.Message);
-			}
+        /// <summary>
+        ///     GET api/claim/admin/status
+        ///     usado para que el administrador consulte los reclamos por estatus.
+        ///     Status posibles: ABIERTO, CERRADO [Existe estado Extraviado pero no se puede postear]
+        /// </summary>
+        [HttpGet("admin/{status}")]
+        public ActionResult<IEnumerable<Claim>> GetByStatus(string status)
+        {
+            var getByStatusCommand = CommandFactory.CreateGetClaimsByStatusCommand(status);
 
-		}
-		
-		/// <summary>
-		//api/Clain/status/id
-		// modificar un reclamo , tanto por status o por titulo y descripcion
-		/// </summary>
-		[HttpPut("{id}")]
-		public ActionResult<string> Put(int id,[FromBody] ClaimSecundary ClaimAux)
-		{
-			try{
-				ClaimRepository conec = new ClaimRepository();
-				Claim claim = new Claim(ClaimAux.title, ClaimAux.description, ClaimAux.status);
-				claim.Validate();
-				claim.ValidatePut();
-				int rows= 0;
-					if (ClaimAux.status != null)
-						rows = conec.ModifyClaimStatus(id, claim);
-					else
-						if (ClaimAux.title != null && ClaimAux.description != null)
-						{
-							rows = conec.ModifyClaimTitle(id, claim);	
-						}
-						else throw new 	NullClaimException("claim vacio");	
-						
-					
-								
-				return Ok("Modificado exitosamente");
-			}catch (DatabaseException ex )
-			{            
-				return StatusCode(500,ex.Message);
-			}
-			catch (InvalidStoredProcedureSignatureException ex )
-			{
-				return StatusCode(500, ex.Message);
-			}catch (NullClaimException ex)
-			{
-				
-				return StatusCode(500,ex.Message);
-			}
-			catch (AttributeSizeException ex)
-			{
-				return StatusCode(500,ex.Message);
-			}
-			catch (AttributeValueException ex)
-			{
-				return StatusCode(500,ex.Message);
-			}
-		}
-	}
-	
+            try
+            {
+                getByStatusCommand.Execute();
+                return Ok(getByStatusCommand.GetResult());
+            }
+            catch (DatabaseException ex)
+            {
+                // TODO: Log
+                return StatusCode(500, ex.Message);
+            }
+        }
 
-		public class ClaimSecundary {
-		public string title {get; set;} 
-		public string description{get; set;}
-		public string status{get; set;}
-		public string getStatus(){
-			return this.status;
-		}
-	}
+        /// <summary>
+        ///     Post api/claim/
+        ///     utilizado para crear un reclamo con una id del equipaje
+        /// </summary>
+        [HttpPost]
+        public ActionResult<Claim> Post([FromBody] Claim claim)
+        {
+            try
+            {
+                var addClaimCommand = CommandFactory.CreateAddClaimCommand(claim);
+                addClaimCommand.Execute();
+                var registeredClaimId = addClaimCommand.GetResult();
+                var getClaimByIdCommand = CommandFactory.CreateGetClaimByIdCommand(registeredClaimId);
+                getClaimByIdCommand.Execute();
+                return StatusCode(201, getClaimByIdCommand.GetResult());
+            }
+            catch (RequiredAttributeException ex)
+            {
+                return new BadRequestObjectResult(new ErrorMessage(ex.Message));
+            }
+            catch (AttributeSizeException ex)
+            {
+                return new BadRequestObjectResult(new ErrorMessage(ex.Message));
+            }
+            catch (AttributeValueException ex)
+            {
+                return new BadRequestObjectResult(new ErrorMessage(ex.Message));
+            }
+            catch (BaggageNotFoundException ex)
+            {
+                return new BadRequestObjectResult(new ErrorMessage(ex.Message));
+            }
+            catch (DatabaseException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        /// <summary>
+        ///     DELETE api/claim/{id}
+        ///     Endpoint para eliminar reclamos por id
+        /// </summary>
+        [HttpDelete("{id}")]
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                CommandFactory.CreateDeleteClaimByIdCommand(id).Execute();
+                return Ok();
+            }
+            catch (DatabaseException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        /// <summary>
+        ///     PUT /api/claim/{id}
+        ///     Endpoint para modificar un reclamo.
+        /// </summary>
+        [HttpPut("{id}")]
+        public ActionResult<string> Put(int id, [FromBody] Claim fieldsToUpdate)
+        {
+            try
+            {
+                CommandFactory.CreateUpdateClaimCommand(id, fieldsToUpdate).Execute();
+                return Ok();
+            }
+            catch (ClaimNotFoundException ex)
+            {
+                return new BadRequestObjectResult(new ErrorMessage(ex.Message));
+            }
+            catch (AttributeSizeException ex)
+            {
+                return new BadRequestObjectResult(new ErrorMessage(ex.Message));
+            }
+            catch (AttributeValueException ex)
+            {
+                return new BadRequestObjectResult(new ErrorMessage(ex.Message));
+            }
+            catch (DatabaseException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+    }
 }

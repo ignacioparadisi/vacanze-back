@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
+using vacanze_back.VacanzeApi.Common.Entities;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
 {
@@ -13,10 +14,11 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo2
         /// Método que Consulta Todos los Roles Existentes en Base de Datos.
         /// </summary>
         /// <returns>Una lista de Roles.</returns>
-        public static List<Role> GetRoles()
+        public static List<Entity> GetRoles()
         {
-            var roles = new List<Role>();
+            var roles = new List<Entity>();
             var table = PgConnection.Instance.ExecuteFunction("GetRoles()");
+            
             for (var i = 0; i < table.Rows.Count; i++)
             {
                 var id = Convert.ToInt32(table.Rows[i][0]);
