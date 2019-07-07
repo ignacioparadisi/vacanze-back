@@ -5,7 +5,7 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo5;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5 {
 
-    public class GetBrandsCommand : Command, CommandResult<List<Brand>> {
+    public class GetBrandsCommand : CommandResult<List<Brand>> {
         private List<Brand> brands;
 
         public GetBrandsCommand(){}

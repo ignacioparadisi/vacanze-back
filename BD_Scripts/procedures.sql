@@ -1527,6 +1527,26 @@ $$
 LANGUAGE 'plpgsql';
 
 
+CREATE OR REPLACE FUNCTION ModelUniqueness(
+  modelName VARCHAR
+)
+RETURNS BOOLEAN AS
+$$
+DECLARE 
+	same INTEGER;
+BEGIN
+  same := 
+  (SELECT COUNT(*) FROM VEH_MODEL 
+  WHERE LOWER(vm_name) = LOWER(modelName));
+
+  IF same >= 1 THEN
+	RETURN TRUE;
+  ELSE
+	RETURN FALSE;
+  END IF;
+END;
+$$
+LANGUAGE 'plpgsql';
 
 
 -------------AGREGAR AUTO-----------------

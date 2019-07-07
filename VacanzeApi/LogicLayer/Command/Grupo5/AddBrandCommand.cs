@@ -4,7 +4,7 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo5;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5 
 {
-    public class AddBrandCommand : Command, CommandResult<int> 
+    public class AddBrandCommand : CommandResult<int> 
     {
         private int _id;
         public int Id { get { return _id; } set{ _id = value; } }

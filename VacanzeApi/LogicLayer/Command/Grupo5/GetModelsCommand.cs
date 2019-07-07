@@ -5,7 +5,7 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo5;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5 
 {
-    public class GetModelsCommand : Command, CommandResult<List<Model>> 
+    public class GetModelsCommand : CommandResult<List<Model>> 
     {
         private List<Model> models;
 

@@ -5,7 +5,7 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo5;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5 {
 
-    public class UpdateBrandCommand : Command, CommandResult<bool> {
+    public class UpdateBrandCommand : CommandResult<bool> {
         private bool _updated;
         public bool Updated { get{ return _updated; } set{ _updated = value; } }
 

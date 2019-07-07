@@ -5,7 +5,7 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo5;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5 
 {
-    public class GetModelsByBrandCommand : Command, CommandResult<List<Model>> 
+    public class GetModelsByBrandCommand : CommandResult<List<Model>> 
     {   
         private int _brandId;
         public int BrandId { get{ return _brandId; } set{ _brandId = value; } }
