@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using DefaultNamespace;
+using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo8;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper;
