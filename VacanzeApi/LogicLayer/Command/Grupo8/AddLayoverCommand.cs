@@ -21,12 +21,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo8
             PostgresCruiserDAO layoverDao = (PostgresCruiserDAO) daoFactory.GetCruiserDAO();
             LayoverMapper layoverMapper = MapperFactory.CreateLayoverMapper();
             Layover layover = (Layover) layoverMapper.CreateEntity(_layoverDTO);
-
-            // TODO: nose si es esta
             _layoverDTO = layoverMapper.CreateDTO(layoverDao.AddLayover(layover));
-
-            // TODO: o esta la forma correcta
-            //layover = layoverDao.AddLayover(layover);
         }
         public LayoverDTO GetResult()
         {
