@@ -9,6 +9,7 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo14;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo14;
+using vacanze_back.VacanzeApi.LogicLayer.Command;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 {
@@ -48,10 +49,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 		//GET /ResRestaurant/{id}
 		[HttpGet("{id}")]
 		public ActionResult<IEnumerable<Restaurant_res>> Get(int id){
-			try{
+            var getByIdCommand = CommandFactory.GetResRestaurantByIdCommand(id);
+            try {
 				Console.WriteLine(id);
-				return ResRestaurantRepository.getResRestaurant(id);
-			}
+                //return ResRestaurantRepository.getResRestaurant(id);
+                getByIdCommand.Execute();
+                return getByIdCommand.GetResult();
+            }
             catch (DatabaseException ){            
 				return StatusCode(500);
 			}

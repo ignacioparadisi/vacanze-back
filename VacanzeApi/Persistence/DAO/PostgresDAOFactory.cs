@@ -50,7 +50,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
             return new PostgresLocationDAO();
         }
 
-        public override ReservationRestaurantDAO GetReservationRestaurantDAO()
+        public override IReservationRestaurantDAO GetReservationRestaurantDAO()
         {
             return new PostgresReservationRestaurantDAO();
         }

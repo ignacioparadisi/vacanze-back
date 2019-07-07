@@ -8,7 +8,7 @@ using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Locations;
-
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo14;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command
 {
@@ -158,6 +158,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         public static GetCitiesByCountryCommand GetCitiesByCountryCommand(int id)
         {
             return new GetCitiesByCountryCommand(id);
-        }  
+        }
+        /*GRUPO14*/
+        public static GetResRestaurantByIdCommand GetResRestaurantByIdCommand(int id)
+        {
+            return new GetResRestaurantByIdCommand(id);
+        }
     }
 }

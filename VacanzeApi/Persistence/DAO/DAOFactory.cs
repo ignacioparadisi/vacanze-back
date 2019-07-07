@@ -52,6 +52,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         // +++++++++++++++++
         //     GRUPO 14
         // +++++++++++++++++
-        public abstract ReservationRestaurantDAO GetReservationRestaurantDAO();
+        public abstract IReservationRestaurantDAO GetReservationRestaurantDAO();
     }
 }

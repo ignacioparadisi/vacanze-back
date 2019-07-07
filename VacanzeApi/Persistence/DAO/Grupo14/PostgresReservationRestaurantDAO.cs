@@ -8,7 +8,7 @@ using vacanze_back.VacanzeApi.Common.Exceptions.Grupo14;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo14
 {
-    public class PostgresReservationRestaurantDAO : ReservationRestaurantDAO
+    public class PostgresReservationRestaurantDAO : IReservationRestaurantDAO
     {
 
         // VARIABLES PARA LA DEFINICION DE LOS SP
