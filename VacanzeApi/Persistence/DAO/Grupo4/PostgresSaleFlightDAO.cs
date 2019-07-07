@@ -9,11 +9,11 @@ using vacanze_back.VacanzeApi.Common.Exceptions.Grupo4;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo4
 {
-    public class PostgresSaleFlightDAO
+    public class PostgresSaleFlightDAO: ISaleFlightDAO
     {
         private const string SP_SELECTFLIGHT = "GetAvailableFlight(@_origin, @_destination,@_dateArrival, @_dateDeparture)";
 
-        public List<SaleFlight> GetAvailableFlights(int origin, int destination, DateTime dateArrival,DateTime dateDeparute)
+        public List<SaleFlight> GetSaleFlight(int origin, int destination, DateTime dateArrival,DateTime dateDeparute)
         {
             var resultTable = PgConnection.Instance.ExecuteFunction(SP_SELECTFLIGHT,origin,destination,dateArrival,dateDeparute);
             if (resultTable.Rows.Count == 0)
@@ -42,13 +42,13 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo4
             {
                 var _oResp = new SaleFlight();
 
-                _oResp.id = Convert.ToInt32(row[1]);
-                _oResp.ileft = Convert.ToInt32(row[2]);
-                _oResp.descrip = Convert.ToString(row[3]);
-                _oResp.dateArrival = Convert.ToDateTime(row[4]);
-                _oResp.price = Convert.ToDecimal(row[5]);
-                _oResp.origin = Convert.ToString(row[6]);
-                _oResp.destination = Convert.ToString(row[7]);
+                _oResp.id = Convert.ToInt32(row[0]);
+                _oResp.ileft = Convert.ToInt32(row[1]);
+                _oResp.descrip = Convert.ToString(row[2]);
+                _oResp.dateArrival = Convert.ToDateTime(row[3]);
+                _oResp.price = Convert.ToDecimal(row[4]);
+                _oResp.origin = Convert.ToString(row[5]);
+                _oResp.destination = Convert.ToString(row[6]);
 
                 return _oResp;
             }

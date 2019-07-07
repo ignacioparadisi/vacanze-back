@@ -5,6 +5,7 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo9;
 using vacanze_back.VacanzeApi.Persistence.DAO.Locations;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo6;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo4;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO
 {
@@ -47,5 +48,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         public abstract UserDAO GetUserDAO();
 
         public abstract IBaggageDao GetBaggageDao();
+
+        public abstract ISaleFlightDAO GetSaleFlightDAO();
     }
 }
