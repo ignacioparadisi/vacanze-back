@@ -123,7 +123,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             }
             catch (AutomobileReservationNotFoundException e)
             {
-                throw new AutomobileReservationNotFoundException(e.ToString());
+                throw new AutomobileReservationNotFoundException(id);
             }
             catch (NpgsqlException e)
             {

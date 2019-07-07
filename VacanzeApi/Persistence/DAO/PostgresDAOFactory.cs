@@ -9,7 +9,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
 {
     public class PostgresDAOFactory : DAOFactory
     {
-        public override ReservationRoomDAO GetReservationRoomDAO()
+        public override IReservationRoomDAO GetReservationRoomDAO()
         {
             return new PostgresReservationRoomDAO();
         }
@@ -49,7 +49,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
             return new PostgresLocationDAO();
         }
 
-        public override ReservationAutomobileDAO GetReservationAutomobileDAO()
+        public override IReservationAutomobileDAO GetReservationAutomobileDAO()
         {
             return new PostgresReservationAutomobileDAO();
         }

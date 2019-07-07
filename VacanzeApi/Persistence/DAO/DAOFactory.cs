@@ -34,9 +34,9 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         // +++++++++++++++++
         //     GRUPO 13
         // +++++++++++++++++
-        public abstract ReservationRoomDAO GetReservationRoomDAO();
+        public abstract IReservationRoomDAO GetReservationRoomDAO();
 
-        public abstract ReservationAutomobileDAO GetReservationAutomobileDAO();
+        public abstract IReservationAutomobileDAO GetReservationAutomobileDAO();
         // +++++++++++++++++
         //     GRUPO 7
         // +++++++++++++++++
