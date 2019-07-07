@@ -9,7 +9,7 @@ public class BaggageBuilder{
 
     private BaggageBuilder(){
 
-        _baggage= new Baggage();
+      //  _baggage= new Baggage();
 
     }
     public static BaggageBuilder Create()
