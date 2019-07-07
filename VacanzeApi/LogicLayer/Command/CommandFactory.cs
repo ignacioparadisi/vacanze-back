@@ -10,6 +10,8 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo8;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo8;
 
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command
@@ -82,6 +84,21 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
 		public static UpdateHotelCommand UpdateHotelCommand(int id, Hotel hotel)
         {
             return new UpdateHotelCommand(id,hotel);
+        }
+
+        public static AddCruiserCommand CreateAddCruiserCommand(CruiserDTO cruiserDto)
+        {
+            return new AddCruiserCommand(cruiserDto);
+        }
+
+         public static GetCruiserCommand CreateGetCruiserCommand(int id)
+        {
+            return new GetCruiserCommand(id);
+        }
+
+        public static AddLayoverCommand CreateAddLayoverCommand(LayoverDTO layoverDto)
+        {
+            return new AddLayoverCommand(layoverDto);
         }
     }
 }
