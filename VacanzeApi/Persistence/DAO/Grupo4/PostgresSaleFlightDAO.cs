@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo4;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo4;
@@ -12,6 +10,8 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo4
     public class PostgresSaleFlightDAO: ISaleFlightDAO
     {
         private const string SP_SELECTFLIGHT = "GetAvailableFlight(@_origin, @_destination,@_dateArrival, @_dateDeparture)";
+
+        private const string SP_POSTFLIGHTSALE = "GetAvailableFlight(@_origin, @_destination,@_dateArrival, @_dateDeparture)";
 
         public List<SaleFlight> GetSaleFlight(int origin, int destination, DateTime dateArrival,DateTime dateDeparute)
         {
@@ -55,9 +55,37 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo4
             catch (Exception)
             {
 
-                throw new NotValidFactoryTypeException("Error en los campos de salida");
+                throw new NotValidFieldException("Error en los campos de salida");
             }
            
+        }
+
+        public int PostSaleFlight(List<PostSaleFlight> postflight)
+        {
+            int _ireturn = 0;
+            try
+            {
+                if (postflight.Count > 0)
+                {
+                    postflight.ForEach(det => {
+
+                        var resultTable = PgConnection.Instance.ExecuteFunction(SP_POSTFLIGHTSALE, det.seat,det.numps,det.user,det.pay,det.fli);
+                    });
+                    
+
+                }
+                else
+                {
+                    throw new ErrorInSaleFlightException();
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw new ErrorInSaleFlightException();
+            }
+            return _ireturn;
         }
     }
 }

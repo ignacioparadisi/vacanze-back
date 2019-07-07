@@ -5,7 +5,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo4
 {
 public class BaggageBuilder{
 
-    private readonly Baggage _baggage;
+    private readonly CheckinBaggage _baggage;
 
     private BaggageBuilder(){
 
@@ -35,13 +35,13 @@ public class BaggageBuilder{
         return this;
     
     }
-        public BaggageBuilder WhitDescription(string description)
+    public BaggageBuilder WhitDescription(string description)
     {
         _baggage._descripcion=description;
         return this;
     
     }
-    public Baggage BuildSinValidar()
+    public CheckinBaggage BuildSinValidar()
     {
         return _baggage;
     }

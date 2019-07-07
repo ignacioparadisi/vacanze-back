@@ -13,4 +13,12 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo4
         public string destination { get; set; }
 
     }
+    public class PostSaleFlight
+    {
+        public string seat { get; set; }
+        public int numps { get; set; }
+        public int user { get; set; }
+        public int pay { get; set; }
+        public int fli { get; set; }
+    }
 }

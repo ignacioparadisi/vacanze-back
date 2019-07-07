@@ -50,5 +50,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         public abstract IBaggageDao GetBaggageDao();
 
         public abstract ISaleFlightDAO GetSaleFlightDAO();
+
+        public abstract ISaleFlightDAO PostSaleFlightDAO();
     }
 }

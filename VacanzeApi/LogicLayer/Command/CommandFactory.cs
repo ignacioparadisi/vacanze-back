@@ -10,6 +10,8 @@ using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Locations;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo4;
 using System;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo4;
+using System.Collections.Generic;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command
 {
@@ -164,6 +166,10 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         public static GetSaleFlightCommand GetSaleFlightCommand(int origin, int destination, DateTime dateArrival, DateTime dateDeparute)
         {
             return new GetSaleFlightCommand(origin,destination,dateArrival,dateDeparute);
+        }
+        public static PostSaleFlightCommand PostSaleFlightCommand(List<PostSaleFlight> postflight)
+        {
+            return new PostSaleFlightCommand(postflight);
         }
 
     }

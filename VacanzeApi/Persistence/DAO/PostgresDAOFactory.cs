@@ -53,5 +53,9 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         {
             return new PostgresSaleFlightDAO();
         }
+        public override ISaleFlightDAO PostSaleFlightDAO()
+        {
+            return new PostgresSaleFlightDAO();
+        }
     }
 }

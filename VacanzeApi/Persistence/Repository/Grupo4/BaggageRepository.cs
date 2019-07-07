@@ -46,7 +46,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo4
 
           }
 
-          public static List<Baggage> GetBaggage()
+          public static List<CheckinBaggage> GetBaggage()
           {
                var table = PgConnection.Instance.ExecuteFunction("getallbaggage()");
                var Vuelo = 0;
@@ -55,7 +55,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo4
                var descripcion = "";
                var id = 0;
 
-               var BaggageList = new List<Baggage>();
+               var BaggageList = new List<CheckinBaggage>();
                for (var i = 0; i < table.Rows.Count; i++)
                {
                     if (table.Rows[i][1] != DBNull.Value)
@@ -79,7 +79,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo4
                     descripcion = table.Rows[i][3].ToString();
 
 
-                    var Baggage = new Baggage(id, Vuelo, Crucero, status, descripcion);
+                    var Baggage = new CheckinBaggage(id, Vuelo, Crucero, status, descripcion);
                     BaggageList.Add(Baggage);
                }
 

@@ -38,9 +38,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo4
 
           //Metodo para obtener todos los equipajes
           [HttpGet]
-          public ActionResult<IEnumerable<Baggage>> Get()
+          public ActionResult<IEnumerable<CheckinBaggage>> Get()
           {
-               var Baggages = new List<Baggage>();
+               var Baggages = new List<CheckinBaggage>();
                try
                {
                     Baggages = BaggageRepository.GetBaggage();

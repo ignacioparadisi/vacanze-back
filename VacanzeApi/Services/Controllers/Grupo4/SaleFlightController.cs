@@ -37,5 +37,24 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo4
                 return StatusCode(500, ex.Message);
             }
         }
+        [HttpPost("")]
+        public ActionResult<int> Post([FromBody] List<PostSaleFlight> postSaleFlight)
+        {
+            var getByIdCommand = CommandFactory.PostSaleFlightCommand(postSaleFlight);
+            try
+            {
+                getByIdCommand.Execute();
+                return getByIdCommand.GetResult();
+            }
+            catch (ErrorInSaleFlightException)
+            {
+                return new NotFoundResult();
+            }
+            catch (DatabaseException ex)
+            {
+                // TODO: Log
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }
