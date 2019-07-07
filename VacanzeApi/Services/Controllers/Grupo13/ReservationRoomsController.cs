@@ -23,12 +23,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         // GET api/reservationautomobiles/?id={user_id}]
         /* https://localhost:5001/api/reservationrooms/?user=1 */
         [HttpGet]
-        public ActionResult<IEnumerable<ReservationRoomDAO>> GetAllByUserID([FromQuery] int user = -1)
+        public ActionResult<IEnumerable<IReservationRoomDAO>> GetAllByUserID([FromQuery] int user = -1)
         {
             try
             {
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-                ReservationRoomDAO reservationRoomDao = factory.GetReservationRoomDAO();
+                IReservationRoomDAO reservationRoomDao = factory.GetReservationRoomDAO();
                 
                 // ReservationRoomRepository connection = new ReservationRoomRepository();
                 return user == -1
