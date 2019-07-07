@@ -38,8 +38,8 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.0" />
 
     <PackageReference Include="NUnit" Version="3.11.0" />
-    <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.0"/>
-    <PackageReference Include="NLog" Version="4.5.11"/>
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.0" />
+    <PackageReference Include="NLog" Version="4.5.11" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
   </ItemGroup>
 
@@ -47,6 +47,7 @@
   <ItemGroup>
     <Folder Include="VacanzeApiTest\Grupo1\" />
     <Folder Include="VacanzeApi\Common\Exceptions\Grupo13\" />
+    <Folder Include="VacanzeApi\LogicLayer\Command\Grupo13" />
     <Folder Include="VacanzeApi\LogicLayer\DTO\Grupo9" />
   </ItemGroup>
 
