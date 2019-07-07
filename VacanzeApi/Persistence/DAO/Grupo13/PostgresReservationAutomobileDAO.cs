@@ -14,7 +14,7 @@ using vacanze_back.VacanzeApi.Common.Exceptions.Grupo13;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
 {
-    public class PostgresReservationAutomobileDAO:ReservationAutomobileDAO
+    public class PostgresReservationAutomobileDAO:IReservationAutomobileDAO
     {
         const String SP_SELECT = "m13_getResAutos()";
      //   const String SP_AVAILABLE = "m13_getavailableautomobilereservations('01/03/2019', '01/05/2019')";
@@ -42,7 +42,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                     var returndate = Convert.ToDateTime(table.Rows[i][2]);
                     var user_id = Convert.ToInt64(table.Rows[i][3]);
                     var aut_fk = (int)Convert.ToInt64(table.Rows[i][4]);
-                    ReservationAutomobile reservation = new ReservationAutomobile(id,pickup,returndate);
+                    ReservationAutomobile reservation = EntityFactory.CreateReservationAutomobile(id,pickup,returndate);
                     reservation.Automobile = ConnectAuto.ConsultforId(aut_fk).ElementAt(0);
                     reservation.Fk_user = aut_fk;
                     reservationAutomobileList.Add(reservation);
@@ -51,7 +51,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
              }
              catch (NpgsqlException e)
              {
-               e.ToString();
+              throw new DatabaseException("Error en BD");
              }
              catch (Exception e)
              {
@@ -79,7 +79,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                     var userid = (int)Convert.ToInt64(table.Rows[i][4]);
                     var aut_fk = (int)Convert.ToInt64(table.Rows[i][5]);
                    // var payfk = Convert.ToInt64(table.Rows[i][5]);
-                    _reservation = new ReservationAutomobile(id,pickup,returndate);
+                    _reservation = EntityFactory.CreateReservationAutomobile(id,pickup,returndate);
                     _reservation.Fk_user = userid;
                     _reservation.Automobile = ConnectAuto.ConsultforId(aut_fk).ElementAt(0);
 
@@ -91,17 +91,15 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
             }
             catch (AutomobileReservationNotFoundException e)
             {
-                throw new AutomobileReservationNotFoundException(e.ToString());
+                throw new AutomobileReservationNotFoundException(id);
             }
             catch (NpgsqlException e)
             {
-                e.ToString();
-                throw;
+                throw new DatabaseException();
             }
             catch (Exception e)
             {
-                e.ToString();
-                throw;
+               throw new GeneralException();
             }
             return _reservation;
         }
@@ -169,7 +167,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                     var autfk = (int)Convert.ToInt64(table.Rows[i][4]);
                     var userid = Convert.ToInt64(table.Rows[i][5]);
                     
-                    ReservationAutomobile reservation = new ReservationAutomobile(id, pickup, returndate);
+                    ReservationAutomobile reservation = EntityFactory.CreateReservationAutomobile(id, pickup, returndate);
                     reservation.Automobile = ConnectAuto.ConsultforId(autfk).ElementAt(0);
                     reservation.Fk_user = user_id;
                     reservationAutomobileList.Add(reservation);

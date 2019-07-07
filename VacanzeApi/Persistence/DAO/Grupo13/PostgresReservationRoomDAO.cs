@@ -8,7 +8,7 @@ using vacanze_back.VacanzeApi.Persistence.Repository.Grupo6;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
 {
-    public class PostgresReservationRoomDAO: ReservationRoomDAO
+    public class PostgresReservationRoomDAO: IReservationRoomDAO
     {
         private const string SP_SELECT = "m13_getResRooms()";
         private const string SP_FIND = "m13_findbyroomreservationid(@_id)";
@@ -35,11 +35,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                     var pickup = Convert.ToDateTime(table.Rows[i][1]);
                     var returndate = Convert.ToDateTime(table.Rows[i][2]);
                     var timestamp = Convert.ToDateTime(table.Rows[i][3]);
-                    var use_id = Convert.ToInt32(table.Rows[i][5]);
+                    var userId = Convert.ToInt32(table.Rows[i][5]);
 
-                    ReservationRoom roomRes = new ReservationRoom(id, pickup, returndate);
+                    ReservationRoom roomRes = EntityFactory.CreateReservationRoom(id, pickup, returndate);
                     roomRes.Hotel = HotelRepository.GetHotelById(Convert.ToInt32(table.Rows[i][4]));
-                    roomRes.Fk_user = use_id;
+                    roomRes.Fk_user = userId;
 
                     roomReservationList.Add(roomRes);
                 }
@@ -65,7 +65,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
          */
         public ReservationRoom Find(int id)
         {
-            var reservationRoom = new ReservationRoom();
+            var reservationRoom = EntityFactory.CreateReservationRoom();
             try
             {
                 var table = PgConnection.Instance.ExecuteFunction(SP_FIND, id);
@@ -79,7 +79,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                     var hot_fk = Convert.ToInt64(table.Rows[i][5]);
 
                     // var payfk = Convert.ToInt64(table.Rows[i][6]);
-                    reservationRoom = new ReservationRoom(id2, pickup, returndate);
+                    reservationRoom = EntityFactory.CreateReservationRoom(id2, pickup, returndate);
                     reservationRoom.Hotel = HotelRepository.GetHotelById(Convert.ToInt32(table.Rows[i][4]));
                     reservationRoom.Fk_user = userid;
                     //  _reservation.User.Id = userid;
@@ -210,7 +210,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                     //  var timestamp = Convert.ToDateTime(table.Rows[i][3]);
                     var hotfk = (int)Convert.ToInt64(table.Rows[i][3]);
 
-                    ReservationRoom reservation = new ReservationRoom(id, pickup, returndate);
+                    ReservationRoom reservation = EntityFactory.CreateReservationRoom(id, pickup, returndate);
                     reservation.Hotel = HotelRepository.GetHotelById(hotfk);
                     reservation.Fk_user = userId;
                     reservationAutomobileList.Add(reservation);

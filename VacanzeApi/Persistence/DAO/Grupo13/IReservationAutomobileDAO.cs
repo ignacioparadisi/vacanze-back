@@ -3,7 +3,7 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
 {
-    public interface ReservationAutomobileDAO
+    public interface IReservationAutomobileDAO
     {
         ReservationAutomobile Find(int id);
         void Delete(ReservationAutomobile reservation);
