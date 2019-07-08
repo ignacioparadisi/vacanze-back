@@ -25,9 +25,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
     public class FlightReservationController : ControllerBase
     {
 
-        /// <summary> POST api/flight-reservation</summary>
+        /// <summary> Agrega una reserva</summary>
         /// <returns>Devuelve el id de la reserva que se agrego</returns>
-
         [Route("~/api/flight-reservation")] 
         // POST api/flight-reservation
         [HttpPost]
@@ -61,10 +60,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
        
 
 
-        /// <summary> GET api/list-reservation-flight/id_user</summary>
+        /// <summary> Obtiene reservas de un usuario</summary>
         /// <param name="id_user">Id del usuario</param>
         /// <returns>Devuelve una lista de todas las reservas de realizo</returns>
-        //
         [Route("~/api/list-reservation-flight/{id_user}")] 
         // GET api/list-reservation-flight
         [HttpGet("{id_user}")]
@@ -72,9 +70,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
 
             try{
                 
-
+                //Instancia del comando
                 GetReservationFlightByUserCommand command = 
                 CommandFactory.CreateGetReservationFlightByUserCommand(id_user);
+
+                //Ejecuta y obtiene el resultado del comando
                 command.Execute();
                 List<Entity> listFlight = command.GetResult();
 
@@ -92,17 +92,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         }
         
         
-        /// <summary> GET api/id-return-city/name_city_i/name_city_v</summary>
+        /// <summary> Busca ids de locaciones </summary>
         /// <param name="name_city_i">Nombre de la ciudad de origen</param>
         /// <param name="name_city_v">Nombre de la ciudad de destino</param>
         /// <returns>Devuelve el id de los paises de origen y destino</returns>
-        //
         [Route("~/api/id-return-city/{name_city_i}/{name_city_v}")] 
         // GET api/list-reservation-flight
         [HttpGet("{name_city_i}/{name_city_v}")]
         public ActionResult<IEnumerable<int>> Get(string name_city_i,string name_city_v){
             
             try{
+                
                 List<string> city_names = new List<string>();
                 city_names.Add(name_city_i);
                 city_names.Add(name_city_v);
@@ -124,10 +124,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         }
 
 
-        /// <summary> GET api/reservation-flight/id_res</summary>
+        /// <summary> Elimina una reserva </summary>
         /// <param name="id_res">ID de la reserva</param>
         /// <returns>Devuelve un mensaje de satisfactorio si elimina la reserva</returns>
-        //
         [Route("~/api/delete-reservation-flight/{id_res}")] 
         // GET api/list-reservation
         [HttpDelete("{id_res}")]
@@ -153,13 +152,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
 
        
 
-        /// <summary> GET api/reservation-flight/departure/arrival/departuredate/numpas</summary>
+        /// <summary> Busca vuelos de ida</summary>
         /// <param name="departure">Ciudad de salida del vuelor</param>
         /// <param name="arrival">Ciudad de llegada del vuelo</param>
         /// <param name="departuredate">Fecha de salida del vuelo</param>
         /// <param name="numpas"></param>
         /// <returns>Devuelve todas las reservas en una fecha indicada</returns>
-        
         [Route("~/api/reservation-flight/{departure}/{arrival}/{departuredate}/{numpas}")] 
         [HttpGet("{departure}/{arrival}/{departuredate}/{numpas}")]
         public ActionResult<IEnumerable<Entity>> Get(int departure, int arrival, string departuredate,int numpas)
@@ -185,14 +183,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
 
 
 
-        /// <summary> GET api/reservation-flight/departure/arrival/departuredate/arrivaldate/numpas</summary>
+        /// <summary> Busca vuelos de ida y vuelta</summary>
         /// <param name="departure">Ciudad de salida del vuelor</param>
         /// <param name="arrival">Ciudad de llegada del vuelo</param>
         /// <param name="departuredate">Fecha de salida del vuelo</param>
         /// <param name="arrivaldate">Fecha de Regreso del vuelo</param>
         /// <param name="numpas">Cantidad de Pasajeros que se quiere reservar </param>
         /// <returns>Devuelve todas las reservas en una fecha indicada</returns>
-
         [Route("~/api/reservation-flight/{departure}/{arrival}/{departuredate}/{arrivaldate}/{numpas}")] 
         [HttpGet("{departure}/{arrival}/{departuredate}/{arrivaldate}/{numpas}")]
         public ActionResult<IEnumerable<Entity>> Get(int departure, int arrival, string departuredate,string arrivaldate,int numpas)

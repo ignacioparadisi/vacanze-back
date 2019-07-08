@@ -26,6 +26,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
         private const string GET_USER =  "GetUserById(@user_id)";
         private const string DELETE_RESERVATION = "deletereservationflight(@id_reservation)";
         
+        /// <summary>Agrega una reserva</summary>
         /// <param name="Entity">Es on objeto de tipo FightRes </param>
         /// <returns>Devuelve el id que se agrego</returns>
         public int AddReservationFlight(Entity entity){
@@ -63,7 +64,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
         }
 
 
-
+        /// <summary>Busca las reservas de un usuario</summary>
         /// <param name="id">id del usuario </param>
         /// <returns>Devuelve la lista de reservas de un usuario</returns>
         public List<Entity> GetReservationFlight(int id){
@@ -119,7 +120,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
         }
 
 
-
+         /// <summary>Elimina una reserva</summary>
         /// <param name="id_reservation">id de la reservacion </param>
         /// <returns>Elimina la reserva que se especifico con el id</returns>
         public void DeleteReservationFlight(int id_reservation){
@@ -141,6 +142,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
         }
 
         
+        /// <summary>Devuelve el id de una locación</summary>
         /// <param name="name_city">Nombre de la ciudad</param>
         /// <returns>Devuelve el id de la ciudad</returns>
         public int GetIDLocation(string name_city){
@@ -173,7 +175,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
 
 
 
-
+        /// <summary>Genera string con nombres de asientos a reservar</summary>
         /// <param name="numseat">Cantidad de asientos a reservar</param>
         /// <param name="_id_fli">Id del vuelo</param>
         /// <returns>Devuelve los numeros de asientos a reservar</returns>
@@ -328,7 +330,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
 
         }
 
-
+        /// <summary>Busca vuelos de I</summary>
         /// <param name="id_city_i">Id de la ciudad de origen</param>
         /// <param name="id_city_v">Id de la ciudad de destino</param>
         /// <param name="date_i">Fecha de ida de una reserva</param>
@@ -422,6 +424,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
         }
 
 
+        /// <summary>Busca vuelos de IV</summary>
         /// <param name="departure">Id de la ciudad de origen</param>
         /// <param name="arrival">Id de la ciudad de destino</param>
         /// <param name="departuredate">Fecha de origen</param>
@@ -447,20 +450,34 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
                   throw new EmptyListFlight("Disculpe no se encontraron vuelos disponibles para esa fecha");
                }*/
                
+               //Recorre la lista de vuelos
                 for(int i = 0; i < table1.Rows.Count; i++){
+
+                    //Almacena el nombre de la locacion de salida
                     table4 = PgConnection.Instance.ExecuteFunction(GET_NAME_LOCATION
                     ,Convert.ToInt32(table1.Rows[i][5]));
+
+                    //Almacena el nombre de la locacion de llegada
                     table5= PgConnection.Instance.ExecuteFunction(GET_NAME_LOCATION
                     ,Convert.ToInt32(table1.Rows[i][6]));
+
+                    //Almacena la cantidad de reservas del vuelo
                     table2 = PgConnection.Instance.ExecuteFunction("getSum(@id_flight)",
                     Convert.ToInt32(table1.Rows[i][0].ToString()));
+
+                    //Almacena la capacidad del avión del vuelo
                     table3 = PgConnection.Instance.ExecuteFunction(GET_CAPACITY,
                     Convert.ToInt32(table1.Rows[i][0].ToString()));
+
+                    //Almacena la cant de reservas y la capacidad del avión
                     listres._sum_pas=Convert.ToInt32(table2.Rows[0][0].ToString());
                     listres._sum_capacity= Convert.ToInt32(table3.Rows[0][0].ToString());
                    
+                    //Almacena la cantidad de reservas disponibles
                     cont=listres._sum_capacity-listres._sum_pas;
                    
+
+                    //Si la cantidad de reservas disponibles es mayor entonces almacena el vuelo
                      if(cont>=numpas){
                         listres._id=Convert.ToInt32(table1.Rows[i][0].ToString());
                         listres._price=Convert.ToInt32(table1.Rows[i][2].ToString());

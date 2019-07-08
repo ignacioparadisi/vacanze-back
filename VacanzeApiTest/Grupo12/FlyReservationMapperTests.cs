@@ -47,6 +47,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo12
 
         //Positivas
         [Test, Order(1) ]
+        //Convierte un dto a una entidad y la compara con otra entidad
         public void CreateEntityTest()
         {
            
@@ -71,6 +72,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo12
         }
 
         [Test, Order(2) ]
+         //Convierte una entidad a un dto y la compara con otro dto
         public void CreateDTOTest()
         {
            
@@ -100,7 +102,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo12
            
             List<FlightRes> entitiescopy = ResFlightMapper.CreateEntityList(dtos);
 
-            Assert.AreEqual(entities, entitiescopy);
+            Assert.AreEqual(entities.Count, entitiescopy.Count);
             //Assert.IsInstanceOf<ActionResult<IEnumerable<Entity>>>(result); 
         }
 
@@ -110,7 +112,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo12
            
             List<FlightResDTO> dtoscopy = ResFlightMapper.CreateDTOList(entities);
 
-            Assert.AreEqual(dtos, dtoscopy);
+            Assert.AreEqual(dtos.Count, dtoscopy.Count);
             //Assert.IsInstanceOf<ActionResult<IEnumerable<Entity>>>(result); 
         }
 
