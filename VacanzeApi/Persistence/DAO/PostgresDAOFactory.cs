@@ -5,11 +5,24 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
 using vacanze_back.VacanzeApi.Persistence.DAO.Locations;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo6;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo12;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo5;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO
 {
     public class PostgresDAOFactory : DAOFactory
     {
+        public override IBrandDAO GetBrandDAO(){
+            return new PostgresBrandDAO();
+        }
+
+        public override IModelDAO GetModelDAO(){
+            return new PostgresModelDAO();
+        }
+
+        public override IVehicleDAO GetVehicleDAO(){
+            return new PostgresVehicleDAO();
+        }
+        
         public override ReservationRoomDAO GetReservationRoomDAO()
         {
             return new PostgresReservationRoomDAO();

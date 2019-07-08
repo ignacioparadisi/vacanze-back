@@ -8,8 +8,16 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper
 
     public class MapperFactory{
 
-        public static BrandMapper createBrandMapper(){
+        public static VehicleMapper CreateVehicleMapper(){
+            return new VehicleMapper();
+        }
+        
+        public static BrandMapper CreateBrandMapper(){
             return new BrandMapper();
+        }
+
+        public static ModelMapper CreateModelMapper(){
+            return new ModelMapper();
         }
 
         public static RestaurantMapper CreateRestaurantMapper()

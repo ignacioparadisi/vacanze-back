@@ -4,26 +4,26 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo5;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5 
 {
-    public class AddBrandCommand : CommandResult<int> 
+    public class AddModelCommand : CommandResult<int>
     {
         private int _id;
+        public int Id { get { return _id; } set{ _id = value; } }
 
-        private Brand _brand;
-        public Brand Brand { get{ return _brand; } set{ _brand = value; } }
+        private Model _model;
+        public Model Model { get{ return _model; } set{ _model = value; } }
 
-        public AddBrandCommand (Brand _brand) {
-            this._brand = _brand;
+        public AddModelCommand(Model model){
+            this.Model = model;
         }
 
-        public void Execute () {
+        public void Execute(){
             DAOFactory daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-            IBrandDAO brandDAO = daoFactory.GetBrandDAO();
-            _id = brandDAO.AddBrand (_brand);
+            IModelDAO modelDAO = daoFactory.GetModelDAO();
+            _id = modelDAO.AddModel(_model);
         }
 
         public int GetResult () {
             return _id;
         }
-
     }
 }
