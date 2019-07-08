@@ -11,7 +11,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo4
     {
         private const string SP_SELECTFLIGHT = "GetAvailableFlight(@_origin, @_destination,@_dateArrival, @_dateDeparture)";
 
-        private const string SP_POSTFLIGHTSALE = "GetAvailableFlight(@_origin, @_destination,@_dateArrival, @_dateDeparture)";
+        private const string SP_POSTFLIGHTSALE = "PostSaleFlight(@_seatnum, @_num_ps,@_user, @_pay,@__fli)";
 
         public List<SaleFlight> GetSaleFlight(int origin, int destination, DateTime dateArrival,DateTime dateDeparute)
         {
@@ -80,7 +80,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo4
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 throw new ErrorInSaleFlightException();
