@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo14;
-
+using vacanze_back.VacanzeApi.Services.Controllers.Grupo14;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo14
 {
@@ -14,7 +14,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo14
         List<Restaurant_res> getResRestaurant(int Iduser);
         List<Restaurant_res> getReservationNotPay(int Iduser);
         int deleteResRestaurant(int resRestId);
-        int updateResRestaurant(int payID, int resRestID);
+        string updateResRestaurant(int payID, int resRestID);
         
     }
 }

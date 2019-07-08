@@ -85,9 +85,11 @@ namespace vacanze_back.VacanzeApiTest.Grupo14
 				"2019-05-30 00:17",
 				5,
 				restaurantId);
-			
-			addId = ResRestaurantRepository.addReservation(reservation);
-            ActionResult<string> res = controller.Put(addId,rr);
+            rr.rest_id = 15;
+
+
+            addId = ResRestaurantRepository.addReservation(reservation);
+            ActionResult<string> res = controller.Put(rr.pay_id, rr);
             Assert.NotNull(res);
         }
 

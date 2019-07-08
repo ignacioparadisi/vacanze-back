@@ -100,30 +100,14 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 		[HttpPut("{id}")]
 		public ActionResult<string> Put(int id, reservationRestaurant resAux)
 		{
-			try{
-				Console.WriteLine(id);
-				ResRestaurantRepository conec = new ResRestaurantRepository();
-				Restaurant_res reserva = new Restaurant_res(resAux.pay_id);
+            var updateResRestaurantCommand = CommandFactory.UpdateResRestaurantCommand(id, resAux);
+            try
+            {
+                updateResRestaurantCommand.Execute();
+                return updateResRestaurantCommand.GetResult();
 
-				Console.WriteLine(resAux.pay_id);
-
-				if (resAux.pay_id == 0){
-					ResponseError mensaje= new ResponseError();
-					mensaje.error="No se puede nodificar un valor nulo";
-					return StatusCode(500,mensaje);
-				}						
-				else{
-					int modifyId = conec.updateResRestaurant(resAux.pay_id, id);
-					if (modifyId == -1){
-						ResponseError mensaje= new ResponseError();
-						mensaje.error="No se puede modificar su reservacion.";
-						return StatusCode(500,mensaje);
-					}
-					//Me regresa el ID de la reserva modificada
-					return Ok(modifyId);
-				}
-				
-			}catch (DatabaseException )
+            }
+            catch (DatabaseException )
 			{            
 				ResponseError mensaje= new ResponseError();
 				mensaje.error="DataBase error.";

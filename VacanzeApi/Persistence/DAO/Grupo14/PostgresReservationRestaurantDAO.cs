@@ -124,7 +124,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo14
             }
         }
 
-        public int updateResRestaurant(int payID, int resRestID)
+        public string updateResRestaurant(int payID, int resRestID)
         {
             try
             {
@@ -132,7 +132,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo14
                 var table = PgConnection.Instance.ExecuteFunction("modifyReservationPayment(@pay, @reservation)", payID, resRestID);
                 var modifyId = Convert.ToInt32(table.Rows[0][0]);
                 Console.WriteLine(modifyId);
-                return modifyId;
+                return modifyId.ToString();
             }
             catch (InvalidOperationException)
             {
