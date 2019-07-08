@@ -79,17 +79,17 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new GetBaggageByPassportCommand(passport);
         }
-        
+
         public static GetBaggageByStatusCommand CreateGetBaggageByStatusCommand(string status)
         {
             return new GetBaggageByStatusCommand(status);
         }
-        
+
         public static UpdateBaggageCommand CreateUpdateBaggageCommand(int id, Baggage baggage)
         {
-            return new UpdateBaggageCommand(id,baggage);
+            return new UpdateBaggageCommand(id, baggage);
         }
-        
+
         public static GetBaggageByIdCommand CreateGetBaggageByIdCommand(int id)
         {
             return new GetBaggageByIdCommand(id);
@@ -104,23 +104,23 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new GetHotelByIdCommand(id);
         }
-        
-		public static GetHotelImageCommand GetHotelImageCommand(int id)
+
+        public static GetHotelImageCommand GetHotelImageCommand(int id)
         {
             return new GetHotelImageCommand(id);
-        }  
-        
-		public static GetHotelsCommand GetHotelsCommand()
+        }
+
+        public static GetHotelsCommand GetHotelsCommand()
         {
             return new GetHotelsCommand();
-        } 
-        
-		public static GetHotelsByCityCommand GetHotelsByCityCommand(int city)
+        }
+
+        public static GetHotelsByCityCommand GetHotelsByCityCommand(int city)
         {
             return new GetHotelsByCityCommand(city);
-        }  
-        
-		public static DeleteHotelCommand DeleteHotelCommand(int id)
+        }
+
+        public static DeleteHotelCommand DeleteHotelCommand(int id)
         {
             return new DeleteHotelCommand(id);
         }
@@ -129,32 +129,32 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new UpdateHotelCommand(id, hotel);
         }
-        
+
         public static AddLocationCommand createAddLocationCommand(Location location)
         {
             return new AddLocationCommand(location);
         }
-        
+
         public static GetLocationByIdCommand GetLocationByIdCommand(int id)
         {
             return new GetLocationByIdCommand(id);
-        }  
-        
-		public static DeleteLocationCommand DeleteLocationCommand(int id)
+        }
+
+        public static DeleteLocationCommand DeleteLocationCommand(int id)
         {
             return new DeleteLocationCommand(id);
-        }  
-        
+        }
+
         public static GetLocationsCommand GetLocationsCommand()
         {
             return new GetLocationsCommand();
-        }  
-        
+        }
+
         public static GetCountriesCommand GetCountriesCommand()
         {
             return new GetCountriesCommand();
-        }  
-        
+        }
+
         public static GetCitiesByCountryCommand GetCitiesByCountryCommand(int id)
         {
             return new GetCitiesByCountryCommand(id);
@@ -163,6 +163,10 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         public static GetResRestaurantByIdCommand GetResRestaurantByIdCommand(int id)
         {
             return new GetResRestaurantByIdCommand(id);
+        }
+        public static DeleteResRestaurantCommand DeleteResRestaurantCommand(int id)
+        {
+            return new DeleteResRestaurantCommand(id);
         }
     }
 }

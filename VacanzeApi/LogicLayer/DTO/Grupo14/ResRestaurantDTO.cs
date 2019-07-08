@@ -42,6 +42,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo14
         public ResRestaurantDTO(int id, string locationName, string pais, string restName,
          string address, string fecha_reservacion, int cant_persona) 
         {
+            rest_id = id;
             fecha_res = fecha_reservacion; //rr_date = fecha a futuro a la cual reservo el usuario
             cant_people = cant_persona; //rr_num_ppl
             restaurantName = restName;
@@ -53,6 +54,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo14
         //Constructor para el GET reservas sin pagar
         public ResRestaurantDTO(int id, string fecha_reservacion, string tipo) 
         {
+            rest_id = id;
             fecha_res = fecha_reservacion; //Fecha a futuro a la cual reservo el usuario
             typeReservation = tipo;
         }

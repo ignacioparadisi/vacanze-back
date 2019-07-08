@@ -65,7 +65,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo14
         }
 
 
-        public List<Restaurant_res> getResRestaurant(int user)
+        public List<Restaurant_res> getResRestaurant(int user) //operative with design patterns
         {
 
             var ReservationList = new List<Restaurant_res>();

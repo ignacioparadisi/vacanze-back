@@ -10,6 +10,7 @@ using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo14;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo14;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo14;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo14;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo14;
@@ -51,7 +52,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 
 		//GET /ResRestaurant/{id}
 		[HttpGet("{id}")]
-		public ActionResult<IEnumerable<ResRestaurantDTO>> Get(int id){
+		public ActionResult<IEnumerable<ResRestaurantDTO>> Get(int id){ //PATRONES LISTO
             var getByIdCommand = CommandFactory.GetResRestaurantByIdCommand(id);
             try {
 				Console.WriteLine(id);
@@ -71,7 +72,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 
 		//GET /ResRestaurant/Payment/{id} el ID es el del usuario
 		[HttpGet("Payment/{userId}")]
-		public ActionResult<IEnumerable<Restaurant_res>> GetReservationNotPay(int userId){
+		public ActionResult<IEnumerable<Restaurant_res>> GetReservationNotPay(int userId){ //this method is not used to this preview
 			try{
 				Console.WriteLine(userId);
 				return ResRestaurantRepository.getReservationNotPay(userId);
@@ -86,21 +87,14 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 
 		//DELETE api/ResRestaurant/id el ID es el de la reserva
 		[HttpDelete("{id}")]
-		public ActionResult<string> Delete(int id){
+		public ActionResult<string> Delete(int id){ //PATRONES LISTO
 
-			Console.WriteLine(id);
-			ResRestaurantRepository conec= new ResRestaurantRepository();
-			var deletedid = conec.deleteResRestaurant(id);
+			
+            DeleteResRestaurantCommand command = CommandFactory.DeleteResRestaurantCommand(id);
+            command.Execute();
+            return Ok();
 
-			if(deletedid.Equals(-1)){
-				ResponseError mensaje = new ResponseError();
-				mensaje.error="No existe el elemento que quiere Eliminar";
-				return StatusCode(500,mensaje);
-			}
-			Console.WriteLine(deletedid);
-			return StatusCode(200, "Eliminado satisfactoriamente");
-
-		}
+        }
 
 		//PUT api/ResRestaurant/id es el id de la reserva
 		[HttpPut("{id}")]

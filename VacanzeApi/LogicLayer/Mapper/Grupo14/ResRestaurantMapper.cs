@@ -16,7 +16,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo14
         public ResRestaurantDTO CreateDTO(Restaurant_res entity)
         {
             Restaurant_res resRest = (Restaurant_res)entity;
-            ResRestaurantDTO resRestDTO = DTOFactory.CreateResRestaurantDTO(resRest.user_id, resRest.cityName, resRest.countryName,
+            ResRestaurantDTO resRestDTO = DTOFactory.CreateResRestaurantDTO(resRest.rest_id, resRest.cityName, resRest.countryName,
             resRest.restaurantName, resRest.restaurantAddress, resRest.fecha_res, resRest.cant_people);
             return resRestDTO;
         }
@@ -27,7 +27,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo14
             foreach (Entity entity in entities)
             {
                 Restaurant_res resRest = (Restaurant_res)entity;
-                dtos.Add(DTOFactory.CreateResRestaurantDTO(resRest.user_id, resRest.cityName, resRest.countryName,
+                dtos.Add(DTOFactory.CreateResRestaurantDTO(resRest.rest_id, resRest.cityName, resRest.countryName,
             resRest.restaurantName, resRest.restaurantAddress, resRest.fecha_res, resRest.cant_people));
             }
             return dtos;
@@ -35,7 +35,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo14
 
         public Restaurant_res CreateEntity(ResRestaurantDTO resRestDTO)
         {
-            Restaurant_res entity = EntityFactory.CreateResRestaurant(resRestDTO.user_id, resRestDTO.cityName, resRestDTO.countryName, 
+            Restaurant_res entity = EntityFactory.CreateResRestaurant(resRestDTO.rest_id, resRestDTO.cityName, resRestDTO.countryName, 
             resRestDTO.restaurantName, resRestDTO.restaurantAddress, resRestDTO.fecha_res, resRestDTO.cant_people);
 
             return entity;
@@ -46,7 +46,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo14
             List<Restaurant_res> entities = new List<Restaurant_res>();
             foreach (ResRestaurantDTO resRestDTO in dtos)
             {
-                entities.Add(EntityFactory.CreateResRestaurant(resRestDTO.user_id, resRestDTO.cityName, resRestDTO.countryName,
+                entities.Add(EntityFactory.CreateResRestaurant(resRestDTO.rest_id, resRestDTO.cityName, resRestDTO.countryName,
             resRestDTO.restaurantName, resRestDTO.restaurantAddress, resRestDTO.fecha_res, resRestDTO.cant_people));
             }
             return entities;
