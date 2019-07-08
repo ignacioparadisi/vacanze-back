@@ -8,6 +8,8 @@ using vacanze_back.VacanzeApi.Persistence.Repository.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo2;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo2;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
 {
@@ -39,6 +41,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
           }
 
         */
+        /* Funcional sin DTO
         // GET api/users
         /// <summary>
         /// Obtiene solo los usuarios empleados
@@ -56,35 +59,64 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             } catch (Exception) {
                 return StatusCode (400);
             }
+        }*/
+
+        // GET api/users
+        /// <summary>
+        /// Obtiene solo los usuarios empleados
+        /// </summary>
+        /// <returns>Devuelve una lista de usuarios que son empleados</returns>
+        [HttpGet]
+        public ActionResult<IEnumerable<UserDTO>> GetEmployees()
+        {
+            List<UserDTO> usersdtos = new List<UserDTO>();
+            List<User> users = new List<User>();
+            try
+            {
+                GetEmployeesCommand command = CommandFactory.CreateGetEmployeesCommand();
+                command.Execute();
+                UserMapper mapper = new UserMapper();
+                users = command.GetResult();
+                usersdtos =  mapper.CreateDTOList(users);
+                return Ok(usersdtos);
+            }
+            catch (InternalServerErrorException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(400);
+            }
         }
 
 
-            /* Este es el viejo
-        // GET api/users/5
-        /// <summary>
-        /// Busca un usuario con el id especificado
-        /// </summary>
-        /// <param name="id">Id del usuario que se desea buscar</param>
-        /// <returns>Un usuario que corresponde al id especificado</returns>
-        [HttpGet("{id}")]
-          public ActionResult<Entity> Get(int id)
-          {
-               User user;
-               try
-               {
-                    user = (User)UserRepository.GetUserById(id);
-               }
-               catch (GeneralException e)
-               {
-                    return BadRequest(e.Message);
-               }
-               catch (Exception)
-               {
-                    return BadRequest("Error de servidor");
-               }
-               return Ok(user);
-          }
-          */
+        /* Este es el viejo
+    // GET api/users/5
+    /// <summary>
+    /// Busca un usuario con el id especificado
+    /// </summary>
+    /// <param name="id">Id del usuario que se desea buscar</param>
+    /// <returns>Un usuario que corresponde al id especificado</returns>
+    [HttpGet("{id}")]
+      public ActionResult<Entity> Get(int id)
+      {
+           User user;
+           try
+           {
+                user = (User)UserRepository.GetUserById(id);
+           }
+           catch (GeneralException e)
+           {
+                return BadRequest(e.Message);
+           }
+           catch (Exception)
+           {
+                return BadRequest("Error de servidor");
+           }
+           return Ok(user);
+      }
+      */
 
         // GET api/users/5
         /// <summary>
@@ -93,14 +125,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
         /// <param name="id">Id del usuario que se desea buscar</param>
         /// <returns>Un usuario que corresponde al id especificado</returns>
         [HttpGet("{id}")]
-        public ActionResult<Entity> Get(int id)
+        public ActionResult<UserDTO> Get(int id)
         {
+            UserDTO userDTO = new UserDTO();
             User user;
             try
             {
                 GetUserByIdCommand command = CommandFactory.CreateGetUserByIdCommand(id);
                 command.Execute();
-                user = (User) command.GetResult();
+                user = command.GetResult();
+                UserMapper mapper = new UserMapper();
+                userDTO = mapper.CreateDTO(user);
+
             }
             catch (GeneralException e)
             {
@@ -110,7 +146,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             {
                 return BadRequest("Error de servidor");
             }
-            return Ok(user);
+            return Ok(userDTO);
         }
 
         /*
@@ -150,15 +186,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
         /// <param name="user">Usuario que se desea guardar</param>
         /// <returns>Retorna el usuario almacenado</returns>
         [HttpPost]
-        public ActionResult<Entity> Post([FromBody] User user)
+        public ActionResult<Entity> Post([FromBody] UserDTO user)
         {
             try
             {
-                PostUserCommand command = new PostUserCommand(user);
+                UserMapper mapper = new UserMapper();
+                User entity = mapper.CreateEntity(user);
+                PostUserCommand command = new PostUserCommand(entity);
                 command.Execute();
                 foreach (var role in user.Roles)
                 {
-                    PostUser_RoleCommand postRoleCommand = new PostUser_RoleCommand(user.Id,role);
+                    PostUser_RoleCommand postRoleCommand = new PostUser_RoleCommand(entity.Id,role);
                     postRoleCommand.Execute();
                 }
             }
@@ -292,7 +330,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             {
                 DeleteUserByIdCommand command = new DeleteUserByIdCommand(id);
                 command.Execute();
-                return Ok();
             }
             catch (GeneralException e)
             {
@@ -302,6 +339,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             {
                 return BadRequest("Error eliminando al usuario");
             }
+            return Ok();
         }
     }
 }

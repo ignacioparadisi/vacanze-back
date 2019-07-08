@@ -391,7 +391,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
             _insertedUsers.Add(user.Id);
             GetEmployeesCommand getEmployeesCommand = new GetEmployeesCommand();
             getEmployeesCommand.Execute();
-            List<Entity> users = getEmployeesCommand.GetResult();
+            List<User> users = getEmployeesCommand.GetResult();
            // List<Entity> users = UserRepository.GetEmployees();
             Assert.AreNotEqual(0, users.Count);
         }

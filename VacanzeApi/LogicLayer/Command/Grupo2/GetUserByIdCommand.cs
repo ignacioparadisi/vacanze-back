@@ -10,10 +10,10 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
 {
-    public class GetUserByIdCommand : Command, CommandResult<Entity>
+    public class GetUserByIdCommand : Command, CommandResult<User>
     {
 
-        public Entity User { get; set; }
+        public User User { get; set; }
         public int Id { get; set; }
 
         public GetUserByIdCommand(int id)
@@ -27,7 +27,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
             {
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
                 UserDAO users = factory.GetUserDAO();
-                User = (User)users.GetUserById(Id);
+                User = users.GetUserById(Id);
             }
             catch(Exception e)
             {
@@ -35,7 +35,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
             }
         }
 
-        public Entity GetResult()
+        public User GetResult()
         {
             return User;
         }

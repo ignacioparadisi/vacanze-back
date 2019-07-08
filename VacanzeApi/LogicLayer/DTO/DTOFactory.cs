@@ -28,9 +28,9 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO{
             return new LocationDTO(id, country, city);
         }
 
-        public static UserDTO CreateUserDTO(int Id, long DocumentId, string Email, string Lastname, string Name, string Password, List<Role> Roles)
+        public static UserDTO CreateUserDTO(int Id, long DocumentId, string Name, string Lastname, string Email, string Password, List<Role> Roles)
         {
-            return new UserDTO(Id, DocumentId, Email, Lastname, Name, Password, Roles);
+            return new UserDTO(Id, DocumentId, Name, Lastname, Email, Password, Roles);
         }
 
         public static RoleDTO CreateRoleDTO(int id, string name)
