@@ -5,20 +5,20 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo5;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5 
 {
-    public class GetBrandsCommand : CommandResult<List<Brand>> 
+    public class GetModelsCommand : CommandResult<List<Model>> 
     {
-        private List<Brand> brands;
+        private List<Model> models;
 
-        public GetBrandsCommand(){}
+        public GetModelsCommand(){}
 
         public void Execute(){
             DAOFactory daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-            IBrandDAO brandDAO = daoFactory.GetBrandDAO();
-            brands = brandDAO.GetBrands();
+            IModelDAO modelDAO = daoFactory.GetModelDAO();
+            models = modelDAO.GetModels();
         }
 
-        public List<Brand> GetResult(){
-            return brands;
+        public List<Model> GetResult(){
+            return models;
         }
     }
 }

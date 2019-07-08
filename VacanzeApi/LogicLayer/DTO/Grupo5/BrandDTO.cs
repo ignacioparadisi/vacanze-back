@@ -10,7 +10,6 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo5{
         private string _brandName;
         public string BrandName { get { return _brandName; } set{ _brandName = value; } }
 
-        [JsonConstructor]
         public BrandDTO(string _brandName){
             this.BrandName = _brandName;
         }
@@ -19,5 +18,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo5{
             this.Id = _id;
             this._brandName = _brandName;
         }
+
+        public BrandDTO(){}
     }
 }
