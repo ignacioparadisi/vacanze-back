@@ -2,22 +2,19 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo4
 {
      public class CheckinBaggage : Entity
      {
-          public int _id { get; set; }
-          public int _maletaFkVuelo { get; set; }
-          public int _maletaFkCrucero { get; set; }
-          public string _maletaStatus { get; set; }
-          public string _descripcion { get; set; }
-          // TODO: Cuando se cree la clase Baggage, implementar esta parte
+        public CheckinBaggage(int id, string _descrip, int _fli, int _cru) : base(id)
+        {
+            descrip = _descrip;
+            fli = _fli;
+            cru = _cru;
+        }
+        public CheckinBaggage(): base(0)
+        {
 
-          public CheckinBaggage(int id, int maletaFkVuelo, int maletaFkCrucero,
-              string maletaStatus, string descripcion) : base(0)
-          {
-              this._id=0;
-              this._maletaFkVuelo = maletaFkVuelo;
-              this._maletaFkCrucero  = maletaFkCrucero;
-              this._maletaStatus = maletaStatus;
-              this._descripcion = descripcion;
-          }
+        }
+        public string descrip { get; set; }
+        public int fli { get; set; }
+        public int cru { get; set; }
 
      }
 }

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo4;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo4;
+using vacanze_back.VacanzeApi.LogicLayer.Command;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo4;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo4
 {
@@ -15,64 +17,25 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo4
      public class BaggageController : ControllerBase
      {
 
-          // Metodo para agregar equipajes
-          [HttpGet("agregar/{estatus}/{descripcion}")]
-          public ActionResult<int> Get(string estatus, string descripcion)
-          {
-               int i = 0;
-
-               try
-               {
-                    i = BaggageRepository.AddBaggageReturnId(0, 0, descripcion, estatus);
-               }
-               catch (DatabaseException e)
-               {
-
-                    return BadRequest("Error al agregar equipaje" + e);
-               }
-
-               return i;
-
-          }
-
-
-          //Metodo para obtener todos los equipajes
-          [HttpGet]
-          public ActionResult<IEnumerable<CheckinBaggage>> Get()
-          {
-               var Baggages = new List<CheckinBaggage>();
-               try
-               {
-                    Baggages = BaggageRepository.GetBaggage();
-               }
-               catch (DatabaseException e)
-               {
-
-                    return BadRequest("Error al Obtener los equipajes" + e);
-               }
-
-               return Baggages;
-          }
-
-
-          // Metodo para eliminar equipajes
-          [HttpGet("{tipo}/{id}")]
-          public ActionResult<string> Get(string tipo, int id)
-          {
-
-               try
-               {
-                    BaggageRepository.DeleteBaggage(id);
-               }
-               catch (DatabaseException e)
-               {
-
-                    return BadRequest("Error al Eliminar equipaje" + e);
-               }
-
-               return "exito  en eliminar equipaje :" + id;
-
-          }
+        [HttpPost("")]
+        public ActionResult<int> Post([FromBody] List<CheckinBaggage> checkBag)
+        {
+            var getByIdCommand = CommandFactory.PostCheckBaggageCommand(checkBag);
+            try
+            {
+                getByIdCommand.Execute();
+                return getByIdCommand.GetResult();
+            }
+            catch (ErrorCheckBaggageException)
+            {
+                return new NotFoundResult();
+            }
+            catch (DatabaseException ex)
+            {
+                // TODO: Log
+                return StatusCode(500, ex.Message);
+            }
+        }
 
 
      }

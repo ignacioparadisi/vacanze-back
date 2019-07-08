@@ -57,5 +57,9 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         {
             return new PostgresSaleFlightDAO();
         }
+        public override ICheckinBaggageDAO PostCheckBaggage()
+        {
+            return new PostgresCheckBaggagetDAO();
+        }
     }
 }

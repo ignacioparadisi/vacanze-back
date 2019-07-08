@@ -172,5 +172,10 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new PostSaleFlightCommand(postflight);
         }
 
+        public static PostCheckBaggageCommand PostCheckBaggageCommand(List<CheckinBaggage> checkbag)
+        {
+            return new PostCheckBaggageCommand(checkbag);
+        }
+
     }
 }

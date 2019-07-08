@@ -2,8 +2,16 @@
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo4
 {
-    public class SaleFlight
+
+    public class SaleFlight : Entity
     {
+
+
+        public SaleFlight(): base(0)
+        {
+
+        }
+
         public int id { get; set; }
         public int ileft { get; set; }
         public string descrip { get; set; }
@@ -13,8 +21,13 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo4
         public string destination { get; set; }
 
     }
-    public class PostSaleFlight
+    public class PostSaleFlight : Entity
     {
+        public PostSaleFlight(): base(0)
+        {
+
+        }
+
         public string seat { get; set; }
         public int numps { get; set; }
         public int user { get; set; }
