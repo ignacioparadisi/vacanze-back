@@ -9,6 +9,7 @@ using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Locations;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo14;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo14;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command
 {
@@ -167,6 +168,16 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         public static DeleteResRestaurantCommand DeleteResRestaurantCommand(int id)
         {
             return new DeleteResRestaurantCommand(id);
+        }
+
+        public static GetResRestaurantNotPayByIdCommand GetResRestaurantNotPayByIdCommand(int id)
+        {
+            return new GetResRestaurantNotPayByIdCommand(id);
+        }
+
+        public static AddResRestaurantCommand AddResRestaurantCommand(Restaurant_res restaurantDTO)
+        {
+            return new AddResRestaurantCommand(restaurantDTO);
         }
     }
 }
