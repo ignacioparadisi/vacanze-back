@@ -1,7 +1,8 @@
-
-namespace vacanze_back.VacanzeApi.Common.Entities.Grupo12{
-    public class FlightRes : Entity{
-
+using vacanze_back.VacanzeApi.LogicLayer.DTO;
+namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo12
+{
+    public class FlightResDTO : DTO
+    {
         public int _id{ get; set;}
         public string _seatNum{ get; set;}
         public string _timestamp{ get; set;}
@@ -23,22 +24,38 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo12{
         public int _idres{get;set;}
 
     
-        public FlightRes():base(0){}
+        public FlightResDTO(){}
         
 
-        public FlightRes(string seatNum,string timestamp,int numPas,int id_user,int id_fli ):base(0){
+        public FlightResDTO( string seatNum,string timestamp,int numPas,int id_user,int id_fli ){
 
             _seatNum=seatNum;
             _timestamp=timestamp;
             _numPas=numPas;
             _id_user=id_user;
             _id_fli=id_fli;
-           
-            
+
         }
 
-        public FlightRes(int id,int price,string timestamp,string seatNum,
-        string name_cityI,string name_countryI, string namecityV,string namecountryV,int numPas):base(id){
+
+        
+         public FlightResDTO(int id,int price,string timestamp,string seatNum,
+         string name_cityI,string name_countryI, string namecityV,string namecountryV,int numPas){
+
+             _id=id;
+             _price=price;
+             _timestamp=timestamp;
+             _seatNum=seatNum;
+             _numPas=numPas;
+             _namecityI=name_cityI;
+             _namecountryI=name_countryI;
+             _namecityV=namecityV;
+             _namecountryV=namecountryV;
+             
+         }
+
+         public FlightResDTO(int id,int price,string timestamp,string seatNum,
+        string name_cityI,string name_countryI, string namecityV,string namecountryV,int numPas, int id_user){
 
             _id=id;
             _price=price;
@@ -49,23 +66,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo12{
             _namecountryI=name_countryI;
             _namecityV=namecityV;
             _namecountryV=namecountryV;
-            
-        }
-
-        public FlightRes(int id,int price,string timestamp,string seatNum,
-        string name_cityI,string name_countryI, string namecityV,string namecountryV,int numPas, int id_user, int id_fli):base(id){
-
-            _id=id;
-            _price=price;
-            _timestamp=timestamp;
-            _seatNum=seatNum;
-            _numPas=numPas;
-            _namecityI=name_cityI;
-            _namecountryI=name_countryI;
-            _namecityV=namecityV;
-            _namecountryV=namecountryV;
             _id_user=id_user;
-            _id_fli=id_fli;
             
         }
     }
