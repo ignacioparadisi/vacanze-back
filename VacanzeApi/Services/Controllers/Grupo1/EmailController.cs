@@ -28,51 +28,42 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
         public ActionResult<LoginDTO> Recovery([FromBody] LoginDTO loginDTO)
         {
             Console.WriteLine("Antes del TRY, en el EmailController");
-            try
-            {
-                LoginMapper LoginMapper = MapperFactory.createLoginMapper();
-                Entity entity = LoginMapper.CreateEntity(loginDTO);
-                RecoveryPasswordCommand command = CommandFactory.RecoveryPasswordCommand((Login) entity);
-                command.Execute();
+            LoginMapper LoginMapper = MapperFactory.createLoginMapper();
+            Entity entity = LoginMapper.CreateEntity(loginDTO);
+            RecoveryPasswordCommand command = CommandFactory.RecoveryPasswordCommand((Login) entity);
+            command.Execute();
                 
-                Login objUser = command.GetResult();
-                if (objUser != null)
-                {
-                    Console.WriteLine("Esta funcionando");
-                    // //logica correo
-                    // var message = new MimeMessage();
-                    // //From Address
-                    // message.From.Add(new MailboxAddress("Vacanze Administracion", "vacanzeucab@gmail.com"));
-                    // //To Address
-                    // message.To.Add(new MailboxAddress("Usuario", address: objUser.email));
-                    // //Subject
-                    // message.Subject = "Recuperacion De Contraseña : ";
+            Login objUser = command.GetResult();
+            if (objUser != null){
 
-                    // message.Body = new TextPart("plain")
-                    // {
-                    //     Text = "Su contraseña nueva:" + objUser
-                    // };
-                    // using (var client = new MailKit.Net.Smtp.SmtpClient())
-                    // {
-                    //     client.Connect("smtp.gmail.com", 587, false);
-                    //     client.Authenticate("hombrehealth111@gmail.com", "_Gx123456");
-                    //     client.Send(message);
-                    //     client.Disconnect(true);
-                    //     client.Dispose();
-                    // }
-                    LoginDTO ldto = LoginMapper.CreateDTO(objUser);
-                    return Ok(ldto);
+                Console.WriteLine("Esta funcionando");
+                //logica correo
+                var message = new MimeMessage();
+                //From Address
+                message.From.Add(new MailboxAddress("Vacanze Administracion", "vacanzeucab@gmail.com"));
+                //To Address
+                message.To.Add(new MailboxAddress("Usuario", address: objUser.email));
+                //Subject
+                message.Subject = "Recuperacion De Contraseña : ";
+
+                message.Body = new TextPart("plain"){
+                   Text = "Su contraseña nueva:" + objUser.password
+                };
+
+                using (var client = new MailKit.Net.Smtp.SmtpClient()){
+                    client.Connect("smtp.gmail.com", 587, true);
+                    client.Authenticate("vacanzeucab1@gmail.com", "_Gx123456");
+                    client.Send(message);
+                    client.Disconnect(true);
+                    client.Dispose();
                 }
-                else
-                {
-                    return BadRequest(new { message = "Username or password is incorrect." });
-                }
+                LoginDTO ldto = LoginMapper.CreateDTO(objUser);
+                return Ok(ldto);
             }
-            catch (Exception e)
-            {
-                Console.WriteLine("Cai en la excepcion");
-                return BadRequest(new { message = e.Message });
+            else{
+                return BadRequest(new { message = "Username or password is incorrect." });
             }
+            
         }
     }
 }

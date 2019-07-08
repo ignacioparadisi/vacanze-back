@@ -78,15 +78,23 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo1{
 
         public Login Recovery(string email){
             try{
+                Console.WriteLine("Antes del SP recovery");
                 var table = PgConnection.Instance.ExecuteFunction("recoveryPassword(@email)",email);
-
+                Console.WriteLine("Despues del SP recovery");
                 if(table.Rows.Count == 0){
                     throw new PasswordRecoveryException("El correo no existe");
                 }
                 else{
+                    Console.WriteLine("");
                     var Id = Convert.ToInt32(table.Rows[0][0]);
+                    Console.WriteLine(Id);
                     var user_email = table.Rows[0][1].ToString();
+                    Console.WriteLine(user_email);
                     var password = table.Rows[0][2].ToString();
+                    Console.WriteLine(password);
+                    Console.WriteLine("Antes del SP update");
+                    var id_update = PgConnection.Instance.ExecuteFunction("updatePassword(@password,@email)",password,email);
+                    Console.WriteLine("Despues del SP update");
                     Console.WriteLine("Clave en texto plano: ");
                     Console.WriteLine(password);
                     var user = new Login(Id, user_email,password );

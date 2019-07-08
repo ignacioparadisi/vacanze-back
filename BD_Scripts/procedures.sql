@@ -2366,12 +2366,22 @@ CREATE OR REPLACE FUNCTION recoveryPassword(email VARCHAR) RETURNS TABLE (id INT
   BEGIN
     new_password = ((SELECT trunc(random() * 9999999999999 + 1000000000000) FROM generate_series(1,1))::text);
 
-    UPDATE users set use_password = MD5(new_password)
+    UPDATE users set use_password = new_password
     WHERE users.use_email = email;
     
     RETURN QUERY select use_id, use_email, use_password
     FROM users
     WHERE use_email = email;
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION updatePassword(password VARCHAR, email VARCHAR) RETURNS INTEGER AS $$
+  DECLARE users_id INTEGER;
+  BEGIN
+    UPDATE users set use_password = MD5(password)
+    WHERE users.use_email = email RETURNING use_id INTO users_id;
+
+    RETURN users_id;
   END;
 $$ LANGUAGE plpgsql;
 ---------------------------------finGrupo1---------------------------------------------------------------------------
