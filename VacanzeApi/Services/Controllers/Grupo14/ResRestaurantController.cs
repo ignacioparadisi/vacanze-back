@@ -27,13 +27,16 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 		[HttpPost]
 		public ActionResult<int> Post([FromBody] reservationRestaurant resAux)
 		{            
-			try{		 
-				
-				Restaurant_res reserva= new Restaurant_res(resAux.fecha_res, resAux.cant_people, resAux.date, resAux.user_id, resAux.rest_id);
-                var id = ResRestaurantRepository.addReservation(reserva);
-				Console.WriteLine(id);
-				return Ok(id);
-			}catch (DatabaseException)
+			try{
+                Restaurant_res reserva = new Restaurant_res(resAux.fecha_res, resAux.cant_people, resAux.date, resAux.user_id, resAux.rest_id);
+                AddResRestaurantCommand command = CommandFactory.AddResRestaurantCommand(reserva);
+                command.Execute();
+                
+                //            var id = ResRestaurantRepository.addReservation(reserva);
+                //Console.WriteLine(id);
+                return Ok();
+            }
+            catch (DatabaseException)
 			{            
                 Console.WriteLine("Estoy en el databaseException");
 				return StatusCode(500);
@@ -72,11 +75,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 
 		//GET /ResRestaurant/Payment/{id} el ID es el del usuario
 		[HttpGet("Payment/{userId}")]
-		public ActionResult<IEnumerable<Restaurant_res>> GetReservationNotPay(int userId){ //this method is not used to this preview
-			try{
-				Console.WriteLine(userId);
-				return ResRestaurantRepository.getReservationNotPay(userId);
-			}
+		public ActionResult<IEnumerable<ResRestaurantDTO>> GetReservationNotPay(int userId){ //this method is not used to this preview
+
+            var getResNotPayByIdCommand = CommandFactory.GetResRestaurantNotPayByIdCommand(userId);
+            try {
+                Console.WriteLine(userId);
+                //return ResRestaurantRepository.getReservationNotPay(userId);
+                getResNotPayByIdCommand.Execute();
+
+                ResRestaurantMapper resRestMapper = MapperFactory.createResRestaurantMapper();
+                return resRestMapper.CreateDTOList(getResNotPayByIdCommand.GetResult());
+            }
             catch (DatabaseException ){            
 				return StatusCode(500);
 			}
