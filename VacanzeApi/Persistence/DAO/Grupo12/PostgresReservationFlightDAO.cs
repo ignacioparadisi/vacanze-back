@@ -357,9 +357,9 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
                 listres._price=table1.Rows.Count;
                
                //Valida que existen vuelos
-                if(listres._price.Equals("0")){
+                /* if(listres._price.Equals(0)){
                     throw new EmptyListFlight("Disculpe no se encontraron vuelos disponibles para esa fecha");
-                }
+                }*/
 
                 
                 //Recorre la lista de vuelos
@@ -443,9 +443,9 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo12
                 ,departure,arrival,departuredate,arrivaldate);
                 listres._price=table1.Rows.Count;
                
-               if(listres._price.Equals("0")){
+               /* if(listres._price.Equals("0")){
                   throw new EmptyListFlight("Disculpe no se encontraron vuelos disponibles para esa fecha");
-               }
+               }*/
                
                 for(int i = 0; i < table1.Rows.Count; i++){
                     table4 = PgConnection.Instance.ExecuteFunction(GET_NAME_LOCATION

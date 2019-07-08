@@ -48,8 +48,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
 
 
                 return StatusCode(200, "Se agrego satisfactoriamente id: " + _id);
-
-            }catch(Exception ex){
+            }
+            catch (ValidationErrorException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch(Exception ex)
+            {
                 return BadRequest(ex.Message);
             }
         }
@@ -59,7 +64,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         /// <summary> GET api/list-reservation-flight/id_user</summary>
         /// <param name="id_user">Id del usuario</param>
         /// <returns>Devuelve una lista de todas las reservas de realizo</returns>
-
+        //
         [Route("~/api/list-reservation-flight/{id_user}")] 
         // GET api/list-reservation-flight
         [HttpGet("{id_user}")]
@@ -74,8 +79,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
                 List<Entity> listFlight = command.GetResult();
 
                 return listFlight;
-
-            }catch(Exception ex){
+            }catch (ValidationErrorException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch(Exception ex)
+            {
 
                  return BadRequest(ex.Message);
             }
@@ -87,7 +96,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         /// <param name="name_city_i">Nombre de la ciudad de origen</param>
         /// <param name="name_city_v">Nombre de la ciudad de destino</param>
         /// <returns>Devuelve el id de los paises de origen y destino</returns>
-
+        //
         [Route("~/api/id-return-city/{name_city_i}/{name_city_v}")] 
         // GET api/list-reservation-flight
         [HttpGet("{name_city_i}/{name_city_v}")]
@@ -104,6 +113,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
                 List<int> city_ids = command.GetResult();
 
                 return city_ids;
+            }catch (ValidationErrorException ex)
+            {
+                return BadRequest(ex.Message);
             }catch(Exception ex ){
 
                  return BadRequest(ex.Message);
@@ -115,7 +127,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         /// <summary> GET api/reservation-flight/id_res</summary>
         /// <param name="id_res">ID de la reserva</param>
         /// <returns>Devuelve un mensaje de satisfactorio si elimina la reserva</returns>
-        
+        //
         [Route("~/api/delete-reservation-flight/{id_res}")] 
         // GET api/list-reservation
         [HttpDelete("{id_res}")]
@@ -129,6 +141,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
 
                 return StatusCode(200, "Se elimino satisfactoriamente");
 
+             }catch (ValidationErrorException ex)
+            {
+                return BadRequest(ex.Message);
             }catch(Exception ex ){
 
                 return BadRequest(ex.Message);
@@ -137,7 +152,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         }
 
        
-//
+
         /// <summary> GET api/reservation-flight/departure/arrival/departuredate/numpas</summary>
         /// <param name="departure">Ciudad de salida del vuelor</param>
         /// <param name="arrival">Ciudad de llegada del vuelo</param>
@@ -157,6 +172,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
                 List<Entity> listFlight = command.GetResult();
 
                 return listFlight;
+
+             }catch (ValidationErrorException ex)
+            {
+                return BadRequest(ex.Message);
             }catch(Exception ex ){
 
                 return BadRequest(ex.Message);
@@ -165,7 +184,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         }
 
 
-//
+
         /// <summary> GET api/reservation-flight/departure/arrival/departuredate/arrivaldate/numpas</summary>
         /// <param name="departure">Ciudad de salida del vuelor</param>
         /// <param name="arrival">Ciudad de llegada del vuelo</param>
@@ -186,6 +205,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
                 List<Entity> listFlight = command.GetResult();
 
                 return listFlight;
+            }catch (ValidationErrorException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch(Exception ex ){
 
