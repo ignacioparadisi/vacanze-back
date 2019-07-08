@@ -4,7 +4,7 @@ using Npgsql;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Exceptions;
-using vacanze_back.VacanzeApi.Persistence.Repository.Grupo6;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo6;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
 {
@@ -38,7 +38,10 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                     var userId = Convert.ToInt32(table.Rows[i][5]);
 
                     ReservationRoom roomRes = EntityFactory.CreateReservationRoom(id, pickup, returndate);
-                    roomRes.Hotel = HotelRepository.GetHotelById(Convert.ToInt32(table.Rows[i][4]));
+
+                    DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
+                    HotelDAO hotelDao = factory.GetHotelDAO();
+                    roomRes.Hotel = hotelDao.GetHotelById(Convert.ToInt32(table.Rows[i][4]));
                     roomRes.Fk_user = userId;
 
                     roomReservationList.Add(roomRes);
@@ -78,11 +81,13 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                     var userid = Convert.ToInt32(table.Rows[i][5]);
                     var hot_fk = Convert.ToInt64(table.Rows[i][5]);
 
-                    // var payfk = Convert.ToInt64(table.Rows[i][6]);
+                    
                     reservationRoom = EntityFactory.CreateReservationRoom(id2, pickup, returndate);
-                    reservationRoom.Hotel = HotelRepository.GetHotelById(Convert.ToInt32(table.Rows[i][4]));
+                    
+                    DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
+                    HotelDAO hotelDao = factory.GetHotelDAO();
+                    reservationRoom.Hotel = hotelDao.GetHotelById(Convert.ToInt32(table.Rows[i][4]));
                     reservationRoom.Fk_user = userid;
-                    //  _reservation.User.Id = userid;
                     //Falta Payment
                 }
                 return reservationRoom;
@@ -211,7 +216,9 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                     var hotfk = (int)Convert.ToInt64(table.Rows[i][3]);
 
                     ReservationRoom reservation = EntityFactory.CreateReservationRoom(id, pickup, returndate);
-                    reservation.Hotel = HotelRepository.GetHotelById(hotfk);
+                    DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
+                    HotelDAO hotelDao = factory.GetHotelDAO();
+                    reservation.Hotel = hotelDao.GetHotelById(hotfk);
                     reservation.Fk_user = userId;
                     reservationAutomobileList.Add(reservation);
                 }
