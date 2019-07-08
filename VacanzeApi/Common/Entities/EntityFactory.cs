@@ -14,9 +14,9 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
             return new Vehicle(Id, _vehicleModelId, _vehicleLocationId, _license, _price, _status);
         }
         
-        public static Brand createBrand(string brandName)
+        public static Brand createBrand(int id, string brandName)
         {
-            return new Brand(brandName);
+            return new Brand(id, brandName);
         }
 
         public static Model CreateModel(int id, int brandId, string modelName, int capacity,
