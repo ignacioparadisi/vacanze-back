@@ -23,6 +23,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
          * Trae de la BD, las reservas de habitacion
          * </summary>
          */
+        // TODO: Puede que este método sea borrado
         public List<ReservationRoom> GetRoomReservations()
         {
             try
