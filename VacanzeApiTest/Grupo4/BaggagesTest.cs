@@ -12,7 +12,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo4
      [TestFixture]
      public class BaggageTest
      {
-          ActionResult<IEnumerable<Baggage>> Baggage;
+          ActionResult<IEnumerable<CheckinBaggage>> Baggage;
           BaggageController controller;
 
           BaggageRepository conec;

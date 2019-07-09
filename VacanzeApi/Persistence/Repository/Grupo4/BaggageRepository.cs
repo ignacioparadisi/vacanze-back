@@ -46,44 +46,44 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo4
 
           }
 
-          public static List<Baggage> GetBaggage()
-          {
-               var table = PgConnection.Instance.ExecuteFunction("getallbaggage()");
-               var Vuelo = 0;
-               var Crucero = 0;
-               var status = "";
-               var descripcion = "";
-               var id = 0;
+          //public static List<CheckinBaggage> GetBaggage()
+          //{
+          //     var table = PgConnection.Instance.ExecuteFunction("getallbaggage()");
+          //     var Vuelo = 0;
+          //     var Crucero = 0;
+          //     var status = "";
+          //     var descripcion = "";
+          //     var id = 0;
 
-               var BaggageList = new List<Baggage>();
-               for (var i = 0; i < table.Rows.Count; i++)
-               {
-                    if (table.Rows[i][1] != DBNull.Value)
-                    {
-                         Vuelo = Convert.ToInt32(table.Rows[i][1]);
-                    }
-                    else
-                    {
-                         Vuelo = 0;
-                    }
-                    if (table.Rows[i][2] != DBNull.Value)
-                    {
-                         Crucero = Convert.ToInt32(table.Rows[i][2]);
-                    }
-                    else
-                    {
-                         Crucero = 0;
-                    }
-                    status = table.Rows[i][4].ToString();
-                    id = Convert.ToInt32(table.Rows[i][0]);
-                    descripcion = table.Rows[i][3].ToString();
+          //     var BaggageList = new List<CheckinBaggage>();
+          //     for (var i = 0; i < table.Rows.Count; i++)
+          //     {
+          //          if (table.Rows[i][1] != DBNull.Value)
+          //          {
+          //               Vuelo = Convert.ToInt32(table.Rows[i][1]);
+          //          }
+          //          else
+          //          {
+          //               Vuelo = 0;
+          //          }
+          //          if (table.Rows[i][2] != DBNull.Value)
+          //          {
+          //               Crucero = Convert.ToInt32(table.Rows[i][2]);
+          //          }
+          //          else
+          //          {
+          //               Crucero = 0;
+          //          }
+          //          status = table.Rows[i][4].ToString();
+          //          id = Convert.ToInt32(table.Rows[i][0]);
+          //          descripcion = table.Rows[i][3].ToString();
 
 
-                    var Baggage = new Baggage(id, Vuelo, Crucero, status, descripcion);
-                    BaggageList.Add(Baggage);
-               }
+          //          var Baggage = new CheckinBaggage(id, Vuelo, Crucero, status, descripcion);
+          //          BaggageList.Add(Baggage);
+          //     }
 
-               return BaggageList;
-          }
+          //     return BaggageList;
+          //}
      }
 }

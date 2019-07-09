@@ -24,11 +24,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           ///  Se conecta con la base de datos para seleccionar todos los usuarios que no sean clientes
           /// </summary>
           /// <returns>Una lista de usuarios que no tienen como rol cliente</returns>
-          public List<Entity> GetEmployees()
+          public List<User> GetEmployees()
           {
                try
                {
-                    var users = new List<Entity>();
+                    var users = new List<User>();
                     var table = PgConnection.Instance.ExecuteFunction(SP_GETEMPLOYEES);
                     DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
                     RoleDAO roles = factory.GetRoleDAO();
@@ -79,7 +79,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           /// <returns>El usuario que corresponde con el id</returns>
           /// <exception cref="UserNotFoundException">En caso de no encontrar ningun usuario se devuelve
           /// una excepcion para avisar que no se encontró ningún usuario con ese id</exception>
-          public Entity GetUserById(int id)
+          public User GetUserById(int id)
           {
                try
                {
@@ -112,7 +112,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           /// </summary>
           /// <param name="user">Usuario que será almacenado en la base de datos</param>
           /// <returns>El usuario agregado en la base de datos con el ID</returns>
-          public Entity AddUser(Entity entity)
+          public User AddUser(User entity)
           {
                try
                {
@@ -193,11 +193,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           /// <exception cref="UserNotFoundException">Excepción que se devuelve cuando
           /// no se encuentra ningun usuario con el id especificado en la base de datos</exception>
           // TODO: Devolver el usuario y no el id nada más
-          public int UpdateUser(Entity entity, int id)
+          public int UpdateUser(User entity, int id)
           {
                User user = (User)entity;
                user.Validate();
-               VerifyEmail(user.Email, user.Id); //Hay que cambiar ese Id por user.Id en controller tambien
+               VerifyEmail(user.Email, id); //Hay que cambiar ese Id por user.Id en controller tambien
                var table = PgConnection.Instance
                    .ExecuteFunction(SP_UPDATE,
                    id, user.DocumentId.ToString(), user.Name, user.Lastname, user.Email);

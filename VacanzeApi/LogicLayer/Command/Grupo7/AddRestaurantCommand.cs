@@ -1,29 +1,30 @@
-using DefaultNamespace;
-using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
+
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo7;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper;
-using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo7;
 using vacanze_back.VacanzeApi.Persistence.DAO;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo7
 {
-    public class AddRestaurantCommand
+    /// <summary>  
+    ///  Comando para agregar un Restaurante
+    /// </summary> 
+    public class AddRestaurantCommand : CommandResult<RestaurantDto>
     {
-        private RestaurantDTO _restaurantDto;
+        private RestaurantDto _restaurantDto;
         
-        public AddRestaurantCommand(RestaurantDTO restaurantDto)
+        public AddRestaurantCommand(RestaurantDto restaurantDto)
         {
             _restaurantDto = restaurantDto;
         }
         public void Execute()
         {
-            DAOFactory daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-            PostgresRestaurantDAO restaurantDao = (PostgresRestaurantDAO) daoFactory.GetRestaurantDAO();
-            RestaurantMapper restaurantMapper = MapperFactory.CreateRestaurantMapper();
-            Restaurant restaurant = (Restaurant) restaurantMapper.CreateEntity(_restaurantDto);
-            _restaurantDto.Id = restaurantDao.AddRestaurant(restaurant);
+            var daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
+            var restaurantMapper = MapperFactory.CreateRestaurantMapper();
+            var restaurant = restaurantMapper.CreateEntity(_restaurantDto);
+            CommandFactory.CreateGetRestaurantValidatorCommand(restaurant).Execute();
+            _restaurantDto.Id = daoFactory.GetRestaurantDAO().AddRestaurant(restaurant);
         }
-        public RestaurantDTO GetResult()
+        public RestaurantDto GetResult()
         {
             return _restaurantDto;
         }
