@@ -85,7 +85,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
 
                     //  _reservation.User.Id = userid;
                     //  _reservation.Automobile.Id = autfk;
-                    //Falta Payment
+                    // Falta Payment
                 }
                 return _reservation;
             }
@@ -201,16 +201,13 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                         reservation.CheckOut,
                         reservation.Fk_user,
                         reservation.Automobile.getId(),
-                        (int)reservation.Id);
+                        reservation.Id);
             }
             catch (DatabaseException ex)
             {
 
                 Console.WriteLine(ex.ToString());
                 throw new Exception("Ups, a ocurrido un error al conectarse a la base de datos", ex);
-            }
-            finally
-            {
             }
         }
     }

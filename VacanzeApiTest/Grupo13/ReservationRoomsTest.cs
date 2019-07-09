@@ -25,7 +25,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             _connection = new ReservationRoomRepository();
             time = new DateTime(1990, 04, 01);
             DateTime time2 = new DateTime(1990, 04, 01);
-            
+
             Hotel hotel = new Hotel();
             hotel.IsActive = true;
             hotel.Name = "PruebaUnitaria";
@@ -39,7 +39,8 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             hotel.Website = "Pu Website";
             hotel.Location = LocationRepository.GetLocationById(1);
             hotel.Id = 1;
-            reservation = new ReservationRoom(1, time, time2,hotel,1);
+            
+            reservation = new ReservationRoom(1, time, time2, hotel,1);
         }
 
         [Test,Order(1)]

@@ -132,12 +132,13 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         {
             try
             {
+                var id = reservation.Hotel.Id;
                  var table=   PgConnection.Instance.
                     ExecuteFunction(SP_ADD_RESERVATION,
                         reservation.CheckIn,
                         reservation.CheckOut,
-                        reservation.Fk_user,
-                        (int)reservation.Hotel.Id);
+                        reservation.User.Id,
+                        reservation.Hotel.Id);
 
                 if (table.Rows.Count > 0)
                 {
@@ -145,7 +146,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                 }
                 return 0;
             }
-            catch (Exception e)
+            catch (NpgsqlException e)
             {
                 throw new GeneralException("Error Agregando la Reserva de Habitación");
             }
@@ -155,13 +156,13 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         /// Borra de la BD, la reservacion que es suministrada
         /// </summary>
         /// <param name="reservation">La entidad reservacion a borrar de la BD</param>
-        public int Delete(ReservationRoom reservation)
+        public int Delete(int id)
         {
             try
             {
                 var table = PgConnection.Instance.ExecuteFunction(
                    SP_DELETE_RESERVATION,
-                   (int)reservation.Id
+                   id
                );
                 if (table.Rows.Count > 0)
                 {
