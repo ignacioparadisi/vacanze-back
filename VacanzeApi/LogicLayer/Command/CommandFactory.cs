@@ -12,7 +12,8 @@ using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Locations;
-
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command
 {
@@ -204,6 +205,31 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new GetCitiesByCountryCommand(id);
         }  
 
+        public static GetEmployeesCommand CreateGetEmployeesCommand()
+        {
+            return new GetEmployeesCommand();
+        }
+
+        public static GetRolesCommand CreateGetRolesCommand()
+        {
+            return new GetRolesCommand();
+        }
+
+        public static GetRolesForUserCommand CreateGetRolesForUserCommand(User user)
+        {
+            return new GetRolesForUserCommand(user);
+        }
+
+        public static GetUserByIdCommand CreateGetUserByIdCommand(int id)
+        {
+            return new GetUserByIdCommand(id);
+        }
+
+        public static UpdateUserCommand CreateUpdateUserCommand(User user, int id)
+        {
+            return new UpdateUserCommand(user, id);
+        }
+
         public static AddReservationFlightCommand CreateAddReservationFlightCommand( FlightRes flight)
         {
             return new AddReservationFlightCommand( flight );
@@ -233,5 +259,6 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new GetReservationsByDateIVCommand( departure, arrival, departuredate, arrivaldate, numpas );
         } 
+
     }
 }
