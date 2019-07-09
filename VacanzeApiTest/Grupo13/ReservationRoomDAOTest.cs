@@ -23,6 +23,9 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         private User _user;
         private List<int> _insertedReservations;
 
+        /// <summary>
+        /// Crea el usuario en base de datos para usar este usuario en las pruebas
+        /// </summary>
         private void CreateUser()
         {
             // TODO: Cambiar por el Factory de usuario
@@ -33,6 +36,9 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             _user = (User) _factory.GetUserDAO().AddUser(_user);
         }
 
+        /// <summary>
+        /// Crea un hotel en la base de datos para usarlo en las pruebas
+        /// </summary>
         private void CreateHotel()
         {
             _hotel = EntityFactory.createHotel(0,
@@ -95,6 +101,16 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             _insertedReservations.Add(_reservation.Id);
             ReservationRoom reservation = _factory.GetReservationRoomDAO().Find(_reservation.Id);
             Assert.AreEqual(reservation.Id, _reservation.Id);
+        }
+
+        [Test]
+        public void GetAllByUserSuccess()
+        {
+            _reservation.Id = _factory.GetReservationRoomDAO().Add(_reservation);
+            _insertedReservations.Add(_reservation.Id);
+            List<ReservationRoom> reservations = _factory.GetReservationRoomDAO().GetAllByUserId(_user.Id);
+            Assert.True(reservations.Count > 0);
+            Assert.AreEqual(reservations[0].Id, _reservation.Id);
         }
     }
 }
