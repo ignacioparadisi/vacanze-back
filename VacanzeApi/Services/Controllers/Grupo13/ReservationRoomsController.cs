@@ -54,11 +54,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
                 ReservationRoom result = reservationRoomDao.Find(id);
                 return Ok(result);
             }
-            // TODO: Manejar las excepciones
-            catch (System.Exception)
+            catch (GeneralException e)
             {
-
-                throw;
+                return BadRequest(e.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error en el servidor");
             }
         }
 
@@ -75,10 +77,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
                 reservationRoomDao.Add(reservation);
                 return Ok(new { Message = "Reservacion Agregada" });
             }
-            catch (Exception e)
+            catch (GeneralException e)
             {
-                Console.WriteLine(e.ToString());
-                return null;
+                return BadRequest(e.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error en el servidor");
             }
         }
 
@@ -99,10 +104,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
                 {
                     return BadRequest(new { Message = ex.Message });
                 }*/
-            catch (Exception ex)
+            catch (GeneralException e)
             {
-                Console.WriteLine(ex.ToString());
-                return null;
+                return BadRequest(e.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error en el servidor");
             }
         }
 
@@ -119,11 +127,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 
                 return Ok(new { Message = "Reservacion eliminada" });
             }
-
-            catch (Exception ex)
+            catch (GeneralException e)
             {
-                Console.WriteLine(ex.ToString());
-                return null;
+                return BadRequest(e.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error en el servidor");
             }
         }
     }
