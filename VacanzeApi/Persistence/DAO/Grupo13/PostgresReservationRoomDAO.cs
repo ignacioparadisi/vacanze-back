@@ -165,7 +165,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
          * </summary>
          * <param name="entity">La reserva a actualizar</param>
          */
-        public void Update(ReservationRoom reservation)
+        public ReservationRoom Update(ReservationRoom reservation)
         {
             try
             {
@@ -177,6 +177,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                     reservation.HotelId,
                     reservation.Id
                 );
+                return reservation;
             }
             catch (Exception)
             {

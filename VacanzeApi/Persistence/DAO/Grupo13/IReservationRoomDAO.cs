@@ -11,6 +11,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         ReservationRoom Add(ReservationRoom reservation);
         int Delete(int id);
         List<ReservationRoom> GetAllByUserId(int userId);
-        void Update(ReservationRoom reservation);
+        ReservationRoom Update(ReservationRoom reservation);
     }
 }
