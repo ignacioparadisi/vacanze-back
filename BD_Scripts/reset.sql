@@ -1,6 +1,6 @@
 -- https://wiki.postgresql.org/wiki/Fixing_Sequences
--- psql -Atq -f reset.sql -o temp
--- psql -f temp
+-- psql -Atq -f reset.sql -o temp -d vacanza -U vacanza --password
+-- psql -f temp -d vacanza -U vacanza --password
 -- rm temp
 
 -- Ejecutando los comandos de arriba actualizas los valores de todas las secuencias
