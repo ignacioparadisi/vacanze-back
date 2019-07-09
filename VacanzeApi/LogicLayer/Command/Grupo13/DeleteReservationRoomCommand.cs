@@ -7,24 +7,24 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13
 {
     public class DeleteReservationRoomCommand : CommandResult<int>
     {
-        private ReservationRoom Res_Room;
-        private int Result;
+        private int _id;
+        private int _result;
 
-        public DeleteReservationRoomCommand(ReservationRoom resRoomDto)
+        public DeleteReservationRoomCommand(int id)
         {
-            Res_Room = resRoomDto;
+            _id = id;
         }
 
         public void Execute()
         {
             DAOFactory daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-            var res_roomDao = (PostgresReservationRoomDAO) daoFactory.GetReservationRoomDAO();
-            Result = res_roomDao.Add(this.Res_Room);
+            var resRoomDao = (PostgresReservationRoomDAO) daoFactory.GetReservationRoomDAO();
+            _result = resRoomDao.Delete(_id);
         }
 
         public int GetResult()
         {
-            return Result;
+            return _result;
         }
     }
 }

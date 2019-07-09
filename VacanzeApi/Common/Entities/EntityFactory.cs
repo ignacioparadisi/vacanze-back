@@ -84,12 +84,10 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
         public static ReservationAutomobile CreateReservationAutomobile(int id, DateTime checkin, DateTime checkout,
             int userId, Auto automobile) =>
             new ReservationAutomobile(id, checkin, checkout, automobile, userId);
-
-        public static ReservationRoom CreateReservationRoom(int id, DateTime chekckIn, DateTime checkOut) =>
-            new ReservationRoom(id, chekckIn, checkOut);
+        
         public static ReservationRoom CreateReservationRoom(int id, DateTime chekckIn, DateTime checkOut,
-            Hotel hotel, User user) =>
-            new ReservationRoom(id, chekckIn, checkOut, hotel, user);
+            int hotelId, int userId) =>
+            new ReservationRoom(id, chekckIn, checkOut, hotelId, userId);
         
         public static ReservationRoom CreateReservationRoom() =>
             new ReservationRoom();

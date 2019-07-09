@@ -12,12 +12,12 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
         //Checkout: Last date of the reservation
         public DateTime CheckOut { get; set; }
         //Hotel of the reservation
-        public Hotel Hotel { get; set; }
+        public int HotelId { get; set; }
 
-        public int Fk_user { get; set; }
+        public int UserId { get; set; }
 
-        public int Fk_pay{ get; set; }
-        public User User { get; set; }
+        public int PaymentId { get; set; }
+
         /// <summary>
         /// Inicializa una nueva instancia de la clase ReservationRoom.
         /// </summary>
@@ -27,34 +27,12 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
         }
         
         [JsonConstructor]
-        public ReservationRoom(int id, DateTime CheckIn, DateTime CheckOut, Hotel hotel, User user) : base(id)
+        public ReservationRoom(int id, DateTime checkIn, DateTime checkOut, int hotelId, int userId) : base(id)
         {
-            this.CheckIn = CheckIn;
-            this.CheckOut = CheckOut;
-            this.Hotel = hotel;
-            this.User = user;
-        }
-
-        /// <summary>
-        /// Inicializa una nueva instancia de la clase ReservationRoom.
-        /// </summary>
-        public ReservationRoom(int id, DateTime CheckIn, DateTime CheckOut) : base(id)
-        {
-            this.CheckIn = CheckIn;
-            this.CheckOut = CheckOut;
-        }
-
-        public ReservationRoom(int payment) : base(0)
-        {
-            this.Fk_pay = payment;
-        }
-
-        public ReservationRoom(int id, DateTime CheckIn, DateTime CheckOut, Hotel hotel, int user_id) : base(id)
-        {
-            this.CheckIn = CheckIn;
-            this.CheckOut = CheckOut;
-            this.Hotel = hotel;
-            this.Fk_user = user_id;
+            CheckIn = checkIn;
+            CheckOut = checkOut;
+            HotelId = hotelId;
+            UserId = userId;
         }
     }
 }

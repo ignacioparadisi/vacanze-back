@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
 using vacanze_back.VacanzeApi.Common.Entities;
@@ -69,7 +68,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             CreateUser();
             CreateHotel();
 
-            _reservation = EntityFactory.CreateReservationRoom(0, checkin, checkout, _hotel, _user);
+            _reservation = EntityFactory.CreateReservationRoom(0, checkin, checkout, _hotel.Id, _user.Id);
         }
 
         [TearDown]
@@ -88,16 +87,15 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         [Test]
         public void AddSuccess()
         {
-            int id = _factory.GetReservationRoomDAO().Add(_reservation);
-            _insertedReservations.Add(id);
-            Assert.NotNull(id);
-            Assert.True(id > 0);
+            ReservationRoom reservationRoom = _factory.GetReservationRoomDAO().Add(_reservation);
+            _insertedReservations.Add(reservationRoom.Id);
+            Assert.True(reservationRoom.Id > 0);
         }
         
         [Test]
         public void FindSuccess()
         {
-            _reservation.Id = _factory.GetReservationRoomDAO().Add(_reservation);
+            _reservation = _factory.GetReservationRoomDAO().Add(_reservation);
             _insertedReservations.Add(_reservation.Id);
             ReservationRoom reservation = _factory.GetReservationRoomDAO().Find(_reservation.Id);
             Assert.AreEqual(reservation.Id, _reservation.Id);
@@ -106,7 +104,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         [Test]
         public void GetAllByUserSuccess()
         {
-            _reservation.Id = _factory.GetReservationRoomDAO().Add(_reservation);
+            _reservation = _factory.GetReservationRoomDAO().Add(_reservation);
             _insertedReservations.Add(_reservation.Id);
             List<ReservationRoom> reservations = _factory.GetReservationRoomDAO().GetAllByUserId(_user.Id);
             Assert.True(reservations.Count > 0);
@@ -116,7 +114,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         [Test]
         public void DeleteSuccess()
         {
-            _reservation.Id = _factory.GetReservationRoomDAO().Add(_reservation);
+            _reservation = _factory.GetReservationRoomDAO().Add(_reservation);
             var id = _factory.GetReservationRoomDAO().Delete(_reservation.Id);
             Assert.AreEqual(_reservation.Id, id);
         }
