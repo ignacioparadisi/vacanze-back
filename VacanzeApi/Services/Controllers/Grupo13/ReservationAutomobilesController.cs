@@ -58,7 +58,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Entity> Post([FromBody] ReservationAutomobile reservation)
+        public ActionResult<Entity> Post([FromBody] ReservationVehicle reservation)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 
         // PUT api/values/5    //ACTUALIZAR UN RECURSO
         [HttpPut]
-        public ActionResult<Entity> Put([FromBody] ReservationAutomobile res)
+        public ActionResult<Entity> Put([FromBody] ReservationVehicle res)
         {
             try
             {
@@ -104,7 +104,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         try
         {
             var connection = new ReservationAutomobileRepository();
-               ReservationAutomobile reservation = (ReservationAutomobile)connection.Find(id);
+               ReservationVehicle reservation = (ReservationVehicle)connection.Find(id);
                 connection.Delete(reservation);
             return Ok("Eliminado exitosamente");
         }
