@@ -6,7 +6,6 @@ using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo13;
-using vacanze_back.VacanzeApi.Persistence.DAO.Grupo6;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
 {
@@ -19,32 +18,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         private const string SP_UPDATE = "m13_updatehotelreservation(@_checkin,@_checkout,@_use_fk,@_hot_fk,@_id)";
         private const string SP_DELETE_RESERVATION = "m13_deleteRoomReservation(@_rooid)";
         private const string SP_ALL_BY_USER_ID = "m13_getresroobyuserandroomid(@_id)";
-
-        /** <summary>
-         * Trae de la BD, las reservas de habitacion
-         * </summary>
-         */
-        // TODO: Puede que este método sea borrado
-        public List<ReservationRoom> GetRoomReservations()
-        {
-            try
-            {
-                var table = PgConnection.Instance.ExecuteFunction(SP_SELECT);
-                List<ReservationRoom> roomReservationList = new List<ReservationRoom>();
-
-                for (int i = 0; i < table.Rows.Count; i++)
-                {
-                    ReservationRoom roomRes = GetReservationRoomFromTable(table, i);
-                    roomReservationList.Add(roomRes);
-                }
-
-                return roomReservationList;
-            }
-            catch (Exception)
-            {
-                throw new GeneralException("Error Obteniendo las Reservas de Habitación");
-            }
-        }
 
         /** <summary>
          * Busca en la BD, la reserva que posee el identificador suministrado
