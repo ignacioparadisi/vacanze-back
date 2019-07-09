@@ -16,14 +16,13 @@ using vacanze_back.VacanzeApi.Persistence.Repository.Grupo5;
 
 namespace vacanze_back.VacanzeApiTest.Grupo13
 {
-
     [TestFixture]
     public class ReservationAutomobileDAOTest
     {
         private Auto _vehicle;
         private User _user;
         private Payment _payment;
-        private ReservationAutomobile _reservationAutomobile;
+        private ReservationVehicle _reservationAutomobile;
 
         [OneTimeSetUp]
         public void SetUp()
@@ -34,18 +33,17 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             _user = EntityFactory.CreateUser(0, 25964266, "Fernando", "Consalvo", "fercon@gmail.com", "123456789",
                 roles);
             _user = daoUser.AddUser(_user);
-            LocationDAO daoLocation = DAOFactory.GetFactory(DAOFactory.Type.Postgres).GetLocationDAO();
-            _vehicle = new Auto("Audi", "A3", 4, true, "afwdqe", 100, "dweoijewijd", daoLocation.GetLocations()[0].Id);
-            _vehicle._id = 5;
+
         }
 
         [Test]
         public void TestAddAutomobileReservationOk()
         {
-            IReservationAutomobileDAO dao = DAOFactory.GetFactory(DAOFactory.Type.Postgres)
+            IReservationVehicleDAO dao = DAOFactory.GetFactory(DAOFactory.Type.Postgres)
                 .GetReservationAutomobileDAO();
             DateTime checkOut = new DateTime(2019, 10, 20);
-           _reservationAutomobile = EntityFactory.CreateReservationAutomobile(0, DateTime.Now, checkOut, _user.Id, _vehicle);
+            _reservationAutomobile =
+                EntityFactory.CreateReservationAutomobile(0, DateTime.Now, checkOut, _user.Id, 5);
             _reservationAutomobile = dao.AddReservation(_reservationAutomobile);
             Assert.NotZero(_reservationAutomobile.Id);
         }

@@ -14,201 +14,137 @@ using vacanze_back.VacanzeApi.Common.Exceptions.Grupo13;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
 {
-    public class PostgresReservationAutomobileDAO:IReservationAutomobileDAO
+    public class PostgresReservationVehicleDAO : IReservationVehicleDAO
     {
         const String SP_SELECT = "m13_getResAutos()";
-     //   const String SP_AVAILABLE = "m13_getavailableautomobilereservations('01/03/2019', '01/05/2019')";
+
+        //   const String SP_AVAILABLE = "m13_getavailableautomobilereservations('01/03/2019', '01/05/2019')";
         const String SP_FIND = "m13_findByResAutId(@_id)";
         const String SP_ADD = "m13_addautomobilereservation(@_checkin,@_checkout,@_use_fk,@_ra_aut_fk)";
         const String SP_UPDATE = "m13_updateautomobilereservation(@_checkin,@_checkout,@_use_fk,@_ra_aut_fk,@_ra_id)";
         const String SP_DELETE = "m13_deleteautomobilereservation(@_id)";
+
         const String SP_ALL_BY_USER_ID = "m13_getresautomobilebyuserid(@_id)";
-     //   const String SP_ADD_PAYMENT = "m13_modifyReservationRoomPayment(@_pay,@_id)";
+
+        //   const String SP_ADD_PAYMENT = "m13_modifyReservationRoomPayment(@_pay,@_id)";
         private Auto _automobile;
-        private ReservationAutomobile _reservation;
-
-        /** <summary>Trae de la BD, las reservas de automoviles</summary>
-         */
-        public List<ReservationAutomobile> GetAutomobileReservations()
+        private ReservationVehicle _reservation;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public List<ReservationVehicle> GetAutomobileReservations()
         {
-             List<ReservationAutomobile> reservationAutomobileList = new List<ReservationAutomobile>();
-             try
-             {
-                var table = PgConnection.Instance.ExecuteFunction(SP_SELECT);
-                for (int i = 0; i < table.Rows.Count; i++)
-                {
-                    var id = Convert.ToInt32(table.Rows[i][0]);
-                    var pickup = Convert.ToDateTime(table.Rows[i][1]);
-                    var returndate = Convert.ToDateTime(table.Rows[i][2]);
-                    var user_id = Convert.ToInt64(table.Rows[i][3]);
-                    var aut_fk = (int)Convert.ToInt64(table.Rows[i][4]);
-                    ReservationAutomobile reservation = EntityFactory.CreateReservationAutomobile(id,pickup,returndate);
-                    reservation.Automobile = ConnectAuto.ConsultforId(aut_fk).ElementAt(0);
-                    reservation.UserId = Convert.ToInt32(user_id);
-                    reservationAutomobileList.Add(reservation);
-                }
-                return reservationAutomobileList;
-             }
-             catch (NpgsqlException e)
-             {
-              throw new DatabaseException("Error en BD");
-             }
-             catch (Exception e)
-             {
-               e.ToString();
-             }
-             finally
-             {
-             }
-             return reservationAutomobileList;
+            List<ReservationVehicle> reservationAutomobileList = new List<ReservationVehicle>();
+            var table = PgConnection.Instance.ExecuteFunction(SP_SELECT);
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                var id = Convert.ToInt32(table.Rows[i][0]);
+                var pickup = Convert.ToDateTime(table.Rows[i][1]);
+                var returndate = Convert.ToDateTime(table.Rows[i][2]);
+                var userId = Convert.ToInt64(table.Rows[i][3]);
+                var vehicleId = (int) Convert.ToInt64(table.Rows[i][4]);
+                ReservationVehicle reservation = EntityFactory.CreateReservationAutomobile(id, pickup, returndate);
+                reservation.VehicleId = vehicleId;
+                reservation.UserId = Convert.ToInt32(userId);
+                reservationAutomobileList.Add(reservation);
+            }
+
+            return reservationAutomobileList;
         }
-        /** <summary>
-         * Busca en la BD, la reserva que posee el identificador suministrado
-         * </summary>
-         * <param name="id">El identificador de la entidad reserva de automovil a buscar</param>
-         */
-        public ReservationAutomobile Find(int id)
-        {
-            try
-            {
-                var table = PgConnection.Instance.ExecuteFunction(SP_FIND, id);
-                for (int i = 0; i < table.Rows.Count; i++)
-                {
-                    var pickup = Convert.ToDateTime(table.Rows[i][1]);
-                    var returndate = Convert.ToDateTime(table.Rows[i][2]);
-                    var userid = (int)Convert.ToInt64(table.Rows[i][4]);
-                    var aut_fk = (int)Convert.ToInt64(table.Rows[i][5]);
-                   // var payfk = Convert.ToInt64(table.Rows[i][5]);
-                    _reservation = EntityFactory.CreateReservationAutomobile(userid,pickup,returndate);
-                    _reservation.UserId = userid;
-                    _reservation.Automobile = ConnectAuto.ConsultforId(aut_fk).ElementAt(0);
 
-                    //  _reservation.User.Id = userid;
-                    //  _reservation.Automobile.Id = autfk;
-                    // Falta Payment
-                }
-                return _reservation;
-            }
-            catch (AutomobileReservationNotFoundException e)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id">El id del auto que se va a buscar</param>
+        /// <returns name = "_reservation">La reserva para el vehiculo con el id introducido</returns>
+        public ReservationVehicle Find(int id)
+        {
+            var table = PgConnection.Instance.ExecuteFunction(SP_FIND, id);
+            for (int i = 0; i < table.Rows.Count; i++)
             {
-                throw new AutomobileReservationNotFoundException(id);
+                var pickup = Convert.ToDateTime(table.Rows[i][1]);
+                var returndate = Convert.ToDateTime(table.Rows[i][2]);
+                var userId = (int) Convert.ToInt64(table.Rows[i][4]);
+                var vehicleId = (int) Convert.ToInt64(table.Rows[i][5]);
+                // var payfk = Convert.ToInt64(table.Rows[i][5]);
+                _reservation = EntityFactory.CreateReservationAutomobile(userId, pickup, returndate);
+                _reservation.UserId = userId;
+                _reservation.VehicleId = vehicleId;
+
+                //  _reservation.User.Id = userid;
+                //  _reservation.Automobile.Id = autfk;
+                // Falta Payment
             }
-            catch (NpgsqlException e)
-            {
-                throw new DatabaseException();
-            }
-            catch (Exception e)
-            {
-               throw new GeneralException();
-            }
+
             return _reservation;
         }
-
-        /** <summary>Inserta en la BD, la reservacion de automovil que es suministrada</summary> 
-         * <param name="reservation">La reservacion a agregar en la BD</param>
-         */
-        public ReservationAutomobile AddReservation(ReservationAutomobile reservation)
+        
+        public ReservationVehicle AddReservation(ReservationVehicle reservation)
         {
-            try
+            var table = PgConnection.Instance.ExecuteFunction(SP_ADD,
+                reservation.CheckIn,
+                reservation.CheckOut,
+                reservation.UserId,
+                reservation.VehicleId);
+            for (int i = 0; i < table.Rows.Count; i++)
             {
-                var table = PgConnection.Instance.
-                    ExecuteFunction(SP_ADD,
-                        reservation.CheckIn,
-                        reservation.CheckOut,
-                        reservation.UserId,
-                        reservation.Automobile.getId());
-                for (int i = 0; i < table.Rows.Count; i++)
-                {
-                    int id = (int)Convert.ToInt64(table.Rows[i][0]);
-                    reservation.Id = id;
-                }
-                    return reservation;
+                int id = (int) Convert.ToInt64(table.Rows[i][0]);
+                reservation.Id = id;
             }
-            catch
-            {
-                throw;
-            }
+
+            return reservation;
         }
 
         /** <summary>Borra de la BD, la reservacion que es suministrada</summary>
          * <param name="entity">La entidad reservacion a borrar de la BD</param>
          */
-        public void Delete(ReservationAutomobile reservation)
+        public void Delete(ReservationVehicle reservation)
         {
-            try
-            {
-                var table = PgConnection.Instance.ExecuteFunction(SP_DELETE,
-                   (int)reservation.Id);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-                throw;
-            }
+            var table = PgConnection.Instance.ExecuteFunction(SP_DELETE,
+                (int) reservation.Id);
         }
 
         /** <summary>Trae de la BD, las reservas de automoviles de un usuario</summary>
          * <param name="user_id">El id del usuario que posee las reservas</param>
          */
-        public List<ReservationAutomobile> GetAllByUserId(int user_id)
+        public List<ReservationVehicle> GetAllByUserId(int userId)
         {
-            List<ReservationAutomobile> reservationAutomobileList = new List<ReservationAutomobile>();
-            try
+            List<ReservationVehicle> reservationAutomobileList = new List<ReservationVehicle>();
+
+            var table = PgConnection.Instance.ExecuteFunction(SP_ALL_BY_USER_ID,
+                userId);
+            for (int i = 0; i < table.Rows.Count; i++)
             {
-                var table = PgConnection.Instance.ExecuteFunction(SP_ALL_BY_USER_ID,
-                    user_id);
-                for (int i = 0; i < table.Rows.Count; i++)
-                {
-                    var id = Convert.ToInt32(table.Rows[i][0]);
-                    var pickup = Convert.ToDateTime(table.Rows[i][1]);
-                    var returndate = Convert.ToDateTime(table.Rows[i][2]);
-                    //current timestamp
-                    var timestamp = Convert.ToDateTime(table.Rows[i][3]);
-                    var autfk = (int)Convert.ToInt64(table.Rows[i][4]);
-                    var userid = Convert.ToInt64(table.Rows[i][5]);
-                    
-                    ReservationAutomobile reservation = EntityFactory.CreateReservationAutomobile(id, pickup, returndate);
-                    reservation.Automobile = ConnectAuto.ConsultforId(autfk).ElementAt(0);
-                    reservation.UserId = user_id;
-                    reservationAutomobileList.Add(reservation);
-                }
-                return reservationAutomobileList;
+                var id = Convert.ToInt32(table.Rows[i][0]);
+                var pickup = Convert.ToDateTime(table.Rows[i][1]);
+                var returndate = Convert.ToDateTime(table.Rows[i][2]);
+                //current timestamp
+                var timestamp = Convert.ToDateTime(table.Rows[i][3]);
+                var vehicleId = (int) Convert.ToInt64(table.Rows[i][4]);
+                var userid = Convert.ToInt64(table.Rows[i][5]);
+
+                ReservationVehicle reservation = EntityFactory.CreateReservationAutomobile(id, pickup, returndate);
+                reservation.VehicleId = vehicleId;
+                reservation.UserId = userId;
+                reservationAutomobileList.Add(reservation);
             }
-            catch (NpgsqlException e)
-            {
-                e.ToString();
-            }
-            catch (Exception e)
-            {
-                e.ToString();
-            }
-            finally
-            {
-            }
+
             return reservationAutomobileList;
         }
 
         /** <summary>Actualiza en la BD, la reservacion de automovil</summary>
          * <param name="entity">La reserva a actualizar</param>
          */
-        public void Update(ReservationAutomobile reservation)
+        public void Update(ReservationVehicle reservation)
         {
-            try
-            {
-                var table = PgConnection.Instance.
-                    ExecuteFunction(SP_UPDATE,
-                        reservation.CheckIn,
-                        reservation.CheckOut,
-                        reservation.UserId,
-                        reservation.Automobile.getId(),
-                        reservation.Id);
-            }
-            catch (DatabaseException ex)
-            {
-
-                Console.WriteLine(ex.ToString());
-                throw new Exception("Ups, a ocurrido un error al conectarse a la base de datos", ex);
-            }
+            var table = PgConnection.Instance.ExecuteFunction(SP_UPDATE,
+                reservation.CheckIn,
+                reservation.CheckOut,
+                reservation.UserId,
+                reservation.VehicleId,
+                reservation.Id);
         }
     }
 }

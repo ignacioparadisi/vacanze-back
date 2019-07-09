@@ -7,14 +7,14 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
 {
 
-    public class ReservationAutomobile : Entity
+    public class ReservationVehicle : Entity
     {
         //CheckIn: Initial date of the reservation
         public DateTime CheckIn { get; set; }
         //CheckOut: Last date of the reservation
         public DateTime CheckOut { get; set; }
         //Automobile which the reservation references
-        public Auto Automobile { get; set; }
+        public int VehicleId { get; set; }
        
         public int UserId{ get; set; }
 
@@ -23,23 +23,23 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
         /// Inicializa una nueva instancia de la clase ReservationAutomobile.
         /// </summary>
         [JsonConstructor]
-        public ReservationAutomobile(int id, DateTime CheckIn, DateTime CheckOut) : base(id)
+        public ReservationVehicle(int id, DateTime CheckIn, DateTime CheckOut) : base(id)
         {
             this.CheckIn = CheckIn;
             this.CheckOut = CheckOut;
         }
 
-        public ReservationAutomobile(int id, DateTime CheckIn, DateTime CheckOut, Auto automobile, int usuario) : base(id)
+        public ReservationVehicle(int id, DateTime checkIn, DateTime checkOut, int vehicleId, int userId) : base(id)
         {
-            this.CheckIn = CheckIn;
-            this.CheckOut = CheckOut;
-            this.UserId = usuario;
-            this.Automobile = automobile;
+            CheckIn = checkIn;
+            CheckOut = checkOut;
+            UserId = userId;
+            VehicleId = vehicleId;
         }
 
-        public ReservationAutomobile(int payment) : base(0)
+        public ReservationVehicle(int paymentId) : base(0)
         {
-            this.PaymentId = payment;
+            PaymentId = paymentId;
         }
     }
 }
