@@ -6,8 +6,6 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Persistence.DAO;
-using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
-using vacanze_back.VacanzeApi.Persistence.DAO.Grupo6;
 
 namespace vacanze_back.VacanzeApiTest.Grupo13
 {
@@ -15,9 +13,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
     public class ReservationRoomDAOTest
     {
         private ReservationRoom _reservation;
-        private IReservationRoomDAO _restRoomDAO;
         private Hotel _hotel;
-        private HotelDAO _hotelDAO;
         private DAOFactory _factory;
         private User _user;
         private List<int> _insertedReservations;

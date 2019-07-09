@@ -6,7 +6,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
 {
     public interface IReservationRoomDAO
     {
-        List<ReservationRoom> GetRoomReservations();
         ReservationRoom Find(int id);
         int GetAvailableRoomReservations(int id);
         ReservationRoom Add(ReservationRoom reservation);

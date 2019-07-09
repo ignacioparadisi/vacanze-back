@@ -8,6 +8,7 @@ using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo13;
 using Npgsql;
+using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.DAO;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
 
@@ -23,7 +24,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         // GET api/reservationautomobiles/?id={user_id}]
         /* https://localhost:5001/api/reservationrooms/?user=1 */
         [HttpGet]
-        public ActionResult<IEnumerable<IReservationRoomDAO>> GetAllByUserID([FromQuery] int user = -1)
+        public ActionResult<IEnumerable<IReservationRoomDAO>> GetAllByUserID([FromQuery] int user)
         {
             try
             {
@@ -31,17 +32,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
                 IReservationRoomDAO reservationRoomDao = factory.GetReservationRoomDAO();
 
                 // ReservationRoomRepository connection = new ReservationRoomRepository();
-                return user == -1
-                    ? Ok(reservationRoomDao.GetRoomReservations())
-                    : Ok(reservationRoomDao.GetAllByUserId(user));
+                return Ok(reservationRoomDao.GetAllByUserId(user));
             }
-            // TODO: Manejar los errores
-            catch (SystemException)
+            catch (GeneralException e)
             {
-                throw;
+                return BadRequest(e.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error en el servidor");
             }
         }
-
+        
         [HttpGet("{id}")]
         public ActionResult<Entity> Find(int id)
         {
