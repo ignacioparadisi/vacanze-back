@@ -4,7 +4,7 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo6;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6 {
 
-    public class AddHotelCommand : Command, CommandResult<int> {
+    public class AddHotelCommand : CommandResult<int> {
         private int _id;
         private Hotel _hotel;
 

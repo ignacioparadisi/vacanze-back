@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
@@ -22,6 +23,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
     [ApiController]
     public class HotelsController : ControllerBase
     {
+		 private readonly ILogger<HotelsController> _logger;
+
+        public HotelsController (ILogger<HotelsController> logger)
+        {
+            _logger = logger;
+        }
         /// <summary>
         ///     Metodo para obtener los hoteles por ubicacion o sin ella
         /// </summary>
@@ -57,8 +64,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
                 DTO lDTO  = HotelMapper.CreateDTO(commandId.GetResult());               
                 return Ok(lDTO);
             }
-            catch (HotelNotFoundException)
+            catch (HotelNotFoundException ex)
             {
+				_logger?.LogError(ex, "HotelNotFoundException when trying to get a hotel by id");
                 return NotFound();
             }
         }
@@ -89,10 +97,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
             }
             catch (RequiredAttributeException e)
             {
+				_logger?.LogError(e, "RequiredAttributeException when trying to add a hotel because some required attribute was as null");
                 return new BadRequestObjectResult(new ErrorMessage(e.Message));
             }
             catch (InvalidAttributeException e)
             {
+				_logger?.LogError(e, "InvalidAttributeException when trying to add Hotel because some attribute had an invalid value ");
                 return new BadRequestObjectResult(new ErrorMessage(e.Message));
             }
         }
@@ -132,17 +142,20 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
                 DTO lDTO  = HotelMapper.CreateDTO( command.GetResult());               
                 return Ok(lDTO);
             }
-            catch (HotelNotFoundException)
+            catch (HotelNotFoundException ex)
             {
+					_logger?.LogError(ex, "HotelNotFoundException when trying to update a hotel by id");
                 return new NotFoundObjectResult(
                     new ErrorMessage($"Hotel con id {hotelId} no conseguido"));
             }
             catch (RequiredAttributeException e)
             {
+				_logger?.LogError(e, "Required Attribute Exception when trying to update a hotel because some required attribute was as null");
                 return new BadRequestObjectResult(new ErrorMessage(e.Message));
             }
             catch (InvalidAttributeException e)
             {
+				_logger?.LogError(e, "InvalidAttributeException when trying to update Hotel because some attribute had an invalid value ");
                 return new BadRequestObjectResult(new ErrorMessage(e.Message));
             }
         }

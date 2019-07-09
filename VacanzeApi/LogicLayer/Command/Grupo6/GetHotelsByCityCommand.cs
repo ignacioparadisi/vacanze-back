@@ -6,7 +6,7 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo6;
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6
 {
 
-	public class GetHotelsByCityCommand : Command, CommandResult<List<Hotel>>
+	public class GetHotelsByCityCommand :CommandResult<List<Hotel>>
 	{
 		private int _city;
 		private List<Hotel> _hotels;

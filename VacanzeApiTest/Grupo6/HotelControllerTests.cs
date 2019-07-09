@@ -20,7 +20,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         [SetUp]
         public void Setup()
         {
-            _hotelsController = new HotelsController();
+            _hotelsController = new HotelsController(null);
             _insertedHotels = new List<int>();
             _hotelentity = HotelBuilder.Create()
                 .WithName("Hotel Cagua")

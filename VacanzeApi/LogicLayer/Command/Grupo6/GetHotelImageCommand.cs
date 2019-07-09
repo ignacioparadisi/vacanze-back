@@ -6,7 +6,7 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo6;
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6
 {
 
-	public class GetHotelImageCommand : Command, CommandResult<String>
+	public class GetHotelImageCommand : CommandResult<String>
 	{
 		private int _id;
 		private String _image;
