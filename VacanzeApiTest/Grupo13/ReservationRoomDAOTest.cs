@@ -114,5 +114,12 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             var id = _factory.GetReservationRoomDAO().Delete(_reservation.Id);
             Assert.AreEqual(_reservation.Id, id);
         }
+
+        [Test]
+        public void GetAvailableRoomReservationsSuccess()
+        {
+            var availableRooms = _factory.GetReservationRoomDAO().GetAvailableRoomReservations(_hotel.Id);
+            Assert.True(availableRooms > 0);
+        }
     }
 }

@@ -30,8 +30,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             {
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
                 IReservationRoomDAO reservationRoomDao = factory.GetReservationRoomDAO();
-
-                // ReservationRoomRepository connection = new ReservationRoomRepository();
                 return Ok(reservationRoomDao.GetAllByUserId(user));
             }
             catch (GeneralException e)
