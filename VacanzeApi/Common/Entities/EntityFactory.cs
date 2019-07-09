@@ -1,4 +1,5 @@
 using System;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
@@ -60,9 +61,11 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
         public static ReservationAutomobile CreateReservationAutomobile(int id, DateTime checkIn, DateTime checkOut) =>
             new ReservationAutomobile(id, checkIn, checkOut);
 
-
         public static ReservationRoom CreateReservationRoom(int id, DateTime chekckIn, DateTime checkOut) =>
             new ReservationRoom(id, chekckIn, checkOut);
+        public static ReservationRoom CreateReservationRoom(int id, DateTime chekckIn, DateTime checkOut,
+            Hotel hotel, User user) =>
+            new ReservationRoom(id, chekckIn, checkOut, hotel, user);
         
         public static ReservationRoom CreateReservationRoom() =>
             new ReservationRoom();

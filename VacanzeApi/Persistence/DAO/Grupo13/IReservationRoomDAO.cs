@@ -10,8 +10,8 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         ReservationRoom Find(int id);
         int GetAvailableRoomReservations(int id);
         int Add(ReservationRoom reservation);
-        int Delete(Entity entity);
+        int Delete(ReservationRoom reservation);
         List<ReservationRoom> GetAllByUserId(int userId);
-        void Update(ReservationRoom entity);
+        void Update(ReservationRoom reservation);
     }
 }

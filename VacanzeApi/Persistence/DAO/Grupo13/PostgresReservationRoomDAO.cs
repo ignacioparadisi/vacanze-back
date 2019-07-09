@@ -4,6 +4,7 @@ using Npgsql;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo6;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
@@ -34,7 +35,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                     var id = Convert.ToInt32(table.Rows[i][0]);
                     var pickup = Convert.ToDateTime(table.Rows[i][1]);
                     var returndate = Convert.ToDateTime(table.Rows[i][2]);
-                    var timestamp = Convert.ToDateTime(table.Rows[i][3]);
                     var userId = Convert.ToInt32(table.Rows[i][5]);
 
                     ReservationRoom roomRes = EntityFactory.CreateReservationRoom(id, pickup, returndate);
@@ -49,15 +49,9 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
 
                 return roomReservationList;
             }
-            catch (NpgsqlException e)
-            {
-                e.ToString();
-                throw;
-            }
             catch (Exception e)
             {
-                e.ToString();
-                throw;
+                throw new GeneralException("Error Obteniendo las Reservas de Habitación");
             }
         }
         
@@ -77,7 +71,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                     var id2 = Convert.ToInt32(table.Rows[i][0]);
                     var pickup = Convert.ToDateTime(table.Rows[i][1]);
                     var returndate = Convert.ToDateTime(table.Rows[i][2]);
-                    var timestamp = Convert.ToDateTime(table.Rows[i][3]);
                     var userid = Convert.ToInt32(table.Rows[i][5]);
                     var hot_fk = Convert.ToInt64(table.Rows[i][5]);
 
@@ -90,15 +83,15 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                     reservationRoom.Fk_user = userid;
                     //Falta Payment
                 }
+                if (table.Rows.Count == 0)
+                {
+                    throw new RoomReservationNotFoundException();
+                }
                 return reservationRoom;
-            }
-            catch (NpgsqlException e)
-            {
-                e.ToString();
             }
             catch (Exception e)
             {
-                e.ToString();
+                throw new GeneralException("Error Obteniendo la Reserva de Habitación");
             }
             return reservationRoom;
         }
@@ -118,15 +111,12 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                 {
                     available = (int)Convert.ToInt64(table.Rows[i][0]);
                 }
+                
                 return available;
-            }
-            catch (NpgsqlException e)
-            {
-                e.ToString();
             }
             catch (Exception e)
             {
-                e.ToString();
+                throw new GeneralException("Error Obteniendo las Habitaciones Disponibles");
             }
             return available;
         }
@@ -155,28 +145,20 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                 }
                 return 0;
             }
-            catch(DatabaseException e)
-            {
-                Console.WriteLine(e.ToString());
-                throw new Exception();
-            }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
-                throw new Exception();
+                throw new GeneralException("Error Agregando la Reserva de Habitación");
             }
         }
 
-        /** <summary>
-         * Borra de la BD, la reservacion que es suministrada
-         * </summary>
-         * <param name="entity">La entidad reservacion a borrar de la BD</param>
-         */
-        public int Delete(Entity entity)
+        /// <summary>
+        /// Borra de la BD, la reservacion que es suministrada
+        /// </summary>
+        /// <param name="reservation">La entidad reservacion a borrar de la BD</param>
+        public int Delete(ReservationRoom reservation)
         {
             try
             {
-                ReservationRoom reservation = (ReservationRoom)entity;
                 var table = PgConnection.Instance.ExecuteFunction(
                    SP_DELETE_RESERVATION,
                    (int)reservation.Id
@@ -189,16 +171,15 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
-                throw;
+                throw new GeneralException("Error Eliminando la Reserva de Habitación");
             }
         }
 
-        /** <summary>
-         * Trae de la BD, las reservas de habitacion del id del usuario suministrado
-         * </summary>
-         * <param name="user_id">El id del usuario que posee las reservas de habitacion</param>
-         */
+        /// <summary>
+        /// Trae de la BD, las reservas de habitación del id del usuario suministrado
+        /// </summary>
+        /// <param name="user_id">El id del usuario que posee las reservas de habitación</param>
+        /// <returns> Una lista de reservas de habitaciones </returns>
         public List<ReservationRoom> GetAllByUserId(int userId)
         {
             List<ReservationRoom> reservationAutomobileList = new List<ReservationRoom>();
@@ -224,13 +205,9 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                 }
                 return reservationAutomobileList;
             }
-            catch (NpgsqlException e)
-            {
-                e.ToString();
-            }
             catch (Exception e)
             {
-                e.ToString();
+                throw new GeneralException("Error Obteniendo las Reservas de Habitación");
             }
             return reservationAutomobileList;
         }
@@ -240,11 +217,10 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
          * </summary>
          * <param name="entity">La reserva a actualizar</param>
          */
-        public void Update(ReservationRoom entity)
+        public void Update(ReservationRoom reservation)
         {
             try
             {
-                ReservationRoom reservation = entity;
                 PgConnection.Instance.ExecuteFunction(
                     SP_UPDATE,
                     reservation.CheckIn,
@@ -254,11 +230,9 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                    reservation.Id
                 );
             }
-            catch (DatabaseException ex)
+            catch (Exception e)
             {
-
-                Console.WriteLine(ex.ToString());
-                throw new Exception("Ups, a ocurrido un error al conectarse a la base de datos", ex);
+                throw new GeneralException("Error Actulizando la Reserva de Habitación");
             }
         }
     }

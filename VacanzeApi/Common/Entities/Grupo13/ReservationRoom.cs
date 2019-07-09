@@ -27,12 +27,11 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
         }
         
         [JsonConstructor]
-        public ReservationRoom(int id, DateTime CheckIn, DateTime CheckOut, Hotel hotel, int user_id, User user) : base(id)
+        public ReservationRoom(int id, DateTime CheckIn, DateTime CheckOut, Hotel hotel, User user) : base(id)
         {
             this.CheckIn = CheckIn;
             this.CheckOut = CheckOut;
             this.Hotel = hotel;
-            this.Fk_user = user_id;
             this.User = user;
         }
 
