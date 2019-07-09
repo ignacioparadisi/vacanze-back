@@ -5,6 +5,8 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo9;
 using vacanze_back.VacanzeApi.Persistence.DAO.Locations;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo6;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo12;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo5;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo4;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO
@@ -14,11 +16,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         public enum Type
         {
             Postgres
-        };
+        }
 
         public static DAOFactory GetFactory(Type type)
         {
-            switch (type)
+            switch (type) 
             {
                 case Type.Postgres:
                     return new PostgresDAOFactory();
@@ -26,6 +28,12 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
                     throw new NotValidFactoryTypeException("El tipo de fábrica de DAO no es válido");
             }
         }
+        // +++++++++++++++++
+        //     GRUPO 5
+        // +++++++++++++++++
+        public abstract IBrandDAO GetBrandDAO();
+        public abstract IModelDAO GetModelDAO();
+        public abstract IVehicleDAO GetVehicleDAO();
         // +++++++++++++++++
         //     GRUPO 6
         // +++++++++++++++++
@@ -35,7 +43,9 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         // +++++++++++++++++
         //     GRUPO 13
         // +++++++++++++++++
-        public abstract ReservationRoomDAO GetReservationRoomDAO();
+        public abstract IReservationRoomDAO GetReservationRoomDAO();
+
+        public abstract IReservationAutomobileDAO GetReservationAutomobileDAO();
         // +++++++++++++++++
         //     GRUPO 7
         // +++++++++++++++++
@@ -48,6 +58,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         public abstract UserDAO GetUserDAO();
 
         public abstract IBaggageDao GetBaggageDao();
+
+        // +++++++++++++++++
+        //     GRUPO 12
+        // +++++++++++++++++
+        public abstract ReservationFlightDAO GetReservationFlightDAO();
 
         public abstract ISaleFlightDAO GetSaleFlightDAO();
 
