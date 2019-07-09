@@ -37,25 +37,36 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo12{
             
         }
 
+        public FlightRes(int id,int price,string timestamp,string seatNum,
+        string name_cityI,string name_countryI, string namecityV,string namecountryV,int numPas):base(id){
 
-        
-         public FlightRes(int id,int price,string timestamp,string seatNum,
-         string name_cityI,string name_countryI, string namecityV,string namecountryV,int numPas):base(id){
+            _id=id;
+            _price=price;
+            _timestamp=timestamp;
+            _seatNum=seatNum;
+            _numPas=numPas;
+            _namecityI=name_cityI;
+            _namecountryI=name_countryI;
+            _namecityV=namecityV;
+            _namecountryV=namecountryV;
+            
+        }
 
-             _id=id;
-             _price=price;
-             _timestamp=timestamp;
-             _seatNum=seatNum;
-             _numPas=numPas;
-             _namecityI=name_cityI;
-             _namecountryI=name_countryI;
-             _namecityV=namecityV;
-             _namecountryV=namecountryV;
-             
-         }
+        public FlightRes(int id,int price,string timestamp,string seatNum,
+        string name_cityI,string name_countryI, string namecityV,string namecountryV,int numPas, int id_user, int id_fli):base(id){
 
-
-
-
+            _id=id;
+            _price=price;
+            _timestamp=timestamp;
+            _seatNum=seatNum;
+            _numPas=numPas;
+            _namecityI=name_cityI;
+            _namecountryI=name_countryI;
+            _namecityV=namecityV;
+            _namecountryV=namecountryV;
+            _id_user=id_user;
+            _id_fli=id_fli;
+            
+        }
     }
 }

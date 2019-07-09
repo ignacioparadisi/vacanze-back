@@ -12,7 +12,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo12{
 
         public string _name_city_i{get;set;}
         public string _name_city_V{get;set;}
-         public int _sum_capacity{get;set;}
+        public int _sum_capacity{get;set;}
         public int _id_city{get;set;}
         public int _sum_pas{get;set;}
         public int _seatavailable{get;set;}
@@ -34,7 +34,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo12{
             _name_city_V=name_city_V;
         }
 
-          public ListRes(int id,int price,int priceupdate,string dateI,string dateV,
+        public ListRes(int id,int price,int priceupdate,string dateI,string dateV,
         string name_country_i ,string name_country_V,int seatavailable,string name_city_i,
         string name_city_V ):base(id){
 

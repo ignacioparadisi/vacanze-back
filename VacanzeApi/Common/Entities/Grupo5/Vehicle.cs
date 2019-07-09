@@ -21,34 +21,41 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo5
         private double _price;
         public double Price { get{ return _price; } set{ _price = value; } }
 
-        public Vehicle(int _vehicleModelId, int _vehicleLocationId, string _license, double _price) :base(0){
+        private bool _status;
+        public bool Status { get{ return _status; } set{ _status = value; } }
+
+        public Vehicle(int _vehicleModelId, int _vehicleLocationId, string _license, double _price, bool _status) :base(0){
             VehicleModelId = _vehicleModelId;
             VehicleLocationId = _vehicleLocationId;
             License = _license;
             Price = _price;
+            Status = _status;
         }
 
-        public Vehicle(Model _vehicleModel, Location _vehicleLocation, string _license, double _price) :base(0){
+        public Vehicle(Model _vehicleModel, Location _vehicleLocation, string _license, double _price, bool _status) :base(0){
             VehicleModel = _vehicleModel;
             VehicleLocation = _vehicleLocation;
             License = _license;
             Price = _price;
+            Status = _status;
         }
 
-        public Vehicle(int Id, int _vehicleModelId, int _vehicleLocationId, string _license, double _price) :base(Id){
+        public Vehicle(int Id, int _vehicleModelId, int _vehicleLocationId, string _license, double _price, bool _status) :base(Id){
             this.Id = Id;
             VehicleModelId = _vehicleModelId;
             VehicleLocationId = _vehicleLocationId;
             License = _license;
             Price = _price;
+            Status = _status;
         }
 
-        public Vehicle(int Id, Model _vehicleModel, Location _vehicleLocation, string _license, double _price) :base(Id){
+        public Vehicle(int Id, Model _vehicleModel, Location _vehicleLocation, string _license, double _price, bool _status) :base(Id){
             this.Id = Id;
             VehicleModel = _vehicleModel;
             VehicleLocation = _vehicleLocation;
             License = _license;
             Price = _price;
+            Status = _status;
         }
     }
 }
