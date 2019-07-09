@@ -23,6 +23,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
          * Trae de la BD, las reservas de habitacion
          * </summary>
          */
+        // TODO: Puede que este método sea borrado
         public List<ReservationRoom> GetRoomReservations()
         {
             try
@@ -132,12 +133,13 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         {
             try
             {
+                var id = reservation.Hotel.Id;
                  var table=   PgConnection.Instance.
                     ExecuteFunction(SP_ADD_RESERVATION,
                         reservation.CheckIn,
                         reservation.CheckOut,
-                        reservation.Fk_user,
-                        (int)reservation.Hotel.Id);
+                        reservation.User.Id,
+                        reservation.Hotel.Id);
 
                 if (table.Rows.Count > 0)
                 {
@@ -145,7 +147,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                 }
                 return 0;
             }
-            catch (Exception e)
+            catch (NpgsqlException e)
             {
                 throw new GeneralException("Error Agregando la Reserva de Habitación");
             }
@@ -159,9 +161,8 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         {
             try
             {
-                var table = PgConnection.Instance.ExecuteFunction(
-                   SP_DELETE_RESERVATION, id);
-                if (table.Rows.Count > 0)
+                var table = PgConnection.Instance.ExecuteFunction(SP_DELETE_RESERVATION, id);
+                   if (table.Rows.Count > 0)
                 {
                     return Convert.ToInt32(table.Rows[0][0]);
                 }
