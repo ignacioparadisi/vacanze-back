@@ -2258,20 +2258,24 @@ CREATE OR REPLACE FUNCTION public.m13_addautomobilereservation(
     _checkout timestamp without time zone,
     _use_fk integer,
     _ra_aut_fk integer)
-    RETURNS void
-    LANGUAGE 'plpgsql'
-
-    COST 100
-    VOLATILE
+    RETURNS TABLE(
+        id int
+                 )
+    
 AS $BODY$
 
 BEGIN
+RETURN QUERY 
 INSERT INTO Res_Aut
 (ra_pickupdate,ra_returndate,ra_timestamp,ra_use_fk,ra_aut_fk)
-VALUES(_checkin,_checkout,CURRENT_TIMESTAMP,_use_fk,_ra_aut_fk);
+VALUES(_checkin,_checkout,CURRENT_TIMESTAMP,_use_fk,_ra_aut_fk)
+RETURNING ra_id;
 END;
 
-$BODY$;
+$BODY$ LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE;
 
 ALTER FUNCTION public.m13_addautomobilereservation(timestamp without time zone, timestamp without time zone, integer, integer)
     OWNER TO vacanza;
