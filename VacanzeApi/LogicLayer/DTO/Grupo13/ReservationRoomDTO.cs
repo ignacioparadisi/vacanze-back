@@ -1,6 +1,4 @@
 using System;
-using Org.BouncyCastle.Crypto.Engines;
-using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo13
 {
