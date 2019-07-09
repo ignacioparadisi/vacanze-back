@@ -56,5 +56,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         public abstract UserDAO GetUserDAO();
 
         public abstract IBaggageDao GetBaggageDao();
+        
     }
 }
