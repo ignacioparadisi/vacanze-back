@@ -44,7 +44,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                     var aut_fk = (int)Convert.ToInt64(table.Rows[i][4]);
                     ReservationAutomobile reservation = EntityFactory.CreateReservationAutomobile(id,pickup,returndate);
                     reservation.Automobile = ConnectAuto.ConsultforId(aut_fk).ElementAt(0);
-                    reservation.Fk_user = aut_fk;
+                    reservation.UserId = Convert.ToInt32(user_id);
                     reservationAutomobileList.Add(reservation);
                 }
                 return reservationAutomobileList;
@@ -79,8 +79,8 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                     var userid = (int)Convert.ToInt64(table.Rows[i][4]);
                     var aut_fk = (int)Convert.ToInt64(table.Rows[i][5]);
                    // var payfk = Convert.ToInt64(table.Rows[i][5]);
-                    _reservation = EntityFactory.CreateReservationAutomobile(id,pickup,returndate);
-                    _reservation.Fk_user = userid;
+                    _reservation = EntityFactory.CreateReservationAutomobile(userid,pickup,returndate);
+                    _reservation.UserId = userid;
                     _reservation.Automobile = ConnectAuto.ConsultforId(aut_fk).ElementAt(0);
 
                     //  _reservation.User.Id = userid;
@@ -115,7 +115,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                     ExecuteFunction(SP_ADD,
                         reservation.CheckIn,
                         reservation.CheckOut,
-                        reservation.Fk_user,
+                        reservation.UserId,
                         reservation.Automobile.getId());
                 for (int i = 0; i < table.Rows.Count; i++)
                 {
@@ -169,7 +169,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                     
                     ReservationAutomobile reservation = EntityFactory.CreateReservationAutomobile(id, pickup, returndate);
                     reservation.Automobile = ConnectAuto.ConsultforId(autfk).ElementAt(0);
-                    reservation.Fk_user = user_id;
+                    reservation.UserId = user_id;
                     reservationAutomobileList.Add(reservation);
                 }
                 return reservationAutomobileList;
@@ -199,7 +199,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                     ExecuteFunction(SP_UPDATE,
                         reservation.CheckIn,
                         reservation.CheckOut,
-                        reservation.Fk_user,
+                        reservation.UserId,
                         reservation.Automobile.getId(),
                         reservation.Id);
             }
