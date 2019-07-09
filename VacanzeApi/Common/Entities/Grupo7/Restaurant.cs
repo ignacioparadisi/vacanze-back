@@ -22,7 +22,6 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo7
         public int Location { get; }
         public string Address { get; }
         
-        [JsonConstructor]
         public Restaurant(int id, string name, int capacity,bool isActive,decimal qualify, string specialty, 
                           decimal price, string businessName, string picture, 
                           string description, string phone, int location, string address) : base(id)

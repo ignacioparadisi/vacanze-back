@@ -5,6 +5,8 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo7;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo7;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
 using vacanze_back.VacanzeApi.Common.Entities;
@@ -70,14 +72,39 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new UpdateModelCommand(model);
         }
 
+        public static RestaurantValidatorCommand CreateGetRestaurantValidatorCommand(Restaurant restaurant)
+        {
+            return new RestaurantValidatorCommand(restaurant);
+        }
+        
         public static GetRestaurantCommand CreateGetRestaurantCommand(int id)
         {
             return new GetRestaurantCommand(id);
         }
 
-        public static AddRestaurantCommand CreateAddRestaurantCommand(RestaurantDTO restaurantDto)
+        public static AddRestaurantCommand CreateAddRestaurantCommand(RestaurantDto restaurantDto)
         {
             return new AddRestaurantCommand(restaurantDto);
+        }
+
+        public static GetRestaurantsCommand CreateGetRestaurantsCommand()
+        {
+            return new GetRestaurantsCommand();
+        }
+        
+        public static GetRestaurantsByCityCommand CreateGetRestaurantsByCityCommand(int locationId)
+        {
+            return new GetRestaurantsByCityCommand(locationId);
+        }
+        
+        public static UpdateRestaurantCommand CreateUpdateRestaurantCommand(RestaurantDto restaurantDto)
+        {
+            return new UpdateRestaurantCommand(restaurantDto);
+        }
+        
+        public static DeleteRestaurantCommand CreateDeleteRestaurantCommand(int id)
+        {
+            return new DeleteRestaurantCommand(id);
         }
 
         public static GetClaimByIdCommand CreateGetClaimByIdCommand(int claimId)
