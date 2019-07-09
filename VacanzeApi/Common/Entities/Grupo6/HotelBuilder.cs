@@ -1,3 +1,8 @@
+using vacanze_back.VacanzeApi.LogicLayer.Command.Locations; 
+using vacanze_back.VacanzeApi.LogicLayer.Command; 
+using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
+
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
 {
     public class HotelBuilder
@@ -68,9 +73,18 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
             return this;
         }
 
-        public HotelBuilder LocatedAt(Location location)
+        public HotelBuilder LocatedAt(int locationid)
         {
-            _hotel.Location = location;
+            try
+            {
+                GetLocationByIdCommand commandId =  CommandFactory.GetLocationByIdCommand(locationid);
+                commandId.Execute ();
+                _hotel.Location = commandId.GetResult(); 
+            }catch (LocationNotFoundException)
+            {
+                _hotel.Location= null;
+            }
+ 
             return this;
         }
 
@@ -89,6 +103,11 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
         public Hotel Build()
         {
             HotelValidator.Validate(_hotel);
+            return _hotel;
+        }
+
+        public Hotel BuildSinVaidar()
+        {
             return _hotel;
         }
     }

@@ -1,21 +1,14 @@
 namespace vacanze_back.VacanzeApi.Common.Entities
 {
-    public class Location
+    public class Location : Entity
     {
-        public Location()
+        public Location() : base(0)
         {
         }
 
-        public Location(int id, string country, string city)
+        public Location(int id, string country, string city) : base(id)
         {
             Id = id;
-            Country = country;
-            City = city;
-        }
-
-        public Location(string country, string city)
-        {
-            Id = 0;
             Country = country;
             City = city;
         }

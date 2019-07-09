@@ -7,10 +7,6 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
         {
         }
 
-        public Hotel(int id) : base(id)
-        {
-        }
-
         public int Id { get; set; }
         public string Name { get; set; }
         public int AmountOfRooms { get; set; }

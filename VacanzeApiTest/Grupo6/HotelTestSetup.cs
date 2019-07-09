@@ -6,9 +6,9 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
 {
     [SetUpFixture]
     public class HotelTestSetup
-    {
-        public static int LOCATION_ID;
-
+    { /* eliminar estas pruebas */
+        public static int LOCATION_ID = 77;
+         /*
         [OneTimeSetUp]
         public void Init()
         {
@@ -19,6 +19,6 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         public void End()
         {
             LocationRepository.DeleteLocation(LOCATION_ID);
-        }
+        }*/
     }
 }
