@@ -33,7 +33,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                 for (int i = 0; i < table.Rows.Count; i++)
                 {
                     reservationRoom = GetReservationRoomFromTable(table, i);
-                    //Falta Payment
+                    // Falta Payment
                 }
 
                 if (table.Rows.Count == 0)
@@ -120,10 +120,9 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                 {
                     return Convert.ToInt32(table.Rows[0][0]);
                 }
-
-                return 0;
+                throw new NotValidIdException("El ID de la reservación no es válida.");
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new GeneralException("Error Eliminando la Reserva de Habitación");
             }
@@ -166,7 +165,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
          * </summary>
          * <param name="entity">La reserva a actualizar</param>
          */
-        public void Update(ReservationRoom reservation)
+        public ReservationRoom Update(ReservationRoom reservation)
         {
             try
             {
@@ -178,6 +177,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                     reservation.HotelId,
                     reservation.Id
                 );
+                return reservation;
             }
             catch (Exception)
             {
