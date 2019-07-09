@@ -15,11 +15,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         public enum Type
         {
             Postgres
-        };
+        }
 
         public static DAOFactory GetFactory(Type type)
         {
-            switch (type)
+            switch (type) 
             {
                 case Type.Postgres:
                     return new PostgresDAOFactory();
