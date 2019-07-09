@@ -53,5 +53,26 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
                 return StatusCode (400);
             }
         }
+
+        [HttpGet("~/api/locations/{locationId:int}/[controller]")]
+        public ActionResult<List<VehicleDTO>> GetAvailableVehiclesByLocation(int locationId){
+            try {
+                GetAvailableVehiclesByLocationCommand command = 
+                    CommandFactory.CreateGetAvailableVehiclesByLocationCommand(locationId);
+                command.Execute ();
+                VehicleMapper vehicleMapper = MapperFactory.CreateVehicleMapper();
+                return Ok (vehicleMapper.CreateDTOList(command.GetResult()));
+            } catch (LocationNotFoundException ex){
+                return StatusCode (404, "Location con  " + ex.Message);
+            } catch (NotVehiclesAvailableException ex){
+                return StatusCode (404, ex.Message);
+            } catch (VehicleNotFoundException ex){
+                return StatusCode (404, ex.Message + ex.VehicleId);
+            } catch (InternalServerErrorException ex) {
+                return StatusCode (500, ex.Message);
+            } catch (Exception) {
+                return StatusCode (400);
+            }
+        }
     }
 }
