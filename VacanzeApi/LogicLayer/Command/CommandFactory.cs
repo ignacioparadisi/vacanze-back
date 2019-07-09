@@ -20,6 +20,8 @@ using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo4;
 using System;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo4;
 using System.Collections.Generic;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command
 {
@@ -305,6 +307,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         public static GetReservationsByDateIVCommand CreateGetReservationsByDateIVCommand(int departure, int arrival, string departuredate, string arrivaldate, int numpas)
         {
             return new GetReservationsByDateIVCommand(departure, arrival, departuredate, arrivaldate, numpas);
+        }
+
+        public static AddReservationRoomCommand CreateAddReservationRoomCommand(ReservationRoom reservationRoom)
+        {
+            return new AddReservationRoomCommand(reservationRoom);
         }
     }
 

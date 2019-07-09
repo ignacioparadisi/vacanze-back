@@ -9,8 +9,10 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo13;
 using Npgsql;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.LogicLayer.Command;
 using vacanze_back.VacanzeApi.Persistence.DAO;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
+using Command = vacanze_back.VacanzeApi.Common.Command;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 {
@@ -66,14 +68,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Entity> Post([FromBody] ReservationRoom reservation)
+        public ActionResult<ReservationRoom> Post([FromBody] ReservationRoom reservation)
         {
             try
             {
-                DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-                IReservationRoomDAO reservationRoomDao = factory.GetReservationRoomDAO();
-                reservationRoomDao.Add(reservation);
-                return Ok(new { Message = "Reservacion Agregada" });
+                CommandResult<ReservationRoom> command = CommandFactory.CreateAddReservationRoomCommand(reservation);
+                command.Execute();
+                return Ok(command.GetResult());
             }
             catch (GeneralException e)
             {
