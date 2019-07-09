@@ -12,7 +12,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
         public static Vehicle CreateVehicle(int Id, int _vehicleModelId, int _vehicleLocationId, 
             string _license, double _price, bool _status)
         {
-            return new Vehicle(Id, _vehicleModelId, _vehicleLocationId, _license, _price);
+            return new Vehicle(Id, _vehicleModelId, _vehicleLocationId, _license, _price, _status);
         }
         
         public static Brand createBrand(int id, string brandName)
@@ -68,7 +68,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
         public static ReservationRoom CreateReservationRoom(int id, DateTime chekckIn, DateTime checkOut) =>
             new ReservationRoom(id, chekckIn, checkOut);
         public static ReservationRoom CreateReservationRoom(int id, DateTime chekckIn, DateTime checkOut,
-            Hotel hotel, int user) =>
+            Hotel hotel, User user) =>
             new ReservationRoom(id, chekckIn, checkOut, hotel, user);
         
         public static ReservationRoom CreateReservationRoom() =>
