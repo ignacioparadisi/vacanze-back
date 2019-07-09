@@ -160,11 +160,8 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         {
             try
             {
-                var table = PgConnection.Instance.ExecuteFunction(
-                   SP_DELETE_RESERVATION,
-                   id
-               );
-                if (table.Rows.Count > 0)
+                var table = PgConnection.Instance.ExecuteFunction(SP_DELETE_RESERVATION, id);
+                   if (table.Rows.Count > 0)
                 {
                     return Convert.ToInt32(table.Rows[0][0]);
                 }

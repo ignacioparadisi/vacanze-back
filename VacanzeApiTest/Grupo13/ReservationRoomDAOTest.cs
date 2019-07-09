@@ -21,8 +21,6 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         private HotelDAO _hotelDAO;
         private DAOFactory _factory;
         private User _user;
-        private List<int> _insertedHotels;
-        private List<int> _insertedUsers;
         private List<int> _insertedReservations;
 
         private void CreateUser()
@@ -55,8 +53,6 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         [SetUp]
         public void Setup()
         {
-            _insertedHotels = new List<int>();
-            _insertedUsers = new List<int>();
             _insertedReservations = new List<int>();
             
             DateTime checkin = new DateTime(2019,7,10);
