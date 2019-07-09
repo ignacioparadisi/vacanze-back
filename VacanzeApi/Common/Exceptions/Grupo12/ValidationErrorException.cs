@@ -1,6 +1,6 @@
 using System;
 
-namespace vacanze_back.VacanzeApi.Common.Exceptions.Grupo12
+namespace vacanze_back.VacanzeApi.Common.Exceptions.Grupo3
 {
     public class ValidationErrorException : Exception
     {

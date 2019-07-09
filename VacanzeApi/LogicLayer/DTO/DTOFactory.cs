@@ -1,5 +1,9 @@
+using System.Collections.Generic;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo2;
 using  vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo5;
 using  vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo6;
+using  vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo12;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.DTO{
 
@@ -35,6 +39,23 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO{
 
         public static LocationDTO CreateLocationDTO(int id, string country, string city){
             return new LocationDTO(id, country, city);
+        }
+
+        public static UserDTO CreateUserDTO(int Id, long DocumentId, string Name, string Lastname, string Email, string Password, List<Role> Roles)
+        {
+            return new UserDTO(Id, DocumentId, Name, Lastname, Email, Password, Roles);
+        }
+
+        public static RoleDTO CreateRoleDTO(int id, string name)
+        {
+            return new RoleDTO(id, name);
+        }
+
+        public static FlightResDTO CreateFlightResDTO(int id,int price,string timestamp,string seatNum,
+         string name_cityI,string name_countryI, string namecityV,string namecountryV,int numPas, int id_user){
+            return new FlightResDTO(  id, price, timestamp, seatNum, name_cityI, name_countryI, namecityV,
+            namecountryV, numPas, id_user);
+
         }
     }
 

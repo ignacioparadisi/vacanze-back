@@ -21,7 +21,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
     public class ReservationAutomobileDAOTest
     {
         private Auto _vehicle;
-        private Entity _user;
+        private User _user;
         private Payment _payment;
         private ReservationAutomobile _reservationAutomobile;
 
@@ -31,7 +31,8 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             UserDAO daoUser = DAOFactory.GetFactory(DAOFactory.Type.Postgres).GetUserDAO();
             List<Role> roles = new List<Role>();
             roles.Add(new Role(1, "Client"));
-            _user = new User(0, 25964266, "Fernando", "Consalvo", "fercon@gmail.com", "123456789", roles);
+            _user = EntityFactory.CreateUser(0, 25964266, "Fernando", "Consalvo", "fercon@gmail.com", "123456789",
+                roles);
             _user = daoUser.AddUser(_user);
             LocationDAO daoLocation = DAOFactory.GetFactory(DAOFactory.Type.Postgres).GetLocationDAO();
             _vehicle = new Auto("Audi", "A3", 4, true, "afwdqe", 100, "dweoijewijd", daoLocation.GetLocations()[0].Id);

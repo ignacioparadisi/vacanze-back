@@ -1,14 +1,19 @@
+using System;
+using System.Collections.Generic;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo7;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo7;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Locations;
-
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command
 {
@@ -199,5 +204,61 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new GetCitiesByCountryCommand(id);
         }  
+
+        public static GetEmployeesCommand CreateGetEmployeesCommand()
+        {
+            return new GetEmployeesCommand();
+        }
+
+        public static GetRolesCommand CreateGetRolesCommand()
+        {
+            return new GetRolesCommand();
+        }
+
+        public static GetRolesForUserCommand CreateGetRolesForUserCommand(User user)
+        {
+            return new GetRolesForUserCommand(user);
+        }
+
+        public static GetUserByIdCommand CreateGetUserByIdCommand(int id)
+        {
+            return new GetUserByIdCommand(id);
+        }
+
+        public static UpdateUserCommand CreateUpdateUserCommand(User user, int id)
+        {
+            return new UpdateUserCommand(user, id);
+        }
+
+        public static AddReservationFlightCommand CreateAddReservationFlightCommand( FlightRes flight)
+        {
+            return new AddReservationFlightCommand( flight );
+        }  
+
+        public static GetReservationFlightByUserCommand CreateGetReservationFlightByUserCommand( int id_user )
+        {
+            return new GetReservationFlightByUserCommand( id_user );
+        } 
+
+        public static GetIdReturnCityCommand CreateGetIdReturnCityCommand( List<string> city_names )
+        {
+            return new GetIdReturnCityCommand( city_names );
+        } 
+
+        public static DeleteReservationCommand CreateDeleteReservationCommand( int id )
+        {
+            return new DeleteReservationCommand( id );
+        } 
+
+        public static GetReservationsByDateICommand CreateGetReservationsByDateICommand( int departure, int arrival, string departuredate, int numpas)
+        {
+            return new GetReservationsByDateICommand( departure, arrival, departuredate, numpas );
+        } 
+
+        public static GetReservationsByDateIVCommand CreateGetReservationsByDateIVCommand( int departure, int arrival, string departuredate, string arrivaldate, int numpas)
+        {
+            return new GetReservationsByDateIVCommand( departure, arrival, departuredate, arrivaldate, numpas );
+        } 
+
     }
 }

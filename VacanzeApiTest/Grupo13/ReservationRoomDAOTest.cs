@@ -30,10 +30,10 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         {
             // TODO: Cambiar por el Factory de usuario
             var roles = new List<Role>();
-            roles.Add(new Role(1, "Cliente"));
-            _user = new User(0, 23456789, "Pedro", "Perez",
+            roles.Add(EntityFactory.CreateRole(1, "Cliente"));
+            _user = EntityFactory.CreateUser(0, 23456789, "Pedro", "Perez",
                 "cliente1@vacanze.com", "12345678", roles);
-            _user = (User) _factory.GetUserDAO().AddUser(_user);
+            _user = _factory.GetUserDAO().AddUser(_user);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         /// </summary>
         private void CreateHotel()
         {
-            _hotel = EntityFactory.createHotel(0,
+            _hotel = EntityFactory.CreateHotel(0,
                 "Prueba",
                 30,
                 5,
