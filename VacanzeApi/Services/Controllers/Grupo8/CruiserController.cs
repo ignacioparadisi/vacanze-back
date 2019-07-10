@@ -6,6 +6,10 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo8;
+using Microsoft.AspNetCore.Http;
+using vacanze_back.VacanzeApi.LogicLayer.Command;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo8;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo8;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
 {
@@ -26,17 +30,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         ///     datos
         /// </exception>
         [HttpGet]
-        public ActionResult<IEnumerable<Cruiser>> GetCruisers()
+        public ActionResult<IEnumerable<CruiserDTO>> Get()
         {
-            try
-            {
-                var cruiserList = CruiserRepository.GetCruisers();
-                return Ok(cruiserList);
-            }
-            catch (DatabaseException e)
-            {
-                return BadRequest(new ErrorMessage(e.Message));
-            }
+            GetCruisersCommand getCruisersCommand = CommandFactory.CreateGetCruisersCommand();
+                getCruisersCommand.Execute();
+                List<CruiserDTO> cruisersDtoList = getCruisersCommand.GetResult();
+                return cruisersDtoList; 
         }
 
         // GET/Cruiser/{id}
@@ -52,18 +51,16 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         ///     datos
         /// </exception>
         [HttpGet("{id}")]
-        public ActionResult<Cruiser> GetCruiser(int id)
+        public ActionResult<CruiserDTO> GetCruiser(int id)
         {
             try
             {
-                var cruiser = CruiserRepository.GetCruiser(id);
-                return Ok(cruiser);
+                GetCruiserCommand getCruiserCommand = CommandFactory.CreateGetCruiserCommand(id);
+                getCruiserCommand.Execute();
+                CruiserDTO cruiser = getCruiserCommand.GetResult();
+                return cruiser;
             }
             catch (CruiserNotFoundException e)
-            {
-                return NotFound(new ErrorMessage(e.Message));
-            }
-            catch (DatabaseException e)
             {
                 return BadRequest(new ErrorMessage(e.Message));
             }
@@ -81,21 +78,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         ///     datos
         /// </exception>
         [HttpPost]
-        public ActionResult<Cruiser> PostCruiser([FromBody] Cruiser cruiser)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<CruiserDTO> PostCruiser([FromBody] CruiserDTO cruiser)
         {
             try
             {
-                cruiser.Validate();
-                var id = CruiserRepository.AddCruiser(cruiser);
-                var savedCruiser = new Cruiser(id, cruiser.Name, cruiser.Status, cruiser.Capacity,
-                    cruiser.LoadingShipCap, cruiser.Model, cruiser.Line, cruiser.Picture);
-                return Ok(savedCruiser);
+                AddCruiserCommand addCruiserCommand = CommandFactory.CreateAddCruiserCommand(cruiser);
+                addCruiserCommand.Execute();
+                CruiserDTO savedCruiser = addCruiserCommand.GetResult();
+                return savedCruiser;
             }
             catch (InvalidAttributeException e)
-            {
-                return BadRequest(new ErrorMessage(e.Message));
-            }
-            catch (DatabaseException e)
             {
                 return BadRequest(new ErrorMessage(e.Message));
             }
@@ -115,31 +109,24 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         ///     datos
         /// </exception>
         [HttpPut]
-        public ActionResult<Cruiser> PutCruiser([FromBody] Cruiser cruiser)
-        {
-            try
-            {
-                cruiser.Validate();
-                var updatedCruiser = CruiserRepository.UpdateCruiser(cruiser);
-                return Ok(updatedCruiser);
-            }
-            catch (InvalidAttributeException e)
-            {
-                return BadRequest(new ErrorMessage(e.Message));
-            }
-            catch (CruiserNotFoundException e)
-            {
-                return NotFound(new ErrorMessage(e.Message));
-            }
-            catch (NullCruiserException e)
-            {
-                return BadRequest(new ErrorMessage(e.Message));
-            }
-            catch (DatabaseException e)
-            {
-                return BadRequest(new ErrorMessage(e.Message));
-            }
-        }
+         public ActionResult<CruiserDTO> PutCruiser([FromBody] CruiserDTO cruiser)
+         {
+             try
+             {
+                 UpdateCruiserCommand updateCruiserCommand = CommandFactory.CreateUpdateCruiserCommand(cruiser);
+                 updateCruiserCommand.Execute();
+                 CruiserDTO updatedCruiser = updateCruiserCommand.GetResult();
+                 return updatedCruiser;
+             }
+             catch(CruiserNotFoundException e)
+             {
+                 return BadRequest(new ErrorMessage(e.Message));
+             }
+             catch (InvalidAttributeException e)
+             {
+                 return BadRequest(new ErrorMessage(e.Message));
+             }
+         }
         
         /// <summary>
         ///     Endpoint para eliminar un Crucero.
@@ -153,21 +140,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         ///     datos
         /// </exception>
         [HttpDelete("{id}")]
-        public ActionResult<int> DeleteCruiser(int id)
+        public IActionResult DeleteCruiser(int id)
         {
-            try
-            {
-                var deletedId = CruiserRepository.DeleteCruiser(id);
-                return Ok(new {id = deletedId});
-            }
-            catch (CruiserNotFoundException e)
-            {
-                return NotFound(new ErrorMessage(e.Message));
-            }
-            catch (DatabaseException e)
-            {
-                return BadRequest(new ErrorMessage(e.Message));
-            }
+            DeleteCruiserCommand deleteCruiserCommand = CommandFactory.CreateDeleteCruiserCommand(id);
+                deleteCruiserCommand.Execute();
+                return Ok("Eliminado satisfactoriamente");
         }
         
         /// <summary>
@@ -181,17 +158,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         ///     datos
         /// </exception>
         [HttpGet("{cruiserId}/Layover")]
-        public ActionResult<IEnumerable<Layover>> GetLayovers(int cruiserId)
+        public ActionResult<IEnumerable<LayoverDTO>> GetLayovers(int cruiserId)
         {
-            try
-            {
-                var layovers = CruiserRepository.GetLayovers(cruiserId);
-                return Ok(layovers);
-            }
-            catch (DatabaseException e)
-            {
-                return BadRequest(new ErrorMessage(e.Message));
-            }
+                GetLayoversCommand getLayoversCommand = CommandFactory.CreateGetLayoversCommand(cruiserId);
+                getLayoversCommand.Execute();
+                List<LayoverDTO> layoverDtoList = getLayoversCommand.GetResult();
+                return layoverDtoList; 
         }
         /// <summary>
         ///     Endpoint para agregar un layover a un crucero.
@@ -207,23 +179,16 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
         
         [HttpPost("{cruiserId}/Layover")]
-        public ActionResult<Layover> PostLayover([FromBody] Layover layover)
+        public ActionResult<LayoverDTO> PostLayover([FromBody] LayoverDTO layover)
         {
             try
             {
-                layover.Validate();
-                var addedLayover= CruiserRepository.AddLayover(layover);
-                return Ok(addedLayover);
+                AddLayoverCommand addLayoverCommand = CommandFactory.CreateAddLayoverCommand(layover);
+                addLayoverCommand.Execute();
+                LayoverDTO savedLayover = addLayoverCommand.GetResult();
+                return savedLayover;
             }
             catch (InvalidAttributeException e)
-            {
-                return BadRequest(new ErrorMessage(e.Message));
-            }
-            catch (CruiserNotFoundException e)
-            {
-                return NotFound(new ErrorMessage(e.Message));
-            }
-            catch (DatabaseException e)
             {
                 return BadRequest(new ErrorMessage(e.Message));
             }
@@ -241,21 +206,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         /// </exception>
         
         [HttpDelete("Layover/{layoverId}")]
-        public ActionResult<int> DeleteLayover(int layoverId)
+        public IActionResult DeleteLayover(int id)
         {
-            try
-            {
-                var deletedId = CruiserRepository.DeleteLayover(layoverId);
-                return Ok(new {id = deletedId});
-            }
-            catch (LayoverNotFoundException e)
-            {
-                return NotFound(new ErrorMessage(e.Message));
-            }
-            catch (DatabaseException e)
-            {
-                return BadRequest(new ErrorMessage(e.Message));
-            }
+            DeleteLayoverCommand deleteLayoverCommand = CommandFactory.CreateDeleteLayoverCommand(id);
+                deleteLayoverCommand.Execute();
+                return Ok("Eliminado satisfactoriamente");
         }
         
         /// <summary>

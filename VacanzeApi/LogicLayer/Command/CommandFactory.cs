@@ -122,5 +122,15 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new UpdateCruiserCommand(cruiserDto);
         }
 
+        public static GetCruisersCommand CreateGetCruisersCommand()
+        {
+            return new GetCruisersCommand();
+        }
+
+        public static GetLayoversCommand CreateGetLayoversCommand(int id)
+        {
+            return new GetLayoversCommand(id);
+        }
+
     }
 }
