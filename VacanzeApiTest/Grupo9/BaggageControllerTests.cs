@@ -22,7 +22,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
         public void Setup()
         {
             _postgresBaggageDaoTest = new PostgresBaggageDao();
-            _baggageControllerTest = new BaggageController();
+            _baggageControllerTest = new BaggageController(null);
             _insertedBaggages = new List<int>();
             _baggage = BaggageBuilder.Create()
                 .WithStatus("EXTRAVIADO")
