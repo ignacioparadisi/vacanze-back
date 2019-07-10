@@ -319,6 +319,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new GetReservationsByDateIVCommand(departure, arrival, departuredate, arrivaldate, numpas);
         }
 
+        #region Grupo 13
         public static AddReservationRoomCommand CreateAddReservationRoomCommand(ReservationRoom reservationRoom)
         {
             return new AddReservationRoomCommand(reservationRoom);
@@ -338,6 +339,23 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new GetReservationRoomCommand(reservationId);
         }
+
+        public static AddReservationVehicleCommand CreateAddReservationVehicleCommand(
+            ReservationVehicle reservationVehicle)
+        {
+            return new AddReservationVehicleCommand(reservationVehicle);
+        }
+
+        public static FindReservationVehicleCommand CreateFindReservationVehicleCommand(int reservationId)
+        {
+            return new FindReservationVehicleCommand(reservationId);
+        }
+
+        public static GetReservationVehicleByUserCommand CreateGetReservationVehicleByUserCommand(int userId)
+        {
+            return new GetReservationVehicleByUserCommand(userId);
+        }
+        #endregion
     }
 
 }

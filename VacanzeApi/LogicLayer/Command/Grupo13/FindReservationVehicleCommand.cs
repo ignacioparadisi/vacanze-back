@@ -11,9 +11,9 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13
         private int _id;
         private ReservationVehicle _reservationVehicle;
 
-        FindReservationVehicleCommand(int id)
+        public FindReservationVehicleCommand(int reservationId)
         {
-            _id = id;
+            _id = reservationId;
         }
         
         public ReservationVehicle GetResult()
@@ -23,7 +23,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13
 
         public void Execute()
         {
-            var dao = DAOFactory.GetFactory(DAOFactory.Type.Postgres).GetReservationAutomobileDAO();
+            var dao = DAOFactory.GetFactory(DAOFactory.Type.Postgres).GetReservationVehicleDAO();
             _reservationVehicle = dao.Find(_id);
             if (_reservationVehicle.Id == 0)
             {

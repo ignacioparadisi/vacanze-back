@@ -31,7 +31,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13
                 throw new ReservationHasNoVehicleException();
             }
                 
-            IReservationVehicleDAO dao = DAOFactory.GetFactory(DAOFactory.Type.Postgres).GetReservationAutomobileDAO();
+            IReservationVehicleDAO dao = DAOFactory.GetFactory(DAOFactory.Type.Postgres).GetReservationVehicleDAO();
             _reservationAutomobile = dao.AddReservation(_reservationAutomobile);
         }
     }
