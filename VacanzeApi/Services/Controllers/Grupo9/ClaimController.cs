@@ -9,6 +9,9 @@ using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo9;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 {
+    /// <summary>  
+    ///  Clase para manejar las peticiones HTTP relacionadas a los reclamos  
+    /// </summary> 
     [Produces("application/json")]
     [Route("api/[controller]")]
     [EnableCors("MyPolicy")]
@@ -17,15 +20,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
     {
         private readonly ILogger<ClaimController> _logger;
 
+
         public ClaimController(ILogger<ClaimController> logger)
         {
             _logger = logger;
         }
 
+
         /// <summary>
         ///     GET api/claim/{id}
-        ///     Obtener Claim segun su Id
+        ///     Metodo para obtener un reclamo segun su id
         /// </summary>
+        /// <returns>Objeto tipo Json con el reclamo encontrado</returns>
         [HttpGet("{id}")]
         public ActionResult<ClaimDto> GetById(int id)
         {
@@ -50,9 +56,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             }
         }
 
+
+
         /// <summary>
-        ///     Get para la tabla equipaje segun su documento de identidad
+        ///     GET api/claim/document/{id}
+        ///     Metodo para obtener todos los reclamos segun su documento de identidad
         /// </summary>
+        /// <returns>Objeto tipo Json con los reclamos encontrados</returns>
         [HttpGet("document/{document}")]
         public ActionResult<IEnumerable<ClaimDto>> GetByDocument(string document)
         {
@@ -71,11 +81,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             }
         }
 
+
         /// <summary>
-        ///     GET api/claim/admin/status
-        ///     usado para que el administrador consulte los reclamos por estatus.
+        ///     GET api/claim/admin/{status}
+        ///     Metodo para obtener todos los reclamos segun un estatus determinado
         ///     Status posibles: ABIERTO, CERRADO [Existe estado Extraviado pero no se puede postear]
         /// </summary>
+        /// <returns>Objeto tipo Json con los reclamos encontrados con el dicho estatus</returns>
         [HttpGet("admin/{status}")]
         public ActionResult<IEnumerable<ClaimDto>> GetByStatus(string status)
         {
@@ -95,9 +107,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             }
         }
 
+      
         /// <summary>
-        ///     Post api/claim/
-        ///     utilizado para crear un reclamo con una id del equipaje
+        ///     POST api/claim/
+        ///     Utilizado para crear un reclamo
         /// </summary>
         [HttpPost]
         public ActionResult<ClaimDto> Post([FromBody] ClaimDto claimDto)
@@ -140,9 +153,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             }
         }
 
+
+
         /// <summary>
         ///     DELETE api/claim/{id}
-        ///     Endpoint para eliminar reclamos por id
+        ///     Endpoint para eliminar un reclamo segun id
         /// </summary>
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
@@ -160,9 +175,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             }
         }
 
+
         /// <summary>
         ///     PUT /api/claim/{id}
-        ///     Endpoint para modificar un reclamo.
+        ///     Endpoint para modificar un reclamo
         /// </summary>
         [HttpPut("{id}")]
         public ActionResult<string> Put(int id, [FromBody] ClaimDto fieldsToUpdate)
