@@ -6,6 +6,7 @@ using vacanze_back.VacanzeApi.LogicLayer.Command;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Locations;
 using vacanze_back.VacanzeApi.LogicLayer.DTO;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper;
+using Microsoft.Extensions.Logging;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers
 {
@@ -15,12 +16,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
     [ApiController]
     public class LocationsController : ControllerBase
     {
-        /// <summary>
-        ///     Metodo para obtener las ubicacions
-        /// </summary>
-        /// <returns>Objeto tipo json de los locations</returns>
-        // GET api/location/[?countries={}]
-        [HttpGet]
+		private readonly ILogger<LocationsController> _logger;
+
+		public	LocationsController(ILogger<LocationsController> logger)
+		{
+			_logger = logger;
+		}
+		/// <summary>
+		///     Metodo para obtener las ubicacions
+		/// </summary>
+		/// <returns>Objeto tipo json de los locations</returns>
+		// GET api/location/[?countries={}]
+		[HttpGet]
         public ActionResult<IEnumerable<LocationDTO>> Get()
         {
             LocationMapper locationMapper = MapperFactory.createLocationMapper();
@@ -59,9 +66,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
                 commandIByCountry.Execute ();
                 return( locationMapper.CreateDTOList(commandIByCountry.GetResult()));      
             }
-            catch (LocationNotFoundException)
+            catch (LocationNotFoundException ex)
             {
-                return NotFound($"Location with id {countryId} not found");
+				_logger?.LogError(ex, "LocationNotFoundException when trying to get a location by country Id");
+				return NotFound($"Location with id {countryId} not found");
             }
         }
     }
