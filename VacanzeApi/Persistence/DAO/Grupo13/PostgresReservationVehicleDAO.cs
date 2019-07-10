@@ -126,6 +126,15 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                 reservation.UserId,
                 reservation.VehicleId,
                 reservation.Id);
+            foreach (DataRow row in table.Rows)
+            {
+                reservation.Id = Convert.ToInt32(row[0]);
+                reservation.CheckIn = Convert.ToDateTime(row[1]);
+                reservation.CheckOut = Convert.ToDateTime(row[2]);
+                reservation.UserId = Convert.ToInt32(row[3]);
+                reservation.VehicleId = Convert.ToInt32(row[4]);
+
+            }
             return reservation;
         }
     }
