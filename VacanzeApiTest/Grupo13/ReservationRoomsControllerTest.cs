@@ -7,6 +7,7 @@ using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.DAO;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper;
 
@@ -87,9 +88,9 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             var resroomMapper = MapperFactory.CreateReservationRoomMapper();
             var result = _controller.Post(resroomMapper.CreateDTO(_reservation));
             var okObject = (OkObjectResult) result.Result;
-            var idToDelete = ((ReservationRoom) okObject.Value).Id;
+            var idToDelete = ((ReservationRoomDTO) okObject.Value).Id;
             _insertedReservations.Add(idToDelete);
-            Assert.IsInstanceOf<OkObjectResult>(result.Result);
+            Assert.IsInstanceOf<OkObjectResult>(okObject);
         }
         
         [Test]
