@@ -29,30 +29,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         //   const String SP_ADD_PAYMENT = "m13_modifyReservationRoomPayment(@_pay,@_id)";
         private Auto _automobile;
         private ReservationVehicle _reservation;
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public List<ReservationVehicle> GetAutomobileReservations()
-        {
-            List<ReservationVehicle> reservationAutomobileList = new List<ReservationVehicle>();
-            var table = PgConnection.Instance.ExecuteFunction(SP_SELECT);
-            for (int i = 0; i < table.Rows.Count; i++)
-            {
-                var id = Convert.ToInt32(table.Rows[i][0]);
-                var pickup = Convert.ToDateTime(table.Rows[i][1]);
-                var returndate = Convert.ToDateTime(table.Rows[i][2]);
-                var userId = Convert.ToInt64(table.Rows[i][3]);
-                var vehicleId = (int) Convert.ToInt64(table.Rows[i][4]);
-                ReservationVehicle reservation = EntityFactory.CreateReservationAutomobile(id, pickup, returndate);
-                reservation.VehicleId = vehicleId;
-                reservation.UserId = Convert.ToInt32(userId);
-                reservationAutomobileList.Add(reservation);
-            }
-
-            return reservationAutomobileList;
-        }
 
         /// <summary>
         /// 

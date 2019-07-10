@@ -8,7 +8,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         ReservationVehicle Find(int id);
         void Delete(ReservationVehicle reservation);
         void Update(ReservationVehicle reservation);
-        List<ReservationVehicle> GetAutomobileReservations();
         ReservationVehicle AddReservation(ReservationVehicle reservation);
         List<ReservationVehicle> GetAllByUserId(int user_id);
     }
