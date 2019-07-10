@@ -106,17 +106,29 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
                 return new BadRequestObjectResult(new ErrorMessage(e.Message));
             }
         }
+
         /// <summary>
         ///     Metodo para eliminar un hotel
         /// </summary>
         /// <param name="id">ID del hotel a eliminar</param>
         /// <returns>una respuesta 200 vacia</returns>
+        /// <exception cref="HotelNotFoundException">El hotel a eliminar no existe</exception>
         [HttpDelete("{id}", Name = "DeleteHotel")]
-        public ActionResult Delete([FromRoute] int id)
-        {
-            DeleteHotelCommand command = CommandFactory.DeleteHotelCommand (id);
-            command.Execute ();
+        public ActionResult Delete([FromRoute] int id){
+        try 
+        {    //validar que el hotel exista
+            GetHotelByIdCommand commandId =  CommandFactory.GetHotelByIdCommand(id);
+            commandId.Execute ();
+            
+            DeleteHotelCommand command = CommandFactory.DeleteHotelCommand(id);
+            command.Execute();
             return Ok();
+        }
+        catch (HotelNotFoundException ex)
+            {
+                _logger?.LogError(ex, "HotelNotFoundException when trying to delete a hotel by id");
+                return new NotFoundObjectResult(new ErrorMessage($"Hotel no conseguido"));
+            }
         }
         /// <summary>
         ///     Metodo para modifcar un hotel
@@ -124,7 +136,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
         /// <param name="hotelId">ID del hotel a modificar</param>
         /// <param name="HotelDTo">Objeto hotel con la data para el hotel a modificar</param>
         /// <returns>Objeto tipo json del hotel modificado</returns>
-        /// <exception cref="HotelNotFoundException">El hotel a modifcar no existe</exception>
+        /// <exception cref="HotelNotFoundException">El hotel a modificar no existe</exception>
         /// <exception cref="RequiredAttributeException">Algun atributo requerido estaba como null</exception>
         /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
         [HttpPut("{hotelId}", Name = "UpdateHotel")]
@@ -145,8 +157,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo6
             catch (HotelNotFoundException ex)
             {
 					_logger?.LogError(ex, "HotelNotFoundException when trying to update a hotel by id");
-                return new NotFoundObjectResult(
-                    new ErrorMessage($"Hotel con id {hotelId} no conseguido"));
+                return new NotFoundObjectResult(new ErrorMessage($"Hotel con id {hotelId} no conseguido"));
             }
             catch (RequiredAttributeException e)
             {
