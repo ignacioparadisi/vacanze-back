@@ -1,19 +1,15 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo11;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
-using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.DAO;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
-using vacanze_back.VacanzeApi.Persistence.DAO.Locations;
-using vacanze_back.VacanzeApi.Persistence.Repository.Grupo5;
-
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo5;
 
 namespace vacanze_back.VacanzeApiTest.Grupo13
 {
@@ -21,7 +17,6 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
     public class ReservationVehicleDAOTest
     {
         private User _user;
-        private Payment _payment;
         private ReservationVehicle _reservationAutomobile;
         private IReservationVehicleDAO dao;
 
@@ -35,14 +30,13 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
                 roles);
             _user = daoUser.AddUser(_user);
             dao = DAOFactory.GetFactory(DAOFactory.Type.Postgres).GetReservationVehicleDAO();
-
         }
 
         [Test]
         [Order(1)]
         public void TestAddVehicleReservationOk()
         {
-            DateTime checkOut = new DateTime(2019, 10, 20);
+            DateTime checkOut = new DateTime(2019, 11, 20);
             _reservationAutomobile =
                 EntityFactory.CreateReservationVehicle(0, DateTime.Now, checkOut, 5, _user.Id);
             _reservationAutomobile = dao.AddReservation(_reservationAutomobile);
@@ -67,8 +61,8 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         [Order(4)]
         public void TestUpdateReservationVehicleOk()
         {
-            _reservationAutomobile.VehicleId = 6;
-            Assert.AreEqual(_reservationAutomobile.VehicleId, dao.Update(_reservationAutomobile).VehicleId);
+            _reservationAutomobile.CheckIn = new DateTime(2019, 10, 20);
+            Assert.AreEqual(_reservationAutomobile.CheckIn, dao.Update(_reservationAutomobile).CheckIn);
         }
 
         [Test]
@@ -81,10 +75,10 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
 
 
         [OneTimeTearDown]
-        public void TearDown()
+        public void OneTimeTearDown()
         {
-            UserDAO userDao = DAOFactory.GetFactory(DAOFactory.Type.Postgres).GetUserDAO();
-            userDao.DeleteUserById(_user.Id);
+            DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
+            factory.GetUserDAO().DeleteUserById(_user.Id);
         }
     }
 }

@@ -58,8 +58,8 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         {
             _insertedReservations = new List<int>();
             
-            DateTime checkin = new DateTime(2019,7,10);
-            DateTime checkout = new DateTime(2019,7,12);
+            DateTime checkin = new DateTime(2019,8,10);
+            DateTime checkout = new DateTime(2019,11,12);
             
             _factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
             
@@ -169,6 +169,16 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             _reservation = _factory.GetReservationRoomDAO().Add(_reservation);
             var id = _factory.GetReservationRoomDAO().Delete(_reservation.Id);
             Assert.AreEqual(_reservation.Id, id);
+        }
+
+        [Test]
+        public void UpdateSuccess()
+        {
+            DateTime checkin = new DateTime(2019,9,10);
+            _reservation = _factory.GetReservationRoomDAO().Add(_reservation);
+            _reservation.CheckIn = checkin;
+            var updatedReservation = _factory.GetReservationRoomDAO().Update(_reservation);
+            Assert.AreEqual(checkin, updatedReservation.CheckIn);
         }
 
         [Test]

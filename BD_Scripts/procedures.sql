@@ -2849,8 +2849,6 @@ ALTER FUNCTION public.m13_addautomobilereservation(timestamp without time zone, 
 --Update de una Automobile Reservation
 CREATE OR REPLACE FUNCTION public.m13_updateautomobilereservation(_checkin timestamp without time zone,
                                                                   _checkout timestamp without time zone,
-                                                                  _use_fk integer,
-                                                                  _ra_aut_fk integer,
                                                                   _ra_id integer)
     RETURNS TABLE
             (
@@ -2872,16 +2870,14 @@ BEGIN
         UPDATE Res_Aut SET
             ra_pickupdate = _checkin,
             ra_returndate = _checkout,
-            ra_timestamp = CURRENT_TIMESTAMP,
-            ra_use_fk = _use_fk,
-            ra_aut_fk = _ra_aut_fk
+            ra_timestamp = CURRENT_TIMESTAMP
             WHERE _ra_id = ra_id
             RETURNING ra_id, ra_pickupdate, ra_returndate, ra_use_fk, ra_aut_fk;
 END;
 
 $BODY$;
 
-ALTER FUNCTION public.m13_updateautomobilereservation(timestamp without time zone, timestamp without time zone, integer, integer, integer)
+ALTER FUNCTION public.m13_updateautomobilereservation(timestamp without time zone, timestamp without time zone, integer)
     OWNER TO vacanza;
 
 --Delete
@@ -3067,10 +3063,15 @@ ALTER FUNCTION public.m13_addroomreservation(timestamp without time zone, timest
 --UPDATE Room Reservation
 CREATE OR REPLACE FUNCTION public.m13_updatehotelreservation(_checkin timestamp without time zone,
                                                              _checkout timestamp without time zone,
-                                                             _use_fk integer,
-                                                             _rr_hot_fk integer,
                                                              _rr_id integer)
-    RETURNS void
+    RETURNS TABLE
+            (
+                id        integer,
+                checkin   timestamp without time zone,
+                checkout  timestamp without time zone,
+                user_fk   integer,
+                hotel_fk    integer
+            )
     LANGUAGE 'plpgsql'
 
     COST 100
@@ -3078,18 +3079,17 @@ CREATE OR REPLACE FUNCTION public.m13_updatehotelreservation(_checkin timestamp 
 AS
 $BODY$
 BEGIN
+    RETURN QUERY
     UPDATE Res_roo
     SET rr_checkindate  = _checkin,
         rr_checkoutdate = _checkout,
-        rr_timestamp    = CURRENT_TIMESTAMP,
-        rr_use_fk       =_use_fk,
-        rr_hot_fk       = _rr_hot_fk
-    WHERE _rr_id = rr_id;
+        rr_timestamp    = CURRENT_TIMESTAMP
+    WHERE _rr_id = rr_id RETURNING rr_id, rr_checkindate, rr_checkoutdate, rr_use_fk, rr_hot_fk;
 END;
 
 $BODY$;
 
-ALTER FUNCTION public.m13_updatehotelreservation(timestamp without time zone, timestamp without time zone, integer, integer, integer)
+ALTER FUNCTION public.m13_updatehotelreservation(timestamp without time zone, timestamp without time zone, integer)
     OWNER TO vacanza;
 
 

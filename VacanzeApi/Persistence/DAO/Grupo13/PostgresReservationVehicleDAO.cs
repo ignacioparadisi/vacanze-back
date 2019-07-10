@@ -21,7 +21,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         //   const String SP_AVAILABLE = "m13_getavailableautomobilereservations('01/03/2019', '01/05/2019')";
         const String SP_FIND = "m13_findByResAutId(@_id)";
         const String SP_ADD = "m13_addautomobilereservation(@_checkin,@_checkout,@_use_fk,@_ra_aut_fk)";
-        const String SP_UPDATE = "m13_updateautomobilereservation(@_checkin,@_checkout,@_use_fk,@_ra_aut_fk,@_ra_id)";
+        const String SP_UPDATE = "m13_updateautomobilereservation(@_checkin,@_checkout,@_ra_id)";
         const String SP_DELETE = "m13_deleteautomobilereservation(@_id)";
 
         const String SP_ALL_BY_USER_ID = "m13_getresautomobilebyuserid(@_id)";
@@ -119,8 +119,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
             var table = PgConnection.Instance.ExecuteFunction(SP_UPDATE,
                 reservation.CheckIn,
                 reservation.CheckOut,
-                reservation.UserId,
-                reservation.VehicleId,
                 reservation.Id);
             foreach (DataRow row in table.Rows)
             {

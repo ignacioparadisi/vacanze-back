@@ -15,7 +15,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         private const string SP_FIND = "m13_findbyroomreservationid(@_id)";
         private const string SP_AVAILABLE = "getAvailableRoomsBasedOnReservationByHotelId(@_id)";
         private const string SP_ADD_RESERVATION = "m13_addRoomReservation(@_checkin, @_checkout,@_use_fk,@_hot_fk)";
-        private const string SP_UPDATE = "m13_updatehotelreservation(@_checkin,@_checkout,@_use_fk,@_hot_fk,@_id)";
+        private const string SP_UPDATE = "m13_updatehotelreservation(@_checkin,@_checkout,@_id)";
         private const string SP_DELETE_RESERVATION = "m13_deleteRoomReservation(@_rooid)";
         private const string SP_ALL_BY_USER_ID = "m13_getresroobyuserandroomid(@_id)";
 
@@ -169,19 +169,28 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         {
             try
             {
-                PgConnection.Instance.ExecuteFunction(
+                var updatedReservation = EntityFactory.CreateReservationRoom();
+                var table = PgConnection.Instance.ExecuteFunction(
                     SP_UPDATE,
                     reservation.CheckIn,
                     reservation.CheckOut,
-                    reservation.UserId,
-                    reservation.HotelId,
                     reservation.Id
                 );
-                return reservation;
+                for (var i = 0; i < table.Rows.Count; i++)
+                {
+                    var id = Convert.ToInt32(table.Rows[i][0]);
+                    var checkInDate = Convert.ToDateTime(table.Rows[i][1]);
+                    var checkOutDate = Convert.ToDateTime(table.Rows[i][2]);
+                    var hotelId = Convert.ToInt32(table.Rows[i][4]);
+                    var userId = Convert.ToInt32(table.Rows[i][3]);
+                    updatedReservation = EntityFactory.CreateReservationRoom(id, checkInDate, checkOutDate, hotelId, userId);
+                }
+                return updatedReservation;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw new GeneralException("Error Actualizando la Reserva de Habitación");
+                throw new GeneralException(e.Message);
+                // throw new GeneralException("Error Actualizando la Reserva de Habitación");
             }
         }
         
