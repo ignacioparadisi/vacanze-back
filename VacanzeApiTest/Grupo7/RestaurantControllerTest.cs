@@ -80,7 +80,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo7
 
         public void GetRestaurantTest_RestaurantNotFoundExeption_ReturnBadRequest()
         {
-            Assert.IsInstanceOf<BadRequestObjectResult>(_restaurantsController.GetRestaurant(-1).Result);
+            Assert.IsInstanceOf<NotFoundObjectResult>(_restaurantsController.GetRestaurant(-1).Result);
         }
 
         [Test]
@@ -108,7 +108,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo7
         public void PutRestaurantTest_RestaurantNotFoundExeption_ReturnBadRequest()
         {
             _restaurantDto.Id = -1;
-            Assert.IsInstanceOf<BadRequestObjectResult>(_restaurantsController.PutRestaurant(_restaurantDto).Result);
+            Assert.IsInstanceOf<NotFoundObjectResult>(_restaurantsController.PutRestaurant(_restaurantDto).Result);
         }
         
         [Test]
