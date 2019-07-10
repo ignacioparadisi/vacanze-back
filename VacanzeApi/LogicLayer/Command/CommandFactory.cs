@@ -360,12 +360,18 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new GetReservationVehicleByUserCommand(userId);
         }
-        #endregion
-
+        
         public static DeleteReservationVehicleCommand CreateDeleteReservationVehicleCommand(int id)
         {
             return new DeleteReservationVehicleCommand(id);
         }
+
+        public static UpdateReservationVehicleCommand CreateUpdateReservationVehicleCommand(
+            ReservationVehicle reservationVehicle)
+        {
+            return new UpdateReservationVehicleCommand(reservationVehicle);
+        }
+        #endregion
     }
 
 }
