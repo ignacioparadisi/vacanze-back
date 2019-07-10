@@ -8,6 +8,7 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo6;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo12;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo5;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo4;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo14;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo1;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO
@@ -29,6 +30,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
                     throw new NotValidFactoryTypeException("El tipo de fábrica de DAO no es válido");
             }
         }
+
         // +++++++++++++++++
         //     GRUPO 5
         // +++++++++++++++++
@@ -70,6 +72,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         public abstract ISaleFlightDAO PostSaleFlightDAO();
 
         public abstract ICheckinBaggageDAO PostCheckBaggage();
+
+        // +++++++++++++++++
+        //     GRUPO 14
+        // +++++++++++++++++
+        public abstract IReservationRestaurantDAO GetReservationRestaurantDAO();
 
         public abstract LoginDAO GetLoginDAO();
 
