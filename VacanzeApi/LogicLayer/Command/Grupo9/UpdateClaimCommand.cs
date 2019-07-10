@@ -1,14 +1,15 @@
-using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper;
 using vacanze_back.VacanzeApi.Persistence.DAO;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9
 {
     public class UpdateClaimCommand : Command
     {
-        private readonly Claim _fieldsToUpdate;
+        private readonly ClaimDto _fieldsToUpdate;
         private readonly int _id;
 
-        public UpdateClaimCommand(int id, Claim fieldsToUpdate)
+        public UpdateClaimCommand(int id, ClaimDto fieldsToUpdate)
         {
             _id = id;
             _fieldsToUpdate = fieldsToUpdate;
@@ -18,8 +19,10 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9
         {
             var daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
             var claimDao = daoFactory.GetClaimDao();
-            CommandFactory.CreateValidateClaimUpdateCommand(_fieldsToUpdate).Execute();
-            claimDao.Update(_id, _fieldsToUpdate);
+            var mapper = MapperFactory.CreateClaimMapper();
+            var entity = mapper.CreateEntity(_fieldsToUpdate);
+            CommandFactory.CreateValidateClaimUpdateCommand(entity).Execute();
+            claimDao.Update(_id, entity);
         }
     }
 }

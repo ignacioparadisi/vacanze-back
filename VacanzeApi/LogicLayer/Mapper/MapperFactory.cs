@@ -1,9 +1,11 @@
+using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo12;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo14;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo1;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo2;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo5;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo6;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo7;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo9;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo12;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo13;
 
@@ -56,6 +58,16 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper
         {
             return new ReservationFlightMapper();
 
+        }
+
+        public static ClaimMapper CreateClaimMapper()
+        {
+            return new ClaimMapper();
+        }
+        
+        public static BaggageMapper CreateBaggageMapper()
+        {
+            return new BaggageMapper();
         }
         
         public static ReservationRoomMapper CreateReservationRoomMapper()
