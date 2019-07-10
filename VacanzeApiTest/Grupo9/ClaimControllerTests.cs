@@ -3,6 +3,9 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo9;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo9;
 using vacanze_back.VacanzeApi.Services.Controllers.Grupo9;
 
@@ -11,61 +14,65 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
     [TestFixture]
     public class ClaimControllerTest
     {
+        private ClaimController _claimController;
+        private ClaimDto _claimDto;
+        private ClaimMapper _claimMapper;
+        private List<int> _insertedClaims;
+        private PostgresClaimDao _postgresClaimDao;
+        
         [SetUp]
         public void Setup()
         {
-            _postgresClaimDaoTest = new PostgresClaimDao();
-            _claimControllerTest = new ClaimController(null);
+            _postgresClaimDao = new PostgresClaimDao();
+            _claimController = new ClaimController(null);
             _insertedClaims = new List<int>();
-            _claim = ClaimBuilder.Create()
+            var claim = ClaimBuilder.Create()
                 .WithStatus("ABIERTO")
                 .WithDescription("Bolso negro extraviado en el areopuerto de maiquetia")
                 .WithTitle("Bolso extraviado")
                 .WithBagagge(6)
                 .Build();
+
+            _claimMapper = MapperFactory.CreateClaimMapper();
+            _claimDto = _claimMapper.CreateDTO(claim);
         }
 
         [TearDown]
         public void TearDown()
         {
-            foreach (var claimId in _insertedClaims) _postgresClaimDaoTest.Delete(claimId);
+            foreach (var claimId in _insertedClaims) _postgresClaimDao.Delete(claimId);
             _insertedClaims.Clear();
         }
-
-        private ClaimController _claimControllerTest;
-        private Claim _claim;
-        private List<int> _insertedClaims;
-        private PostgresClaimDao _postgresClaimDaoTest;
 
         [Test]
         public void GetByDocument_InvalidDocumentId_EmptyListReturned()
         {
-            var result = _claimControllerTest.GetByDocument("-1");
+            var result = _claimController.GetByDocument("-1");
             Assert.AreEqual(0, result.Value.Count());
         }
 
         [Test]
         public void GetById_InvalidClaimId_NotFoundResultReturned()
         {
-            var result = _claimControllerTest.GetById(-1);
+            var result = _claimController.GetById(-1);
             Assert.IsInstanceOf<NotFoundResult>(result.Result);
         }
 
         [Test]
         public void GetById_ValidClaimId_OkResultReturned()
         {
-            var savedClaimId = _postgresClaimDaoTest.Add(_claim);
+            var savedClaimId = _postgresClaimDao.Add(_claimMapper.CreateEntity(_claimDto));
             _insertedClaims.Add(savedClaimId);
-            var result = _claimControllerTest.GetById(savedClaimId);
+            var result = _claimController.GetById(savedClaimId);
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
         }
 
         [Test]
         public void GetByStatus_ValidStatusName_OkResultReturned()
         {
-            var savedClaimId = _postgresClaimDaoTest.Add(_claim);
+            var savedClaimId = _postgresClaimDao.Add(_claimMapper.CreateEntity(_claimDto));
             _insertedClaims.Add(savedClaimId);
-            var result = _claimControllerTest.GetByStatus("ABIERTO");
+            var result = _claimController.GetByStatus("ABIERTO");
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
         }
 
@@ -73,16 +80,16 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
         [Test]
         public void Post_ClaimWithNoExistingBaggage_BadRequestReturned()
         {
-            _claim.BaggageId = -10;
-            var result = _claimControllerTest.Post(_claim);
+            _claimDto.BaggageId = -10;
+            var result = _claimController.Post(_claimDto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
 
         [Test]
         public void Post_ClaimWithNoValidStatus_BadRequestReturned()
         {
-            _claim.Status = "NOTVALIDSTATUS";
-            var result = _claimControllerTest.Post(_claim);
+            _claimDto.Status = "NOTVALIDSTATUS";
+            var result = _claimController.Post(_claimDto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
 
