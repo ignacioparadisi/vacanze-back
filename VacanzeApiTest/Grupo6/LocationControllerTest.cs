@@ -15,7 +15,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         [SetUp]
         public void Setup()
         {
-            _locationController = new LocationsController();
+            _locationController = new LocationsController(null);
         }
         [Test]
         public void Get_LocationTest()

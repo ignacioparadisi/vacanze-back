@@ -1,5 +1,6 @@
 using vacanze_back.VacanzeApi.LogicLayer.Command.Locations; 
 using vacanze_back.VacanzeApi.LogicLayer.Command; 
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6; 
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 
@@ -102,7 +103,8 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo6
 
         public Hotel Build()
         {
-            HotelValidator.Validate(_hotel);
+            HotelValidatorCommand command =  CommandFactory.HotelValidatorCommand(_hotel);
+            command.Execute ();
             return _hotel;
         }
 
