@@ -482,23 +482,12 @@ INSERT INTO res_fli(rf_id, rf_seatnum, rf_timestamp, rf_num_ps, rf_use_fk, rf_pa
 
 ------- grupo 13 ----------
 
-INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
-VALUES('FIAT','UNO',5,true,25.99,'TAT77E','fiatuno.jgp',1);
-
-INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
-VALUES('FIAT','FIRE',5,true,24.99,'MEB19G','fiatfire.jgp',1);
-
-INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
-VALUES('BMW','Z3',4,true,35.99,'DDB43S','bmwz3.jpg',2);
-
-INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
-VALUES('Audi','Q7',6,true,40.99,'AA1239G','audiq7.jpg',3);
-
-INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
-VALUES('Sin','Reserva',4,true,34.99,'Bueno','',2);
-
-INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
-VALUES('Sin2','Reserva2',3,true,36.99,'Bueno2','',2);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (1, 37, 'TAT77E', 550, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (1, 37, 'MEB19G', 550, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (1, 37, 'MEB19H', 550, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (1, 37, 'MEB18G', 550, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (1, 37, 'MFB19G', 550, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (1, 37, 'MEB29G', 550, TRUE);
 
 INSERT INTO public.res_roo(rr_checkinDate,rr_checkoutDate,rr_timestamp,rr_use_fk,rr_hot_fk)
 values('10/12/2018', '02/01/2019','10/12/2018', 1, 1 );
