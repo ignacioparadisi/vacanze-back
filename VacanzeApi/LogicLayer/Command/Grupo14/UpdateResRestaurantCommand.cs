@@ -26,8 +26,8 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo14
 
         public void Execute() //Metodo Execute() que se hereda de la interface Command y se sobreescribe.
         {
-            var daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-            _result = daoFactory.GetReservationRestaurantDAO().updateResRestaurant(idPay, restId.rest_id);
+            var daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);                               //Instancia de la fabrica abstracta DAO con el Manejador de BD especifico.
+            _result = daoFactory.GetReservationRestaurantDAO().updateResRestaurant(idPay, restId.rest_id);  //Se hace el llamado al metodo que se desea ejecutar en base de datos pasando un parametro.
         }
     }
 }

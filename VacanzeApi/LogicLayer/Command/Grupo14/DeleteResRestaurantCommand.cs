@@ -11,6 +11,8 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo14
     {
         private int _id;
         public int Id { get { return _id; } set { _id = value; } }
+
+        //Constructor de la clase DeleteResRestaurantCommand
         public DeleteResRestaurantCommand(int id)
         {
             _id = id;

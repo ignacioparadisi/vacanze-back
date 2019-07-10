@@ -45,9 +45,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
                     " para el usuario con el id " +Convert.ToString(reserva.user_id));
                 command.Execute();
                 _logger.LogInformation("Se ejecuta el comando con las acciones a ejecutar correspondientes para la agregacion de reservas de restaurante" +
-                    " para el usuario con el id " + Convert.ToString(reserva.user_id));
-                //var id = ResRestaurantRepository.addReservation(reserva);
-                //Console.WriteLine(id);
+                    " para el usuario con el id " + Convert.ToString(reserva.user_id));                
                 return Ok();
             }
             catch (DatabaseException)
@@ -76,12 +74,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
             
             try {
                 var getByIdCommand = CommandFactory.GetResRestaurantByIdCommand(id);
-                Console.WriteLine(id);
-                //return ResRestaurantRepository.getResRestaurant(id);
+                Console.WriteLine(id);                
                 getByIdCommand.Execute();
                 _logger.LogInformation("Se ejecuta el comando con las acciones a ejecutar correspondientes para la obtencion de reservas de restaurante" +
-                    " para el usuario con el id " + Convert.ToString(id));
-                //return getByIdCommand.GetResult();
+                    " para el usuario con el id " + Convert.ToString(id));               
                 ResRestaurantMapper resRestMapper = MapperFactory.createResRestaurantMapper();
                 return resRestMapper.CreateDTOList(getByIdCommand.GetResult());
             }

@@ -16,5 +16,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo14
         int deleteResRestaurant(int resRestId);
         string updateResRestaurant(int payID, int resRestID);
         
+        //Interfaz con los metodos que se utilizan para la busqueda de la data de las reservas de restaurantes
     }
 }

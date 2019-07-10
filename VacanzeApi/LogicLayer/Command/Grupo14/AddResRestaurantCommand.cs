@@ -17,6 +17,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo14
         public int Id { get { return _id; } set { _id = value; } }
         public Restaurant_res ResRestaurant { get{ return _resRestaurant; } set{ _resRestaurant = value; } }
 
+        //Constructor de la clase AddResRestaurantCommand
         public AddResRestaurantCommand(Restaurant_res _resRestaurant)
         {
             this._resRestaurant = _resRestaurant;

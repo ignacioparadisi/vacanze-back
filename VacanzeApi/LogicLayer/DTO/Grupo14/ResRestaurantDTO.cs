@@ -13,11 +13,13 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo14
         public int user_id { get; set; } //ID del usuario registrado
         public int rest_id { get; set; } //ID del restaurante seleciconado
         public int pay_id { get; set; } //ID del pago
+
         //Atributos para el getReservation
         public string restaurantName { get; set; } //Nombre del restaurante
         public string restaurantAddress { get; set; } //Direccion del restaurante
         public string cityName { get; set; } //Ciudad seleccionada
         public string countryName { get; set; } //Pais donde esta esa ciudad
+
         //Atributo para que el equipo de pago sepa que tipo de reservacion es
         public string typeReservation { get; set; } //Atributo para que el equipo de pago sepa que tipo de reservacion es
         
@@ -25,11 +27,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo14
         public ResRestaurantDTO(string fecha_reservacion, int cant_persona, string fecha,
             int user_ID, int rest_ID) 
         {
-            fecha_res = fecha_reservacion; //rr_date
-            cant_people = cant_persona; //rr_num_ppl
-            date = fecha; //rr_timestamp
-            user_id = user_ID; //rr_use_id
-            rest_id = rest_ID; //rr_res_fk
+            fecha_res = fecha_reservacion;  //rr_date
+            cant_people = cant_persona;     //rr_num_ppl
+            date = fecha;                   //rr_timestamp
+            user_id = user_ID;              //rr_use_id
+            rest_id = rest_ID;              //rr_res_fk
         }
 
         //Contructor para el PUT
@@ -43,8 +45,8 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo14
          string address, string fecha_reservacion, int cant_persona) 
         {
             rest_id = id;
-            fecha_res = fecha_reservacion; //rr_date = fecha a futuro a la cual reservo el usuario
-            cant_people = cant_persona; //rr_num_ppl
+            fecha_res = fecha_reservacion;      //rr_date = fecha a futuro a la cual reservo el usuario
+            cant_people = cant_persona;         //rr_num_ppl
             restaurantName = restName;
             restaurantAddress = address;
             cityName = locationName;

@@ -11,10 +11,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo14
     public class PostgresReservationRestaurantDAO : IReservationRestaurantDAO
     {
 
-        // VARIABLES PARA LA DEFINICION DE LOS SP
-
-
-
         /// <summary>
         ///     Metodo para agregar reservaciones en restaurantes asociado a un usuario.
         /// </summary>

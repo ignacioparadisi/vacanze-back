@@ -12,6 +12,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo14
         private readonly int _id;
         private List<Restaurant_res> _result;
 
+        //Constructor de la clase GetResRestaurantNotPayByIdCommand
         public GetResRestaurantNotPayByIdCommand(int id)
         {
             _id = id;
@@ -24,8 +25,8 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo14
 
         public void Execute() //Metodo Execute() que se hereda de la interface Command y se sobreescribe.
         {
-            var daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-            _result = daoFactory.GetReservationRestaurantDAO().getReservationNotPay(_id);
+            var daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);               //Instancia de la fabrica abstracta DAO con el Manejador de BD especifico.
+            _result = daoFactory.GetReservationRestaurantDAO().getReservationNotPay(_id);   //Se hace el llamado al metodo que se desea ejecutar en base de datos pasando un parametro.
         }
     }
 }

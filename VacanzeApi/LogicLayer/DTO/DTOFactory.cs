@@ -64,7 +64,6 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO{
         public static ResRestaurantDTO CreateResRestaurantDTO(int id, string locationName, string pais, string restName,
          string address, string fecha_reservacion, int cant_person)
         {
-
             return new ResRestaurantDTO( id,  locationName,  pais,  restName,
           address,  fecha_reservacion,  cant_person);
         }
