@@ -35,16 +35,16 @@ namespace vacanze_back.VacanzeApiTest.Grupo3
            
             GetAirplaneCommand f=CommandFactory.GetAirplaneCommand();
             f.Execute();
-            Assert.IsInstanceOf<ActionResult<IEnumerable<Entity>>>(f.GetResult()); 
+            Assert.NotNull(f.GetResult());
         }
 
 
         [Test, Order(2) ]
         public void FindTest()
         {
-           
-            var result = controller.Find(666);
-            Assert.IsInstanceOf<ActionResult<Entity>>(result); 
+             GetAirplaneByIdCommand command = CommandFactory.GetFindPlaneIdCommand(1);
+             command.Execute();
+             Assert.NotNull(command.GetResult()); 
         }
 
 

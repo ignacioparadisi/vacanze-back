@@ -9,8 +9,6 @@ using vacanze_back.VacanzeApi.Common.Exceptions.Grupo3;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo3;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo3;
-using vacanze_back.VacanzeApi.LogicLayer.Command;
-using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo3;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
 {
