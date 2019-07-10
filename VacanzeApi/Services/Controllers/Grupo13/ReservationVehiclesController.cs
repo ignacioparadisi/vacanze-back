@@ -9,6 +9,8 @@ using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using Microsoft.AspNetCore.Http;
 using Npgsql;
+using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.LogicLayer.Command;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 {
@@ -27,32 +29,40 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         {
             try
             {
-                ReservationAutomobileRepository connection = new ReservationAutomobileRepository();
-                return user == -1
-                    ? connection.GetAutomobileReservations()
-                    : connection.GetAllByUserId(user);
+                CommandResult<List<ReservationVehicle>> command =
+                    CommandFactory.CreateGetReservationVehicleByUserCommand(user);
+                command.Execute();
+                return Ok(command.GetResult());
             }
-            catch (SystemException)
+            catch (GeneralException e)
             {
-                throw;
+                return BadRequest(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, "Error en el Servidor");
             }
         }
 
 
-        /*[HttpGet("{id}")]
-        public ActionResult<Entity> Get(int id)
+        [HttpGet("{id}")]
+        public ActionResult<ReservationVehicle> Get(int id)
         {
             try
             {
-                ReservationAutomobileRepository connection = new ReservationAutomobileRepository();
-                Entity result = connection.Find(id);
-                return Ok(result);
+                CommandResult<ReservationVehicle> command = CommandFactory.CreateFindReservationVehicleCommand(id);
+                command.Execute();
+                return Ok(command.GetResult());
             }
-            catch (System.Exception)
+            catch (GeneralException e)
             {
-                throw;
+                return BadRequest(e.Message);
             }
-        }*/
+            catch (Exception e)
+            {
+                return StatusCode(500, "Error en el Servidor");
+            }
+        }
 
         // POST api/values //CREAR UN RECURSO
         [HttpPost]
@@ -62,14 +72,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         {
             try
             {
-                var connection = new ReservationAutomobileRepository();
-                connection.AddReservation(reservation);
-                return Ok(new { Message = "Agregada Reservacion de automovil" });
+                CommandResult<ReservationVehicle> command =
+                    CommandFactory.CreateAddReservationVehicleCommand(reservation);
+                command.Execute();
+                return Ok(command.GetResult());
             }
-            catch (Exception ex)
+            catch (GeneralException e)
             {
-                Console.WriteLine(ex.ToString());
-                return null;
+                return BadRequest(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, "Error en el Servidor");
             }
         }
 
@@ -81,16 +95,16 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             try
             {
                 ReservationAutomobileRepository repository = new ReservationAutomobileRepository();
-              //  ReservationAutomobile reservation = (ReservationAutomobile) repository.Find((int)res.Id);
+                //  ReservationAutomobile reservation = (ReservationAutomobile) repository.Find((int)res.Id);
 
                 repository.Update(res);
 
-                return Ok(new { Message = "Editado" });
+                return Ok(new {Message = "Editado"});
             }
-        /*    catch (DbErrorException ex)
-            {
-                return BadRequest(new { Message = ex.Message });
-            }*/
+            /*    catch (DbErrorException ex)
+                {
+                    return BadRequest(new { Message = ex.Message });
+                }*/
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
@@ -98,28 +112,23 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             }
         }
 
-    /*[HttpDelete("{id}")]
-    public ActionResult<string> Delete(int id)
-    {
-        try
+        [HttpDelete("{id}")]
+        public ActionResult<int> Delete(int id)
         {
-            var connection = new ReservationAutomobileRepository();
-               ReservationVehicle reservation = (ReservationVehicle)connection.Find(id);
-                connection.Delete(reservation);
-            return Ok("Eliminado exitosamente");
-        }
-            catch (Exception ex)
+            try
             {
-                Console.WriteLine(ex.ToString());
-                return null;
+                CommandResult<int> command = CommandFactory.CreateDeleteReservationVehicleCommand(id);
+                command.Execute();
+                return Ok(command.GetResult());
             }
-
-        }*/
-
-        
-
+            catch (GeneralException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, "Error en el Servidor");
+            }
+        }
     }
-
- 
-
 }

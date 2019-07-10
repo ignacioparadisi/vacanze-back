@@ -77,9 +77,9 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         /** <summary>Borra de la BD, la reservacion que es suministrada</summary>
          * <param name="entity">La entidad reservacion a borrar de la BD</param>
          */
-        public int Delete(ReservationVehicle reservation)
+        public int Delete(int id)
         {
-            var table = PgConnection.Instance.ExecuteFunction(SP_DELETE, reservation.Id);
+            var table = PgConnection.Instance.ExecuteFunction(SP_DELETE, id);
             if (table.Rows.Count > 0)
             {
                 return Convert.ToInt32(table.Rows[0][0]);
