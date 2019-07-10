@@ -4,6 +4,7 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
+using Microsoft.Extensions.Logging;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
 {
@@ -17,17 +18,19 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
         private const string SP_DELETEUSER = "DeleteUserById(@user_id)";
         private const string SP_DELETEUSER_ROLE = "DeleteUser_Role(@user_id)";
         private const string SP_UPDATE = "ModifyUser(@id, @doc_id, @name, @lastname, @email)";
+        private readonly ILogger _logger;
 
 
         // GETS
-          /// <summary>
-          ///  Se conecta con la base de datos para seleccionar todos los usuarios que no sean clientes
-          /// </summary>
-          /// <returns>Una lista de usuarios que no tienen como rol cliente</returns>
-          public List<User> GetEmployees()
+        /// <summary>
+        ///  Se conecta con la base de datos para seleccionar todos los usuarios que no sean clientes
+        /// </summary>
+        /// <returns>Una lista de usuarios que no tienen como rol cliente</returns>
+        public List<User> GetEmployees()
           {
                try
                {
+                _logger.LogInformation("Entrando en GetEmployees");
                     var users = new List<User>();
                     var table = PgConnection.Instance.ExecuteFunction(SP_GETEMPLOYEES);
                     DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
@@ -46,10 +49,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
                          user.Roles = roles.GetRolesForUser(id);
                          users.Add(user);
                     }
-
-                    return users;
+                _logger.LogDebug("Users:", users);
+                return users;
                }
                catch(Exception e){
+                _logger.LogError("Error", e);
                     e.ToString();
                     throw;
                }
@@ -66,11 +70,13 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           /// porque no pueden haber correos repetidos</exception>
           public void VerifyEmail(string email, int id = 0)
           {
-               var table = PgConnection.Instance.ExecuteFunction(SP_GETUSERBYEMAIL,
+            _logger.LogInformation("Entrando en VerifyEmail(email,id)",email,id);
+            var table = PgConnection.Instance.ExecuteFunction(SP_GETUSERBYEMAIL,
                    email, id);
                if (table.Rows.Count > 0)
                     throw new RepeatedEmailException("El Email Ingresado ya Existe");
-          }
+            _logger.LogInformation("Saliendo de GetEmployees");
+        }
 
           /// <summary>
           /// Obtiene un usuario de la base de datos por su id
@@ -83,7 +89,8 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           {
                try
                {
-                    User user;
+                _logger.LogInformation("Entrando en GetUserById(id)",id);
+                User user;
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
                 RoleDAO roles = factory.GetRoleDAO();
                 var table = PgConnection.Instance.ExecuteFunction(SP_GETUSERBYID, id);
@@ -98,10 +105,12 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
                     user = new User(user_id, documentId, name, lastname, email);
 
                     user.Roles = roles.GetRolesForUser(id);
-                    return user;
+                _logger.LogDebug("User:", user);
+                return user;
                }
                catch(Exception e){
-                    e.ToString();
+                _logger.LogError("Error", e);
+                e.ToString();
                     throw;
                }
           }
@@ -116,7 +125,8 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           {
                try
                {
-                    User user = (User)entity;
+                _logger.LogInformation("Entrando en AddUser");
+                User user = (User)entity;
                     user.Validate();
                     VerifyEmail(user.Email);
                     user.EncryptOrCreatePassword();
@@ -128,10 +138,12 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
                     user.Id = id;
                     user.Password = null;
 
-                    return user;
+                _logger.LogDebug("User:", user);
+                return user;
                }
                catch(Exception e){
-                    e.ToString();
+                _logger.LogError("Error", e);
+                e.ToString();
                     throw;
                }
           }
@@ -146,14 +158,16 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           {
                try
                {
-                    var table = PgConnection.Instance.ExecuteFunction(SP_ADDUSER_ROLE,
+                _logger.LogInformation("Entrando en AddUser_Role(userid,roleid)",userid,roleid);
+                var table = PgConnection.Instance.ExecuteFunction(SP_ADDUSER_ROLE,
                     userid, roleid);
                }
                catch(DatabaseException e){
                     Console.WriteLine(e.ToString());
                     throw new Exception();
                }
-          }
+            _logger.LogInformation("Saliendo de AddUser_Role(userid,roleid)", userid, roleid);
+        }
 
           /// <summary>
           /// Elimina un usario de la base de datos por su id
@@ -164,13 +178,14 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           /// diciendo que el usuario no existe</exception>
           public int DeleteUserById(int id)
           {
-               var table = PgConnection.Instance.ExecuteFunction(SP_DELETEUSER, id);
+            _logger.LogInformation("Entrando en DeleteUserById(int id)",id);
+            var table = PgConnection.Instance.ExecuteFunction(SP_DELETEUSER, id);
                var userId = table.Rows[0][0];
                if (userId == DBNull.Value)
                {
                     throw new UserNotFoundException("El usuario no se encuentra registrado.");
                }
-
+            _logger.LogDebug("ID : ", id);
                return Convert.ToInt32(userId);
           }
 
@@ -180,8 +195,10 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           /// <param name="id">Id del usuario al que se le quieren eliminar los roles</param>
           public void DeleteUser_Role(int id)
           {
-               var table = PgConnection.Instance.ExecuteFunction(SP_DELETEUSER_ROLE, id);
-          }
+            _logger.LogInformation("Entrando en DeleteUserById(int id)", id);
+            var table = PgConnection.Instance.ExecuteFunction(SP_DELETEUSER_ROLE, id);
+            _logger.LogInformation("Saliendo de DeleteUserById(int id)", id);
+        }
 
           // - MARK: UPDATE
           /// <summary>
@@ -195,18 +212,21 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           // TODO: Devolver el usuario y no el id nada más
           public int UpdateUser(User entity, int id)
           {
-               User user = (User)entity;
+            _logger.LogInformation("Entrando en UpdateUser(User entity, int id)",entity,id);
+            User user = (User)entity;
                user.Validate();
                VerifyEmail(user.Email, id); //Hay que cambiar ese Id por user.Id en controller tambien
                var table = PgConnection.Instance
                    .ExecuteFunction(SP_UPDATE,
                    id, user.DocumentId.ToString(), user.Name, user.Lastname, user.Email);
                var userId = table.Rows[0][0];
-               if (userId == DBNull.Value)
+               
+            if (userId == DBNull.Value)
                {
                     throw new UserNotFoundException("El usuario no se encuentra registrado.");
                }
-               return Convert.ToInt32(userId);
+            _logger.LogDebug("UserID: ", userId);
+            return Convert.ToInt32(userId);
           }
 
     }
