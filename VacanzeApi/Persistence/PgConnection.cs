@@ -16,6 +16,9 @@ namespace vacanze_back.VacanzeApi.Persistence
                 $"Server={host};User Id={user};Password={password};Database={databaseName}";
             /* _connectionParameters= 
                 "Server=localhost;Port=5433;User Id=postgres;" + "Password=122324;Database=vacanza;" ;*/ 
+            /* 
+            _connectionParameters= "Server=localhost;Port=5433;User Id=postgres;" + 
+                      "Password=admin;Database=vacanza;" ;*/
         }
 
         // TODO: Obtener datos para conectar con la BD de algun archivo de configuracion
