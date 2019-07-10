@@ -53,7 +53,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10
             this.UserId = _userId;
         }
 
-        public Travel(string _name, DateTime _init, DateTime _end, string _descriptio){
+        public Travel(string _name, DateTime _init, DateTime _end, string _description){
             this.Name = _name;
             this.Init = _init;
             this.End = _end;
