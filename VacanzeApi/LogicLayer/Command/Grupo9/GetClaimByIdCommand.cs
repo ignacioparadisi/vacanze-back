@@ -1,12 +1,13 @@
-using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper;
 using vacanze_back.VacanzeApi.Persistence.DAO;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9
 {
-    public class GetClaimByIdCommand : CommandResult<Claim>
+    public class GetClaimByIdCommand : CommandResult<ClaimDto>
     {
         private readonly int _idToSearch;
-        private Claim _result;
+        private ClaimDto _result;
 
         public GetClaimByIdCommand(int idToSearch)
         {
@@ -16,10 +17,12 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9
         public void Execute()
         {
             var daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-            _result = daoFactory.GetClaimDao().GetById(_idToSearch);
+            var mapper = MapperFactory.CreateClaimMapper();
+            var entity = daoFactory.GetClaimDao().GetById(_idToSearch);
+            _result = mapper.CreateDTO(entity);
         }
 
-        public Claim GetResult()
+        public ClaimDto GetResult()
         {
             // TODO: Tal vez se deberia verificar si es null?
             return _result;
