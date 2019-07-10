@@ -328,6 +328,12 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new DeleteReservationRoomCommand(reservationId);
         }
+
+        public static GetReservationRoomCommand CreateGetReservationRoomCommand(int reservationId)
+        {
+            return new GetReservationRoomCommand(reservationId);
+        }
+        
     }
 
 }
