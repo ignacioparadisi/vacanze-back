@@ -80,6 +80,10 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5
                             Convert.ToDouble(dataRow[4]),
                             Convert.ToBoolean(dataRow[5])
                         );
+                        vehicle.VehicleModel = 
+                            new PostgresModelDAO().GetModelById(vehicle.VehicleModelId);
+                        vehicle.VehicleLocation = 
+                            new PostgresLocationDAO().GetLocationById(vehicle.VehicleLocationId);
                         vehicles.Add(vehicle);
                     }
                 }else{

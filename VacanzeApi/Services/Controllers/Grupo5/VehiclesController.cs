@@ -31,6 +31,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
                 AddVehicleCommand command = CommandFactory.CreateAddVehicleCommand((Vehicle) entity);
                 command.Execute();
                 return Ok ("ok " + command.GetResult ());
+            } catch (RequiredAttributeException ex){
+                return StatusCode(400, ex.Message);
             } catch (ModelNotFoundException ex){
                 return StatusCode(404, ex.Message + ex.ModelId);
             } catch (LocationNotFoundException ex){
@@ -67,7 +69,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
                     CommandFactory.CreateGetAvailableVehiclesByLocationCommand(locationId);
                 command.Execute ();
                 VehicleMapper vehicleMapper = MapperFactory.CreateVehicleMapper();
-                return Ok (vehicleMapper.CreateDTOList(command.GetResult()));
+                return Ok (command.GetResult());
             } catch (LocationNotFoundException ex){
                 return StatusCode (404, "Location con  " + ex.Message);
             } catch (NotVehiclesAvailableException ex){

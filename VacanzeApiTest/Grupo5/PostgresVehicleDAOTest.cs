@@ -79,5 +79,38 @@ namespace vacanze_back.VacanzeApiTest.Grupo5
 
             Assert.NotZero(vehicleDAO.AddVehicle(vehicle));
         }
+
+        [Test]
+        public void TestGetVehicleById_VehicleNotFoundException(){
+            Assert.Throws<VehicleNotFoundException>(
+                () => vehicleDAO.GetVehicleById(100000)
+            );
+        }
+
+        [Test]
+        public void TestGetVehicleById_Successfully(){
+            Assert.NotNull(vehicleDAO.GetVehicleById(1));
+        }
+
+        [Test]
+        public void TestGetAvailableVehiclesByLocation_LocationNotFoundException(){
+            Assert.Throws<LocationNotFoundException>(
+                () => vehicleDAO.GetAvailableVehiclesByLocation(100000)
+            );
+        }
+
+        [Test]
+        public void TestGetAvailableVehiclesByLocation_NotVehiclesAvailableException(){
+            Assert.Throws<NotVehiclesAvailableException>(
+                () => vehicleDAO.GetAvailableVehiclesByLocation(161)
+            );
+        }
+
+        [Test]
+        public void TestGetAvailableVehiclesByLocation_Success(){
+            Assert.NotZero(
+                vehicleDAO.GetAvailableVehiclesByLocation(37).Count);
+        }
+
     }
 }
