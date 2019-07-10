@@ -80,11 +80,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         public int Delete(int id)
         {
             var table = PgConnection.Instance.ExecuteFunction(SP_DELETE, id);
-            if (table.Rows.Count > 0)
-            {
-                return Convert.ToInt32(table.Rows[0][0]);
-            }
-            throw new NotValidIdException("El ID de la reservación no es válido.");
+            return Convert.ToInt32(table.Rows[0][0]);
         }
 
         /** <summary>Trae de la BD, las reservas de automoviles de un usuario</summary>

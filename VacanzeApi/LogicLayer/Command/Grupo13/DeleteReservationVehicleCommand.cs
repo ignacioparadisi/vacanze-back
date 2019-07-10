@@ -16,9 +16,10 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13
 
         public void Execute()
         {
-            DAOFactory daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-            var resVehicDao = (PostgresReservationVehicleDAO) daoFactory.GetReservationVehicleDAO();
-            _result = resVehicDao.Delete(_id);
+            var getReservationCommand = CommandFactory.CreateFindReservationVehicleCommand(_id);
+            getReservationCommand.Execute();
+            var dao = DAOFactory.GetFactory(DAOFactory.Type.Postgres).GetReservationVehicleDAO();
+            _result = dao.Delete(_id);
         }
 
         public int GetResult()
