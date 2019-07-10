@@ -14,7 +14,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo5{
         }
 
         public Brand CreateEntity(BrandDTO dto){
-            Brand brand = EntityFactory.CreateBrand(dto.Id, dto.BrandName);
+            Brand brand = EntityFactory.CreateBrand(dto.Id,dto.BrandName);
             return brand;
         }
 

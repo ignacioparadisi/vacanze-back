@@ -1,9 +1,14 @@
+using System;
 using System.Collections.Generic;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo1;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo14;
+
 
 namespace vacanze_back.VacanzeApi.Common.Entities{
 
@@ -31,7 +36,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
             return new Restaurant(id, name, capacity, isActive, qualify, specialty, price, businessName, picture, description, phone, location, address);
         }
 
-        public static Hotel createHotel(int id, string name, int amountOfRooms, int roomCapacity,
+        public static Hotel CreateHotel(int id, string name, int amountOfRooms, int roomCapacity,
             bool isActive, string addressSpecs, decimal pricePerRoom, string website, string phone,
             string picture, int stars, int locationId)
         {
@@ -63,7 +68,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
             return new User(id, documentId, name, lastname, email, password, roles);
         }
 
-        public static Role CreateRol(int id, string name)
+        public static Role CreateRole(int id, string name)
         {
             return new Role(id, name);
         }
@@ -73,6 +78,43 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
             return new FlightRes( id, price, timestamp, seatNum, name_cityI, name_countryI,
             namecityV, namecountryV, numPas, id_user, id_flight);
 
+        }
+
+        #region Grupo 13
+        public static ReservationVehicle CreateReservationVehicle(int id, DateTime checkIn, DateTime checkOut) =>
+            new ReservationVehicle(id, checkIn, checkOut);
+
+        public static ReservationVehicle CreateReservationVehicle(int id, DateTime checkin, DateTime checkout,
+            int vehicleId, int userId) =>
+            new ReservationVehicle(id, checkin, checkout, vehicleId, userId);
+        
+        public static ReservationRoom CreateReservationRoom(int id, DateTime chekckIn, DateTime checkOut,
+            int hotelId, int userId) =>
+            new ReservationRoom(id, chekckIn, checkOut, hotelId, userId);
+        
+        public static ReservationRoom CreateReservationRoom() =>
+            new ReservationRoom();
+        #endregion
+
+        /*Grupo14*/
+        public static Restaurant_res CreateResRestaurant(int id, string locationName, string pais, string restName,
+         string address, string fecha_reservacion, int cant_persona)
+        {
+            return new Restaurant_res(id,locationName,pais,restName,
+            address,fecha_reservacion,cant_persona);
+        }          
+        
+        //Grupo 1
+        public static Login createLogin(int id, List<Role> roles, string email, string password){
+            return new Login(id, roles, email, password);
+        }
+
+        public static Login createLogin(int id, string email, string password){
+            return new Login(id,email, password);
+        }
+
+        public static Login createLogin(string password){
+            return new Login(password);
         }
     }
 }
