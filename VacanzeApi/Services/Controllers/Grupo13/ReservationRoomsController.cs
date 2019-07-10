@@ -89,19 +89,19 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
                 var resroomMapper = MapperFactory.CreateReservationRoomMapper();
                 var reservation = resroomMapper.CreateEntity(reservationDto);
                 CommandResult<ReservationRoom> command = CommandFactory.CreateAddReservationRoomCommand(reservation);
-                _logger.LogInformation("Se Ejecuta el Comando para Agregar Habitación");
+                _logger?.LogInformation("Se Ejecuta el Comando para Agregar Habitación");
                 command.Execute();
-                _logger.LogInformation("Se Creó la Reserva de Habitación");
+                _logger?.LogInformation("Se Creó la Reserva de Habitación");
                 return Ok(resroomMapper.CreateDTO(command.GetResult()));
             }
             catch (GeneralException e)
             {
-                _logger.LogError(e, e.Message + "al Agregar Reserva de Hotel");
+                _logger?.LogError(e, e.Message + "al Agregar Reserva de Hotel");
                 return BadRequest(e.Message);
             }
             catch (Exception e)
             {
-                _logger.LogError(e,"Error en el Servidor al Agregar Reserva de Hotel");
+                _logger?.LogError(e,"Error en el Servidor al Agregar Reserva de Hotel");
                 return StatusCode(500, "Error en el Servidor");
             }
         }
