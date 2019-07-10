@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo13;
@@ -49,7 +50,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             }
             catch (Exception)
             {
-                return StatusCode(500, "Error en el servidor");
+                return StatusCode(500, "Error en el Servidor");
             }
         }
         
@@ -69,7 +70,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             }
             catch (Exception)
             {
-                return StatusCode(500, "Error en el servidor");
+                return StatusCode(500, "Error en el Servidor");
             }
         }
 
@@ -77,75 +78,82 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         /// POST api/reservationrooms
         /// </summary>
         /// <param name="reservation"></param>
-        /// <returns></returns>
+        /// <returns> El DTO de la Resrva de Hotel Agregada</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<ReservationRoom> Post([FromBody] ReservationRoomDTO reservationDto)
+        public ActionResult<ReservationRoomDTO> Post([FromBody] ReservationRoomDTO reservationDto)
         {
             try
             {
                 var resroomMapper = MapperFactory.CreateReservationRoomMapper();
                 var reservation = resroomMapper.CreateEntity(reservationDto);
                 CommandResult<ReservationRoom> command = CommandFactory.CreateAddReservationRoomCommand(reservation);
+                _logger.LogInformation("Se Ejecuta el Comando para Agregar Habitación");
                 command.Execute();
                 _logger.LogInformation("Se Creó la Reserva de Habitación");
-                return Ok(command.GetResult());
+                return Ok(resroomMapper.CreateDTO(command.GetResult()));
             }
             catch (GeneralException e)
             {
+                _logger.LogError(e, e.Message + "al Agregar Reserva de Hotel");
                 return BadRequest(e.Message);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return StatusCode(500, "Error en el servidor");
+                _logger.LogError(e,"Error en el Servidor al Agregar Reserva de Hotel");
+                return StatusCode(500, "Error en el Servidor");
             }
         }
 
         // PUT api/values/5    //ACTUALIZAR UN RECURSO
         [HttpPut]
-        public ActionResult<Entity> Put([FromBody] ReservationRoom res)
+        public ActionResult<ReservationRoomDTO> Put([FromBody] ReservationRoomDTO reservationDto)
         {
             try
             {
-                ReservationRoomRepository repository = new ReservationRoomRepository();
-              //  ReservationRoom reservation = (ReservationRoom)repository.Find((int)entity.Id);
-
-                repository.Update(res);
-
-                return Ok(new { Message = "Editado" });
+                var resroomMapper = MapperFactory.CreateReservationRoomMapper();
+                var reservation = resroomMapper.CreateEntity(reservationDto);
+                CommandResult<ReservationRoom> command = CommandFactory.CreateUpdateReservationRoomCommand(reservation);
+                _logger.LogInformation("Se Ejecuta el Comando para Reservar Habitación");
+                command.Execute();
+                _logger.LogInformation("Se Actualizó la Reserva de Habitación");
+                return Ok(resroomMapper.CreateDTO(command.GetResult()));
             }
-            /*    catch (DbErrorException ex)
-                {
-                    return BadRequest(new { Message = ex.Message });
-                }*/
+            
             catch (GeneralException e)
             {
+                _logger.LogError(e, e.Message + "al Actualizar Reserva de Hotel");
                 return BadRequest(e.Message);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return StatusCode(500, "Error en el servidor");
+                _logger.LogError(e,"Error en el Servidor al Actualizar Reserva de Hotel");
+                return StatusCode(500, "Error en el Servidor");
             }
         }
 
         // DELETE api/values/5 //BORRAR
         [HttpDelete("{id}")]
-        public ActionResult<Entity> Delete(int id)
+        public ActionResult<int> Delete(int id)
         {
             try
             {
                 CommandResult<int> command = CommandFactory.CreateDeleteReservationRoomCommand(id);
+                _logger.LogInformation("Se Ejecuta el Comando para Eliminar Habitación");
                 command.Execute();
+                _logger.LogInformation("Se Eliminó la Reserva de Habitación");
                 return Ok(command.GetResult());
             }
             catch (GeneralException e)
             {
+                _logger.LogError(e, e.Message + "al Agregar Reserva de Hotel");
                 return BadRequest(e.Message);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return StatusCode(500, "Error en el servidor");
+                _logger.LogError(e,"Error en el Servidor al Eliminar una Reserva de Hotel");
+                return StatusCode(500, "Error en el Servidor");
             }
         }
     }
