@@ -21,7 +21,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo8
         public void Execute()
         {
             DAOFactory daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-            PostgresCruiserDAO cruiserDao = (PostgresCruiserDAO) daoFactory.GetCruiserDAO();
+            PostgresCruiserDAO cruiserDao = (PostgresCruiserDAO) daoFactory.GetCruiserDAO(); 
             cruiserDao.DeleteLayover(_id);
         }
     }

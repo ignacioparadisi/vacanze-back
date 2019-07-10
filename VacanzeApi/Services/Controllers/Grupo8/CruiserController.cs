@@ -206,11 +206,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         /// </exception>
         
         [HttpDelete("Layover/{layoverId}")]
-        public IActionResult DeleteLayover(int id)
+        public IActionResult DeleteLayover(int layoverId)
         {
-            DeleteLayoverCommand deleteLayoverCommand = CommandFactory.CreateDeleteLayoverCommand(id);
-                deleteLayoverCommand.Execute();
-                return Ok("Eliminado satisfactoriamente");
+            DeleteLayoverCommand deleteLayoverCommand = CommandFactory.CreateDeleteLayoverCommand(layoverId);
+            deleteLayoverCommand.Execute();
+            return Ok("Eliminado satisfactoriamente");
         }
         
         /// <summary>

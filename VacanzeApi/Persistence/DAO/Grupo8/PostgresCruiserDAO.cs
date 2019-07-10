@@ -209,8 +209,8 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo8
                 var deletedid = Convert.ToInt32(table.Rows[0][0]);
                 return deletedid;
             }
-            catch (InvalidCastException)
-            {
+            catch (Exception e){
+                Console.Write(e);
                 throw new LayoverNotFoundException("Escala no encontrada");
             }
         }
