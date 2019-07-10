@@ -106,5 +106,14 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             var result = _controller.Delete(_reservation.Id);
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
         }
+
+        [Test]
+        public void GetReservationRoomsForUser()
+        {
+            _reservation = _factory.GetReservationRoomDAO().Add(_reservation);
+            _insertedReservations.Add(_reservation.Id);
+            var result = _controller.GetReservationRoomsForUser(_user.Id);
+            Assert.IsInstanceOf<OkObjectResult>(result.Result);
+        }
     }
 }
