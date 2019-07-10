@@ -34,10 +34,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             try
             {
                 getByIdCommand.Execute();
-                return Ok(getByIdCommand.GetResult());
+                var result = getByIdCommand.GetResult();
+                _logger?.LogInformation($"Obtenido Claim por ID {id} exitosamente");
+                return Ok(result);
             }
             catch (ClaimNotFoundException)
             {
+                _logger.LogWarning($"Claim con ID {id} no conseguido");
                 return new NotFoundResult();
             }
             catch (DatabaseException ex)
@@ -57,11 +60,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             try
             {
                 getByDocumentCommand.Execute();
-                return getByDocumentCommand.GetResult();
+                var result = getByDocumentCommand.GetResult();
+                _logger?.LogInformation($"Listados claims por documento {document} correctamente");
+                return Ok(result);
             }
             catch (DatabaseException ex)
             {
-                // TODO: Log
+                _logger?.LogError(ex, "Database exception when trying to get a claim by document");
                 return StatusCode(500, ex.Message);
             }
         }
@@ -79,11 +84,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             try
             {
                 getByStatusCommand.Execute();
-                return Ok(getByStatusCommand.GetResult());
+                var result = getByStatusCommand.GetResult();
+                _logger?.LogInformation($"Listados claims por estado {status} correctamente");
+                return Ok(result);
             }
             catch (DatabaseException ex)
             {
-                // TODO: Log
+                _logger?.LogError(ex, "Database exception when trying to get a claim by status");
                 return StatusCode(500, ex.Message);
             }
         }
@@ -102,26 +109,33 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
                 var registeredClaimId = addClaimCommand.GetResult();
                 var getClaimByIdCommand = CommandFactory.CreateGetClaimByIdCommand(registeredClaimId);
                 getClaimByIdCommand.Execute();
-                return StatusCode(201, getClaimByIdCommand.GetResult());
+                var result = getClaimByIdCommand.GetResult();
+                _logger?.LogInformation($"Claim creado correctamente con ID {result.Id}");
+                return StatusCode(201, result);
             }
             catch (RequiredAttributeException ex)
             {
+                _logger?.LogWarning($"Atributo requerido faltante al crear Claim: {ex.Message}");
                 return new BadRequestObjectResult(new ErrorMessage(ex.Message));
             }
             catch (AttributeSizeException ex)
             {
+                _logger?.LogWarning($"Tamaño invalido de atributo al crear Claim: {ex.Message}");
                 return new BadRequestObjectResult(new ErrorMessage(ex.Message));
             }
             catch (AttributeValueException ex)
             {
+                _logger?.LogWarning($"Valor invalido de atributo al crear Claim: {ex.Message}");
                 return new BadRequestObjectResult(new ErrorMessage(ex.Message));
             }
             catch (BaggageNotFoundException ex)
             {
+                _logger?.LogWarning($"Baggage invalido ({claim.BaggageId}) al crear Claim: {ex.Message}");
                 return new BadRequestObjectResult(new ErrorMessage(ex.Message));
             }
             catch (DatabaseException ex)
             {
+                _logger?.LogError(ex, "Error de base de datos al tratar de crear Claim");
                 return StatusCode(500, ex.Message);
             }
         }
@@ -136,10 +150,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             try
             {
                 CommandFactory.CreateDeleteClaimByIdCommand(id).Execute();
+                _logger?.LogInformation($"Claim {id} eliminado correctamente");
                 return Ok();
             }
             catch (DatabaseException ex)
             {
+                _logger?.LogError(ex, "Error de base de datos al tratar de eliminar Claim");
                 return StatusCode(500, ex.Message);
             }
         }
@@ -154,22 +170,27 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             try
             {
                 CommandFactory.CreateUpdateClaimCommand(id, fieldsToUpdate).Execute();
+                _logger?.LogInformation($"Claim {id} actualizado correctamente");
                 return Ok();
             }
             catch (ClaimNotFoundException ex)
             {
+                _logger?.LogWarning(ex.Message);
                 return new BadRequestObjectResult(new ErrorMessage(ex.Message));
             }
             catch (AttributeSizeException ex)
             {
+                _logger?.LogWarning($"Tamaño invalido de atributo al actualizar Claim {id}: {ex.Message}");
                 return new BadRequestObjectResult(new ErrorMessage(ex.Message));
             }
             catch (AttributeValueException ex)
             {
+                _logger?.LogWarning($"Valor invalido de atributo al actualizar Claim {id}: {ex.Message}");
                 return new BadRequestObjectResult(new ErrorMessage(ex.Message));
             }
             catch (DatabaseException ex)
             {
+                _logger?.LogError(ex, "Error de base de datos al tratar de actualizar Claim");
                 return StatusCode(500, ex.Message);
             }
         }
