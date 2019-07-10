@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.DAO;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
 
@@ -24,7 +25,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                throw new UserNotFoundException("Usuario no encontrado");
             }
         }
 
