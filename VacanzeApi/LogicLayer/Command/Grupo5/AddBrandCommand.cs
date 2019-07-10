@@ -1,11 +1,12 @@
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
-using vacanze_back.VacanzeApi.Persistence.Repository.Grupo5;
+using vacanze_back.VacanzeApi.Persistence.DAO;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo5;
 
-namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5 {
-
-    public class AddBrandCommand : Command, CommandResult<int> {
+namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5 
+{
+    public class AddBrandCommand : CommandResult<int> 
+    {
         private int _id;
-        public int Id { get { return _id; } set{ _id = value; } }
 
         private Brand _brand;
         public Brand Brand { get{ return _brand; } set{ _brand = value; } }
@@ -15,8 +16,9 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5 {
         }
 
         public void Execute () {
-            DAOBrand daoBrand = new DAOBrand (); //Without Factory
-            _id = daoBrand.AddBrand (_brand);
+            DAOFactory daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
+            IBrandDAO brandDAO = daoFactory.GetBrandDAO();
+            _id = brandDAO.AddBrand (_brand);
         }
 
         public int GetResult () {
@@ -24,5 +26,4 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5 {
         }
 
     }
-
 }

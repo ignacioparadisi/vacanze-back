@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Persistence.DAO;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
 {
-    public class GetRolesCommand : Command, CommandResult<List<Entity>>
+    public class GetRolesCommand : Command, CommandResult<List<Role>>
     {
 
-        private static List<Entity> Roles;
+        private static List<Role> Roles;
 
         public void Execute()
         {
@@ -27,7 +28,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
             }
         }
 
-        public List<Entity> GetResult()
+        public List<Role> GetResult()
         {
             return Roles;
         }

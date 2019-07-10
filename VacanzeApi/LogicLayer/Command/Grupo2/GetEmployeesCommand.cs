@@ -9,10 +9,10 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
 {
-    public class GetEmployeesCommand : Command, CommandResult<List<Entity>>
+    public class GetEmployeesCommand : Command, CommandResult<List<User>>
     {
 
-        private static List<Entity> Employees;
+        private static List<User> Employees;
 
         public void Execute()
         {
@@ -28,7 +28,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
             }
         }
 
-        public List<Entity> GetResult()
+        public List<User> GetResult()
         {
             return Employees;
         }

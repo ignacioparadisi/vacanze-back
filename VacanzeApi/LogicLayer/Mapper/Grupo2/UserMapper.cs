@@ -1,4 +1,4 @@
-using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,7 +15,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo2
         {
             try
             {
-                return DTOFactory.CreateUserDTO(user.Id, user.DocumentId, user.Email, user.Lastname, user.Name, user.Password, user.Roles);
+                return DTOFactory.CreateUserDTO(user.Id, user.DocumentId, user.Name, user.Lastname, user.Email, user.Password, user.Roles);
             }
             catch(NullReferenceException e)
             {
@@ -34,7 +34,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo2
                 List<UserDTO> dtos = new List<UserDTO>();
                 foreach (User user in users)
                 {
-                    dtos.Add(DTOFactory.CreateUserDTO(user.Id, user.DocumentId, user.Email, user.Lastname, user.Name, user.Password, user.Roles));
+                    dtos.Add(DTOFactory.CreateUserDTO(user.Id, user.DocumentId, user.Name, user.Lastname, user.Email, user.Password, user.Roles));
                 }
                 return dtos;
             }

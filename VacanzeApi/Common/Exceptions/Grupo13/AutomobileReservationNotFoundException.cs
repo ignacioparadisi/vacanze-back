@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace vacanze_back.VacanzeApi.Common.Exceptions.Grupo13
 {
-    public class AutomobileReservationNotFoundException : Exception
+    public class AutomobileReservationNotFoundException : GeneralException
     {
 
         public AutomobileReservationNotFoundException()
@@ -16,7 +16,7 @@ namespace vacanze_back.VacanzeApi.Common.Exceptions.Grupo13
         /// Permite el envio de mensajes con el id de la reservacion de automovil que fue ingresado y no encontrado.
         /// </summary>
         /// <param name="id"></param>
-        public AutomobileReservationNotFoundException(string message) : base(message)
+        public AutomobileReservationNotFoundException(int id) : base($"El automovil ${id} no fue encontrado ")
         {
         }
 

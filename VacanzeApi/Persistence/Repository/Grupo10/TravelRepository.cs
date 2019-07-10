@@ -91,10 +91,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
                             ReservationRoom reservationRoom = new ReservationRoom(
                                 Convert.ToInt32(dataRow[0]),
                                 DateTime.Parse(dataRow[1].ToString()),
-                                DateTime.Parse(dataRow[2].ToString())
-                            );
-                            reservationRoom.Hotel = HotelRepository.GetHotelById(Convert.ToInt32(dataRow[5]));
-                            reservationRoom.Fk_user = Convert.ToInt32(dataRow[4]);
+                                DateTime.Parse(dataRow[2].ToString()), Convert.ToInt32(dataRow[5]), Convert.ToInt32(dataRow[4]));
                             reservationsOfRoom.Add(reservationRoom);
                         }
                         reservations = reservationsOfRoom.Cast<T>().ToList();

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -48,7 +48,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo2
         {
             try
             {
-                return (Role) EntityFactory.CreateRol(dto._Id, dto._Name);
+                return (Role) EntityFactory.CreateRole(dto.Id, dto.Name);
             }
             catch (Exception e)
             {
@@ -63,7 +63,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo2
                 List<Role> roles = new List<Role>();
                 foreach (RoleDTO dto in dtos)
                 {
-                    roles.Add((Role) EntityFactory.CreateRol(dto._Id, dto._Name));
+                    roles.Add((Role) EntityFactory.CreateRole(dto.Id, dto.Name));
                 }
                 return roles;
             }
