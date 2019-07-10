@@ -112,5 +112,72 @@ namespace vacanze_back.VacanzeApiTest.Grupo5
                 vehicleDAO.GetAvailableVehiclesByLocation(37).Count);
         }
 
+        [Test]
+        public void TestGetVehicles_Success(){
+            Assert.NotZero(
+                vehicleDAO.GetVehicles().Count);
+        }
+
+        [Test]
+        public void TestUpdateVehicle_VehicleNotFoundException(){
+            Vehicle vehicle = new Vehicle(
+                100000,//VehicleId
+                1,
+                30, 
+                "AC34793",
+                1230.2,
+                true
+            );
+
+            Assert.Throws<VehicleNotFoundException>(
+                () => vehicleDAO.UpdateVehicle(vehicle)
+            );
+        }
+
+        [Test]
+        public void TestUpdateVehicle_ModelNotFoundException(){
+            Vehicle vehicle = new Vehicle(
+                1,
+                100000,//ModelId
+                30, 
+                "AC34793",
+                1230.2,
+                true
+            );
+
+            Assert.Throws<ModelNotFoundException>(
+                () => vehicleDAO.UpdateVehicle(vehicle)
+            );
+        }
+
+        [Test]
+        public void TestUpdateVehicle_LocationNotFoundException(){
+            Vehicle vehicle = new Vehicle(
+                1,
+                1,
+                100000,//LocationId
+                "AC34793",
+                1230.2,
+                true
+            );
+
+            Assert.Throws<LocationNotFoundException>(
+                () => vehicleDAO.UpdateVehicle(vehicle)
+            );
+        }
+
+        [Test]
+        public void TestUpdateVehicleStatus_VehicleNotFoundException(){
+            Assert.Throws<VehicleNotFoundException>(
+                () => vehicleDAO.UpdateVehicleStatus(100000,false)
+            );
+        }
+        
+        [Test]
+        public void TestUpdateVehicleStatus_Success(){
+            Assert.True(vehicleDAO.UpdateVehicleStatus(1,false));
+        }
+        
+
     }
 }

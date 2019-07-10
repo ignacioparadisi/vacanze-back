@@ -116,9 +116,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
                 return StatusCode(404, ex.Message + ex.ModelId);
             } catch (LocationNotFoundException ex){
                 return StatusCode(404, ex.Message);
-            } catch (UniqueAttributeException ex){
-                return StatusCode(500, ex.Message);
-            } catch(InternalServerErrorException ex){
+            }  catch(InternalServerErrorException ex){
                 return StatusCode(500, ex.Message);
             } catch(Exception){
                 return StatusCode(400);

@@ -142,18 +142,12 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5
                 PostgresLocationDAO locationDAO = new PostgresLocationDAO();
                 locationDAO.GetLocationById(vehicle.VehicleLocationId);// Throw LocationNotFoundException
                 PgConnection pgConnection = PgConnection.Instance;
-                DataTable dataTable = pgConnection.ExecuteFunction (
-                    "LicenseUniqueness(@license)", vehicle.License);
-                 if(Convert.ToBoolean(dataTable.Rows[0][0])){
-                     throw new UniqueAttributeException("La matricula " + vehicle.License + " ya existe");
-                 }else{
-                     dataTable = pgConnection.ExecuteFunction(
-                    "UpdateVehicle(@vehid, @vehmodel, @vehlocation, @vehlicense, @vehprice, @vehstatus)",
-                    vehicle.Id, vehicle.VehicleModelId, vehicle.VehicleLocationId, vehicle.License, vehicle.Price, vehicle.Status);
-                    if(Convert.ToBoolean(dataTable.Rows[0][0])){
-                        updated = true;
-                    }
-                 }
+                DataTable dataTable = pgConnection.ExecuteFunction(
+                "UpdateVehicle(@vehid, @vehmodel, @vehlocation, @vehlicense, @vehprice, @vehstatus)",
+                vehicle.Id, vehicle.VehicleModelId, vehicle.VehicleLocationId, vehicle.License, vehicle.Price, vehicle.Status);
+                if(Convert.ToBoolean(dataTable.Rows[0][0])){
+                    updated = true;
+                }
             }catch(DatabaseException ex){
                 throw new InternalServerErrorException("Error en el servidor : Conexion a base de datos", ex);
             }catch(InvalidStoredProcedureSignatureException ex){
