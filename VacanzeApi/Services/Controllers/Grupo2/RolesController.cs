@@ -9,6 +9,7 @@ using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo2;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo2;
+using Microsoft.Extensions.Logging;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
 {
@@ -18,28 +19,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
     [ApiController]
     public class RolesController : ControllerBase
     {
-        /*
-        // GET api/values
-        /// <summary>
-        /// Obtienes los roles disponibles
-        /// </summary>
-        /// <returns>Una lista de roles</returns>
-        [HttpGet]
-        public ActionResult<IEnumerable<Entity>> GetRoles()
-        {
-            var roles = new List<Entity>();
-            try
-            {
-                roles = RoleRepository.GetRoles();
-            }
-            catch (DatabaseException e)
-            {
-                return BadRequest("Error al Obtener Roles");
-            }
-
-            return Ok(roles);
-        }
-        */
+        private readonly ILogger _logger;
 
         // GET api/values
         /// <summary>
@@ -53,14 +33,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             var rolesDTO = new List<RoleDTO>();
             try
             {
+                _logger.LogInformation("Ejecutando el Comando GetRolesCommand()");
                 GetRolesCommand command = CommandFactory.CreateGetRolesCommand();
                 command.Execute();
+                _logger.LogInformation("Ejecutado el Comando GetRolesCommand()");
                 roles = command.GetResult();
                 RoleMapper mapper = new RoleMapper();
                 rolesDTO = mapper.CreateDTOList(roles);
             }
             catch (DatabaseException e)
             {
+                _logger.LogError("BadRequest: ", e);
                 return BadRequest("Error al Obtener Roles");
             }
 
