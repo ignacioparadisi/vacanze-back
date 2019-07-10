@@ -30,8 +30,8 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12
 
         public void Execute(){
             
-            try
-            {
+            //try
+            //{
 
                 //Obtiene el DAO correspondiente por medio de las factories
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
@@ -47,11 +47,16 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12
 
                 }
 
+                //Valida que el número a reservar sea válido
+                if(this.NumPas < 1){
+                    throw new ValidationErrorException("El número de acientos a reservar es inválido");
+                }
+
                 
                 ListFlight=ResFlightDao.GetFlightValidateI(this.Departure, this.Arrival, this.DepartureDate, this.NumPas);
 
 
-            }
+            /* }
             catch (ValidationErrorException ex)
             {
             throw new Exception(ex.Message);
@@ -59,7 +64,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12
             catch(Exception ex)
             {
                 throw new Exception(ex.Message);
-            }
+            }*/
 
 
         }

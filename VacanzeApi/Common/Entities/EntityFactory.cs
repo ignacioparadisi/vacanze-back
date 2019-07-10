@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo1;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
-using vacanze_back.VacanzeApi.Common.Entities.Grupo14;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo14;
+
 
 namespace vacanze_back.VacanzeApi.Common.Entities{
 
@@ -79,12 +81,12 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
         }
 
         #region Grupo 13
-        public static ReservationAutomobile CreateReservationAutomobile(int id, DateTime checkIn, DateTime checkOut) =>
-            new ReservationAutomobile(id, checkIn, checkOut);
+        public static ReservationVehicle CreateReservationVehicle(int id, DateTime checkIn, DateTime checkOut) =>
+            new ReservationVehicle(id, checkIn, checkOut);
 
-        public static ReservationAutomobile CreateReservationAutomobile(int id, DateTime checkin, DateTime checkout,
-            int userId, Auto automobile) =>
-            new ReservationAutomobile(id, checkin, checkout, automobile, userId);
+        public static ReservationVehicle CreateReservationVehicle(int id, DateTime checkin, DateTime checkout,
+            int vehicleId, int userId) =>
+            new ReservationVehicle(id, checkin, checkout, vehicleId, userId);
         
         public static ReservationRoom CreateReservationRoom(int id, DateTime chekckIn, DateTime checkOut,
             int hotelId, int userId) =>
@@ -100,6 +102,19 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
         {
             return new Restaurant_res(id,locationName,pais,restName,
             address,fecha_reservacion,cant_persona);
+        }          
+        
+        //Grupo 1
+        public static Login createLogin(int id, List<Role> roles, string email, string password){
+            return new Login(id, roles, email, password);
+        }
+
+        public static Login createLogin(int id, string email, string password){
+            return new Login(id,email, password);
+        }
+
+        public static Login createLogin(string password){
+            return new Login(password);
         }
     }
 }

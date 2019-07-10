@@ -20,8 +20,8 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12
 
         public void Execute(){
 
-        try
-        {
+        //try
+       // {
 
             //Obtiene el DAO correspondiente por medio de las factories
             DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
@@ -44,6 +44,10 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12
 
             }
 
+            //Valida que el número a reservar sea válido
+            if(FlightReservation._numPas < 1){
+                throw new ValidationErrorException("El número de acientos a reservar es inválido");
+            }
 
             //Guarda en la reserva los nombres de los asientos a reservar
             string seat=ResFlightDao.ConSeatNum(FlightReservation._numPas,FlightReservation._id_fli);
@@ -55,20 +59,20 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12
                 this.Id = ResFlightDao.AddReservationFlight(FlightReservation);
 
             }else{
-                throw new ValidationErrorException("No existen suficientes asientos sin reservar que coincida con su solicitud");
-                 Console.WriteLine("El numero de asientos excede a la cantida de reservas disponibles");
+                Console.WriteLine("El numero de asientos excede a la cantida de reservas disponibles");
+                throw new ValidationErrorException("No existen suficientes asientos sin reservar que coincida con su solicitud");            
             }
 
 
-        }
+        /*  }
         catch (ValidationErrorException ex)
         {
-           throw new Exception(ex.Message);
+           throw new ValidationErrorException(ex.Message);
         }
         catch(Exception ex)
         {
             throw new Exception(ex.Message);
-        }
+        }*/
 
             
 
