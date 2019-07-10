@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace vacanze_back.VacanzeApi.Common.Exceptions.Grupo13
 {
-    public class RoomReservationNotFoundException : Exception
+    public class RoomReservationNotFoundException : GeneralException
     {
 
         public RoomReservationNotFoundException()

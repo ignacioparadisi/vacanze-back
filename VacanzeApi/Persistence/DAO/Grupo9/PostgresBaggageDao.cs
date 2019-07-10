@@ -8,6 +8,13 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo9
 {
     public class PostgresBaggageDao : IBaggageDao
     {
+
+        /// <summary>
+        ///     Metodo para obtener un equipaje por su numero serial
+        /// </summary>
+        /// <param name="id">serial del equipaje</param>
+        /// <returns>Baggage entity</returns>
+        /// <exception cref="BaggageNotFoundException">No se encuentra un baggage con el serial especificado</exception>
         public Baggage GetById(int id)
         {
             var resultTable = PgConnection.Instance.ExecuteFunction("GetBaggage(@BAG_ID)", id);
@@ -18,6 +25,12 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo9
             return ExtractBaggageFromRow(resultTable.Rows[0]);
         }
 
+
+        /// <summary>
+        ///     Obtener todos los equipajes de un usuario en particular por medio de su documento de pasaporte
+        /// </summary>
+        /// <param name="passportId">el numero de pasaporte</param>
+        /// <returns>Lista de objetos json de tipo equipaje</returns>
         public List<Baggage> GetByPassport(string passportId)
         {
             var baggagesByPassport = new List<Baggage>();
@@ -31,6 +44,13 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo9
             return baggagesByPassport;
         }
 
+
+
+        /// <summary>
+        ///     Metodo para obtener todos los equipajes segun un estatus determinado
+        /// </summary>
+        /// <param name="status">El nombre del estatus</param>
+        /// <returns>Lista de objetos json de tipo equipaje</returns>
         public List<Baggage> GetByStatus(string status)
         {
             var baggagesBySatus = new List<Baggage>();
@@ -44,6 +64,15 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo9
             return baggagesBySatus;
         }
 
+
+
+
+        /// <summary>
+        ///     Metodo para modificar el equipaje
+        /// </summary>
+        /// <param name="id">El id del equipaje que se quiere modificar</param>
+        /// <param name="updatedBaggage">El nombre del equipaje</param>
+        /// <returns>id del equipajes modificado</returns>
         public Baggage Update(int id, Baggage updatedBaggage)
         {
             //TODO: Hacer validator del baggage
@@ -54,6 +83,8 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo9
             return GetById(id);
         }
 
+
+
         private Baggage ExtractBaggageFromRow(DataRow row)
         {
             var id = Convert.ToInt32(row[0]);
@@ -63,5 +94,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo9
 
             return baggage;
         }
+
     }
 }
