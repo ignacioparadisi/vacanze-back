@@ -39,7 +39,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             {
                 getByIdCommand.Execute();
                 _logger?.LogInformation($"Obtenido Equipaje por numero serial {id} exitosamente");
-                return getByIdCommand.GetResult();
+                return Ok(getByIdCommand.GetResult());
             }
             catch (BaggageNotFoundException)
             {
@@ -70,11 +70,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
                 _logger?.LogInformation($"Obtenido Equipaje por numero de pasaporte {id} exitosamente");
                 return Ok(getByPassportCommand.GetResult());
             }
-            catch (BaggageNotFoundException)
-            {
-                _logger?.LogWarning($"Equipajes no encontrados pertenecientes al usuario de pasaporte {id}");
-                return new NotFoundResult();
-            }
             catch (DatabaseException ex)
             {
                 _logger?.LogError(ex, "Error en la base de datos al obtener un equipaje por numero de pasaporte");
@@ -98,12 +93,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             {
                 getByStatusCommand.Execute();
                 _logger?.LogInformation($"Obtenidos todos los equipajes de {status} exitosamente");
-                return getByStatusCommand.GetResult();
-            }
-            catch (BaggageNotFoundException)
-            {
-                _logger?.LogWarning($"Equipajes no encontrados pertenecientes al estatus {status}");
-                return new NotFoundResult();
+                return Ok(getByStatusCommand.GetResult());
             }
             catch (DatabaseException ex)
             {
@@ -127,22 +117,22 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             {
                 updateBaggageCommand.Execute();
                 _logger?.LogInformation($"Modificado el equipaje de id {id} exitosamente");
-                return updateBaggageCommand.GetResult();
-            }
-            catch (DatabaseException ex)
-            {
-                _logger?.LogError(ex, $"Error en la base de datos al tratar de modificar el equipaje de id {id}");
-                return StatusCode(500, ex.Message);
+                return Ok(updateBaggageCommand.GetResult());
             }
             catch (BaggageNotFoundException ex)
             {
                 _logger?.LogError(ex, "Equipaje que se deseaba modificar no fue encontrado");
-                return StatusCode(500, ex.Message);
+                return new BadRequestObjectResult(new ErrorMessage(ex.Message));
             }
             catch (AttributeValueException ex)
             {
                 _logger?.LogError(ex, "Al modificar un baggage, ocurrio un error en los valores de los atributos");
                 return new BadRequestObjectResult(new ErrorMessage(ex.Message));
+            }
+            catch (DatabaseException ex)
+            {
+                _logger?.LogError(ex, $"Error en la base de datos al tratar de modificar el equipaje de id {id}");
+                return StatusCode(500, ex.Message);
             }
         }
     }
