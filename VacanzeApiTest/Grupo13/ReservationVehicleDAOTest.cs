@@ -2,14 +2,12 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using vacanze_back.VacanzeApi.Common.Entities;
-using vacanze_back.VacanzeApi.Common.Entities.Grupo11;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
-using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Persistence.DAO;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
-using vacanze_back.VacanzeApi.Persistence.DAO.Grupo5;
+
 
 namespace vacanze_back.VacanzeApiTest.Grupo13
 {
