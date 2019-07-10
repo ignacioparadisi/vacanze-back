@@ -24,7 +24,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
 		[SetUp]
 		public void Setup()
 		{
-			_cruiser = new Cruiser("The great seeker of wonder" , true , 220 , 200 , "A big one" , "A tender line", "I suppose a picture is in order");
+			_cruiser = new Cruiser("Seeker of wonder" ,true,  220 , 200 , "A big one" , "A tender line", "I suppose a picture is in order");
 			_addedCruiserList = new List<int>();
 			_cruiserDao = (PostgresCruiserDAO) DAOFactory.GetFactory(DAOFactory.Type.Postgres).GetCruiserDAO();
 		}
@@ -69,7 +69,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
 		{
 			var id = _cruiserDao.AddCruiser(_cruiser);
 			_addedCruiserList.Add(id);
-			var toUpdateCruiser = new Cruiser(id, "The great seeker of wonder reforged" , true , 500 , 250 , "A big one made even larger" , "A fine line", "I suppose a picture is in order... soon");
+			var toUpdateCruiser = new Cruiser(id, "Seeker of wonder2" , true , 500 , 250 , "A bigger one" , "A fine line", "I suppose a picture is in order... soon");
 			var updatedCruiser = _cruiserDao.UpdateCruiser(toUpdateCruiser);
 			var actualCruiser = _cruiserDao.GetCruiser(id);
 			Assert.AreEqual(updatedCruiser.Name,actualCruiser.Name);
@@ -107,7 +107,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
 		{
 			var id = _cruiserDao.AddCruiser(_cruiser);
 			_addedCruiserList.Add(id);
-            _layover = new Layover(id,"02/12/2019","05/01/2020", 250, 1, 2);
+            _layover = new Layover(id,"2019-12-2","2019-12-6", 250, 1, 2);
             var layover = _cruiserDao.AddLayover(_layover);
 			Assert.NotNull(layover);
 		}
@@ -115,7 +115,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
         [Test]
 		public void AddLayoverTest_Returns_CruiserNotFoundException()
 		{
-            _layover = new Layover(0,"02/12/2019","05/01/2020", 250, 1, 2);
+            _layover = new Layover(0,"2019-12-2","2019-12-6", 250, 1, 2);
 			Assert.Throws<CruiserNotFoundException>(() => _cruiserDao.AddLayover(_layover));
 		}
 
@@ -124,7 +124,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
 		{
 			var id = _cruiserDao.AddCruiser(_cruiser);
 			_addedCruiserList.Add(id);
-            _layover = new Layover(id,"02/12/2019","05/01/2020", 250, 1, 2);
+            _layover = new Layover(id,"2019-12-2","2019-12-5", 250, 1, 2);
             var layover = _cruiserDao.AddLayover(_layover);
             List<Layover> layoverList = _cruiserDao.GetLayovers(id);
 			Assert.IsTrue(layoverList.Count > 0);
@@ -135,7 +135,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
 		{
 			var id = _cruiserDao.AddCruiser(_cruiser);
 			_addedCruiserList.Add(id);
-            _layover = new Layover(id,"02/12/2019","05/01/2020", 250, 1, 2);
+            _layover = new Layover(id,"2019-12-2","2019-12-6", 250, 1, 2);
             var layover = _cruiserDao.AddLayover(_layover);
             var deletedLayover = _cruiserDao.DeleteLayover(layover.Id);
 			Assert.AreEqual(layover.Id, deletedLayover);
@@ -152,7 +152,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
 		{
 			var id = _cruiserDao.AddCruiser(_cruiser);
 			_addedCruiserList.Add(id);
-            _layover = new Layover(id,"02/12/2019","05/01/2020", 250, 1, 2);
+            _layover = new Layover(id,"2019/12/2","2019/12/3", 250, 1, 2);
             var layover = _cruiserDao.AddLayover(_layover);
             List<Layover> layoverList = _cruiserDao.GetLayoversForRes(1,2);
 			Assert.IsTrue(layoverList.Count > 0);
