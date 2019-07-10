@@ -6,7 +6,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
 {
     public interface IAirplaneDAO
     {
-        List<Entity> Get();
+        List<Airplane> Get();
         Airplane Find(long id);
     }
 }

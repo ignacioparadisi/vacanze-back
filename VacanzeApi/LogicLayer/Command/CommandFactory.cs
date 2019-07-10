@@ -136,7 +136,6 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
 
         public static AddFlightCommand AddFlightCommand(FlightDTO _flight)
         {
-            Console.WriteLine("id=");
             return new AddFlightCommand(_flight);
         }
 
@@ -181,7 +180,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new GetCountriesCommand();
         }  
-        
+
+        public static GetAirplaneCommand GetAirplaneCommand()
+        {
+            return new GetAirplaneCommand();
+        } 
         public static GetCitiesByCountryCommand GetCitiesByCountryCommand(int id)
         {
             return new GetCitiesByCountryCommand(id);

@@ -9,27 +9,33 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo3;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo3;
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo3
 {
-    public class DeleteFlightCommand: Command
+    public class GetAirplaneCommand: Command, CommandResult<List<Airplane>>
     {
+         List<Airplane> airplanes = new List<Airplane>();
 
-        private int _id;
-     
-        public DeleteFlightCommand (int _id) {
-            this._id = _id;
+        public int _id;
+        public GetAirplaneCommand () {
         }
 
         public void Execute()
         {
             try
             {
+               
+                Console.WriteLine("id="+_id);
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-                IFlightDAO flightDao = factory.GetFlight();
-                flightDao.Delete(_id);
+                IAirplaneDAO airplaneDao = factory.GetAirplane();
+                airplanes=airplaneDao.Get();
             }
             catch(Exception e)
             {
                 Console.WriteLine(e.ToString());
             }
+        }
+
+        public List<Airplane> GetResult()
+        {
+            return airplanes;
         }
     }
 }
