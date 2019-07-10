@@ -96,7 +96,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
             catch (RestaurantNotFoundExeption e)
             {
                 _logger?.LogWarning($"Restaurant con ID {id} no conseguido");
-                return BadRequest(new ErrorMessage(e.Message));
+                return NotFound(new ErrorMessage(e.Message));
             } catch (DatabaseException ex)
             {
                 _logger?.LogError(ex, "Database exception when trying to get a restaurant by id");
@@ -157,7 +157,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
              catch(RestaurantNotFoundExeption e)
              {
                  _logger?.LogWarning($"Restaurant con ID {restaurant.Id} no conseguido");
-                 return BadRequest(new ErrorMessage(e.Message));
+                 return NotFound(new ErrorMessage(e.Message));
              }
              catch (InvalidAttributeException e)
              {
