@@ -6,8 +6,8 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
     public interface IReservationVehicleDAO
     {
         ReservationVehicle Find(int id);
-        void Delete(ReservationVehicle reservation);
-        void Update(ReservationVehicle reservation);
+        int Delete(ReservationVehicle reservation);
+        ReservationVehicle Update(ReservationVehicle reservation);
         ReservationVehicle AddReservation(ReservationVehicle reservation);
         List<ReservationVehicle> GetAllByUserId(int user_id);
     }

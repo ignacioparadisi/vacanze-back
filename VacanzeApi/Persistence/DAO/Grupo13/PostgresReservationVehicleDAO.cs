@@ -76,10 +76,14 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         /** <summary>Borra de la BD, la reservacion que es suministrada</summary>
          * <param name="entity">La entidad reservacion a borrar de la BD</param>
          */
-        public void Delete(ReservationVehicle reservation)
+        public int Delete(ReservationVehicle reservation)
         {
-            var table = PgConnection.Instance.ExecuteFunction(SP_DELETE,
-                (int) reservation.Id);
+            var table = PgConnection.Instance.ExecuteFunction(SP_DELETE, reservation.Id);
+            if (table.Rows.Count > 0)
+            {
+                return Convert.ToInt32(table.Rows[0][0]);
+            }
+            throw new NotValidIdException("El ID de la reservación no es válido.");
         }
 
         /** <summary>Trae de la BD, las reservas de automoviles de un usuario</summary>
@@ -113,7 +117,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         /** <summary>Actualiza en la BD, la reservacion de automovil</summary>
          * <param name="entity">La reserva a actualizar</param>
          */
-        public void Update(ReservationVehicle reservation)
+        public ReservationVehicle Update(ReservationVehicle reservation)
         {
             var table = PgConnection.Instance.ExecuteFunction(SP_UPDATE,
                 reservation.CheckIn,
@@ -121,6 +125,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                 reservation.UserId,
                 reservation.VehicleId,
                 reservation.Id);
+            return reservation;
         }
     }
 }
