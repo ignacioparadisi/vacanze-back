@@ -27,25 +27,16 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
         public  ActionResult<LoginDTO> Login([FromBody] LoginDTO loginDTO)
         {
             Console.WriteLine("Antes del TRY, en LoginController");
-            try{
-                LoginMapper LoginMapper = MapperFactory.createLoginMapper();
-                Entity entity = LoginMapper.CreateEntity(loginDTO);
-                GetUserCommand command = CommandFactory.loginGetUserCommand((Login)entity);
-                command.Execute();
+            LoginMapper LoginMapper = MapperFactory.createLoginMapper();
+            Entity entity = LoginMapper.CreateEntity(loginDTO);
+            GetUserCommand command = CommandFactory.loginGetUserCommand((Login)entity);
+            command.Execute();
 
-                Login answer = command.GetResult();
-                DTO lDTO = LoginMapper.CreateDTO(answer);
-                Console.WriteLine("En el POST, el lDTO: ");
-                Console.WriteLine(lDTO);
-                return Ok(lDTO);
-                
-            }
-            catch(LoginUserNotFoundException){
-                throw new LoginUserNotFoundException("Error, la clave o la contrasena son incorrectos");
-            }
-            catch(DatabaseException){
-                throw new DatabaseException("Error al buscar en la BD");
-            }
+            Login answer = command.GetResult();
+            DTO lDTO = LoginMapper.CreateDTO(answer);
+            Console.WriteLine("En el POST, el lDTO: ");
+            Console.WriteLine(lDTO);
+            return Ok(lDTO);
         }
 
     }
