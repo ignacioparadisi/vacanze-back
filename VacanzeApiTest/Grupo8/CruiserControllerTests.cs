@@ -6,7 +6,7 @@ using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo8;
 using vacanze_back.VacanzeApi.Services.Controllers.Grupo8;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 
-namespace vacanze_back.VacanzeApiTest.Grupo7
+namespace vacanze_back.VacanzeApiTest.Grupo8
 {
     [TestFixture]
     public class CruisersControllerTest
