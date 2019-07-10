@@ -27,6 +27,10 @@ using System.Collections.Generic;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13;
 
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo14;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo14;
+using vacanze_back.VacanzeApi.Services.Controllers.Grupo14;
+
 namespace vacanze_back.VacanzeApi.LogicLayer.Command
 {
     public class CommandFactory
@@ -331,6 +335,22 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new GetReservationsByDateIVCommand(departure, arrival, departuredate, arrivaldate, numpas);
         }
+
+    
+        /*GRUPO14*/
+        public static GetResRestaurantByIdCommand GetResRestaurantByIdCommand(int id)
+        {
+            return new GetResRestaurantByIdCommand(id);
+        }
+        public static DeleteResRestaurantCommand DeleteResRestaurantCommand(int id)
+        {
+            return new DeleteResRestaurantCommand(id);
+        }
+
+        public static GetResRestaurantNotPayByIdCommand GetResRestaurantNotPayByIdCommand(int id)
+        {
+            return new GetResRestaurantNotPayByIdCommand(id);
+
         
         #region Grupo 13
         public static AddReservationRoomCommand CreateAddReservationRoomCommand(ReservationRoom reservationRoom)
@@ -394,6 +414,15 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         public static RecoveryPasswordCommand RecoveryPasswordCommand(Login loginE){
             return new RecoveryPasswordCommand(loginE);
         }
-    }
 
+
+        public static AddResRestaurantCommand AddResRestaurantCommand(Restaurant_res restaurantDTO)
+        {
+            return new AddResRestaurantCommand(restaurantDTO);
+        }
+        public static UpdateResRestaurantCommand UpdateResRestaurantCommand(int idPay, reservationRestaurant Rest)
+        {
+            return new UpdateResRestaurantCommand(idPay, Rest);
+        }
+    }
 }

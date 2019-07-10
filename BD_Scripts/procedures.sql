@@ -2062,7 +2062,7 @@ BEGIN
                         R.res_loc_fk,
                         R.res_address_specs
                  FROM Restaurant AS R
-                 WHERE R.res_loc_fk = sent_location;
+                 WHERE R.res_loc_fk = sent_location AND R.res_isactive = true;
 END;
 $$ LANGUAGE plpgsql;
 
