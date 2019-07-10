@@ -37,7 +37,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo6{
         public Hotel CreateEntity(HotelDTO hotelDto){
             HotelDTOValidatorCommand command =  CommandFactory.HotelDTOValidatorCommand(hotelDto);
             command.Execute();
-            Hotel entity = EntityFactory.createHotel(hotelDto.Id, hotelDto.Name, hotelDto.AmountOfRooms, 
+            Hotel entity = EntityFactory.CreateHotel(hotelDto.Id, hotelDto.Name, hotelDto.AmountOfRooms, 
                                             hotelDto.RoomCapacity, hotelDto.IsActive, hotelDto.AddressSpecification,
                                             hotelDto.PricePerRoom, hotelDto.Website, hotelDto.Phone ,
                                             hotelDto.Picture, hotelDto.Stars, hotelDto.Location.Id);
@@ -75,7 +75,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo6{
             foreach(HotelDTO hotelDto in dtos){
                 HotelDTOValidatorCommand command =  CommandFactory.HotelDTOValidatorCommand(hotelDto);
                 command.Execute();
-                entities.Add(EntityFactory.createHotel(hotelDto.Id, hotelDto.Name, hotelDto.AmountOfRooms, 
+                entities.Add(EntityFactory.CreateHotel(hotelDto.Id, hotelDto.Name, hotelDto.AmountOfRooms, 
                                             hotelDto.RoomCapacity, hotelDto.IsActive, hotelDto.AddressSpecification,
                                             hotelDto.PricePerRoom, hotelDto.Website, hotelDto.Phone ,
                                             hotelDto.Picture, hotelDto.Stars, hotelDto.Location.Id));

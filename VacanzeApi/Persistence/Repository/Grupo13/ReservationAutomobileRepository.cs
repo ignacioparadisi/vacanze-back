@@ -44,7 +44,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                             var aut_fk = (int)Convert.ToInt64(table.Rows[i][4]);
                             ReservationAutomobile reservation = new ReservationAutomobile(id,pickup,returndate);
                             reservation.Automobile = ConnectAuto.ConsultforId(aut_fk).ElementAt(0);
-                            reservation.Fk_user = aut_fk;
+                            reservation.UserId = aut_fk;
                             reservationAutomobileList.Add(reservation);
                             }
                     return reservationAutomobileList;
@@ -112,7 +112,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                     var aut_fk = (int)Convert.ToInt64(table.Rows[i][5]);
                    // var payfk = Convert.ToInt64(table.Rows[i][5]);
                     _reservation = new ReservationAutomobile(id,pickup,returndate);
-                    _reservation.Fk_user = userid;
+                    _reservation.UserId = userid;
                     _reservation.Automobile = ConnectAuto.ConsultforId(aut_fk).ElementAt(0);
 
                     //  _reservation.User.Id = userid;
@@ -123,7 +123,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
             }
             catch (AutomobileReservationNotFoundException e)
             {
-                throw new AutomobileReservationNotFoundException(e.ToString());
+                throw new AutomobileReservationNotFoundException(id);
             }
             catch (NpgsqlException e)
             {
@@ -149,7 +149,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                     ExecuteFunction(SP_ADD,
                         reservation.CheckIn,
                         reservation.CheckOut,
-                        reservation.Fk_user,
+                        reservation.UserId,
                         reservation.Automobile.getId());
                 for (int i = 0; i < table.Rows.Count; i++)
                 {
@@ -204,7 +204,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                     
                     ReservationAutomobile reservation = new ReservationAutomobile(id, pickup, returndate);
                     reservation.Automobile = ConnectAuto.ConsultforId(autfk).ElementAt(0);
-                    reservation.Fk_user = user_id;
+                    reservation.UserId = user_id;
                     reservationAutomobileList.Add(reservation);
                 }
                 return reservationAutomobileList;
@@ -236,7 +236,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                     ExecuteFunction(SP_UPDATE,
                         reservation.CheckIn,
                         reservation.CheckOut,
-                        reservation.Fk_user,
+                        reservation.UserId,
                         reservation.Automobile.getId(),
                         (int)reservation.Id);
             }

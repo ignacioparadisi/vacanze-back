@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 
 namespace vacanze_back.VacanzeApi.Common.Entities{
 
@@ -31,7 +33,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
             return new Restaurant(id, name, capacity, isActive, qualify, specialty, price, businessName, picture, description, phone, location, address);
         }
 
-        public static Hotel createHotel(int id, string name, int amountOfRooms, int roomCapacity,
+        public static Hotel CreateHotel(int id, string name, int amountOfRooms, int roomCapacity,
             bool isActive, string addressSpecs, decimal pricePerRoom, string website, string phone,
             string picture, int stars, int locationId)
         {
@@ -63,7 +65,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
             return new User(id, documentId, name, lastname, email, password, roles);
         }
 
-        public static Role CreateRol(int id, string name)
+        public static Role CreateRole(int id, string name)
         {
             return new Role(id, name);
         }
@@ -74,5 +76,21 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
             namecityV, namecountryV, numPas, id_user, id_flight);
 
         }
+
+        #region Grupo 13
+        public static ReservationAutomobile CreateReservationAutomobile(int id, DateTime checkIn, DateTime checkOut) =>
+            new ReservationAutomobile(id, checkIn, checkOut);
+
+        public static ReservationAutomobile CreateReservationAutomobile(int id, DateTime checkin, DateTime checkout,
+            int userId, Auto automobile) =>
+            new ReservationAutomobile(id, checkin, checkout, automobile, userId);
+        
+        public static ReservationRoom CreateReservationRoom(int id, DateTime chekckIn, DateTime checkOut,
+            int hotelId, int userId) =>
+            new ReservationRoom(id, chekckIn, checkOut, hotelId, userId);
+        
+        public static ReservationRoom CreateReservationRoom() =>
+            new ReservationRoom();
+        #endregion
     }
 }
