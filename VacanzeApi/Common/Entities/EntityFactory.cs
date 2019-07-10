@@ -7,6 +7,8 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo14;
+
 
 namespace vacanze_back.VacanzeApi.Common.Entities{
 
@@ -94,6 +96,14 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
             new ReservationRoom();
         #endregion
 
+        /*Grupo14*/
+        public static Restaurant_res CreateResRestaurant(int id, string locationName, string pais, string restName,
+         string address, string fecha_reservacion, int cant_persona)
+        {
+            return new Restaurant_res(id,locationName,pais,restName,
+            address,fecha_reservacion,cant_persona);
+        }          
+        
         //Grupo 1
         public static Login createLogin(int id, List<Role> roles, string email, string password){
             return new Login(id, roles, email, password);
