@@ -17,8 +17,8 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12
 
         public void Execute(){
 
-            try
-            {
+           // try
+            //{
 
                 //Obtiene el DAO correspondiente por medio de las factories
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
@@ -34,7 +34,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12
 
                 ResFlightDao.DeleteReservationFlight(this.Id);
 
-            }
+           /*  }
             catch (ValidationErrorException ex)
             {
                  throw new Exception(ex.Message);
@@ -42,7 +42,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12
             catch(Exception ex)
             {
                 throw new Exception(ex.Message);
-            }
+            }*/
 
 
         }

@@ -49,6 +49,12 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12
 
                 }
 
+                //Valida que el número a reservar sea válido
+                if(this.NumPas < 1){
+                    throw new ValidationErrorException("El número de acientos a reservar es inválido");
+                }
+
+
 
                 ListFlight=ResFlightDao.GetReservationFlightIV(this.Departure, this.Arrival, this.DepartureDate, this.ArrivalDate, this.NumPas);
 

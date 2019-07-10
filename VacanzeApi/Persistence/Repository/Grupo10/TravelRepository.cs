@@ -83,15 +83,15 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
             try{
                 PgConnection pgConnection = PgConnection.Instance;
                 if(type.Equals("HOTEL")){
-                        DataTable dataTable = pgConnection.ExecuteFunction(
-                            "GetReservationsOfHotelByTravelAndLocation(@travelId, @locationId)", travelId, locationId);
+                    DataTable dataTable = pgConnection.ExecuteFunction(
+                    "GetReservationsOfHotelByTravelAndLocation(@travelId, @locationId)", travelId, locationId);
                     if( dataTable.Rows.Count > 0 ){
                         List<ReservationRoom> reservationsOfRoom = new List<ReservationRoom>();
                         foreach (DataRow dataRow in dataTable.Rows){
                             ReservationRoom reservationRoom = new ReservationRoom(
-                                Convert.ToInt32(dataRow[0]),
-                                DateTime.Parse(dataRow[1].ToString()),
-                                DateTime.Parse(dataRow[2].ToString()), Convert.ToInt32(dataRow[5]), Convert.ToInt32(dataRow[4]));
+                            Convert.ToInt32(dataRow[0]),
+                            DateTime.Parse(dataRow[1].ToString()),
+                            DateTime.Parse(dataRow[2].ToString()), Convert.ToInt32(dataRow[5]), Convert.ToInt32(dataRow[4]));
                             reservationsOfRoom.Add(reservationRoom);
                         }
                         reservations = reservationsOfRoom.Cast<T>().ToList();
@@ -100,10 +100,41 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
                             travelId, locationId, "No posee reservaciones de " + type.ToLower() + " en dicha ciudad");
                     }
                 }else if(type.Equals("RESTAURANT")){
-                    
+                    DataTable dataTable = pgConnection.ExecuteFunction(
+                    "GetReservationsOfRestaurantByTravelAndLocation(@travelId, @locationId)", travelId, locationId);
+                    if( dataTable.Rows.Count > 0 ){
+                        List<Restaurant_res> reservationsOfRest = new List<Restaurant_res>();
+                        foreach (DataRow dataRow in dataTable.Rows){
+                            Restaurant_res reservationRest = new Restaurant_res(
+                            Convert.ToInt32(dataRow[0]),
+                            DateTime.Parse(dataRow[1].ToString()),
+                            Convert.ToInt32(dataRow[2].ToString()), Convert.ToInt32(dataRow[5]), Convert.ToInt32(dataRow[4]));
+                            reservationsOfRest.Add(reservationRest);
+                        }
+                        reservations = reservationsOfRest.Cast<T>().ToList();
+                    }else{
+                        throw new WithoutTravelReservationsException(
+                            travelId, locationId, "No posee reservaciones de " + type.ToLower() + " en dicha ciudad");
+                    }
                 }else if(type.Equals("FLIGHT")){
                     
                 }else if(type.Equals("CAR")){
+                    DataTable dataTable = pgConnection.ExecuteFunction(
+                    "GetReservationsOfCarssByTravelAndLocation(@travelId, @locationId)", travelId, locationId);
+                    if( dataTable.Rows.Count > 0 ){
+                        List<ReservationAutomobile> reservationsOfAuto = new List<ReservationAutomobile>();
+                        foreach (DataRow dataRow in dataTable.Rows){
+                            ReservationAutomobile reservationAuto = new ReservationAutomobile(
+                            Convert.ToInt32(dataRow[0]),
+                            DateTime.Parse(dataRow[1].ToString()),
+                            DateTime.Parse(dataRow[2].ToString()), Convert.ToInt32(dataRow[5]), Convert.ToInt32(dataRow[4]));
+                            reservationsOfAuto.Add(reservationAuto);
+                        }
+                        reservations = reservationsOfAuto.Cast<T>().ToList();
+                    }else{
+                        throw new WithoutTravelReservationsException(
+                            travelId, locationId, "No posee reservaciones de " + type.ToLower() + " en dicha ciudad");
+                    }
                 }else{
                     throw new InvalidReservationTypeException(type,"Tipo de reserva invalido : " + type);
                 }

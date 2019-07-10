@@ -6,24 +6,24 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13
 {
     public class GetReservationRoomCommand : CommandResult<ReservationRoom>
     {
-        private int Id;
-        private ReservationRoom Res_Room;
+        private int _id;
+        private ReservationRoom _reservationRoom;
 
         public GetReservationRoomCommand(int id)
         {
-            Id = id;
+            _id = id;
         }
 
         public void Execute()
         {
             DAOFactory daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-            var res_roomDao = (PostgresReservationRoomDAO) daoFactory.GetReservationRoomDAO();
-            Res_Room = res_roomDao.Find(Id);
+            var roomDao = (PostgresReservationRoomDAO) daoFactory.GetReservationRoomDAO();
+            _reservationRoom = roomDao.Find(_id);
         }
         
         public ReservationRoom GetResult()
         {
-            return this.Res_Room;
+            return _reservationRoom;
         }
     }
 }

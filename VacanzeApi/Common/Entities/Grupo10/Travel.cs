@@ -13,7 +13,8 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10
         private List<ReservationRoom> _roomReservations = new List<ReservationRoom>();
         private List<ReservationAutomobile> _carReservations = new List<ReservationAutomobile>();
         private List<Restaurant_res> _restaurantReservations = new List<Restaurant_res>();
-        
+        /*private List<> _flightReservations = new (); */
+
         private int _id;
         public int Id{ get{ return _id; } set{ _id = value; } }
 
@@ -52,7 +53,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10
             this.UserId = _userId;
         }
 
-        public Travel(string _name, DateTime _init, DateTime _end, string _descriptio){
+        public Travel(string _name, DateTime _init, DateTime _end, string _description){
             this.Name = _name;
             this.Init = _init;
             this.End = _end;

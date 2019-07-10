@@ -25,8 +25,8 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12
 
         public void Execute(){
 
-            try
-            {
+            //try
+            //{
 
  
                  //Obtiene el DAO correspondiente por medio de las factories
@@ -42,15 +42,15 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12
                 }
 
                  this.FlightReservations = ResFlightDao.GetReservationFlight(this.IdUser);
-            }
+           /*  }
             catch (ValidationErrorException ex)
             {
-                throw new Exception(ex.Message);
+                throw new ValidationErrorException(ex.Message);
             }
             catch(Exception ex)
             {
                 throw new Exception(ex.Message);
-            }
+            }*/
 
         }
 

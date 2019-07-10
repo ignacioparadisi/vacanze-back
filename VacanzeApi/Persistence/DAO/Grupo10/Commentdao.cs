@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo2;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo10;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo14;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo10
 {
@@ -44,7 +45,21 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo10
 
         public int Deletecomment(int id)
         {
-            throw new System.NotImplementedException();
+            try 
+            {
+                var table = PgConnection.Instance.ExecuteFunction("DeleteComment(@com_ID)", com_id);
+                var deleteid = Convert.ToInt32(table.Rows[0][0]);
+                Console.WriteLine(deletedid);
+                return deletedid;
+            }
+            catch (InvalidCastException)
+            {
+                throw new DeleteReservationException("el comentario no existe.");
+            }
+            catch (DatabaseException)
+            {
+                throw new DeleteReservationException("Error con la base de datos.");
+            }
         }
 
         public List<Comment> Getcomment(int id)

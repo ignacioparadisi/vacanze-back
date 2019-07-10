@@ -1,28 +1,32 @@
 using System;
 using System.Collections.Generic;
-using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5;
-using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
-using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo7;
-using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo7;
-using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo6;
+using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo1;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo14;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo4;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
-using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo10;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
-using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
-using vacanze_back.VacanzeApi.Common.Entities;
-using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9;
-using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo1;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12;
-using vacanze_back.VacanzeApi.LogicLayer.Command.Locations;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo14;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2;
-using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo4;
-using System;
-using vacanze_back.VacanzeApi.Common.Entities.Grupo4;
-using System.Collections.Generic;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo7;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Locations;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo6;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo7;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo9;
+using vacanze_back.VacanzeApi.Services.Controllers.Grupo14;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command
 {
@@ -140,9 +144,9 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new GetClaimsByDocumentCommand(document);
         }
 
-        public static AddClaimCommand CreateAddClaimCommand(Claim claim)
+        public static AddClaimCommand CreateAddClaimCommand(ClaimDto dto)
         {
-            return new AddClaimCommand(claim);
+            return new AddClaimCommand(dto);
         }
 
         public static DeleteClaimByIdCommand CreateDeleteClaimByIdCommand(int id)
@@ -150,7 +154,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new DeleteClaimByIdCommand(id);
         }
 
-        public static UpdateClaimCommand CreateUpdateClaimCommand(int id, Claim fieldsToUpdate)
+        public static UpdateClaimCommand CreateUpdateClaimCommand(int id, ClaimDto fieldsToUpdate)
         {
             return new UpdateClaimCommand(id, fieldsToUpdate);
         }
@@ -175,7 +179,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new GetBaggageByStatusCommand(status);
         }
 
-        public static UpdateBaggageCommand CreateUpdateBaggageCommand(int id, Baggage baggage)
+        public static UpdateBaggageCommand CreateUpdateBaggageCommand(int id, BaggageDTO baggage)
         {
             return new UpdateBaggageCommand(id, baggage);
         }
@@ -183,6 +187,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         public static GetBaggageByIdCommand CreateGetBaggageByIdCommand(int id)
         {
             return new GetBaggageByIdCommand(id);
+        }
+
+        public static ValidateBaggageUpdateCommand CreateValidateBaggageUpdateCommand(Baggage baggage)
+        {
+            return new ValidateBaggageUpdateCommand(baggage);
         }
 
         public static AddHotelCommand createAddHotelCommand(Hotel hotel)
@@ -329,6 +338,93 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new GetReservationsByDateIVCommand(departure, arrival, departuredate, arrivaldate, numpas);
         }
-    }
 
+    
+        /*GRUPO14*/
+        public static GetResRestaurantByIdCommand GetResRestaurantByIdCommand(int id)
+        {
+            return new GetResRestaurantByIdCommand(id);
+        }
+        public static DeleteResRestaurantCommand DeleteResRestaurantCommand(int id)
+        {
+            return new DeleteResRestaurantCommand(id);
+        }
+
+        public static GetResRestaurantNotPayByIdCommand GetResRestaurantNotPayByIdCommand(int id)
+        {
+            return new GetResRestaurantNotPayByIdCommand(id);
+        }
+
+        #region Grupo 13
+        public static AddReservationRoomCommand CreateAddReservationRoomCommand(ReservationRoom reservationRoom)
+        {
+            return new AddReservationRoomCommand(reservationRoom);
+        }
+
+        public static DeleteReservationRoomCommand CreateDeleteReservationRoomCommand(int reservationId)
+        {
+            return new DeleteReservationRoomCommand(reservationId);
+        }
+
+        public static GetReservationRoomsForUserCommand CreateGetReservationRoomsForUserCommand(int id)
+        {
+            return new GetReservationRoomsForUserCommand(id);
+        }
+
+        public static GetReservationRoomCommand CreateGetReservationRoomCommand(int reservationId)
+        {
+            return new GetReservationRoomCommand(reservationId);
+        }
+
+        public static UpdateReservationRoomCommand CreateUpdateReservationRoomCommand(ReservationRoom reservationRoom)
+        {
+            return new UpdateReservationRoomCommand(reservationRoom);
+        }
+
+        public static AddReservationVehicleCommand CreateAddReservationVehicleCommand(
+            ReservationVehicle reservationVehicle)
+        {
+            return new AddReservationVehicleCommand(reservationVehicle);
+        }
+
+        public static FindReservationVehicleCommand CreateFindReservationVehicleCommand(int reservationId)
+        {
+            return new FindReservationVehicleCommand(reservationId);
+        }
+
+        public static GetReservationVehicleByUserCommand CreateGetReservationVehicleByUserCommand(int userId)
+        {
+            return new GetReservationVehicleByUserCommand(userId);
+        }
+        
+        public static DeleteReservationVehicleCommand CreateDeleteReservationVehicleCommand(int id)
+        {
+            return new DeleteReservationVehicleCommand(id);
+        }
+
+        public static UpdateReservationVehicleCommand CreateUpdateReservationVehicleCommand(
+            ReservationVehicle reservationVehicle)
+        {
+            return new UpdateReservationVehicleCommand(reservationVehicle);
+        }
+        #endregion
+        
+        //Grupo 1
+        public static GetUserCommand loginGetUserCommand(Login loginE){
+            return new GetUserCommand(loginE);
+        } 
+
+        public static RecoveryPasswordCommand RecoveryPasswordCommand(Login loginE){
+            return new RecoveryPasswordCommand(loginE);
+        }
+
+        public static AddResRestaurantCommand AddResRestaurantCommand(Restaurant_res restaurantDTO)
+        {
+            return new AddResRestaurantCommand(restaurantDTO);
+        }
+        public static UpdateResRestaurantCommand UpdateResRestaurantCommand(int idPay, reservationRestaurant Rest)
+        {
+            return new UpdateResRestaurantCommand(idPay, Rest);
+        }
+    }
 }
