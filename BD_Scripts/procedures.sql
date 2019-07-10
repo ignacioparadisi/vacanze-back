@@ -1481,409 +1481,400 @@ $$ LANGUAGE plpgsql;
 ------------------------------------FIN DEL GRUPO 9--------------------------------
 
 -----------------------------------Grupo 5 ------------------------------------------------
-CREATE OR REPLACE FUNCTION AddVehicle(modelId INTEGER,
-                                      locationId INTEGER,
-                                      license VARCHAR,
-                                      price DECIMAL,
-                                      status BOOLEAN)
-    RETURNS INTEGER AS
+CREATE OR REPLACE FUNCTION AddVehicle( 
+	modelId INTEGER,
+	locationId INTEGER,
+	license VARCHAR,
+	price FLOAT,
+	status BOOLEAN
+)
+RETURNS INTEGER AS
 $$
 DECLARE
-    vehicleId INTEGER;
+	vehicleId INTEGER;
 BEGIN
-    INSERT INTO VEHICLE(veh_model, veh_location, veh_license, veh_price, veh_status)
-    VALUES (modelId, locationId, license, price, status) RETURNING veh_id INTO vehicleId;
-    RETURN vehicleId;
+	INSERT INTO VEHICLE(veh_model, veh_location, veh_license, veh_price, veh_status)
+	VALUES(modelId, locationId, license, price, status) RETURNING veh_id INTO vehicleId;
+	RETURN vehicleId;
 END;
 $$
-    LANGUAGE 'plpgsql';
+LANGUAGE 'plpgsql';
 
 
-CREATE OR REPLACE FUNCTION AddBrand(
-    brandName VARCHAR)
-    RETURNS INTEGER AS
+CREATE OR REPLACE FUNCTION AddBrand(  
+	brandName VARCHAR)
+RETURNS INTEGER AS
 $$
 DECLARE
-    brandId INTEGER;
+	brandId INTEGER;
 BEGIN
-    INSERT INTO VEH_BRAND(vb_name)
-    VALUES (brandName) RETURNING vb_id INTO brandId;
-    RETURN brandId;
+	INSERT INTO VEH_BRAND(vb_name)
+	VALUES(brandName) RETURNING vb_id INTO brandId;
+	RETURN brandId;
 END;
 $$
-    LANGUAGE 'plpgsql';
+LANGUAGE 'plpgsql';
 
 
-CREATE OR REPLACE FUNCTION AddModel(brandId INTEGER,
-                                    modelName VARCHAR,
-                                    capacity INTEGER,
-                                    picture VARCHAR)
-    RETURNS INTEGER AS
+CREATE OR REPLACE FUNCTION AddModel( 
+	brandId INTEGER,
+	modelName VARCHAR,
+	capacity INTEGER,
+	picture VARCHAR
+)
+RETURNS INTEGER AS
 $$
 DECLARE
-    modelId INTEGER;
+	modelId INTEGER;
 BEGIN
-    INSERT INTO VEH_MODEL(vm_brand, vm_name, vm_capacity, vm_picture)
-    VALUES (brandId, modelName, capacity, picture) RETURNING vm_id INTO modelId;
-    RETURN modelId;
+	INSERT INTO VEH_MODEL(vm_brand, vm_name, vm_capacity, vm_picture)
+	VALUES(brandId, modelName, capacity, picture) RETURNING vm_id INTO modelId;
+	RETURN modelId;
 END;
 $$
-    LANGUAGE 'plpgsql';
+LANGUAGE 'plpgsql';
 
 
-CREATE OR REPLACE FUNCTION GetVehiclesByLocation(locationId INTEGER)
-    RETURNS TABLE
-            (
-                vehicleId   INTEGER,
-                modelId     INTEGER,
-                location_id INTEGER,
-                license     VARCHAR,
-                price       DECIMAL,
-                status      BOOLEAN
-            )
-AS
+CREATE OR REPLACE FUNCTION GetVehiclesByLocation(locationId INTEGER) 
+RETURNS TABLE (
+	vehicleId INTEGER,
+	modelId INTEGER,
+	location_id INTEGER,
+	license VARCHAR,
+	price DECIMAL,
+	status BOOLEAN
+) AS $$
+BEGIN
+	RETURN QUERY 
+	SELECT veh_id, veh_model, veh_location, veh_license, veh_price, veh_status 
+	FROM VEHICLE WHERE veh_location = locationId;
+END; $$ 
+LANGUAGE 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION GetVehicles() 
+RETURNS TABLE (
+	vehicleId INTEGER,
+	modelId INTEGER,
+	locationId INTEGER,
+	license VARCHAR,
+	price DECIMAL,
+	status BOOLEAN
+) AS $$
+BEGIN
+	RETURN QUERY 
+	SELECT veh_id, veh_model, veh_location, veh_license, veh_price, veh_status 
+	FROM VEHICLE;
+END; $$ 
+LANGUAGE 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION GetBrands() 
+RETURNS TABLE (
+	brandId INTEGER,
+	brandName VARCHAR
+) AS $$
+BEGIN
+	RETURN QUERY 
+	SELECT vb_id, vb_name FROM VEH_BRAND;
+END; $$ 
+LANGUAGE 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION GetModelsByBrand(brandId INTEGER) 
+RETURNS TABLE (
+	modelId INTEGER,
+	brand INTEGER,
+	modelName VARCHAR,
+	capacity INTEGER,
+	picture VARCHAR
+) AS $$
+BEGIN
+	RETURN QUERY 
+	SELECT vm_id, vm_brand, vm_name, vm_capacity, vm_picture FROM VEH_MODEL WHERE vm_brand = brandId;
+END; $$ 
+LANGUAGE 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION GetModels() 
+RETURNS TABLE (
+  modelId INTEGER,
+  brand INTEGER,
+  modelName VARCHAR,
+  capacity INTEGER,
+  picture VARCHAR
+) AS $$
+BEGIN
+  RETURN QUERY 
+  SELECT vm_id, vm_brand, vm_name, vm_capacity, vm_picture FROM VEH_MODEL;
+END; $$ 
+LANGUAGE 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION UpdateModel(
+  vmid INTEGER, 
+  vmbrand INTEGER, 
+  vmname VARCHAR, 
+  vmcapacity INTEGER, 
+  vmpicture VARCHAR
+)
+RETURNS BOOLEAN AS
 $$
 BEGIN
-    RETURN QUERY
-        SELECT veh_id, veh_model, veh_location, veh_license, veh_price, veh_status
-        FROM VEHICLE
-        WHERE veh_location = locationId;
+  UPDATE veh_model
+  SET vm_brand = vmbrand,
+  vm_name = vmname, vm_capacity = vmcapacity,vm_picture = vmpicture
+  WHERE vm_id = vmid;
+  IF FOUND THEN
+    RETURN TRUE;
+  ELSE
+    RETURN FALSE;
+  END IF;
 END;
 $$
-    LANGUAGE 'plpgsql';
+LANGUAGE 'plpgsql';
 
 
-CREATE OR REPLACE FUNCTION GetVehicles()
-    RETURNS TABLE
-            (
-                vehicleId  INTEGER,
-                modelId    INTEGER,
-                locationId INTEGER,
-                license    VARCHAR,
-                price      DECIMAL,
-                status     BOOLEAN
-            )
-AS
+CREATE OR REPLACE FUNCTION UpdateBrand(
+  vbid INTEGER,
+  vbname VARCHAR
+)
+RETURNS BOOLEAN AS
 $$
 BEGIN
-    RETURN QUERY
-        SELECT veh_id, veh_model, veh_location, veh_license, veh_price, veh_status
-        FROM VEHICLE;
+  UPDATE veh_brand
+  SET vb_name = vbname
+  WHERE vb_id = vbid;
+  IF FOUND THEN
+    RETURN TRUE;
+  ELSE
+    RETURN FALSE;
+  END IF;
 END;
 $$
-    LANGUAGE 'plpgsql';
+LANGUAGE 'plpgsql';
 
 
-CREATE OR REPLACE FUNCTION GetBrands()
-    RETURNS TABLE
-            (
-                brandId   INTEGER,
-                brandName VARCHAR
-            )
-AS
+CREATE OR REPLACE FUNCTION UpdateVehicle(
+  vehid INTEGER,
+  vehmodel INTEGER,
+  vehlocation INTEGER,
+  vehlicense VARCHAR,
+  vehprice FLOAT,
+  vehstatus BOOLEAN
+)
+RETURNS BOOLEAN AS
 $$
 BEGIN
-    RETURN QUERY
-        SELECT vb_id, vb_name FROM VEH_BRAND;
+  UPDATE vehicle
+  SET veh_model = vehmodel, veh_location = vehlocation, 
+  veh_license = vehlicense, veh_price = vehprice, 
+  veh_status = vehstatus
+  WHERE veh_id = vehid;
+  IF FOUND THEN
+    RETURN TRUE;
+  ELSE
+    RETURN FALSE;
+  END IF;
 END;
 $$
-    LANGUAGE 'plpgsql';
+LANGUAGE 'plpgsql';
 
 
-CREATE OR REPLACE FUNCTION GetModelsByBrand(brandId INTEGER)
-    RETURNS TABLE
-            (
-                modelId   INTEGER,
-                brand     INTEGER,
-                modelName VARCHAR,
-                capacity  INTEGER,
-                picture   VARCHAR
-            )
-AS
+CREATE OR REPLACE FUNCTION UpdateVehicleStatus(
+  vehid INTEGER,
+  vehstatus BOOLEAN
+)
+RETURNS BOOLEAN AS
 $$
 BEGIN
-    RETURN QUERY
-        SELECT vm_id, vm_brand, vm_name, vm_capacity, vm_picture FROM VEH_MODEL WHERE vm_brand = brandId;
+  UPDATE vehicle
+  SET veh_status = vehstatus
+  WHERE veh_id = vehid;
+  IF FOUND THEN
+    RETURN TRUE;
+  ELSE
+    RETURN FALSE;
+  END IF;
 END;
 $$
-    LANGUAGE 'plpgsql';
+LANGUAGE 'plpgsql';
 
 
-CREATE OR REPLACE FUNCTION GetModels()
-    RETURNS TABLE
-            (
-                modelId   INTEGER,
-                brand     INTEGER,
-                modelName VARCHAR,
-                capacity  INTEGER,
-                picture   VARCHAR
-            )
-AS
-$$
+CREATE OR REPLACE FUNCTION GetVehicleByBrand(brandId INTEGER) 
+RETURNS TABLE (
+  vehid INTEGER,
+  vehmodel INTEGER,
+  vehlocation INTEGER,
+  vehlicense VARCHAR,
+  vehprice DECIMAL,
+  vehstatus BOOLEAN
+) AS $$
 BEGIN
-    RETURN QUERY
-        SELECT vm_id, vm_brand, vm_name, vm_capacity, vm_picture FROM VEH_MODEL;
-END;
-$$
-    LANGUAGE 'plpgsql';
+  RETURN QUERY 
+  SELECT veh_id, veh_model, veh_location, veh_license, veh_price, veh_status FROM vehicle, 
+  veh_model AS Model, veh_brand AS Brand WHERE veh_model = Model.vm_id 
+  AND Model.vm_brand = Brand.vb_id AND  Brand.vb_id = brandId;
+END; $$ 
+LANGUAGE 'plpgsql';
 
 
-CREATE OR REPLACE FUNCTION UpdateModel(vmid INTEGER,
-                                       vmbrand INTEGER,
-                                       vmname VARCHAR,
-                                       vmcapacity INTEGER,
-                                       vmpicture VARCHAR)
-    RETURNS BOOLEAN AS
-$$
+CREATE OR REPLACE FUNCTION GetVehicleByModel(ModelId INTEGER) 
+RETURNS TABLE (
+  vehid INTEGER,
+  vehmodel INTEGER,
+  vehlocation INTEGER,
+  vehlicense VARCHAR,
+  vehprice DECIMAL,
+  vehstatus BOOLEAN
+) AS $$
 BEGIN
-    UPDATE veh_model
-    SET vm_brand    = vmbrand,
-        vm_name     = vmname,
-        vm_capacity = vmcapacity,
-        vm_picture  = vmpicture
-    WHERE vm_id = vmid;
-    IF FOUND THEN
-        RETURN TRUE;
-    ELSE
-        RETURN FALSE;
-    END IF;
-END;
-$$
-    LANGUAGE 'plpgsql';
-
-
-CREATE OR REPLACE FUNCTION UpdateBrand(vbid INTEGER,
-                                       vbname VARCHAR)
-    RETURNS BOOLEAN AS
-$$
-BEGIN
-    UPDATE veh_brand
-    SET vb_name = vbname
-    WHERE vb_id = vbid;
-    IF FOUND THEN
-        RETURN TRUE;
-    ELSE
-        RETURN FALSE;
-    END IF;
-END;
-$$
-    LANGUAGE 'plpgsql';
-
-
-CREATE OR REPLACE FUNCTION UpdateVehicle(vehid INTEGER,
-                                         vehmodel INTEGER,
-                                         vehlocation INTEGER,
-                                         vehlicense VARCHAR,
-                                         vehprice DECIMAL,
-                                         vehstatus BOOLEAN)
-    RETURNS BOOLEAN AS
-$$
-BEGIN
-    UPDATE vehicle
-    SET veh_model    = vehmodel,
-        veh_location = vehlocation,
-        veh_license  = vehlicense,
-        veh_price    = vehprice,
-        veh_status   = vehstatus
-    WHERE veh_id = vehid;
-    IF FOUND THEN
-        RETURN TRUE;
-    ELSE
-        RETURN FALSE;
-    END IF;
-END;
-$$
-    LANGUAGE 'plpgsql';
-
-
-CREATE OR REPLACE FUNCTION UpdateVehicleStatus(vehid INTEGER,
-                                               vehstatus BOOLEAN)
-    RETURNS BOOLEAN AS
-$$
-BEGIN
-    UPDATE vehicle
-    SET veh_status = vehstatus
-    WHERE veh_id = vehid;
-    IF FOUND THEN
-        RETURN TRUE;
-    ELSE
-        RETURN FALSE;
-    END IF;
-END;
-$$
-    LANGUAGE 'plpgsql';
-
-
-CREATE OR REPLACE FUNCTION GetVehicleByBrand(brandId INTEGER)
-    RETURNS TABLE
-            (
-                vehid       INTEGER,
-                vehmodel    INTEGER,
-                vehlocation INTEGER,
-                vehlicense  VARCHAR,
-                vehprice    DECIMAL,
-                vehstatus   BOOLEAN
-            )
-AS
-$$
-BEGIN
-    RETURN QUERY
-        SELECT veh_id, veh_model, veh_location, veh_license, veh_price, veh_status
-        FROM vehicle,
-             veh_model AS Model,
-             veh_brand AS Brand
-        WHERE veh_model = Model.vm_id
-          AND Model.vm_brand = Brand.vb_id
-          AND Brand.vb_id = brandId;
-END;
-$$
-    LANGUAGE 'plpgsql';
-
-
-CREATE OR REPLACE FUNCTION GetVehicleByModel(ModelId INTEGER)
-    RETURNS TABLE
-            (
-                vehid       INTEGER,
-                vehmodel    INTEGER,
-                vehlocation INTEGER,
-                vehlicense  VARCHAR,
-                vehprice    DECIMAL,
-                vehstatus   BOOLEAN
-            )
-AS
-$$
-BEGIN
-    RETURN QUERY
-        SELECT veh_id, veh_model, veh_location, veh_license, veh_price, veh_status
-        FROM vehicle,
-             veh_model AS Model
-        WHERE veh_model = Model.vm_id
-          AND Model.vm_id = ModelId;
-END;
-$$
-    LANGUAGE 'plpgsql';
+  RETURN QUERY 
+  SELECT veh_id, veh_model, veh_location, veh_license, veh_price, veh_status FROM vehicle, 
+  veh_model AS Model WHERE veh_model = Model.vm_id AND Model.vm_id = ModelId;
+END; $$ 
+LANGUAGE 'plpgsql';
 
 
 CREATE OR REPLACE FUNCTION BrandUniqueness(
-    brandName VARCHAR
+  brandName VARCHAR
 )
-    RETURNS BOOLEAN AS
+RETURNS BOOLEAN AS
 $$
-DECLARE
-    same INTEGER;
+DECLARE 
+	same INTEGER;
 BEGIN
-    same :=
-            (SELECT COUNT(*)
-             FROM VEH_BRAND
-             WHERE LOWER(vb_name) = LOWER(brandName));
+  same := 
+  (SELECT COUNT(*) FROM VEH_BRAND 
+  WHERE LOWER(vb_name) = LOWER(brandName));
 
-    IF same >= 1 THEN
-        RETURN TRUE;
-    ELSE
-        RETURN FALSE;
-    END IF;
+  IF same >= 1 THEN
+	RETURN TRUE;
+  ELSE
+	RETURN FALSE;
+  END IF;
 END;
 $$
-    LANGUAGE 'plpgsql';
+LANGUAGE 'plpgsql';
 
 
 CREATE OR REPLACE FUNCTION ModelUniqueness(
-    modelName VARCHAR
+  modelName VARCHAR
 )
-    RETURNS BOOLEAN AS
+RETURNS BOOLEAN AS
 $$
-DECLARE
-    same INTEGER;
+DECLARE 
+	same INTEGER;
 BEGIN
-    same :=
-            (SELECT COUNT(*)
-             FROM VEH_MODEL
-             WHERE LOWER(vm_name) = LOWER(modelName));
+  same := 
+  (SELECT COUNT(*) FROM VEH_MODEL 
+  WHERE LOWER(vm_name) = LOWER(modelName));
 
-    IF same >= 1 THEN
-        RETURN TRUE;
-    ELSE
-        RETURN FALSE;
-    END IF;
+  IF same >= 1 THEN
+	RETURN TRUE;
+  ELSE
+	RETURN FALSE;
+  END IF;
 END;
 $$
-    LANGUAGE 'plpgsql';
+LANGUAGE 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION LicenseUniqueness(
+  license VARCHAR
+)
+RETURNS BOOLEAN AS
+$$
+DECLARE 
+	same INTEGER;
+BEGIN
+  same := 
+  (SELECT COUNT(*) FROM VEHICLE 
+  WHERE LOWER(veh_license) = LOWER(license));
+
+  IF same >= 1 THEN
+	RETURN TRUE;
+  ELSE
+	RETURN FALSE;
+  END IF;
+END;
+$$
+LANGUAGE 'plpgsql';
 
 
 CREATE OR REPLACE FUNCTION GetBrandById(brandId integer)
-    RETURNS TABLE
-            (
-                Id        INTEGER,
-                brandName VARCHAR
-            )
+RETURNS TABLE
+  (
+	Id INTEGER,
+	brandName VARCHAR
+  )
 AS
 $$
 BEGIN
     RETURN QUERY SELECT *
-                 FROM VEH_BRAND
-                 WHERE vb_id = brandId;
+	FROM VEH_BRAND
+	WHERE vb_id = brandId;
 END;
 $$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION GetModelById(modelId integer)
-    RETURNS TABLE
-            (
-                Id        INTEGER,
-                brandId   INTEGER,
-                modelName VARCHAR,
-                capacity  INTEGER,
-                picture   VARCHAR
-            )
+RETURNS TABLE
+  (
+	Id INTEGER,
+	brandId INTEGER,
+	modelName VARCHAR,
+	capacity INTEGER,
+	picture VARCHAR
+  )
 AS
 $$
 BEGIN
     RETURN QUERY SELECT *
-                 FROM VEH_MODEL
-                 WHERE vm_id = modelId;
+	FROM VEH_MODEL
+	WHERE vm_id = modelId;
 END;
 $$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION GetVehicleById(vehicleId integer)
-    RETURNS TABLE
-            (
-                Id         INTEGER,
-                modelId    INTEGER,
-                locationId INTEGER,
-                license    VARCHAR,
-                price      DECIMAL,
-                status     BOOLEAN
-            )
+RETURNS TABLE
+  (
+	Id INTEGER,
+	modelId INTEGER,
+	locationId INTEGER,
+	license VARCHAR,
+	price DECIMAL,
+	status BOOLEAN
+  )
 AS
 $$
 BEGIN
     RETURN QUERY SELECT *
-                 FROM VEHICLE
-                 WHERE veh_id = vehicleId;
+	FROM VEHICLE
+	WHERE veh_id = vehicleId;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION GetAvailableVehiclesByLocation(locId integer)
-    RETURNS TABLE
-            (
-                Id         INTEGER,
-                modelId    INTEGER,
-                locationId INTEGER,
-                license    VARCHAR,
-                price      DECIMAL,
-                status     BOOLEAN
-            )
+RETURNS TABLE
+  (
+	Id INTEGER,
+	modelId INTEGER,
+	locationId INTEGER,
+	license VARCHAR,
+	price DECIMAL,
+	status BOOLEAN
+  )
 AS
 $$
 BEGIN
     RETURN QUERY SELECT *
-                 FROM VEHICLE
-                 WHERE veh_location = locId
-                   AND veh_status = true;
+	FROM VEHICLE
+	WHERE veh_location = locId AND veh_status = true;
 END;
 $$ LANGUAGE plpgsql;
------------------------------------Fin Grupo 5 ------------------------------------------------
+-------------------------------Fin Grupo 5 ------------------------------------------------
 
 ------ Consulta de los lugares ------
 
@@ -2975,58 +2966,6 @@ $$ LANGUAGE plpgsql;
 
 ----------------------------------Grupo 13 Automobile Reservations-----------------------------------------
 
---Get all Reservations Automobiles
-CREATE OR REPLACE FUNCTION public.m13_getresautos(
-)
-    RETURNS TABLE
-            (
-                ra_id         integer,
-                ra_pickupdate timestamp without time zone,
-                ra_returndate timestamp without time zone,
-                ra_use_fk     integer,
-                ra_aut_fk     integer,
-                ra_pay_fk     integer,
-                aut_id        integer,
-                aut_make      character varying,
-                aut_model     character varying,
-                aut_capacity  integer,
-                aut_price     numeric,
-                aut_license   character varying,
-                aut_picture   character varying,
-                aut_loc_fk    integer
-            )
-    LANGUAGE 'plpgsql'
-
-    COST 100
-    VOLATILE
-    ROWS 1000
-AS
-$BODY$
-BEGIN
-    RETURN QUERY
-        select rr.ra_id,
-               rr.ra_pickupdate,
-               rr.ra_returndate,
-               rr.ra_use_fk,
-               rr.ra_aut_fk,
-               rr.ra_pay_fk,
-               r.aut_id,
-               r.aut_make,
-               r.aut_model,
-               r.aut_capacity,
-               r.aut_price,
-               r.aut_license,
-               r.aut_picture,
-               r.aut_loc_fk
-        from public.res_aut as rr,
-             public.Automobile as r
-        where rr.ra_aut_fk = r.aut_id;
-END;
-$BODY$;
-
-ALTER FUNCTION public.m13_getresautos()
-    OWNER TO vacanza;
-
 --Find by id de la reservation
 CREATE OR REPLACE FUNCTION public.m13_findbyresautid(
     _resautid integer)
@@ -3155,12 +3094,7 @@ CREATE OR REPLACE FUNCTION public.m13_getresautomobilebyuserid(
                 ra_timestamp  timestamp without time zone,
                 ra_aut_fk     integer,
                 ra_use_fk     integer,
-                ra_pay_fk     integer,
-                aut_id        integer,
-                aut_make      character varying,
-                aut_model     character varying,
-                aut_capacity  integer,
-                aut_price     numeric
+                ra_pay_fk     integer
             )
     LANGUAGE 'plpgsql'
 
@@ -3178,16 +3112,9 @@ BEGIN
                ra.ra_timestamp,
                ra.ra_aut_fk,
                ra.ra_use_fk,
-               ra.ra_pay_fk,
-               au.aut_id,
-               au.aut_make,
-               au.aut_model,
-               au.aut_capacity,
-               au.aut_price
-        from public.Res_Aut as ra,
-             public.Automobile as au
-        where ra.ra_aut_fk = au.aut_id
-          and _user_id = ra.ra_use_fk;
+               ra.ra_pay_fk
+        from public.Res_Aut as ra
+        where _user_id = ra.ra_use_fk;
 END;
 
 $BODY$;
