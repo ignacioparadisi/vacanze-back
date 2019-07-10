@@ -455,30 +455,30 @@ INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (3,29); -- Caracas
 
 INSERT INTO flight(fli_id, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, 
         	fli_loc_arrival, fli_pla_fk)
-VALUES (1,300,'2019-01-01','2019-06-13',1,2,1);
+VALUES (1,300,'2019-08-08','2019-09-09',1,2,1);
 
 INSERT INTO flight(fli_id, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, 
         	fli_loc_arrival, fli_pla_fk)
-VALUES (2,450,'2019-02-01','2019-03-01',2,3,2);
+VALUES (2,450,'2019-08-08','2019-09-09',2,3,2);
 
 INSERT INTO flight(fli_id, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, 
         	fli_loc_arrival, fli_pla_fk)
-VALUES (3,650,'2019-03-01','2019-04-01',5,6,3);
+VALUES (3,650,'2019-08-08','2019-10-10',5,6,3);
 
 INSERT INTO flight(fli_id, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, 
         	fli_loc_arrival, fli_pla_fk)
-VALUES (4,650,'2019-03-01','2019-03-12',7,10,1);
+VALUES (4,650,'2019-08-08','2019-09-09',7,10,1);
 
 INSERT INTO flight(fli_id, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, 
         	fli_loc_arrival, fli_pla_fk)
-VALUES (5,650,'2019-03-01','2019-03-12',7,10,2);
+VALUES (5,650,'2019-08-08','2019-09-10',7,10,2);
 
 
 INSERT INTO res_fli(rf_id, rf_seatnum, rf_timestamp, rf_num_ps, rf_use_fk, rf_pay_fk,rf_fli_fk)
-    VALUES (1,3,'2019-01-01',4,1,null,1);
+    VALUES (1,3,'2019-08-08',4,1,null,1);
 
 INSERT INTO res_fli(rf_id, rf_seatnum, rf_timestamp, rf_num_ps, rf_use_fk, rf_pay_fk,rf_fli_fk)
-    VALUES (2,2,'2019-01-15',4,1,null,2);
+    VALUES (2,2,'2019-08-08',4,1,null,2);
 
 ------- grupo 13 ----------
 
