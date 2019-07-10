@@ -32,6 +32,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
             command.Execute();
                 
             Login objUser = command.GetResult();
+            Console.WriteLine("Correo en el controller");
+            Console.WriteLine(objUser.email);
+            Console.WriteLine(objUser.password);
             if (objUser != null){
 
                 Console.WriteLine("Esta funcionando");
@@ -49,8 +52,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
                 };
 
                 using (var client = new MailKit.Net.Smtp.SmtpClient()){
-                    client.Connect("smtp.gmail.com", 587, true);
-                    client.Authenticate("vacanzeucab1@gmail.com", "vacanze1234");
+                    client.CheckCertificateRevocation = false;
+                    client.Connect("smtp.gmail.com", 587);
+                    client.Authenticate("hombrehealth111@gmail.com", "_Gx123456");
                     client.Send(message);
                     client.Disconnect(true);
                     client.Dispose();
