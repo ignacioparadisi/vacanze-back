@@ -40,6 +40,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
                 GetRestaurantsCommand getRestaurantsCommand = CommandFactory.CreateGetRestaurantsCommand();
                 getRestaurantsCommand.Execute();
                 List<RestaurantDto> restaurantsDtoList = getRestaurantsCommand.GetResult();
+                _logger?.LogInformation("Los restaurantes fueron obtenidos exitosamente");
                 return restaurantsDtoList; 
             }
             catch (DatabaseException ex)
@@ -63,6 +64,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
                 GetRestaurantsByCityCommand getRestaurantsByCityCommand = CommandFactory.CreateGetRestaurantsByCityCommand(id);
                 getRestaurantsByCityCommand.Execute();
                 List<RestaurantDto> restaurantsDtoList = getRestaurantsByCityCommand.GetResult();
+                _logger?.LogInformation($"Los restaurantes por la locacion de ID {id} fueron obtenidos exitosamente");
                 return restaurantsDtoList;
             }
             catch (DatabaseException ex)
@@ -88,6 +90,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
                 GetRestaurantCommand getRestaurantCommand = CommandFactory.CreateGetRestaurantCommand(id);
                 getRestaurantCommand.Execute();
                 RestaurantDto restaurant = getRestaurantCommand.GetResult();
+                _logger?.LogInformation($"El restaurante de ID {id} fue obtenido exitosamente");
                 return restaurant;
             }
             catch (RestaurantNotFoundExeption e)
@@ -118,6 +121,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
                 AddRestaurantCommand addRestaurantCommand = CommandFactory.CreateAddRestaurantCommand(restaurant);
                 addRestaurantCommand.Execute();
                 RestaurantDto savedRestaurant = addRestaurantCommand.GetResult();
+                _logger?.LogInformation($"Restaurante creado exitosamente con el ID {savedRestaurant.Id}");
                 return savedRestaurant;
             }
             catch (InvalidAttributeException e)
@@ -147,6 +151,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
                  UpdateRestaurantCommand updateRestaurantCommand = CommandFactory.CreateUpdateRestaurantCommand(restaurant);
                  updateRestaurantCommand.Execute();
                  RestaurantDto updatedRestaurant = updateRestaurantCommand.GetResult();
+                 _logger?.LogInformation($"Restaurante con ID {updatedRestaurant.Id} actualizado correctamente");
                  return updatedRestaurant;
              }
              catch(RestaurantNotFoundExeption e)
@@ -178,6 +183,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
             {
                 DeleteRestaurantCommand deleteRestaurantCommand = CommandFactory.CreateDeleteRestaurantCommand(id);
                 deleteRestaurantCommand.Execute();
+                _logger?.LogInformation($"Restaurante con ID {id} eliminado satisfactoriamete");
                 return Ok("Eliminado satisfactoriamente");
             }
             catch (DatabaseException ex) 
