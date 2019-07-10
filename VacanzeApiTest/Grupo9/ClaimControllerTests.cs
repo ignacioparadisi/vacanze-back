@@ -86,6 +86,18 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
             _claimDto.BaggageId = -10;
             var result = _claimController.Post(_claimDto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
+            
+        }
+        
+        [Test]
+        public void Post_ValidClaim_201CreatedReturned()
+        {
+            _claimDto.BaggageId = 1;
+            var result = _claimController.Post(_claimDto);
+            var castedResult = (ObjectResult) result.Result;
+            var responseValue =  (ClaimDto) castedResult.Value;
+            _insertedClaims.Add(responseValue.Id);
+            Assert.IsInstanceOf<ObjectResult>(result.Result);
         }
 
         [Test]

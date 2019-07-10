@@ -61,7 +61,8 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
         [Test]
         public void GetByDocumentTest()
         {
-            //TODO: Hacerla 
+            var claimList = _claimDao.GetByDocument("23613704");
+            Assert.IsTrue(claimList.Count > 0);
         }
 
         [Test]
