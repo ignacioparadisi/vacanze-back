@@ -7,6 +7,7 @@ using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo7;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo10;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
 using vacanze_back.VacanzeApi.Common.Entities;
@@ -76,6 +77,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new GetModelsCommand();
         }
 
+     
         public static GetModelsByBrandCommand CreateGetModelsByBrandCommand(int brandId)
         {
             return new GetModelsByBrandCommand(brandId);

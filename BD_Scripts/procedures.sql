@@ -1971,6 +1971,101 @@ BEGIN
 END; $$
 LANGUAGE plpgsql;
 
+-- eliminar viaje
+
+-- FUNCTION: public.deletetravel(integer)
+
+-- DROP FUNCTION public.deletetravel(integer);
+
+CREATE OR REPLACE FUNCTION public.deletetravel(
+	_id integer)
+    RETURNS void
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+AS $BODY$
+BEGIN
+
+    DELETE FROM travel
+    WHERE (tra_id = _id);
+
+END;
+$BODY$;
+
+ALTER FUNCTION public.deletetravel(integer)
+    OWNER TO postgres;
+
+-- agregar comentario
+
+CREATE OR REPLACE FUNCTION public.addcomment(
+	commentdescription varchar ,
+	commentdatetime varchar,
+	commentidforanea integer 
+)
+    RETURNS integer
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+AS $BODY$
+DECLARE
+	travelId INTEGER;
+BEGIN
+	INSERT INTO public.comment(com_descr, com_timestamp, com_tra_res_fk)
+	VALUES(commentdescription, to_date(commentdatetime,'YYYY-MM-DD'),commentidforanea);
+	RETURN 1;
+END;
+$BODY$;
+
+
+---obtener comentario 
+
+
+
+CREATE OR REPLACE FUNCTION public.getcommentid(
+	codigo integer)
+    RETURNS TABLE(com_id integer ,com_descr varchar, com_timestamp timestamp, _com_tra_res_fk integer) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+BEGIN
+    RETURN QUERY  select * 
+    FROM comment WHERE com_tra_res_fk = codigo;
+END;
+$BODY$;
+-- updatecomment
+
+
+CREATE OR REPLACE FUNCTION public.updatecomment(
+	commentid integer,
+	commentdescription character varying,
+	commentdatetime character varying,
+	commentidforanea integer)
+    RETURNS boolean
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+AS $BODY$
+BEGIN
+	UPDATE comment
+	SET com_id = commentid, com_descr = commentdescription,
+	com_timestamp = to_date(commentdatetime,'YYYY-MM-DD')
+	WHERE com_id = commentid and com_tra_res_fk=commentidforanea;
+	IF FOUND THEN
+		RETURN TRUE;
+	ELSE
+		RETURN FALSE;
+	END IF;
+END;
+$BODY$;
+
+--- falta el deletecoment
+
 
 
 ------------------------------------fin de grupo 10---------------------------------
