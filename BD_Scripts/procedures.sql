@@ -2302,13 +2302,12 @@ CREATE OR REPLACE FUNCTION GetReservationsOfCarssByTravelAndLocation(
 	ra_ID INTEGER,
 	ra_PickUpDate TIMESTAMP,
 	ra_RetrunDate TIMESTAMP,
-	ra_Timestamp TIMESTAMP,
 	ra_use_fk INTEGER,
 	ra_aut_fk INTEGER
 )AS $$
 BEGIN
 	RETURN QUERY
-	SELECT ra.ra_ID, ra.ra_PickUpDate, ra.ra_RetrunDate, ra.ra_Timestamp, ra.ra_use_fk, ra.ra_aut_fk 
+	SELECT ra.ra_ID, ra.ra_PickUpDate, ra.ra_RetrunDate, ra.ra_use_fk, ra.ra_aut_fk 
 	FROM TRA_RES tr
 		  INNER JOIN 
 		  TRA_LOC tl
