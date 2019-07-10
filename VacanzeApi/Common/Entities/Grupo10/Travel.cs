@@ -13,7 +13,8 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10
         private List<ReservationRoom> _roomReservations = new List<ReservationRoom>();
         private List<ReservationAutomobile> _carReservations = new List<ReservationAutomobile>();
         private List<Restaurant_res> _restaurantReservations = new List<Restaurant_res>();
-        
+        /*private List<> _flightReservations = new (); */
+
         private int _id;
         public int Id{ get{ return _id; } set{ _id = value; } }
 

@@ -1978,7 +1978,7 @@ END; $$
 LANGUAGE plpgsql;
 
 -- DROP FUNCTION GetReservationsOfCarsByTravelAndLocation(INTEGER, INTEGER);
-CREATE OR REPLACE FUNCTION GetReservationsOfCarsByTravelAndLocation(
+CREATE OR REPLACE FUNCTION GetReservationsOfCarssByTravelAndLocation(
 	travelId INTEGER, 
 	locationId INTEGER
 ) RETURNS TABLE (
