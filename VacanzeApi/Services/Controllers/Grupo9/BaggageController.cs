@@ -15,10 +15,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
     [ApiController]
     public class BaggageController : ControllerBase
     {
+
         /// <summary>
-        // GET api/values/id
-        // consultar los equipajes segun su id
+        ///     GET api/baggage/serial/{id}
+        ///     Metodo para obtener el equipaje segun su serial
         /// </summary>
+        /// <returns>Objeto tipo json con el equipaje deseado</returns>
         [HttpGet("serial/{id}")]
         public ActionResult<BaggageDTO> Get(int id)
         {
@@ -39,10 +41,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             }
         }
 
+
+
         /// <summary>
-        // GET api/values/5
-        // Get para la tabla equipaje segun su documento de identidad
+        ///     GET api/baggage/documentPasaport/{id}
+        ///     Metodo para obtener todos los equipajes de un usuario en particular por medio de su pasaporte
         /// </summary>
+        /// <returns>Lista de Objetos de tipo json de cada equipaje</returns>
         [HttpGet("documentPasaport/{id}")]
         public ActionResult<IEnumerable<BaggageDTO>> GetDocument(string id)
         {
@@ -63,9 +68,14 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             }
         }
 
+
+
         /// <summary>
-        //consultar los equipajes segun su estatus
+        ///     GET api/baggage/admin/getStatus/{id}
+        ///     Metodo para obtener todos los equipajes segun un estatus determinado
+        ///     Estatus posibles: EXTRAVIADO, RECLAMADO, ENTREGADO
         /// </summary>
+        /// <returns>Lista de Objetos de tipo json de cada equipaje</returns>
         [HttpGet("admin/getStatus/{status}")]
         public ActionResult<IEnumerable<BaggageDTO>> GetStatus(string status)
         {
@@ -86,10 +96,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             }
         }
 
+
+
         /// <summary>
-        //api/Clain/status/5
-        // modificar el estatus del equipaje
+        ///     PUT api/baggage/{id}
+        ///     Metodo para modificar el equipaje
         /// </summary>
+        /// <returns>id del equipaje modificado</returns>
         [HttpPut("{id}")]
         public ActionResult<BaggageDTO> Put(int id, [FromBody] BaggageDTO Baggage)
         {

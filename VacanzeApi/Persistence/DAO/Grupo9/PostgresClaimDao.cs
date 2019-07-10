@@ -113,7 +113,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo9
 
 
         /// <summary>
-        ///     Metodo extraer un claim de la tabla retornada por las consultas a la base de datos ejecutadas por el PgConnection
+        ///     Metodo extraer un equipaje de la tabla retornada por las consultas a la base de datos ejecutadas por el PgConnection
         /// </summary>
         /// <param name="row">fila a extraer</param>
         private Claim ExtractClaimFromRow(DataRow row)
