@@ -1,3 +1,4 @@
+using System;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.DAO;
@@ -20,6 +21,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13
                 throw new ReservationHasNoUserException();
             if (_reservationRoom.HotelId == 0)
                 throw new ReservationHasNoHotelException();
+            if (_reservationRoom.CheckIn.Equals(DateTime.MinValue))
+                throw new ReservationHasNoCheckInException();
+            if (_reservationRoom.CheckOut.Equals(DateTime.MinValue))
+                throw new ReservationHasNoCheckOutException();
+            
             DAOFactory daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
             var reservationRoomDao = (PostgresReservationRoomDAO) daoFactory.GetReservationRoomDAO();
             _reservationRoom = reservationRoomDao.Add(_reservationRoom);

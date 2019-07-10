@@ -1,3 +1,4 @@
+using System;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.DAO;
@@ -14,6 +15,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13
         {
             this._reservationAutomobile = _reservationAutomobile;
         }
+
         public ReservationVehicle GetResult()
         {
             return _reservationAutomobile;
@@ -21,16 +23,15 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13
 
         public void Execute()
         {
-            if (_reservationAutomobile.UserId == 0 )
-            {
+            if (_reservationAutomobile.UserId == 0)
                 throw new ReservationHasNoUserException();
-            }
-
             if (_reservationAutomobile.VehicleId == 0)
-            {
                 throw new ReservationHasNoVehicleException();
-            }
-                
+            if (_reservationAutomobile.CheckIn.Equals(DateTime.MinValue))
+                throw new ReservationHasNoCheckInException();
+            if (_reservationAutomobile.CheckOut.Equals(DateTime.MinValue))
+                throw new ReservationHasNoCheckOutException();
+
             IReservationVehicleDAO dao = DAOFactory.GetFactory(DAOFactory.Type.Postgres).GetReservationVehicleDAO();
             _reservationAutomobile = dao.AddReservation(_reservationAutomobile);
         }
