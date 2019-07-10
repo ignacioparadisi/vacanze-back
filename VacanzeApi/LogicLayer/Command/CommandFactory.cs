@@ -40,6 +40,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new GetAvailableVehiclesByLocationCommand(locationId);
         }
+        
+        public static UpdateVehicleCommand CreateUpdateVehicleCommand(Vehicle vehicle)
+        {
+            return new UpdateVehicleCommand(vehicle);
+        }
 
         public static AddBrandCommand CreateAddBrandCommand(Brand brand)
         {

@@ -31,6 +31,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
                 AddVehicleCommand command = CommandFactory.CreateAddVehicleCommand((Vehicle) entity);
                 command.Execute();
                 return Ok ("ok " + command.GetResult ());
+            } catch (ModelNotFoundException ex){
+                return StatusCode(404, ex.Message + ex.ModelId);
+            } catch (LocationNotFoundException ex){
+                return StatusCode(404, ex.Message);
+            } catch (UniqueAttributeException ex){
+                return StatusCode(500, ex.Message); 
             }catch (InternalServerErrorException ex) {
                 return StatusCode (500, ex.Message);
             } catch (Exception) {
@@ -66,12 +72,36 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
                 return StatusCode (404, "Location con  " + ex.Message);
             } catch (NotVehiclesAvailableException ex){
                 return StatusCode (404, ex.Message);
-            } catch (VehicleNotFoundException ex){
-                return StatusCode (404, ex.Message + ex.VehicleId);
             } catch (InternalServerErrorException ex) {
                 return StatusCode (500, ex.Message);
             } catch (Exception) {
                 return StatusCode (400);
+            }
+        }
+
+        [HttpPut]
+        public IActionResult UpdateVehicle([FromBody] VehicleDTO vehicleDTO){
+            try{
+                VehicleMapper vehicleMapper = MapperFactory.CreateVehicleMapper();
+                Entity entity = vehicleMapper.CreateEntity(vehicleDTO);
+                UpdateVehicleCommand command = CommandFactory.CreateUpdateVehicleCommand ((Vehicle) entity);
+                command.Execute ();
+                if(command.GetResult())
+                    return Ok("La modificación fue realizada exitosamente");
+                else
+                    return StatusCode(400);
+            } catch (VehicleNotFoundException ex){
+                return StatusCode(404, ex.Message + ex.VehicleId);
+            } catch (ModelNotFoundException ex){
+                return StatusCode(404, ex.Message + ex.ModelId);
+            } catch (LocationNotFoundException ex){
+                return StatusCode(404, ex.Message);
+            } catch (UniqueAttributeException ex){
+                return StatusCode(500, ex.Message);
+            } catch(InternalServerErrorException ex){
+                return StatusCode(500, ex.Message);
+            } catch(Exception){
+                return StatusCode(400);
             }
         }
     }

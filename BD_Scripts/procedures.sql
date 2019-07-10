@@ -1256,7 +1256,7 @@ CREATE OR REPLACE FUNCTION AddVehicle(
 	modelId INTEGER,
 	locationId INTEGER,
 	license VARCHAR,
-	price DECIMAL,
+	price FLOAT,
 	status BOOLEAN
 )
 RETURNS INTEGER AS
@@ -1431,7 +1431,7 @@ CREATE OR REPLACE FUNCTION UpdateVehicle(
   vehmodel INTEGER,
   vehlocation INTEGER,
   vehlicense VARCHAR,
-  vehprice DECIMAL,
+  vehprice FLOAT,
   vehstatus BOOLEAN
 )
 RETURNS BOOLEAN AS
@@ -1540,6 +1540,28 @@ BEGIN
   same := 
   (SELECT COUNT(*) FROM VEH_MODEL 
   WHERE LOWER(vm_name) = LOWER(modelName));
+
+  IF same >= 1 THEN
+	RETURN TRUE;
+  ELSE
+	RETURN FALSE;
+  END IF;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION LicenseUniqueness(
+  license VARCHAR
+)
+RETURNS BOOLEAN AS
+$$
+DECLARE 
+	same INTEGER;
+BEGIN
+  same := 
+  (SELECT COUNT(*) FROM VEHICLE 
+  WHERE LOWER(veh_license) = LOWER(license));
 
   IF same >= 1 THEN
 	RETURN TRUE;

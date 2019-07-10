@@ -14,11 +14,21 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5
         public int AddVehicle(Vehicle vehicle){
             int id = 0;
             try {
+                PostgresModelDAO modelDAO = new PostgresModelDAO();
+                modelDAO.GetModelById(vehicle.VehicleModelId);//Throw ModelNotFoundException
+                PostgresLocationDAO locationDAO = new PostgresLocationDAO();
+                locationDAO.GetLocationById(vehicle.VehicleLocationId);// Throw LocationNotFoundException
                 PgConnection pgConnection = PgConnection.Instance;
                 DataTable dataTable = pgConnection.ExecuteFunction (
-                "AddVehicle(@modelId, @locationId, @license, @price, @status)", 
-                    vehicle.VehicleModelId, vehicle.VehicleLocationId, vehicle.License, vehicle.Price, vehicle.Status);
-                id = Convert.ToInt32 (dataTable.Rows[0][0]);
+                    "LicenseUniqueness(@modelName)", vehicle.License);
+                if(Convert.ToBoolean(dataTable.Rows[0][0])){
+                    throw new UniqueAttributeException("La matricula " + vehicle.License + " ya existe");
+                }else{
+                    dataTable = pgConnection.ExecuteFunction (
+                    "AddVehicle(@modelId, @locationId, @license, @price, @status)", 
+                        vehicle.VehicleModelId, vehicle.VehicleLocationId, vehicle.License, vehicle.Price, vehicle.Status);
+                    id = Convert.ToInt32 (dataTable.Rows[0][0]);
+                }
             } catch (DatabaseException ex) {
                 throw new InternalServerErrorException ("Error en el servidor : Conexion a base de datos", ex);
             } catch (InvalidStoredProcedureSignatureException ex) {
@@ -83,6 +93,35 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5
                 throw new InternalServerErrorException("Error en el servidor", ex);
             }
             return vehicles;
+        }
+
+        public bool UpdateVehicle(Vehicle vehicle){
+            bool updated = false;
+            try{
+                GetVehicleById(vehicle.Id);// Throw VehicleNotFoundException
+                PostgresModelDAO modelDAO = new PostgresModelDAO();
+                modelDAO.GetModelById(vehicle.VehicleModelId);//Throw ModelNotFoundException
+                PostgresLocationDAO locationDAO = new PostgresLocationDAO();
+                locationDAO.GetLocationById(vehicle.VehicleLocationId);// Throw LocationNotFoundException
+                PgConnection pgConnection = PgConnection.Instance;
+                DataTable dataTable = pgConnection.ExecuteFunction (
+                    "LicenseUniqueness(@license)", vehicle.License);
+                 if(Convert.ToBoolean(dataTable.Rows[0][0])){
+                     throw new UniqueAttributeException("La matricula " + vehicle.License + " ya existe");
+                 }else{
+                     dataTable = pgConnection.ExecuteFunction(
+                    "UpdateVehicle(@vehid, @vehmodel, @vehlocation, @vehlicense, @vehprice, @vehstatus)",
+                    vehicle.Id, vehicle.VehicleModelId, vehicle.VehicleLocationId, vehicle.License, vehicle.Price, vehicle.Status);
+                    if(Convert.ToBoolean(dataTable.Rows[0][0])){
+                        updated = true;
+                    }
+                 }
+            }catch(DatabaseException ex){
+                throw new InternalServerErrorException("Error en el servidor : Conexion a base de datos", ex);
+            }catch(InvalidStoredProcedureSignatureException ex){
+                throw new InternalServerErrorException("Error en el servidor", ex);
+            }
+            return updated;
         }
     }
 }
