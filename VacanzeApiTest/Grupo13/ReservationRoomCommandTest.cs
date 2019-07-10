@@ -138,8 +138,26 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             CommandResult<ReservationRoom> command2 =
                 CommandFactory.CreateGetReservationRoomCommand(command.GetResult().Id);
             command2.Execute();
-            Assert.True(command2.GetResult().Id > 0);
+            Assert.AreEqual(command.GetResult().Id, command2.GetResult().Id);
         }
+
+        [Test]
+        public void DeleteReservationSuccessTest()
+        {
+            DateTime checkin = new DateTime(2019,7,10);
+            DateTime checkout = new DateTime(2019,7,12);
+            ReservationRoom reservationRoom =
+                EntityFactory.CreateReservationRoom(0, checkin, checkout, _hotel.Id, _user.Id);
+            CommandResult<ReservationRoom> command = CommandFactory.CreateAddReservationRoomCommand(reservationRoom);
+            command.Execute();
+            _insertedReservations.Add(reservationRoom.Id);
+            CommandResult<int> command2 =
+                CommandFactory.CreateDeleteReservationRoomCommand(command.GetResult().Id);
+            command2.Execute();
+            Assert.AreEqual(command.GetResult().Id, command2.GetResult());
+        }
+        
+        
         
         
     }
