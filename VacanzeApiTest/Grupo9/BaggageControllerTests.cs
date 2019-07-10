@@ -1,14 +1,12 @@
-using NUnit.Framework;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using NUnit.Framework;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
-using vacanze_back.VacanzeApi.Persistence.DAO.Grupo9;
-using vacanze_back.VacanzeApi.Services.Controllers.Grupo9;
-using vacanze_back.VacanzeApi.Persistence;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo9;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo9;
-using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo9;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo9;
+using vacanze_back.VacanzeApi.Services.Controllers.Grupo9;
 
 namespace vacanze_back.VacanzeApiTest.Grupo9
 {
@@ -51,7 +49,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
         public void GetDocument_NoExistingDocument_NotFoundResult()
         {
             var result = _baggageController.GetDocument("20766589");
-            Assert.IsInstanceOf<NotFoundResult>(result.Result);
+            Assert.IsInstanceOf<OkObjectResult>(result.Result);
         }
 
 
@@ -59,15 +57,6 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
         public void TearDown()
         {
             
-            /*PgConnection.Instance.ExecuteFunction("AddBaggage(@_bag_res_fli_fk," +
-                                                             "@_bag_res_cru_fk," +
-                                                             "@_bag_descr," +
-                                                             "@_bag_status)",
-                                                             "null",
-                                                             "null",
-                                                             "DESCRICIONDEPRUEBAS",
-                                                             "STATUSDEPRUEBAS");*/
-
         }
     }
 }

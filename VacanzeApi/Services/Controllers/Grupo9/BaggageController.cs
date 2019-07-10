@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
-using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo9;
-using Microsoft.Extensions.Logging;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 {
@@ -69,7 +68,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             {
                 getByPassportCommand.Execute();
                 _logger?.LogInformation($"Obtenido Equipaje por numero de pasaporte {id} exitosamente");
-                return getByPassportCommand.GetResult();
+                return Ok(getByPassportCommand.GetResult());
             }
             catch (BaggageNotFoundException)
             {
