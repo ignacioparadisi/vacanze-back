@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo14;
 
@@ -11,7 +12,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10
         private List<Location> locations = new List<Location>();
 
         private List<ReservationRoom> _roomReservations = new List<ReservationRoom>();
-        private List<ReservationAutomobile> _carReservations = new List<ReservationAutomobile>();
+        private List<ReservationVehicle> _carReservations = new List<ReservationVehicle>();
         private List<Restaurant_res> _restaurantReservations = new List<Restaurant_res>();
         /*private List<> _flightReservations = new (); */
 

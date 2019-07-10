@@ -122,12 +122,12 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
                     DataTable dataTable = pgConnection.ExecuteFunction(
                     "GetReservationsOfCarssByTravelAndLocation(@travelId, @locationId)", travelId, locationId);
                     if( dataTable.Rows.Count > 0 ){
-                        List<ReservationAutomobile> reservationsOfAuto = new List<ReservationAutomobile>();
+                        List<ReservationVehicle> reservationsOfAuto = new List<ReservationVehicle>();
                         foreach (DataRow dataRow in dataTable.Rows){
-                            ReservationAutomobile reservationAuto = new ReservationAutomobile(
+                            ReservationVehicle reservationAuto = new ReservationVehicle(
                             Convert.ToInt32(dataRow[0]),
                             DateTime.Parse(dataRow[1].ToString()),
-                            DateTime.Parse(dataRow[2].ToString()), Convert.ToInt32(dataRow[5]), Convert.ToInt32(dataRow[4]));
+                            DateTime.Parse(dataRow[2].ToString()), Convert.ToInt32(dataRow[4]), Convert.ToInt32(dataRow[3]));
                             reservationsOfAuto.Add(reservationAuto);
                         }
                         reservations = reservationsOfAuto.Cast<T>().ToList();

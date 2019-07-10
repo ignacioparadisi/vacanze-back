@@ -2322,6 +2322,8 @@ BEGIN
 	WHERE tr.tr_travel_fk = travelId AND tl.tl_loc_fk = locationId AND a.aut_loc_fk = locationId;
 END; $$
 LANGUAGE plpgsql;
+-- ---------------------------------------
+
 CREATE OR REPLACE FUNCTION AddLocationToTravel(travelId INTEGER,
                                                locationId INTEGER)
     RETURNS BOOLEAN AS
