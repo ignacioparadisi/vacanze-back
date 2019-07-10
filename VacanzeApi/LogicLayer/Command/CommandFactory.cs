@@ -255,7 +255,16 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new GetFindFlightCommand(_id);
         }
 
-        
+        public static GetFindFlightIdCommand GetFindFlightIdEntityCommand(int _id)
+        {
+            return new GetFindFlightIdCommand(_id);
+        }
+        public static GetAirplaneByIdCommand GetFindPlaneIdCommand(int _id)
+        {
+            return new GetAirplaneByIdCommand(_id);
+        }
+
+
         public static UpdateFlightCommand UpdateFlightCommand(Flight _flight)
         {
             return new UpdateFlightCommand(_flight);
@@ -268,6 +277,9 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         
         public static GetFlightListCommand getListFlightCommand(){
             return new GetFlightListCommand();
+        }
+        public static GetByDateCommand getByDateFlightCommand(string a, string b){
+            return new GetByDateCommand(a,b);
         }
 		public static HotelValidatorCommand HotelValidatorCommand(Hotel hotel)
         {

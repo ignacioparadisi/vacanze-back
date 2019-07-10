@@ -179,6 +179,47 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
 
         }
 
+/// <summary>Busca vuelo especifico en la DB</summary>
+        /// <param name="id">Id del vuelo a busac</param>
+        /// <returns>Entity con el resultado de la query</returns>
+        public Entity FindIdEntity(int id)
+        {
+
+            try
+            {
+                var table = PgConnection.Instance.ExecuteFunction(FIND_FLIGHT, id);
+               Flight flight = null;
+                //DAOFactory Flight=DAOFactory
+
+                AirplanesRepositoryDAO airplane=new AirplanesRepositoryDAO();
+                if (table.Rows.Count > 0)
+                {
+                    flight = new Flight(Convert.ToInt32(table.Rows[0][0]));
+                    flight.Id = Convert.ToInt32(table.Rows[0][0]);
+                    flight.price = Convert.ToDouble(table.Rows[0][1]);
+                    flight.departure = table.Rows[0][2].ToString();
+                    flight.arrival = table.Rows[0][3].ToString();
+                    flight.loc_departure = LocationRepository.GetLocationById(Convert.ToInt32(table.Rows[0][4]));
+                    flight.loc_arrival = LocationRepository.GetLocationById(Convert.ToInt32(table.Rows[0][5]));
+                    flight.plane = airplane.Find(Convert.ToInt32(table.Rows[0][6]));
+                }
+                return flight;
+            }
+
+            catch (DatabaseException ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw new DbErrorException("¡Ups! Hubo un error con la Base de Datos", ex);
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+           
+
+        }
+
         /// <summary>Busca vuelo en un rango de fechas en la DB</summary>
         /// <param name="begin">Fecha menor a buscar</param>
         /// <param name="end">Fecha mayor a buscar</param>
