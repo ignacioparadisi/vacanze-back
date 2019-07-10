@@ -61,24 +61,24 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         /// <returns name = "_reservation">La reserva para el vehiculo con el id introducido</returns>
         public ReservationVehicle Find(int id)
         {
+            ReservationVehicle reservation = new ReservationVehicle();
             var table = PgConnection.Instance.ExecuteFunction(SP_FIND, id);
             for (int i = 0; i < table.Rows.Count; i++)
             {
+                var reservationId = Convert.ToInt32(table.Rows[i][0]);
                 var pickup = Convert.ToDateTime(table.Rows[i][1]);
                 var returndate = Convert.ToDateTime(table.Rows[i][2]);
                 var userId = (int) Convert.ToInt64(table.Rows[i][4]);
                 var vehicleId = (int) Convert.ToInt64(table.Rows[i][5]);
                 // var payfk = Convert.ToInt64(table.Rows[i][5]);
-                _reservation = EntityFactory.CreateReservationAutomobile(userId, pickup, returndate);
-                _reservation.UserId = userId;
-                _reservation.VehicleId = vehicleId;
+                reservation = EntityFactory.CreateReservationAutomobile(reservationId, pickup, returndate, userId, vehicleId);
 
                 //  _reservation.User.Id = userid;
                 //  _reservation.Automobile.Id = autfk;
                 // Falta Payment
             }
 
-            return _reservation;
+            return reservation;
         }
         
         public ReservationVehicle AddReservation(ReservationVehicle reservation)
