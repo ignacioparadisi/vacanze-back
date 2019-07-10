@@ -168,6 +168,9 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         public static GetFlightListCommand getListFlightCommand(){
             return new GetFlightListCommand();
         }
+        public static GetByDateCommand getByDateFlightCommand(string a, string b){
+            return new GetByDateCommand(a,b);
+        }
 
         public static AddLocationCommand createAddLocationCommand(Location location)
         {
