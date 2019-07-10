@@ -186,12 +186,16 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
                 _logger?.LogInformation($"Restaurante con ID {id} eliminado satisfactoriamete");
                 return Ok("Eliminado satisfactoriamente");
             }
+            catch (RestaurantNotFoundExeption e)
+            {
+                _logger.LogWarning($"Restaurant con ID {id} no conseguido");
+                return BadRequest(new ErrorMessage(e.Message));
+            }
             catch (DatabaseException ex) 
             {
                 _logger?.LogError(ex, "Database exception when trying to update a restaurant");
                 return StatusCode(500, ex.Message);
             }
-            
         }
     }
 }

@@ -100,6 +100,9 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo7
         /// <param name="id">id del restaurante a eliminar</param>
         public void DeleteRestaurant(int id)
         {
+            var table = PgConnection.Instance.ExecuteFunction("GetRestaurant(@id)" , id);
+            if (table.Rows.Count == 0)
+                throw new RestaurantNotFoundExeption("El restaurante que desea eliminar no existe");
             PgConnection.Instance.ExecuteFunction("DeleteRestaurant(@id)",id);
         }
 
