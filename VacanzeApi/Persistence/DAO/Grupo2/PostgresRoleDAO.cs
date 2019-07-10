@@ -14,9 +14,9 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
         /// Método que Consulta Todos los Roles Existentes en Base de Datos.
         /// </summary>
         /// <returns>Una lista de Roles.</returns>
-        public List<Entity> GetRoles()
+        public List<Role> GetRoles()
         {
-            var roles = new List<Entity>();
+            var roles = new List<Role>();
             var table = PgConnection.Instance.ExecuteFunction(SP_GETROLES);
             
             for (var i = 0; i < table.Rows.Count; i++)

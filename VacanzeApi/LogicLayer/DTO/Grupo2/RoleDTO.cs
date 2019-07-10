@@ -9,19 +9,20 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo2
     public class RoleDTO : DTO
     {
         // Constantes que contienen el id de los roles que pueden tener los usuarios
-        public int _id { get; set; }
-        public const int _CLIENT = 1;
-        public const int _ADMIN = 2;
-        public const int _CHECKIN = 3;
-        public const int _CLAIM = 4;
-        public const int _CARRIER = 5;
+        public int Id { get; set; }
+        public const int CLIENT = 1;
+        public const int ADMIN = 2;
+        public const int CHECKIN = 3;
+        public const int CLAIM = 4;
+        public const int CARRIER = 5;
 
         // Nombre del rol
-        public string _Name { get; set; }
+        public string Name { get; set; }
 
         public RoleDTO(int id, string name)
         {
-            _Name = name;
+            Id = id;
+            Name = name;
         }
 
         /// <summary>
@@ -31,10 +32,10 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo2
         /// <exception cref="NotValidIdException">Devuelve una excepcion si el id no es valido</exception>
         public bool Validate()
         {
-            var availableRoles = new int[] { _CLIENT, _ADMIN, _CHECKIN, _CLAIM, _CARRIER };
-            if (!availableRoles.Contains(_id))
+            var availableRoles = new int[] { CLIENT, ADMIN, CHECKIN, CLAIM, CARRIER };
+            if (!availableRoles.Contains(Id))
             {
-                throw new NotValidIdException("El rol " + _id + " es inválido");
+                throw new NotValidIdException("El rol " + Id + " es inválido");
             }
 
             return true;

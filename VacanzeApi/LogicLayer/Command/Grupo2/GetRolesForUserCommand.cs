@@ -13,6 +13,12 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
     {
         private static List<Role> Roles;
         public User User { get; set; }
+
+        public GetRolesForUserCommand(User user)
+        {
+            User = user;
+        }
+
         public void Execute()
         {
             try

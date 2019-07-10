@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo2;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo2;
 using vacanze_back.VacanzeApi.Services.Controllers.Grupo2;
 
@@ -12,6 +13,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
     {
         private UsersController _usersController;
         private User _user;
+        private UserDTO _dto;
         private List<int> _insertedUsers;
         
         [SetUp]
@@ -45,7 +47,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         [Test]
         public void PostUserTest()
         {
-            var result = _usersController.Post(_user);
+            var result = _usersController.Post(_dto);
             var okObject = (OkObjectResult) result.Result;
             var idToDelete = ((User) okObject.Value).Id;
             _insertedUsers.Add(idToDelete);
@@ -56,7 +58,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         public void PostUser_NotValidDocumentIdExceptionTest()
         {
             _user.DocumentId = 0;
-            var result = _usersController.Post(_user);
+            var result = _usersController.Post(_dto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
 
@@ -64,7 +66,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         public void PostUser_NotValidNameException_NullTest()
         {
             _user.Name = null;
-            var result = _usersController.Post(_user);
+            var result = _usersController.Post(_dto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
         
@@ -72,7 +74,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         public void PostUser_NotValidNameException_EmptyTest()
         {
             _user.Name = "";
-            var result = _usersController.Post(_user);
+            var result = _usersController.Post(_dto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
         
@@ -80,7 +82,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         public void PostUser_NotValidNameException_WhiteSpaceTest()
         {
             _user.Name = " ";
-            var result = _usersController.Post(_user);
+            var result = _usersController.Post(_dto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
         
@@ -88,7 +90,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         public void PostUser_NotValidLastNameException_NullTest()
         {
             _user.Lastname = null;
-            var result = _usersController.Post(_user);
+            var result = _usersController.Post(_dto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
         
@@ -96,7 +98,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         public void PostUser_NotValidLastNameException_EmptyTest()
         {
             _user.Lastname = "";
-            var result = _usersController.Post(_user);
+            var result = _usersController.Post(_dto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
         
@@ -104,7 +106,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         public void PostUser_NotValidLastNameException_WhiteSpaceTest()
         {
             _user.Lastname = " ";
-            var result = _usersController.Post(_user);
+            var result = _usersController.Post(_dto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
         
@@ -112,7 +114,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         public void PostUser_EmailRequiredException_NullTest()
         {
             _user.Email = null;
-            var result = _usersController.Post(_user);
+            var result = _usersController.Post(_dto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
         
@@ -120,7 +122,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         public void PostUser_EmailRequiredException_EmptyTest()
         {
             _user.Email = "";
-            var result = _usersController.Post(_user);
+            var result = _usersController.Post(_dto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
         
@@ -128,7 +130,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         public void PostUser_EmailRequiredException_WhiteSpaceTest()
         {
             _user.Email = " ";
-            var result = _usersController.Post(_user);
+            var result = _usersController.Post(_dto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
         
@@ -136,7 +138,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         public void PostUser_NotValidEmailExceptionTest()
         {
             _user.Email = "email";
-            var result = _usersController.Post(_user);
+            var result = _usersController.Post(_dto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
         
@@ -144,7 +146,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         public void PostUser_RoleRequiredException_NullTest()
         {
             _user.Roles = null;
-            var result = _usersController.Post(_user);
+            var result = _usersController.Post(_dto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
         
@@ -152,7 +154,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         public void PostUser_RoleRequiredException_EmptyTest()
         {
             _user.Roles = new List<Role>();
-            var result = _usersController.Post(_user);
+            var result = _usersController.Post(_dto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
         
@@ -162,7 +164,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
             var roles = new List<Role>();
             roles.Add(new Role(-1, "Checkin"));
             _user.Roles = roles;
-            var result = _usersController.Post(_user);
+            var result = _usersController.Post(_dto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
 
@@ -173,7 +175,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
             roles.Add(new Role(Role.ADMIN, "Administrador"));
             roles.Add(new Role(Role.CLAIM, "Reclamo"));
             _user.Roles = roles;
-            var result = _usersController.Post(_user);
+            var result = _usersController.Post(_dto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
         
@@ -182,7 +184,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         {
             var user = UserRepository.AddUser(_user);
             _insertedUsers.Add(user.Id);
-            var result = _usersController.Post(_user);
+            var result = _usersController.Post(_dto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
 
@@ -190,7 +192,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         public void PostUser_PasswordRequiredException_NullTest()
         {
             _user.Password = null;
-            var result = _usersController.Post(_user);
+            var result = _usersController.Post(_dto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
         
@@ -198,7 +200,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         public void PostUser_PasswordRequiredException_EmptyTest()
         {
             _user.Password = "";
-            var result = _usersController.Post(_user);
+            var result = _usersController.Post(_dto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
         
@@ -206,7 +208,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         public void PostUser_PasswordRequiredException_WhiteSpaceTest()
         {
             _user.Password = "  ";
-            var result = _usersController.Post(_user);
+            var result = _usersController.Post(_dto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
         
@@ -383,7 +385,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         {
             var user = UserRepository.AddUser(_user);
             var result = _usersController.Delete(user.Id);
-            Assert.IsInstanceOf<OkObjectResult>(result.Result);
+            Assert.IsInstanceOf<OkResult>(result.Result);
         }
 
         [Test]

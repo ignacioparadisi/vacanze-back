@@ -8,6 +8,12 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo12;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo12;
 using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.LogicLayer.DTO;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo12;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo12;
+using vacanze_back.VacanzeApi.LogicLayer.Command;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
 {
@@ -16,7 +22,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
     [EnableCors("MyPolicy")]
 	[ApiController]
     
-    public class FlightController : ControllerBase
+    public class FlightReservationController : ControllerBase
     {
 
         /// <summary> POST api/flight-reservation</summary>
@@ -25,17 +31,23 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         [Route("~/api/flight-reservation")] 
         // POST api/flight-reservation
         [HttpPost]
-        public ActionResult<IEnumerable<string>> Post(FlightRes flight){
+        public ActionResult<IEnumerable<string>> Post(FlightResDTO flightDTO){
 
             try{
 
-                FlightResConnection con=new FlightResConnection();
-                string seat=con.conSeatNum(flight._numPas,flight._id_fli);
-                FlightRes f=new FlightRes(seat,flight._timestamp,
-                flight._numPas,flight._id_user,flight._id_fli);
-                int i = con.AddReservationFlight(f);
-                
-                return StatusCode(200, "Se agrego satisfactoriamente id:"+i);
+                //Crea la entidad por medio del mapper devuelvo del factory
+                ReservationFlightMapper ResFlightMapper = MapperFactory.CreateReservationFlightMapper();
+                Entity entity = ResFlightMapper.CreateEntity(flightDTO);
+
+                //Instancia el comando por medio del factory pasandole la entidad al constructor
+                AddReservationFlightCommand command = CommandFactory.CreateAddReservationFlightCommand ((FlightRes)entity);
+
+                //Ejecuta y obtiene el resultado del comando
+                command.Execute ();
+                int _id = command.GetResult();
+
+
+                return StatusCode(200, "Se agrego satisfactoriamente id: " + _id);
 
             }catch(Exception ex){
                 return BadRequest(ex.Message);
@@ -43,7 +55,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         }
        
 
-       
+
         /// <summary> GET api/list-reservation-flight/id_user</summary>
         /// <param name="id_user">Id del usuario</param>
         /// <returns>Devuelve una lista de todas las reservas de realizo</returns>
@@ -51,14 +63,19 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         [Route("~/api/list-reservation-flight/{id_user}")] 
         // GET api/list-reservation-flight
         [HttpGet("{id_user}")]
-        public ActionResult<IEnumerable<FlightRes>> Get(int id_user){
+        public ActionResult<IEnumerable<Entity>> Get(int id_user){
 
             try{
-                FlightResConnection con=new FlightResConnection();
-                List<FlightRes> listFlight = con.GetReservationFlight(id_user);
+                
+
+                GetReservationFlightByUserCommand command = 
+                CommandFactory.CreateGetReservationFlightByUserCommand(id_user);
+                command.Execute();
+                List<Entity> listFlight = command.GetResult();
+
                 return listFlight;
 
-            }catch(Exception ex ){
+            }catch(Exception ex){
 
                  return BadRequest(ex.Message);
             }
@@ -77,13 +94,16 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         public ActionResult<IEnumerable<int>> Get(string name_city_i,string name_city_v){
             
             try{
-                List<int> lis_id=new List<int>();
-                FlightResConnection con=new FlightResConnection();
-                int id_locationI = con.GetIDLocation(name_city_i);
-                int id_locationV = con.GetIDLocation(name_city_v);
-                lis_id.Add(id_locationI);
-                lis_id.Add(id_locationV);
-                return lis_id;
+                List<string> city_names = new List<string>();
+                city_names.Add(name_city_i);
+                city_names.Add(name_city_v);
+
+                GetIdReturnCityCommand command = CommandFactory.CreateGetIdReturnCityCommand(city_names);
+
+                command.Execute();
+                List<int> city_ids = command.GetResult();
+
+                return city_ids;
             }catch(Exception ex ){
 
                  return BadRequest(ex.Message);
@@ -102,9 +122,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         public ActionResult<IEnumerable<String>> Delete(int id_res){
 
             try{
-                Console.Write(id_res);
-                FlightResConnection con=new FlightResConnection();
-                con.DeleteReservationFlight(id_res);
+
+                DeleteReservationCommand command = CommandFactory.CreateDeleteReservationCommand(id_res);
+
+                command.Execute();
+
                 return StatusCode(200, "Se elimino satisfactoriamente");
 
             }catch(Exception ex ){
@@ -115,32 +137,35 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
         }
 
        
-
-        /// <summary> GET api/reservation-flight/departure/arrival/departuredate</summary>
+//
+        /// <summary> GET api/reservation-flight/departure/arrival/departuredate/numpas</summary>
         /// <param name="departure">Ciudad de salida del vuelor</param>
         /// <param name="arrival">Ciudad de llegada del vuelo</param>
         /// <param name="departuredate">Fecha de salida del vuelo</param>
+        /// <param name="numpas"></param>
         /// <returns>Devuelve todas las reservas en una fecha indicada</returns>
         
         [Route("~/api/reservation-flight/{departure}/{arrival}/{departuredate}/{numpas}")] 
         [HttpGet("{departure}/{arrival}/{departuredate}/{numpas}")]
-        public ActionResult<IEnumerable<ListRes>> Get(int departure, int arrival, string departuredate,int numpas)
+        public ActionResult<IEnumerable<Entity>> Get(int departure, int arrival, string departuredate,int numpas)
         {
             try
             {
-                FlightResConnection con=new FlightResConnection();
-                List<ListRes> listFlight=con.GetFlightValidateI(departure, arrival, departuredate,numpas);
+                GetReservationsByDateICommand command = 
+                    CommandFactory.CreateGetReservationsByDateICommand(departure, arrival, departuredate, numpas);
+                command.Execute();
+                List<Entity> listFlight = command.GetResult();
+
                 return listFlight;
-            }
-            catch (DatabaseException ex)
-            {
+            }catch(Exception ex ){
+
                 return BadRequest(ex.Message);
             }
            
         }
 
 
-
+//
         /// <summary> GET api/reservation-flight/departure/arrival/departuredate/arrivaldate/numpas</summary>
         /// <param name="departure">Ciudad de salida del vuelor</param>
         /// <param name="arrival">Ciudad de llegada del vuelo</param>
@@ -151,21 +176,20 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo12
 
         [Route("~/api/reservation-flight/{departure}/{arrival}/{departuredate}/{arrivaldate}/{numpas}")] 
         [HttpGet("{departure}/{arrival}/{departuredate}/{arrivaldate}/{numpas}")]
-        public ActionResult<IEnumerable<ListRes>> Get(int departure, int arrival, string departuredate,string arrivaldate,int numpas)
+        public ActionResult<IEnumerable<Entity>> Get(int departure, int arrival, string departuredate,string arrivaldate,int numpas)
         {
             try
             {
-                FlightResConnection con=new FlightResConnection();
-                List<ListRes> listFlight=con.GetReservationFlightIV(departure, arrival, departuredate,arrivaldate,numpas);
+                GetReservationsByDateIVCommand command = 
+                    CommandFactory.CreateGetReservationsByDateIVCommand(departure, arrival, departuredate, arrivaldate, numpas);
+                command.Execute();
+                List<Entity> listFlight = command.GetResult();
+
                 return listFlight;
             }
-            catch (DatabaseException ex)
-            {
+            catch(Exception ex ){
+
                 return BadRequest(ex.Message);
-            }
-            catch (Exception)
-            {
-                return null;
             }
         }
         
