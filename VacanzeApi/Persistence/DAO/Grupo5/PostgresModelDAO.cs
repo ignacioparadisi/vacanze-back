@@ -105,6 +105,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5
                         Convert.ToInt32(dataTable.Rows[0][3]),
                         dataTable.Rows[0][4].ToString()
                     );
+                    model.ModelBrand = new PostgresBrandDAO().GetBrandById(model.ModelBrandId);
                 }
             }catch(DatabaseException ex){
                 throw new InternalServerErrorException("Error en el servidor : Conexion a base de datos", ex);
@@ -121,18 +122,12 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5
                 PostgresBrandDAO brandDAO = new PostgresBrandDAO();
                 brandDAO.GetBrandById(model.ModelBrandId);//Throw BrandNotFoundException
                 PgConnection pgConnection = PgConnection.Instance;
-                DataTable dataTable = pgConnection.ExecuteFunction (
-                    "ModelUniqueness(@modelName)", model.ModelName);
+                DataTable dataTable = pgConnection.ExecuteFunction(
+                "UpdateModel(@vmid, @vmbrand, @vmname, @vmcapacity, @vmpicture)",
+                model.Id, model.ModelBrandId, model.ModelName, model.Capacity, model.Picture);
                 if(Convert.ToBoolean(dataTable.Rows[0][0])){
-                    throw new UniqueAttributeException("El modelo " + model.ModelName + " ya existe");
-                }else{
-                    dataTable = pgConnection.ExecuteFunction(
-                    "UpdateModel(@vmid, @vmbrand, @vmname, @vmcapacity, @vmpicture)",
-                    model.Id, model.ModelBrandId, model.ModelName, model.Capacity, model.Picture);
-                    if(Convert.ToBoolean(dataTable.Rows[0][0])){
-                        updated = true;
-                    }
-                }    
+                    updated = true;
+                }  
             }catch(DatabaseException ex){
                 throw new InternalServerErrorException("Error en el servidor : Conexion a base de datos", ex);
             }catch(InvalidStoredProcedureSignatureException ex){
