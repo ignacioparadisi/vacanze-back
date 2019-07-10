@@ -24,7 +24,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Locations
                 locationList.Add(ExtractLocationFromRow(results.Rows[i]));
             return locationList;
         }
-
         /// <summary>
         ///     Metodo para obtener la ubicacion por id.
         /// </summary>
@@ -59,7 +58,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Locations
                 locationList.Add(ExtractLocationFromRow(results.Rows[i]));
             return locationList;
         }
-
         /// <summary>
         ///     Metodo para obtener todos las ciudades por pais
         /// </summary>
@@ -101,7 +99,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Locations
             var country = row[2].ToString();
             return new Location(id, country, city);
         }
-
         /// <summary>
         ///     Metodo para agregar una ubicacion
         /// </summary>
@@ -121,7 +118,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Locations
             var savedId = Convert.ToInt32(table.Rows[0][0]);
             return savedId;
         }
-
         /// <summary>
         ///     Metodo para elimnar una ubicacion
         /// </summary>

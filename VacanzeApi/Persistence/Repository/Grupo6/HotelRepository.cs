@@ -19,7 +19,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
         /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
         public static int AddHotel(Hotel hotel)
         {
-            HotelValidator.Validate(hotel);
+            //HotelValidator.Validate(hotel);
             var table = PgConnection.Instance.ExecuteFunction(
                 "addhotel(@name, @amountOfRooms, @capacityPerRoom, @active, @addressSpecs, " +
                 "@roomPrice, @website, @phone, @picture, @stars, @location)",
@@ -128,12 +128,12 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
         /// <exception cref="RequiredAttributeException">Algun atributo requerido estaba como null</exception>
         /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
         /// <exception cref="DatabaseException">
-        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la bse de
+        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la base de
         ///     datos
         /// </exception>
         public static Hotel UpdateHotel(int id, Hotel newData)
         {
-            HotelValidator.Validate(newData);
+            //HotelValidator.Validate(newData);
             PgConnection.Instance.ExecuteFunction(
                 "updatehotel(@_id, @name, @amountOfRooms, @capacityPerRoom, @active, @addressSpecs, " +
                 "@roomPrice, @website, @phone, @picture, @stars, @location)",
@@ -171,17 +171,17 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
         /// <summary>
         ///     Metodo para formar un <see cref="Hotel" /> a partir de un <see cref="DataRow" />.
         ///     El <see cref="DataRow" /> debe cumplir con un orden especifico de parametros para funcionar,
-        ///     el cual es respetado por todos las funciones almancenadas relacionadas al modulo de Hotel.
+        ///     el cual es respetado por todos las funciones almacenadas relacionadas al modulo de Hotel.
         /// </summary>
         /// <param name="row">
         ///     Fila en donde se encuentran los datos para generar el <see cref="Hotel" />
         /// </param>
         /// <returns><see cref="Hotel" /> segun los datos recibidos</returns>
         /// <exception cref="IndexOutOfRangeException">
-        ///     Lanzado si el DataRow no devuelve la cantidad de atributos necesarios
+        ///     Ejecutado si el DataRow no devuelve la cantidad de atributos necesarios
         /// </exception>
         /// <exception cref="FormatException">
-        ///     Lanzado si algun elemento del DataRow no esta en el orden correcto y por lo tanto no se
+        ///     Ejecutado si algun elemento del DataRow no esta en el orden correcto y por lo tanto no se
         ///     puede convertir al tipo de dato correspondiente para el <see cref="Hotel" />
         /// </exception>
         private static Hotel ExtractHotelFromRow(DataRow row)

@@ -2,6 +2,7 @@
 using System;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
+using vacanze_back.VacanzeApi.Common.Exceptions;
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
 {
@@ -12,12 +13,12 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
         //Checkout: Last date of the reservation
         public DateTime CheckOut { get; set; }
         //Hotel of the reservation
-        public Hotel Hotel { get; set; }
+        public int HotelId { get; set; }
 
-        public int Fk_user { get; set; }
+        public int UserId { get; set; }
 
-        public int Fk_pay{ get; set; }
-        public User User { get; set; }
+        public int PaymentId { get; set; }
+
         /// <summary>
         /// Inicializa una nueva instancia de la clase ReservationRoom.
         /// </summary>
@@ -27,35 +28,50 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
         }
         
         [JsonConstructor]
-        public ReservationRoom(int id, DateTime CheckIn, DateTime CheckOut, Hotel hotel, int user_id, User user) : base(id)
+        public ReservationRoom(int id, DateTime checkIn, DateTime checkOut, int hotelId, int userId) : base(id)
         {
-            this.CheckIn = CheckIn;
-            this.CheckOut = CheckOut;
-            this.Hotel = hotel;
-            this.Fk_user = user_id;
-            this.User = user;
+            if (IsValid(id, checkIn, checkOut, hotelId, userId))
+            {
+                CheckIn = checkIn;
+                CheckOut = checkOut;
+                HotelId = hotelId;
+                UserId = userId;
+            }
         }
 
         /// <summary>
-        /// Inicializa una nueva instancia de la clase ReservationRoom.
+        /// Valida los atributos de la reservacion antes de crearla
         /// </summary>
-        public ReservationRoom(int id, DateTime CheckIn, DateTime CheckOut) : base(id)
+        /// <param name="id">Id de la reservación</param>
+        /// <param name="checkIn">Fecha de checkin</param>
+        /// <param name="checkOut">Fecha de checkout</param>
+        /// <param name="hotelId">Id del hotel en donde se desea hacer la reservacion</param>
+        /// <param name="userId">Id del usuario qeu está haciendo la reservación</param>
+        /// <returns></returns>
+        /// <exception cref="NotValidIdException">Se lanza cuando el id es menor a 0</exception>
+        /// <exception cref="GeneralException">Se lanza si la fecha de checkin es mayor que la de checkout</exception>
+        private bool IsValid(int id, DateTime checkIn, DateTime checkOut, int hotelId, int userId)
         {
-            this.CheckIn = CheckIn;
-            this.CheckOut = CheckOut;
-        }
+            if (id < 0)
+            {
+                throw new NotValidIdException("El ID de la reservación no es válido.");
+            }
 
-        public ReservationRoom(int payment) : base(0)
-        {
-            this.Fk_pay = payment;
-        }
+            if (hotelId < 0)
+            {
+                throw new NotValidIdException("El ID del hotel no es válido.");
+            }
 
-        public ReservationRoom(int id, DateTime CheckIn, DateTime CheckOut, Hotel hotel, int user_id) : base(id)
-        {
-            this.CheckIn = CheckIn;
-            this.CheckOut = CheckOut;
-            this.Hotel = hotel;
-            this.Fk_user = user_id;
+            if (userId < 0)
+            {
+                throw new NotValidIdException("El ID del usuario no es válido.");
+            }
+
+            if (checkIn > checkOut)
+            {
+                throw new GeneralException("La fecha de salida no puede ser menor a la fecha de ingreso");
+            }
+            return true;
         }
     }
 }

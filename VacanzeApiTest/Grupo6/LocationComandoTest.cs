@@ -40,8 +40,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
             Assert.Throws<LocationNotFoundException>(() =>
             {
                 GetLocationByIdCommand commandId =  CommandFactory.GetLocationByIdCommand(999999);
-                commandId.Execute ();
-                location = commandId.GetResult();   
+                commandId.Execute(); 
             }); 
         }
 

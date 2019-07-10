@@ -81,7 +81,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5{
         }
 
         [HttpGet("{modelId:int}")]
-        public ActionResult<Model> GetModelById(int modelId){
+        public ActionResult<ModelDTO> GetModelById(int modelId){
             try {
                 GetModelByIdCommand command = CommandFactory.CreateGetModelByIdCommand(modelId);
                 command.Execute ();
@@ -114,8 +114,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5{
                 return StatusCode (404, ex.Message + ex.ModelId);
             } catch (BrandNotFoundException ex){
                 return StatusCode (404, ex.Message + ex.BrandId);
-            } catch(UniqueAttributeException ex){
-                return StatusCode (500, ex.Message);
             } catch(InternalServerErrorException ex){
                 return StatusCode(500, ex.Message);
             } catch(Exception){

@@ -1,21 +1,23 @@
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper;
 using vacanze_back.VacanzeApi.Persistence.DAO;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9
 {
-    public class UpdateBaggageCommand : CommandResult<Baggage>
+    public class UpdateBaggageCommand : CommandResult<BaggageDTO>
     {
         private readonly int _idToSearch;
-        private Baggage _fieldsToUpdate;
-        private Baggage _result;
+        private BaggageDTO _fieldsToUpdate;
+        private BaggageDTO _result;
 
-        public UpdateBaggageCommand(int idToSearch, Baggage fieldsToUpdate)
+        public UpdateBaggageCommand(int idToSearch, BaggageDTO fieldsToUpdate)
         {
             _idToSearch = idToSearch;
             _fieldsToUpdate = fieldsToUpdate;
         }
         
-        public Baggage GetResult()
+        public BaggageDTO GetResult()
         {
             return _result;
         }
@@ -23,7 +25,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9
         public void Execute()
         {
             var daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-            _result = daoFactory.GetBaggageDao().Update(_idToSearch, _fieldsToUpdate);
+            var baggageDao = daoFactory.GetBaggageDao();
+            var mapper = MapperFactory.CreateBaggageMapper();
+            var entity = mapper.CreateEntity(_fieldsToUpdate);
+            CommandFactory.CreateValidateBaggageUpdateCommand(entity).Execute();
+            baggageDao.Update(_idToSearch, entity);
         }
     }
 }

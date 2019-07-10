@@ -6,5 +6,10 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5
     public interface IVehicleDAO
     {
         int AddVehicle(Vehicle vehicle);
+        Vehicle GetVehicleById(int vehicleId);
+        List<Vehicle> GetVehicles();
+        List<Vehicle> GetAvailableVehiclesByLocation(int locationId);
+        bool UpdateVehicle(Vehicle vehicle);
+        bool UpdateVehicleStatus(int vehicleId, bool status);
     } 
 }
