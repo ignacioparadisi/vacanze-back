@@ -6,6 +6,9 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo9;
 using vacanze_back.VacanzeApi.Services.Controllers.Grupo9;
 using vacanze_back.VacanzeApi.Persistence;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo9;
 
 namespace vacanze_back.VacanzeApiTest.Grupo9
 {
@@ -13,8 +16,10 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
     public class BaggageControllerTests
     {
 
-        private BaggageController _baggageControllerTest;
-        private Baggage _baggage;
+        private BaggageController _baggageController;
+        private BaggageDTO _baggagedto;
+        //private Baggage _baggage;
+        private BaggageMapper _baggageMapper;
         private List<int> _insertedBaggages;
         private PostgresBaggageDao _postgresBaggageDaoTest;
 
@@ -22,95 +27,47 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
         public void Setup()
         {
             _postgresBaggageDaoTest = new PostgresBaggageDao();
-            _baggageControllerTest = new BaggageController(null);
+            _baggageController = new BaggageController(null);
             _insertedBaggages = new List<int>();
-            _baggage = BaggageBuilder.Create()
+            var baggage = BaggageBuilder.Create()
                 .WithStatus("EXTRAVIADO")
                 .WithDescription("Bolso negro extraviado en el areopuerto de maiquetia")
                 .Build();
+
+            _baggageMapper = MapperFactory.CreateBaggageMapper();
+            _baggagedto = _baggageMapper.CreateDTO(baggage);
         }
 
-        /*CREATE OR REPLACE FUNCTION AddBaggage(
-	_bag_res_fli_fk INTEGER,
-    _bag_res_cru_fk INTEGER,
-    _bag_descr VARCHAR(100),
-    _bag_status VARCHAR(100)*/
+
+        [Test]
+        public void GetBySerial_NoExistingBaggage_NotFoundResultReturned()
+        {
+
+            var result = _baggageController.Get(-10);
+            Assert.IsInstanceOf<NotFoundResult>(result.Result);
+        }
+
+        [Test]
+        public void GetDocument_NoExistingDocument_NotFoundResult()
+        {
+            var result = _baggageController.GetDocument("20766589");
+            Assert.IsInstanceOf<NotFoundResult>(result.Result);
+        }
+
 
         [TearDown]
         public void TearDown()
         {
             
-            PgConnection.Instance.ExecuteFunction("AddBaggage(@_bag_res_fli_fk," +
+            /*PgConnection.Instance.ExecuteFunction("AddBaggage(@_bag_res_fli_fk," +
                                                              "@_bag_res_cru_fk," +
                                                              "@_bag_descr," +
                                                              "@_bag_status)",
                                                              "null",
                                                              "null",
                                                              "DESCRICIONDEPRUEBAS",
-                                                             "STATUSDEPRUEBAS");
+                                                             "STATUSDEPRUEBAS");*/
 
         }
-
-/*
-
-        [TearDown]
-        public void tearDown()
-        {
-            controller = null;
-        }
-
-        private ActionResult<IEnumerable<Baggage>> Baggage;
-        private BaggageController controller;
-
-        private BaggageRepository conec;
-        private int response;
-
-        [Test]
-        [Order(1)]
-        public void GetBaggageEspecificTest()
-        {
-            Baggage = controller.Get(5);
-            response = Baggage.Value.Count();
-            Assert.AreEqual(1, response);
-        }
-
-        [Test]
-        [Order(3)]
-        public void GetBaggageGetDocumentTest()
-        {
-            Baggage = controller.GetDocument("26055828");
-            response = Baggage.Value.Count();
-            Assert.True(response >= 0);
-        }
-
-        [Test]
-        [Order(2)]
-        public void GetBaggagestatusTest()
-        {
-            Baggage = controller.GetStatus("EXTRAVIADO");
-            response = Baggage.Value.Count();
-            Assert.True(response > 1);
-        }
-
-        [Test]
-        [Order(5)]
-        public void NullBaggageExceptionModifyBaggageStatusTest()
-        {
-            var p = new Baggage(1, "UNITARIA", "EXTRAVIADO");
-
-            Assert.Throws<NullBaggageException>(() => conec.ModifyBaggageStatus(0, p));
-        }
-
-        [Test]
-        [Order(4)]
-        public void PutBaggageStatusTest()
-        {
-            var cs = new Baggage(1, "", "EXTRAVIADO");
-            controller.Put(5, cs);
-            var enumerable = controller.Get(5);
-            var baggage = enumerable.Value.ToArray();
-            Assert.AreEqual(baggage[0].Status, "EXTRAVIADO");
-        }
-    */
     }
 }

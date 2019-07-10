@@ -44,7 +44,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             }
             catch (BaggageNotFoundException)
             {
-                _logger.LogWarning($"Equipaje con serial {id} no encontrado");
+                _logger?.LogWarning($"Equipaje con serial {id} no encontrado");
                 return new NotFoundResult();
             }
             catch (DatabaseException ex)
@@ -73,7 +73,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             }
             catch (BaggageNotFoundException)
             {
-                _logger.LogWarning($"Equipajes no encontrados pertenecientes al usuario de pasaporte {id}");
+                _logger?.LogWarning($"Equipajes no encontrados pertenecientes al usuario de pasaporte {id}");
                 return new NotFoundResult();
             }
             catch (DatabaseException ex)
@@ -103,7 +103,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             }
             catch (BaggageNotFoundException)
             {
-                _logger.LogWarning($"Equipajes no encontrados pertenecientes al estatus {status}");
+                _logger?.LogWarning($"Equipajes no encontrados pertenecientes al estatus {status}");
                 return new NotFoundResult();
             }
             catch (DatabaseException ex)
