@@ -114,8 +114,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5{
                 return StatusCode (404, ex.Message + ex.ModelId);
             } catch (BrandNotFoundException ex){
                 return StatusCode (404, ex.Message + ex.BrandId);
-            } catch(UniqueAttributeException ex){
-                return StatusCode (500, ex.Message);
             } catch(InternalServerErrorException ex){
                 return StatusCode(500, ex.Message);
             } catch(Exception){
