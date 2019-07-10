@@ -49,7 +49,9 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
         public void GetByDocument_InvalidDocumentId_EmptyListReturned()
         {
             var result = _claimController.GetByDocument("-1");
-            Assert.AreEqual(0, result.Value.Count());
+            var castedResult = (OkObjectResult) result.Result;
+            var resultList =  (List<ClaimDto>) castedResult.Value;
+            Assert.AreEqual(0, resultList.Count());
         }
 
         [Test]

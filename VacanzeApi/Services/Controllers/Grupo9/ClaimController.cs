@@ -46,8 +46,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             }
             catch (ClaimNotFoundException)
             {
-                _logger.LogWarning($"Claim con ID {id} no conseguido");
-                return new NotFoundResult();
+                _logger?.LogWarning($"Claim con ID {id} no conseguido");
+                return NotFound();
             }
             catch (DatabaseException ex)
             {
