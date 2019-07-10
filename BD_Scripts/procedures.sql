@@ -1762,7 +1762,7 @@ BEGIN
     RETURN QUERY SELECT
     R.res_id, R.res_name, R.res_capacity , R.res_isactive, R.res_qualify ,R.res_specialty,R.res_price, R.res_businessname, R.res_picture, R.res_descr, R.res_tlf, R.res_loc_fk, R.res_address_specs
     FROM Restaurant AS R
-	WHERE R.res_loc_fk = sent_location;
+	WHERE R.res_loc_fk = sent_location AND R.res_isactive = true;
 END;
 $$ LANGUAGE plpgsql;
 
