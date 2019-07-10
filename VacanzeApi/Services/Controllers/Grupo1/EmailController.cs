@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo1;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo1;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
@@ -28,7 +29,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
         {
             _logger = logger;
         }
-        
+
         [HttpPost]
 
         //POST : /api/ApplicationUser/Email
@@ -41,12 +42,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
                 command.Execute();
                     
                 Login objUser = command.GetResult();
-                Console.WriteLine("Correo del usuario que modifico: ");
-                Console.WriteLine(objUser.email);
-                Console.WriteLine("Clave del usuario modificada: ");
-                Console.WriteLine(objUser.password);
-                if (objUser != null){
 
+                if (objUser != null){
+                    Console.WriteLine("Correo del usuario que modifico: ");
+                    Console.WriteLine(objUser.email);
+                    Console.WriteLine("Clave del usuario modificada: ");
+                    Console.WriteLine(objUser.password);
+                    
                     //logica correo
                     var message = new MimeMessage();
                     //From Address
@@ -57,7 +59,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
                     message.Subject = "Recuperacion De Contraseña : ";
 
                     message.Body = new TextPart("plain"){
-                    Text = "Su contraseña nueva:" + objUser.password
+                    Text = "Su contraseña nueva: " + objUser.password
                     };
 
                     using (var client = new MailKit.Net.Smtp.SmtpClient()){
@@ -71,15 +73,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
                     LoginDTO ldto = LoginMapper.CreateDTO(objUser);
                     return Ok(ldto);
                 }
-                else{
-                    return BadRequest(new { message = "Username or password is incorrect." });
+                else{ 
+                    return BadRequest(new { message = "Correo invalido." });
                 }
             }
             catch(DatabaseException ex){
-                _logger?.LogError(ex, "Database exception when trying to get a claim by id");
+                _logger?.LogError(ex, "Database exception cuando se intenta mandar el correo con la nueva clave al cliente");
                 return StatusCode(500, ex.Message);
             }
-            
+            catch(PasswordRecoveryException ){
+                return BadRequest(new { message = "Correo invalido." });
+            }
         }
     }
 }

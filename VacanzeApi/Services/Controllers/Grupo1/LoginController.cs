@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo1;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo1;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
@@ -46,8 +47,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
                 return Ok(lDTO);
             }
             catch(DatabaseException ex){
-                _logger?.LogError(ex, "Database exception when trying to get a claim by id");
+                _logger?.LogError(ex, "Database exception cuando se intento iniciar sesion.");
                 return StatusCode(500, ex.Message);
+            }
+            catch(LoginUserNotFoundException){
+                return BadRequest(new { message = "Correo o clave invalida." });            
             }
         }
 
