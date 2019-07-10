@@ -1,18 +1,57 @@
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo9;
+using vacanze_back.VacanzeApi.Services.Controllers.Grupo9;
+using vacanze_back.VacanzeApi.Persistence;
 
 namespace vacanze_back.VacanzeApiTest.Grupo9
 {
     [TestFixture]
     public class BaggageControllerTests
     {
-        /*
+
+        private BaggageController _baggageControllerTest;
+        private Baggage _baggage;
+        private List<int> _insertedBaggages;
+        private PostgresBaggageDao _postgresBaggageDaoTest;
+
         [SetUp]
-        public void setup()
+        public void Setup()
         {
-            controller = new BaggageController();
-            conec = new BaggageRepository();
+            _postgresBaggageDaoTest = new PostgresBaggageDao();
+            _baggageControllerTest = new BaggageController();
+            _insertedBaggages = new List<int>();
+            _baggage = BaggageBuilder.Create()
+                .WithStatus("EXTRAVIADO")
+                .WithDescription("Bolso negro extraviado en el areopuerto de maiquetia")
+                .Build();
         }
 
+        /*CREATE OR REPLACE FUNCTION AddBaggage(
+	_bag_res_fli_fk INTEGER,
+    _bag_res_cru_fk INTEGER,
+    _bag_descr VARCHAR(100),
+    _bag_status VARCHAR(100)*/
+
+        [TearDown]
+        public void TearDown()
+        {
+            
+            PgConnection.Instance.ExecuteFunction("AddBaggage(@_bag_res_fli_fk," +
+                                                             "@_bag_res_cru_fk," +
+                                                             "@_bag_descr," +
+                                                             "@_bag_status)",
+                                                             "null",
+                                                             "null",
+                                                             "DESCRICIONDEPRUEBAS",
+                                                             "STATUSDEPRUEBAS");
+
+        }
+
+/*
 
         [TearDown]
         public void tearDown()
