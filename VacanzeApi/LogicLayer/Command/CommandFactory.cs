@@ -340,6 +340,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new GetReservationRoomCommand(reservationId);
         }
 
+        public static UpdateReservationRoomCommand CreateUpdateReservationRoomCommand(ReservationRoom reservationRoom)
+        {
+            return new UpdateReservationRoomCommand(reservationRoom);
+        }
+
         public static AddReservationVehicleCommand CreateAddReservationVehicleCommand(
             ReservationVehicle reservationVehicle)
         {
