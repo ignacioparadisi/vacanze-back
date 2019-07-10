@@ -1890,6 +1890,7 @@ BEGIN
 END; $$
 LANGUAGE 'plpgsql';
 
+-- DROP FUNCTION GetReservationsOfHotelByTravelAndLocation(INTEGER, INTEGER);
 CREATE OR REPLACE FUNCTION GetReservationsOfHotelByTravelAndLocation(
 	travelId INTEGER, 
 	locationId INTEGER
@@ -1907,15 +1908,48 @@ BEGIN
 	FROM TRA_RES tr
 		  INNER JOIN 
 		  TRA_LOC tl
-			    ON tr.tr_travel_fk = tl.tl_tra_fk
+			  ON tr.tr_travel_fk = tl.tl_tra_fk
 		    INNER JOIN
 		    RES_ROO rh
 			    ON tr.tr_res_roo_fk = rh.rr_id
-			    INNER JOIN HOTEL h
-			        ON rh.rr_hot_fk = h.hot_id
-		  WHERE tr.tr_travel_fk = travelId AND tl.tl_loc_fk = locationId AND h.hot_loc_fk = locationId;
+			    INNER JOIN 
+          HOTEL h
+			      ON rh.rr_hot_fk = h.hot_id
+	WHERE tr.tr_travel_fk = travelId AND tl.tl_loc_fk = locationId AND h.hot_loc_fk = locationId;
 END; $$
 LANGUAGE plpgsql;
+
+-- DROP FUNCTION GetReservationsOfRestaurantByTravelAndLocation(INTEGER, INTEGER);
+CREATE OR REPLACE FUNCTION GetReservationsOfRestaurantByTravelAndLocation(
+  travelId INTEGER, 
+	locationId INTEGER
+) RETURNS TABLE (
+  reservationId INTEGER,
+  rRestDate TIMESTAMP,
+  rRestNumPpl INTEGER,
+  rRestTimestamp TIMESTAMP,
+  rRestUserId INTEGER,
+  rRestaurantId INTEGER
+)AS $$
+BEGIN
+  RETURN QUERY
+  SELECT rre.rr_id, rre.rr_date, rre.rr_num_ppl, rre.rr_timestamp, rre.rr_use_fk, rre.rr_res_fk
+  FROM TRA_RES tr
+      INNER JOIN
+      TRA_LOC tl
+			  ON tr.tr_travel_fk = tl.tl_tra_fk
+		    INNER JOIN
+        RES_REST rre 
+          ON tr.tr_res_rest_fk = rre.rr_id
+          INNER JOIN 
+          RESTAURANT r 
+            ON rre.rr_res_fk = r.res_id 
+  WHERE tr.tr_travel_fk = travelId AND tl.tl_loc_fk = locationId AND  r.res_loc_fk = locationId;
+END; $$
+LANGUAGE plpgsql;
+
+-- DROP FUNCTION GetReservationsOfFlightsByTravelAndLocation(INTEGER, INTEGER);
+-- por hacer
 
 -- DROP FUNCTION updatetravel(integer,character varying,character varying,character varying,character varying);
 CREATE OR REPLACE FUNCTION UpdateTravel(
