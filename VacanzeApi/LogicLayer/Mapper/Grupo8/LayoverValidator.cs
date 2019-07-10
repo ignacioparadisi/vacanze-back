@@ -5,6 +5,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo8
 {
     public class LayoverValidator
     {
+        /// <summary>
+        ///     Metodo para validar todos los campos de un layover
+        /// </summary>
+        /// <param name="layover">Objeto que contiene toda la informacion del layover a validar</param>
+
         public static void Validate(Layover layover)
         {
             if (string.IsNullOrEmpty(layover.ArrivalDate))
