@@ -22,6 +22,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         private User _user;
         private Payment _payment;
         private ReservationVehicle _reservationAutomobile;
+        private IReservationVehicleDAO dao;
 
         [OneTimeSetUp]
         public void SetUp()
@@ -32,6 +33,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             _user = EntityFactory.CreateUser(0, 25964266, "Fernando", "Consalvo", "fercon@gmail.com", "123456789",
                 roles);
             _user = daoUser.AddUser(_user);
+            dao = DAOFactory.GetFactory(DAOFactory.Type.Postgres).GetReservationVehicleDAO();
 
         }
 
@@ -39,11 +41,9 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         [Order(1)]
         public void TestAddVehicleReservationOk()
         {
-            IReservationVehicleDAO dao = DAOFactory.GetFactory(DAOFactory.Type.Postgres)
-                .GetReservationVehicleDAO();
             DateTime checkOut = new DateTime(2019, 10, 20);
             _reservationAutomobile =
-                EntityFactory.CreateReservationVehicle(0, DateTime.Now, checkOut, _user.Id, 5);
+                EntityFactory.CreateReservationVehicle(0, DateTime.Now, checkOut, 5, _user.Id);
             _reservationAutomobile = dao.AddReservation(_reservationAutomobile);
             Assert.NotZero(_reservationAutomobile.Id);
         }
@@ -52,7 +52,6 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         [Order(2)]
         public void TestFindVehicleOk()
         {
-            var dao = DAOFactory.GetFactory(DAOFactory.Type.Postgres).GetReservationVehicleDAO();
             Assert.AreEqual(_reservationAutomobile.Id, dao.Find(_reservationAutomobile.Id).Id);
         }
 
@@ -60,16 +59,22 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         [Order(3)]
         public void TestFindReservationVehicleByUserId()
         {
-            var dao = DAOFactory.GetFactory(DAOFactory.Type.Postgres).GetReservationVehicleDAO();
             Assert.IsNotEmpty(dao.GetAllByUserId(_user.Id));
         }
 
         [Test]
         [Order(4)]
+        public void TestUpdateReservationVehicleOk()
+        {
+            _reservationAutomobile.VehicleId = 6;
+            Assert.AreEqual(_reservationAutomobile.VehicleId, dao.Update(_reservationAutomobile).VehicleId);
+        }
+
+        [Test]
+        [Order(5)]
         public void TestDeleteReservation()
         {
-            var dao = DAOFactory.GetFactory(DAOFactory.Type.Postgres).GetReservationVehicleDAO();
-            dao.Delete(_reservationAutomobile.Id);
+            dao.Delete(_reservationAutomobile);
             Assert.AreEqual(0, dao.Find(_reservationAutomobile.Id).Id);
         }
 
