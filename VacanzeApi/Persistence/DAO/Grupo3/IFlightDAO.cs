@@ -13,6 +13,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
        void Update(Entity entity);
        void Delete(int entity);
        int Find(int id);
+       Entity FindIdEntity(int id);
        List<Entity> GetByDate(string begin, string end);
        List<Entity> GetByLocation(int departure, int arrival);
        List<Entity> GetOutboundFlights(int departure, int arrival, string departuredate);

@@ -53,8 +53,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
         {
             try
             {
-                var result = FlightRepository.Find(id);
-                return Ok(result);
+                GetFindFlightIdCommand command= CommandFactory.GetFindFlightIdEntityCommand(id);
+                command.Execute();
+                //var result = FlightRepository.Find(id);
+                return Ok(command.GetResult());
             }
             catch (DbErrorException ex)
             {
