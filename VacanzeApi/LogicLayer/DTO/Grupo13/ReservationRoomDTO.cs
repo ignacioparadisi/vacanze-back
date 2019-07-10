@@ -14,6 +14,6 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo13
 
         public int UserId { get; set; }
 
-        public int PayId { get; set; }
+        public int PaymentId { get; set; }
     }
 }

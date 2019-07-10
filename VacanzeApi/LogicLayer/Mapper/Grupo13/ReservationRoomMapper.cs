@@ -21,7 +21,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo13
                 CheckOut = entity.CheckOut,
                 HotelId = entity.HotelId,
                 UserId = entity.UserId,
-                PayId = entity.PaymentId
+                PaymentId = entity.PaymentId
             };
         }
         
@@ -53,7 +53,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo13
                     CheckOut = reservation.CheckOut,
                     HotelId = reservation.HotelId,
                     UserId = reservation.UserId,
-                    PayId = reservation.PaymentId
+                    PaymentId = reservation.PaymentId
                 });
             }
 
