@@ -12,7 +12,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
 {
     public class DeleteUserByIdCommand : Command, CommandResult<int>
     {
-        private readonly ILogger _logger;
+       // private readonly ILogger _logger;
         public int Id { get; set; }
         public DeleteUserByIdCommand(int id)
         {
@@ -22,7 +22,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
         {
             try
             {
-                _logger.LogInformation("Entrando a Execute() DeleteUserByIdCommand");
+                //_logger.LogInformation("Entrando a Execute() DeleteUserByIdCommand");
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
                 UserDAO dao = factory.GetUserDAO();
                 dao.DeleteUserById(Id);

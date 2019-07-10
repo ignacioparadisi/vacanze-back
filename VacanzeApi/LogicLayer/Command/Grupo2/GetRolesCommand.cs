@@ -13,21 +13,21 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
     public class GetRolesCommand : Command, CommandResult<List<Role>>
     {
 
-        private readonly ILogger _logger;
+       // private readonly ILogger _logger;
         private static List<Role> Roles;
 
         public void Execute()
         {
             try
             {
-                _logger.LogInformation("Entrando a Execute() GetRolesCommand");
+               // _logger.LogInformation("Entrando a Execute() GetRolesCommand");
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
                 RoleDAO roles = factory.GetRoleDAO();
                 Roles = roles.GetRoles();
             }
             catch(Exception e)
             {
-                _logger.LogError("Exception",e);
+                //_logger.LogError("Exception",e);
                 Console.WriteLine(e.ToString());
             }
         }

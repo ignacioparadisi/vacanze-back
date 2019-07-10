@@ -12,7 +12,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
 {
     public class PostUser_RoleCommand : Command
     {
-        private readonly ILogger _logger;
+       // private readonly ILogger _logger;
         public Role Role { get; set; }
         public int Id { get; set; }
 
@@ -26,14 +26,14 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
         {
             try
             {
-                _logger.LogInformation("Entrando a Execute() PostUser_RoleCommand");
+               // _logger.LogInformation("Entrando a Execute() PostUser_RoleCommand");
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
                 UserDAO dao = factory.GetUserDAO();
                 dao.AddUser_Role(this.Id,this.Role.Id);
             }
             catch (Exception e)
             {
-                _logger.LogError("Exception",e);
+               // _logger.LogError("Exception",e);
                 Console.WriteLine(e.ToString());
             }
         }

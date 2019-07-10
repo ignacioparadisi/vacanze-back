@@ -12,7 +12,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
 {
     public class GetRolesForUserCommand : Command, CommandResult<List<Role>>
     {
-        private readonly ILogger _logger;
+       // private readonly ILogger _logger;
         private static List<Role> Roles;
         public User User { get; set; }
 
@@ -25,14 +25,14 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
         {
             try
             {
-                _logger.LogInformation("Entrando a Execute() GetRolesForUserCommand");
+               // _logger.LogInformation("Entrando a Execute() GetRolesForUserCommand");
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
                 RoleDAO roles = factory.GetRoleDAO();
                 Roles = roles.GetRolesForUser(User.Id);
             }
             catch (Exception e)
             {
-                _logger.LogError("Exception",e);
+               // _logger.LogError("Exception",e);
                 Console.WriteLine(e.ToString());
             }
         }

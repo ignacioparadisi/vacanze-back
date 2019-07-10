@@ -12,21 +12,21 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
 {
     public class GetEmployeesCommand : Command, CommandResult<List<User>>
     {
-        private readonly ILogger _logger;
+       // private readonly ILogger _logger;
         private static List<User> Employees;
 
         public void Execute()
         {
             try
             {
-                _logger.LogInformation("Entrando a Execute() GetEmployeesCommand");
+               // _logger.LogInformation("Entrando a Execute() GetEmployeesCommand");
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
                 UserDAO users = factory.GetUserDAO();
                 Employees = users.GetEmployees();
             }
             catch(Exception e)
             {
-                _logger.LogError("Exception",e);
+                //_logger.LogError("Exception",e);
                 Console.WriteLine(e.ToString());
             }
         }

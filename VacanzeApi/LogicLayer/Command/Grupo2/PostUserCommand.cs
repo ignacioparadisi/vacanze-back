@@ -12,7 +12,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
 {
     public class PostUserCommand : Command, CommandResult<Entity>
     {
-        private readonly ILogger _logger;
+        //private readonly ILogger _logger;
         public User User { get; set; }
 
         public PostUserCommand(User user)
@@ -24,14 +24,14 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
         {
             try
             {
-                _logger.LogInformation("Entrando a Execute() PostUserCommand");
+               // _logger.LogInformation("Entrando a Execute() PostUserCommand");
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
                 UserDAO dao = factory.GetUserDAO();
                 this.User.Id = (dao.AddUser(this.User)).Id;
             }
             catch (Exception e)
             {
-                _logger.LogError("Exception",e);
+               // _logger.LogError("Exception",e);
                 Console.WriteLine(e.ToString());
             }
         }
