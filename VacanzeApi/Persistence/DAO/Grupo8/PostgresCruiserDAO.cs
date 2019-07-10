@@ -6,7 +6,7 @@ using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 using vacanze_back.VacanzeApi.Persistence;
 
-namespace DefaultNamespace
+namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo8
 {
     public class PostgresCruiserDAO: ICruiserDAO
     {

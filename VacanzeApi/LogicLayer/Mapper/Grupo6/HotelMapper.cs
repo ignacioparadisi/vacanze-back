@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using vacanze_back.VacanzeApi.LogicLayer.DTO;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
-using vacanze_back.VacanzeApi.LogicLayer.DTO;
+
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo6{
 
@@ -18,7 +19,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo6{
         }
 
         public Hotel CreateEntity(HotelDTO hotelDto){
-            Hotel entity = EntityFactory.createHotel(hotelDto.Id, hotelDto.Name, hotelDto.AmountOfRooms, 
+            Hotel entity = EntityFactory.CreateHotel(hotelDto.Id, hotelDto.Name, hotelDto.AmountOfRooms, 
                                             hotelDto.RoomCapacity, hotelDto.IsActive, hotelDto.AddressSpecification,
                                             hotelDto.PricePerRoom, hotelDto.Website, hotelDto.Phone ,
                                             hotelDto.Picture, hotelDto.Stars, hotelDto.Location.Id);
@@ -41,7 +42,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo6{
         public List<Hotel> CreateEntityList(List<HotelDTO> dtos){
             List<Hotel> entities = new List<Hotel>();
             foreach(HotelDTO hotelDto in dtos){
-                entities.Add(EntityFactory.createHotel(hotelDto.Id, hotelDto.Name, hotelDto.AmountOfRooms, 
+                entities.Add(EntityFactory.CreateHotel(hotelDto.Id, hotelDto.Name, hotelDto.AmountOfRooms, 
                                             hotelDto.RoomCapacity, hotelDto.IsActive, hotelDto.AddressSpecification,
                                             hotelDto.PricePerRoom, hotelDto.Website, hotelDto.Phone ,
                                             hotelDto.Picture, hotelDto.Stars, hotelDto.Location.Id));

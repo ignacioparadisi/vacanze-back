@@ -13,13 +13,20 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2
 
         public User User { get; set; }
         public int Id { get; set; }
+
+        public UpdateUserCommand(User user, int id)
+        {
+            User = user;
+            Id = id;
+        }
+
         public void Execute()
         {
             try
             {
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-                UserDAO users = factory.GetUserDAO();
-                Id = users.UpdateUser(User, Id);
+                UserDAO dao = factory.GetUserDAO();
+                dao.UpdateUser(User, Id);
             }
             catch (Exception e)
             {

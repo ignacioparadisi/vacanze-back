@@ -1,3 +1,6 @@
+using System;
+using vacanze_back.VacanzeApi.Common.Exceptions;
+
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo5
 {
     public class Model : Entity{
@@ -6,13 +9,43 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo5
         public Brand ModelBrand { get{ return _modelBrand; } set{ _modelBrand = value; } }
         
         private int _modelBrandId;
-        public int ModelBrandId { get{ return _modelBrandId;} set{ _modelBrandId = value; } }
+        public int ModelBrandId 
+        { 
+            get{ return _modelBrandId; } 
+            set
+            { 
+                if(value == 0)
+                    throw new RequiredAttributeException("Debe indicar una marca");
+                else
+                    _modelBrandId = value; 
+            } 
+        }
 
         private string _modelName;
-        public string ModelName { get{ return _modelName;} set{ _modelName = value; } }
+        public string ModelName 
+        { 
+            get{ return _modelName; } 
+            set
+            { 
+               if(value == null || value.Equals(""))
+                    throw new RequiredAttributeException("Debe indicar el nombre del modelo");
+                else
+                    _modelName = value; 
+            } 
+        }
 
         private int _capacity;
-        public int Capacity { get { return _capacity;} set{ _capacity = value; } }
+        public int Capacity 
+        { 
+            get { return _capacity; } 
+            set
+            { 
+                if(value == 0)
+                    throw new RequiredAttributeException("Debe indicar la capacidad");
+                else
+                    _capacity = value;  
+            } 
+        }
 
         private string _picture;
         public string Picture { get { return _picture; } set{ _picture = value; } }

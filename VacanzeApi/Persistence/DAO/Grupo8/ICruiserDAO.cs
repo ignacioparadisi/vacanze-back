@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 
-namespace DefaultNamespace
+namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo8
 {
     public interface ICruiserDAO
     {

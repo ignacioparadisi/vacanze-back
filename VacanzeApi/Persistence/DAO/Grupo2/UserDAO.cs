@@ -8,14 +8,14 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
 {
     public interface UserDAO
     {
-        List<Entity> GetEmployees();
+        List<User> GetEmployees();
         void VerifyEmail(string email, int id = 0);
-        Entity GetUserById(int id);
-        Entity AddUser(Entity entity);
+        User GetUserById(int id);
+        User AddUser(User entity);
         void AddUser_Role(int userid, int roleid);
         int DeleteUserById(int id);
         void DeleteUser_Role(int id);
-        int UpdateUser(Entity entity, int id);
+        int UpdateUser(User entity, int id);
         
     }
 }

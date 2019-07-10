@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using vacanze_back.VacanzeApi.Common.Entities; //para poder usar location 
-using vacanze_back.VacanzeApi.Persistence.Repository;  //con el tiempo quitar esta directiva cuando se resuelva lo de location 
+using vacanze_back.VacanzeApi.LogicLayer.Command.Locations; 
+using vacanze_back.VacanzeApi.LogicLayer.Command; 
 
 namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo6{
 
@@ -58,24 +59,10 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo6{
             this.Phone = phone ;
             this.Picture = picture ;
             this.Stars = stars;
-            this.Location = LocationRepository.GetLocationById(locationId);
-        }
-
-        public HotelDTO(string name , int amountOfRooms, int roomCapacity ,
-        bool isActive, string addressSpecs, decimal pricePerRoom, string website , string phone ,
-        string picture, int stars , int locationId ){
-
-            this.Name = name;
-            this.AmountOfRooms = amountOfRooms;
-            this.RoomCapacity=roomCapacity;
-            this.IsActive= isActive;
-            this.AddressSpecification =addressSpecs;
-            this.PricePerRoom = pricePerRoom;
-            this.Website = website;
-            this.Phone = phone ;
-            this.Picture = picture ;
-            this.Stars = stars;
-            this.Location = LocationRepository.GetLocationById(locationId);
+            
+            GetLocationByIdCommand commandId =  CommandFactory.GetLocationByIdCommand(locationId);
+            commandId.Execute ();
+            this.Location = commandId.GetResult(); 
         }
     }
 }

@@ -1,9 +1,14 @@
-using DefaultNamespace;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo7;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo9;
+using vacanze_back.VacanzeApi.Persistence.DAO.Locations;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo6;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo12;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo5;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo4;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo8;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO
 {
@@ -12,11 +17,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         public enum Type
         {
             Postgres
-        };
+        }
 
         public static DAOFactory GetFactory(Type type)
         {
-            switch (type)
+            switch (type) 
             {
                 case Type.Postgres:
                     return new PostgresDAOFactory();
@@ -25,14 +30,23 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
             }
         }
         // +++++++++++++++++
+        //     GRUPO 5
+        // +++++++++++++++++
+        public abstract IBrandDAO GetBrandDAO();
+        public abstract IModelDAO GetModelDAO();
+        public abstract IVehicleDAO GetVehicleDAO();
+        // +++++++++++++++++
         //     GRUPO 6
         // +++++++++++++++++
         public abstract HotelDAO GetHotelDAO();
         
+        public abstract LocationDAO GetLocationDAO();
         // +++++++++++++++++
         //     GRUPO 13
         // +++++++++++++++++
-        public abstract ReservationRoomDAO GetReservationRoomDAO();
+        public abstract IReservationRoomDAO GetReservationRoomDAO();
+
+        public abstract IReservationAutomobileDAO GetReservationAutomobileDAO();
         // +++++++++++++++++
         //     GRUPO 7
         // +++++++++++++++++
@@ -47,5 +61,19 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         //     GRUPO 8
         // +++++++++++++++++
         public abstract ICruiserDAO GetCruiserDAO();
+
+        public abstract IBaggageDao GetBaggageDao();
+
+        // +++++++++++++++++
+        //     GRUPO 12
+        // +++++++++++++++++
+        public abstract ReservationFlightDAO GetReservationFlightDAO();
+
+        public abstract ISaleFlightDAO GetSaleFlightDAO();
+
+        public abstract ISaleFlightDAO PostSaleFlightDAO();
+
+        public abstract ICheckinBaggageDAO PostCheckBaggage();
+
     }
 }

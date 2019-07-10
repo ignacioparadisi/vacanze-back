@@ -5,7 +5,6 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
 using System.Data;
-using vacanze_back.VacanzeApi.Persistence.Repository; //lo puse por que todavia no se a migrado las location 
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo6
 {
@@ -105,7 +104,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo6
         var hotelList = new List<Hotel>();
 
         DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-        ReservationRoomDAO reservationRoomDao = factory.GetReservationRoomDAO();
+        IReservationRoomDAO reservationRoomDao = factory.GetReservationRoomDAO();
 
         for (var i = 0; i < table.Rows.Count; i++)
         {

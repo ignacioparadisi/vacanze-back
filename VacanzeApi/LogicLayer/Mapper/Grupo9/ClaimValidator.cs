@@ -1,6 +1,7 @@
 using System.Net.Http;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.LogicLayer.Command;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo9
 {
@@ -32,9 +33,13 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo9
 
                 if (claim.Title == null)
                     throw new RequiredAttributeException("Atributo \"Title\" es obligatorio");
-            }
 
-            // TODO: Utilizar BaggageDao.GetById(baggageId) para validar que se le este pegando una maleta
+                if (claim.BaggageId == 0)
+                    throw new RequiredAttributeException("Atributo \"BaggageId\" es obligatorio y diferente a 0");
+
+                // Si no se consigue la maleta lanzara un BaggageNotFoundException
+                CommandFactory.CreateGetBaggageByIdCommand(claim.BaggageId).Execute();
+            }
 
             // No permitir guardar otros valores que no sean el indicado
             if (claim.Status != null && claim.Status != "ABIERTO" && claim.Status != "CERRADO")
