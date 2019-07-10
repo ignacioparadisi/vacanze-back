@@ -5,7 +5,7 @@ using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo13;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo13
 {
-    public class ReservationVehicleMapper
+    public class ReservationVehicleMapper : Mapper<ReservationVehicleDTO, ReservationVehicle>
     {
         /// <summary>
         /// Método para convertir una reserva de vehículo en DTO
