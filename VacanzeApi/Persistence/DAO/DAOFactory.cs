@@ -30,6 +30,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
                     throw new NotValidFactoryTypeException("El tipo de fábrica de DAO no es válido");
             }
         }
+
         // +++++++++++++++++
         //     GRUPO 5
         // +++++++++++++++++
