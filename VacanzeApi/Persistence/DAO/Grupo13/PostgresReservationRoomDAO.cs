@@ -160,11 +160,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
             }
         }
 
-        /** <summary>
-         * Actualiza en la BD, la reservacion de habitacion
-         * </summary>
-         * <param name="entity">La reserva a actualizar</param>
-         */
+        /// <summary>
+        /// Actualiza en la BD, la reservacion de habitacion
+        /// </summary>
+        /// <param name="entity">La reserva a actualizar</param>
+        /// <returns> La Reserva de Hotel Actualizada </returns>
         public ReservationRoom Update(ReservationRoom reservation)
         {
             try
@@ -181,7 +181,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
             }
             catch (Exception)
             {
-                throw new GeneralException("Error Actulizando la Reserva de Habitación");
+                throw new GeneralException("Error Actualizando la Reserva de Habitación");
             }
         }
         
