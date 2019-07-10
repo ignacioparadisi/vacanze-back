@@ -39,7 +39,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         }
 
 
-        [HttpGet("{id}")]
+        /*[HttpGet("{id}")]
         public ActionResult<Entity> Get(int id)
         {
             try
@@ -52,7 +52,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             {
                 throw;
             }
-        }
+        }*/
 
         // POST api/values //CREAR UN RECURSO
         [HttpPost]
@@ -98,7 +98,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             }
         }
 
-    [HttpDelete("{id}")]
+    /*[HttpDelete("{id}")]
     public ActionResult<string> Delete(int id)
     {
         try
@@ -114,7 +114,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
                 return null;
             }
 
-        }
+        }*/
 
         
 
