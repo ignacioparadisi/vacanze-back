@@ -2452,6 +2452,7 @@ $BODY$;
 ALTER FUNCTION public.deletetravel(integer)
     OWNER TO postgres;
 
+-- COMENTARIOS ----------------------------------------------------------
 -- agregar comentario
 
 CREATE OR REPLACE FUNCTION public.addcomment(
@@ -2519,10 +2520,29 @@ BEGIN
 	END IF;
 END;
 $BODY$;
+--- Delete comment
 
---- falta el deletecoment
+CREATE OR REPLACE FUNCTION DeleteComment(id integer)
+    RETURN INTEGER AS
+$$
+DECLARE
+    FOUND_ID INTEGER;
+BEGIN
+    SELECT Count(com_id)
+    into FOUND_ID
+    FROM COMMENT
+    WHERE (com_id = id);
+    IF (FOUND_ID = 0) THEN
+        RETURN null;
+    END IF;
 
+    DELETE
+    FROM COMMENT 
+    WHERE (com_id = id);
+    RETURN id;
 
+END;
+$$ LANGUAGE plpgsql;
 
 ------------------------------------fin de grupo 10---------------------------------
 ------------------------------------Grupo12-----------------------------------------
