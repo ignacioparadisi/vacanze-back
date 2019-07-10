@@ -18,6 +18,7 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper;
 using Command = vacanze_back.VacanzeApi.Common.Command;
 using Microsoft.Extensions.Logging;
+using Org.BouncyCastle.Utilities;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 {
@@ -41,22 +42,24 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             {
                 CommandResult<List<ReservationRoom>> command =
                     CommandFactory.CreateGetReservationRoomsForUserCommand(user);
-                _logger?.LogInformation("Se Ejecuta el Comando para Obtener las Reservas de Habitación de un "+
-                                       "Usuario");
+                _logger?.LogInformation($"Se Ejecuta el Comando para Obtener las Reservas de Habitación de el "+
+                                       "Usuario " + Convert.ToString(user));
                 command.Execute();
-                _logger?.LogInformation("Se Obtuvieron las Reservas de Habitación de un Usuario");
+                _logger?.LogInformation("Se Obtuvieron las Reservas de Habitación de el Usuario " 
+                                        + Convert.ToString(user));
                 var resroomMapper = MapperFactory.CreateReservationRoomMapper();
                 return Ok(resroomMapper.CreateDTOList(command.GetResult()));
             }
             catch (GeneralException e)
             {
-                _logger?.LogError(e, e.Message + "al Obtener las Reservas de Habitación de un Usuario");
+                _logger?.LogWarning(e, e.Message + " al Obtener las Reservas de Habitación de el Usuario " 
+                                               + Convert.ToString(user));
                 return BadRequest(e.Message);
             }
             catch (Exception e)
             {
-                _logger?.LogError(e, "Error en el Servidor al Obtener las Reservas de Habitación de un " +
-                                    "Usuario" );
+                _logger?.LogError(e, "Error en el Servidor al Obtener las Reservas de Habitación de el Usuario " 
+                                     + Convert.ToString(user));
                 return StatusCode(500, "Error en el Servidor");
             }
         }
@@ -67,7 +70,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             try
             {
                 CommandResult<ReservationRoom> command = CommandFactory.CreateGetReservationRoomCommand(id);
-                _logger?.LogInformation("Se Ejecuta el Comando para Consultar una Reserva de Habitación");
+                _logger?.LogInformation("Se Ejecuta el Comando para Consultar la Reserva de Habitación");
                 command.Execute();
                 var resroomMapper = MapperFactory.CreateReservationRoomMapper();
                 _logger?.LogInformation("Se Consultó la Reserva de Habitación");
@@ -75,7 +78,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             }
             catch (GeneralException e)
             {
-                _logger?.LogError(e, e.Message + "al Consultar una Reserva de Habitación");
+                _logger?.LogWarning(e, e.Message + " al Consultar una Reserva de Habitación");
                 return BadRequest(e.Message);
             }
             catch (Exception e)
@@ -100,19 +103,19 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
                 var resroomMapper = MapperFactory.CreateReservationRoomMapper();
                 var reservation = resroomMapper.CreateEntity(reservationDto);
                 CommandResult<ReservationRoom> command = CommandFactory.CreateAddReservationRoomCommand(reservation);
-                _logger?.LogInformation("Se Ejecuta el Comando para Agregar Habitación");
+                _logger?.LogInformation("Se Ejecuta el Comando para Agregar la Reserva de Habitación");
                 command.Execute();
                 _logger?.LogInformation("Se Creó la Reserva de Habitación");
                 return Ok(resroomMapper.CreateDTO(command.GetResult()));
             }
             catch (GeneralException e)
             {
-                _logger?.LogError(e, e.Message + "al Agregar Reserva de Hotel");
+                _logger?.LogWarning(e, e.Message + " al Agregar Reserva de Habitación");
                 return BadRequest(e.Message);
             }
             catch (Exception e)
             {
-                _logger?.LogError(e,"Error en el Servidor al Agregar Reserva de Hotel");
+                _logger?.LogError(e,"Error en el Servidor al Agregar Reserva de Habitación");
                 return StatusCode(500, "Error en el Servidor");
             }
         }
@@ -130,20 +133,24 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
                 var resroomMapper = MapperFactory.CreateReservationRoomMapper();
                 var reservation = resroomMapper.CreateEntity(reservationDto);
                 CommandResult<ReservationRoom> command = CommandFactory.CreateUpdateReservationRoomCommand(reservation);
-                _logger?.LogInformation("Se Ejecuta el Comando para Reservar Habitación");
+                _logger?.LogInformation("Se Ejecuta el Comando para Modificar la Reservar Habitación " +
+                                        Convert.ToString(reservationDto.Id));
                 command.Execute();
-                _logger?.LogInformation("Se Actualizó la Reserva de Habitación");
+                _logger?.LogInformation("Se Actualizó la Reserva de Habitación " +
+                                        Convert.ToString(reservationDto.Id));
                 return Ok(resroomMapper.CreateDTO(command.GetResult()));
             }
             
             catch (GeneralException e)
             {
-                _logger?.LogError(e, e.Message + "al Actualizar Reserva de Habitación");
+                _logger?.LogWarning(e, e.Message + "al Actualizar la Reserva de Habitación"  +
+                                       Convert.ToString(reservationDto.Id));
                 return BadRequest(e.Message);
             }
             catch (Exception e)
             {
-                _logger?.LogError(e,"Error en el Servidor al Actualizar Reserva de Habitación");
+                _logger?.LogError(e,"Error en el Servidor al Actualizar Reserva de Habitación"  +
+                                    Convert.ToString(reservationDto.Id));
                 return StatusCode(500, "Error en el Servidor");
             }
         }
@@ -166,7 +173,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             }
             catch (GeneralException e)
             {
-                _logger?.LogError(e, e.Message + "al Agregar Reserva de Hotel");
+                _logger?.LogWarning(e, e.Message + " al Agregar Reserva de Hotel");
                 return BadRequest(e.Message);
             }
             catch (Exception e)
