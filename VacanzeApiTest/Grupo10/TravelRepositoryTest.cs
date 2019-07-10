@@ -32,7 +32,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo10
             Assert.NotZero(listOfTravels.Count);
         }
 
-        [Test]
+     /*    [Test]
         public void InvalidReservationTypeException(){
             Assert.Throws<InvalidReservationTypeException>(
                 () => TravelRepository.GetReservationsByTravelAndLocation<object>(1, 37, "Samuel"));
@@ -50,7 +50,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo10
             Assert.Throws<WithoutTravelReservationsException>(
                 () => TravelRepository.GetReservationsByTravelAndLocation<object>(2, 37, "HOTEL"));
         }
-
+*/
         [Test]
         public void WithoutTravelLocationsException(){
             Assert.Throws<WithoutTravelLocationsException>(

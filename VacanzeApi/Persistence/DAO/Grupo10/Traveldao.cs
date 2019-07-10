@@ -164,24 +164,20 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo10
             return saved;
         }
 
-
-     /*      public  List<T> GetReservationsByTravelAndLocation<T>(int travelId, int locationId, string type){
+ public  List<T> GetReservationsByTravelAndLocation<T>(int travelId, int locationId, string type){
             List<T> reservations = new List<T>();
             try{
                 PgConnection pgConnection = PgConnection.Instance;
                 if(type.Equals("HOTEL")){
-                        DataTable dataTable = pgConnection.ExecuteFunction(
-                            "GetReservationsOfHotelByTravelAndLocation(@travelId, @locationId)", travelId, locationId);
+                    DataTable dataTable = pgConnection.ExecuteFunction(
+                    "GetReservationsOfHotelByTravelAndLocation(@travelId, @locationId)", travelId, locationId);
                     if( dataTable.Rows.Count > 0 ){
                         List<ReservationRoom> reservationsOfRoom = new List<ReservationRoom>();
                         foreach (DataRow dataRow in dataTable.Rows){
                             ReservationRoom reservationRoom = new ReservationRoom(
-                                Convert.ToInt32(dataRow[0]),
-                                DateTime.Parse(dataRow[1].ToString()),
-                                DateTime.Parse(dataRow[2].ToString())
-                            );
-                            reservationRoom.Hotel = HotelRepository.GetHotelById(Convert.ToInt32(dataRow[5]));
-                            reservationRoom.Fk_user = Convert.ToInt32(dataRow[4]);
+                            Convert.ToInt32(dataRow[0]),
+                            DateTime.Parse(dataRow[1].ToString()),
+                            DateTime.Parse(dataRow[2].ToString()), Convert.ToInt32(dataRow[5]), Convert.ToInt32(dataRow[4]));
                             reservationsOfRoom.Add(reservationRoom);
                         }
                         reservations = reservationsOfRoom.Cast<T>().ToList();
@@ -190,10 +186,48 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo10
                             travelId, locationId, "No posee reservaciones de " + type.ToLower() + " en dicha ciudad");
                     }
                 }else if(type.Equals("RESTAURANT")){
-                    
+                    DataTable dataTable = pgConnection.ExecuteFunction(
+                    "GetReservationsOfRestaurantByTravelAndLocation(@travelId, @locationId)", travelId, locationId);
+                    if( dataTable.Rows.Count > 0 ){
+                        List<Restautantetravel> reservationsOfRest=new List<Restautantetravel>();
+                      
+                        foreach (DataRow dataRow in dataTable.Rows){
+                            Restautantetravel reservationRest = new Restautantetravel(
+                            Convert.ToInt32(dataRow[0]),
+                            DateTime.Parse(dataRow[1].ToString()),
+                            Convert.ToInt32(dataRow[2].ToString()), 
+                            Convert.ToInt32(dataRow[5]),
+                             Convert.ToInt32(dataRow[4]));
+                            reservationsOfRest.Add(reservationRest);
+                        }
+                        reservations = reservationsOfRest.Cast<T>().ToList();
+                    }else{
+                        throw new WithoutTravelReservationsException(
+                            travelId, locationId, "No posee reservaciones de " + type.ToLower() + " en dicha ciudad");
+                    }
                 }else if(type.Equals("FLIGHT")){
+
+                    
                     
                 }else if(type.Equals("CAR")){
+                    DataTable dataTable = pgConnection.ExecuteFunction(
+                    "GetReservationsOfCarssByTravelAndLocation(@travelId, @locationId)", travelId, locationId);
+                    if( dataTable.Rows.Count > 0 ){
+                        List<ReservationVehicle> reservationsOfAuto = new List<ReservationVehicle>();
+                           foreach (DataRow dataRow in dataTable.Rows){
+                            ReservationVehicle reservationAuto = new ReservationVehicle(
+                            Convert.ToInt32(dataRow[0]),
+                            DateTime.Parse(dataRow[1].ToString()),
+                            DateTime.Parse(dataRow[2].ToString()), 
+                            Convert.ToInt32(dataRow[4]), 
+                            Convert.ToInt32(dataRow[3]));
+                            reservationsOfAuto.Add(reservationAuto);
+                        }
+                        reservations = reservationsOfAuto.Cast<T>().ToList();
+                    }else{
+                        throw new WithoutTravelReservationsException(
+                            travelId, locationId, "No posee reservaciones de " + type.ToLower() + " en dicha ciudad");
+                    }
                 }else{
                     throw new InvalidReservationTypeException(type,"Tipo de reserva invalido : " + type);
                 }
@@ -203,8 +237,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo10
                 throw new InternalServerErrorException("Error en el servidor", ex);
             }
             return reservations;
-        }*/
-
+        }
     }
 }
 

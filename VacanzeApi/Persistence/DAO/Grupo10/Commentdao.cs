@@ -47,10 +47,14 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo10
         {
             try 
             {
-                var table = PgConnection.Instance.ExecuteFunction("DeleteComment(@com_ID)", com_id);
-                var deleteid = Convert.ToInt32(table.Rows[0][0]);
-                Console.WriteLine(deletedid);
-                return deletedid;
+                int i=0;
+
+             PgConnection pgConnection = PgConnection.Instance;
+            
+             pgConnection.ExecuteFunction("DeleteComment(@com_ID)", id);
+             return i ;
+       
+                
             }
             catch (InvalidCastException)
             {

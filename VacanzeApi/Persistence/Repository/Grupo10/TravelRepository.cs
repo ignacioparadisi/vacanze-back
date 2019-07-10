@@ -7,6 +7,7 @@ using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo10;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
+
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo2;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo14;
@@ -78,7 +79,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
         /// Si el usuario no tiene reservaciones en el viaje para esa ciudad retorna esta excepción
         /// no hay restricciones de si realmente la ciudad pertenece al viaje.
         ///</exception>
-        public static List<T> GetReservationsByTravelAndLocation<T>(int travelId, int locationId, string type){
+        /*  public static List<T> GetReservationsByTravelAndLocation<T>(int travelId, int locationId, string type){
             List<T> reservations = new List<T>();
             try{
                 PgConnection pgConnection = PgConnection.Instance;
@@ -104,11 +105,14 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
                     "GetReservationsOfRestaurantByTravelAndLocation(@travelId, @locationId)", travelId, locationId);
                     if( dataTable.Rows.Count > 0 ){
                         List<Restaurant_res> reservationsOfRest = new List<Restaurant_res>();
+                        
                         foreach (DataRow dataRow in dataTable.Rows){
+                            Restaurant_res axu =new Restaurant_res();
                             Restaurant_res reservationRest = new Restaurant_res(
                             Convert.ToInt32(dataRow[0]),
                             DateTime.Parse(dataRow[1].ToString()),
-                            Convert.ToInt32(dataRow[2].ToString()), Convert.ToInt32(dataRow[5]), Convert.ToInt32(dataRow[4]));
+                            Convert.ToInt32(dataRow[2].ToString()),
+                             Convert.ToInt32(dataRow[5]), Convert.ToInt32(dataRow[4]));
                             reservationsOfRest.Add(reservationRest);
                         }
                         reservations = reservationsOfRest.Cast<T>().ToList();
@@ -144,7 +148,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo10
                 throw new InternalServerErrorException("Error en el servidor", ex);
             }
             return reservations;
-        }
+        }*/
 
         ///<sumary>
         /// Consulta las ciudades relacionadas con un viaje
