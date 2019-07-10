@@ -1,25 +1,23 @@
 using System;
 using System.Collections.Generic;
-using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5;
+using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo4;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
-using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo7;
-using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo7;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
-using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
-using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
-using vacanze_back.VacanzeApi.Common.Entities;
-using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9;
-using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12;
-using vacanze_back.VacanzeApi.LogicLayer.Command.Locations;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo2;
-using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo4;
-using System;
-using vacanze_back.VacanzeApi.Common.Entities.Grupo4;
-using System.Collections.Generic;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo7;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Locations;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo7;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo9;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command
 {
@@ -136,9 +134,9 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new GetClaimsByDocumentCommand(document);
         }
 
-        public static AddClaimCommand CreateAddClaimCommand(Claim claim)
+        public static AddClaimCommand CreateAddClaimCommand(ClaimDto dto)
         {
-            return new AddClaimCommand(claim);
+            return new AddClaimCommand(dto);
         }
 
         public static DeleteClaimByIdCommand CreateDeleteClaimByIdCommand(int id)
@@ -146,7 +144,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new DeleteClaimByIdCommand(id);
         }
 
-        public static UpdateClaimCommand CreateUpdateClaimCommand(int id, Claim fieldsToUpdate)
+        public static UpdateClaimCommand CreateUpdateClaimCommand(int id, ClaimDto fieldsToUpdate)
         {
             return new UpdateClaimCommand(id, fieldsToUpdate);
         }

@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
-using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo9;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 {
@@ -27,7 +27,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
         ///     Obtener Claim segun su Id
         /// </summary>
         [HttpGet("{id}")]
-        public ActionResult<Claim> GetById(int id)
+        public ActionResult<ClaimDto> GetById(int id)
         {
             var getByIdCommand = CommandFactory.CreateGetClaimByIdCommand(id);
 
@@ -54,7 +54,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
         ///     Get para la tabla equipaje segun su documento de identidad
         /// </summary>
         [HttpGet("document/{document}")]
-        public ActionResult<IEnumerable<Claim>> GetByDocument(string document)
+        public ActionResult<IEnumerable<ClaimDto>> GetByDocument(string document)
         {
             var getByDocumentCommand = CommandFactory.CreateGetClaimsByDocumentCommand(document);
             try
@@ -77,7 +77,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
         ///     Status posibles: ABIERTO, CERRADO [Existe estado Extraviado pero no se puede postear]
         /// </summary>
         [HttpGet("admin/{status}")]
-        public ActionResult<IEnumerable<Claim>> GetByStatus(string status)
+        public ActionResult<IEnumerable<ClaimDto>> GetByStatus(string status)
         {
             var getByStatusCommand = CommandFactory.CreateGetClaimsByStatusCommand(status);
 
@@ -100,11 +100,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
         ///     utilizado para crear un reclamo con una id del equipaje
         /// </summary>
         [HttpPost]
-        public ActionResult<Claim> Post([FromBody] Claim claim)
+        public ActionResult<ClaimDto> Post([FromBody] ClaimDto claimDto)
         {
             try
             {
-                var addClaimCommand = CommandFactory.CreateAddClaimCommand(claim);
+                var addClaimCommand = CommandFactory.CreateAddClaimCommand(claimDto);
                 addClaimCommand.Execute();
                 var registeredClaimId = addClaimCommand.GetResult();
                 var getClaimByIdCommand = CommandFactory.CreateGetClaimByIdCommand(registeredClaimId);
@@ -130,7 +130,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
             }
             catch (BaggageNotFoundException ex)
             {
-                _logger?.LogWarning($"Baggage invalido ({claim.BaggageId}) al crear Claim: {ex.Message}");
+                _logger?.LogWarning($"Baggage invalido ({claimDto.BaggageId}) al crear Claim: {ex.Message}");
                 return new BadRequestObjectResult(new ErrorMessage(ex.Message));
             }
             catch (DatabaseException ex)
@@ -165,7 +165,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
         ///     Endpoint para modificar un reclamo.
         /// </summary>
         [HttpPut("{id}")]
-        public ActionResult<string> Put(int id, [FromBody] Claim fieldsToUpdate)
+        public ActionResult<string> Put(int id, [FromBody] ClaimDto fieldsToUpdate)
         {
             try
             {
