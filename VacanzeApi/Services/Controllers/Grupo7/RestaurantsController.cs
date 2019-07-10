@@ -95,7 +95,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
             }
             catch (RestaurantNotFoundExeption e)
             {
-                _logger.LogWarning($"Restaurant con ID {id} no conseguido");
+                _logger?.LogWarning($"Restaurant con ID {id} no conseguido");
                 return BadRequest(new ErrorMessage(e.Message));
             } catch (DatabaseException ex)
             {
@@ -156,7 +156,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
              }
              catch(RestaurantNotFoundExeption e)
              {
-                 _logger.LogWarning($"Restaurant con ID {restaurant.Id} no conseguido");
+                 _logger?.LogWarning($"Restaurant con ID {restaurant.Id} no conseguido");
                  return BadRequest(new ErrorMessage(e.Message));
              }
              catch (InvalidAttributeException e)
@@ -188,7 +188,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
             }
             catch (RestaurantNotFoundExeption e)
             {
-                _logger.LogWarning($"Restaurant con ID {id} no conseguido");
+                _logger?.LogWarning($"Restaurant con ID {id} no conseguido");
                 return BadRequest(new ErrorMessage(e.Message));
             }
             catch (DatabaseException ex) 
