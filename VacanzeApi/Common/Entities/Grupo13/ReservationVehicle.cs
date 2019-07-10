@@ -37,6 +37,11 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo13
             VehicleId = vehicleId;
         }
 
+        public ReservationVehicle() : base(0)
+        {
+            
+        }
+
         public ReservationVehicle(int paymentId) : base(0)
         {
             PaymentId = paymentId;
