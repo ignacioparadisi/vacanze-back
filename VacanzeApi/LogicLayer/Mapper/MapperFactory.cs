@@ -55,5 +55,10 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper
         {
             return new ReservationRoomMapper();
         }
+
+        public static ReservationVehicleMapper CreateReservationVehicleMapper()
+        {
+            return new ReservationVehicleMapper();
+        }
     }
 }

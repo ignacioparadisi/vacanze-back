@@ -47,7 +47,8 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                 var userId = (int) Convert.ToInt64(table.Rows[i][4]);
                 var vehicleId = (int) Convert.ToInt64(table.Rows[i][5]);
                 // var payfk = Convert.ToInt64(table.Rows[i][5]);
-                reservation = EntityFactory.CreateReservationAutomobile(reservationId, pickup, returndate, userId, vehicleId);
+                reservation = EntityFactory.CreateReservationVehicle(reservationId, pickup, 
+                    returndate, vehicleId, userId);
 
                 //  _reservation.User.Id = userid;
                 //  _reservation.Automobile.Id = autfk;
@@ -105,7 +106,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                 var vehicleId = (int) Convert.ToInt64(table.Rows[i][4]);
                 var userid = Convert.ToInt64(table.Rows[i][5]);
 
-                ReservationVehicle reservation = EntityFactory.CreateReservationAutomobile(id, pickup, returndate);
+                ReservationVehicle reservation = EntityFactory.CreateReservationVehicle(id, pickup, returndate);
                 reservation.VehicleId = vehicleId;
                 reservation.UserId = userId;
                 reservationAutomobileList.Add(reservation);

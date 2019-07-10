@@ -78,11 +78,11 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
         }
 
         #region Grupo 13
-        public static ReservationVehicle CreateReservationAutomobile(int id, DateTime checkIn, DateTime checkOut) =>
+        public static ReservationVehicle CreateReservationVehicle(int id, DateTime checkIn, DateTime checkOut) =>
             new ReservationVehicle(id, checkIn, checkOut);
 
-        public static ReservationVehicle CreateReservationAutomobile(int id, DateTime checkin, DateTime checkout,
-            int userId, int vehicleId) =>
+        public static ReservationVehicle CreateReservationVehicle(int id, DateTime checkin, DateTime checkout,
+            int vehicleId, int userId) =>
             new ReservationVehicle(id, checkin, checkout, vehicleId, userId);
         
         public static ReservationRoom CreateReservationRoom(int id, DateTime chekckIn, DateTime checkOut,
