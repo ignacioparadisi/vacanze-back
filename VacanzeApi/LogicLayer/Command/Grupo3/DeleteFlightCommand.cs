@@ -31,7 +31,5 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo3
                 Console.WriteLine(e.ToString());
             }
         }
-
-       
     }
 }

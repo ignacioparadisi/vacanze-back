@@ -3,6 +3,10 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
+using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo9;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo9;
 using vacanze_back.VacanzeApi.Services.Controllers.Grupo9;
 
@@ -11,61 +15,67 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
     [TestFixture]
     public class ClaimControllerTest
     {
+        private ClaimController _claimController;
+        private ClaimDto _claimDto;
+        private ClaimMapper _claimMapper;
+        private List<int> _insertedClaims;
+        private PostgresClaimDao _postgresClaimDao;
+        
         [SetUp]
         public void Setup()
         {
-            _postgresClaimDaoTest = new PostgresClaimDao();
-            _claimControllerTest = new ClaimController(null);
+            _postgresClaimDao = new PostgresClaimDao();
+            _claimController = new ClaimController(null);
             _insertedClaims = new List<int>();
-            _claim = ClaimBuilder.Create()
+            var claim = ClaimBuilder.Create()
                 .WithStatus("ABIERTO")
                 .WithDescription("Bolso negro extraviado en el areopuerto de maiquetia")
                 .WithTitle("Bolso extraviado")
                 .WithBagagge(6)
                 .Build();
+
+            _claimMapper = MapperFactory.CreateClaimMapper();
+            _claimDto = _claimMapper.CreateDTO(claim);
         }
 
         [TearDown]
         public void TearDown()
         {
-            foreach (var claimId in _insertedClaims) _postgresClaimDaoTest.Delete(claimId);
+            foreach (var claimId in _insertedClaims) _postgresClaimDao.Delete(claimId);
             _insertedClaims.Clear();
         }
-
-        private ClaimController _claimControllerTest;
-        private Claim _claim;
-        private List<int> _insertedClaims;
-        private PostgresClaimDao _postgresClaimDaoTest;
 
         [Test]
         public void GetByDocument_InvalidDocumentId_EmptyListReturned()
         {
-            var result = _claimControllerTest.GetByDocument("-1");
-            Assert.AreEqual(0, result.Value.Count());
+            var result = _claimController.GetByDocument("-1");
+            var castedResult = (OkObjectResult) result.Result;
+            var resultList =  (List<ClaimDto>) castedResult.Value;
+            Assert.AreEqual(0, resultList.Count());
         }
 
         [Test]
         public void GetById_InvalidClaimId_NotFoundResultReturned()
         {
-            var result = _claimControllerTest.GetById(-1);
+            var result = _claimController.GetById(-1);
             Assert.IsInstanceOf<NotFoundResult>(result.Result);
         }
 
         [Test]
         public void GetById_ValidClaimId_OkResultReturned()
         {
-            var savedClaimId = _postgresClaimDaoTest.Add(_claim);
+            var savedClaimId = _postgresClaimDao.Add(_claimMapper.CreateEntity(_claimDto));
             _insertedClaims.Add(savedClaimId);
-            var result = _claimControllerTest.GetById(savedClaimId);
+            var result = _claimController.GetById(savedClaimId);
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
         }
 
         [Test]
         public void GetByStatus_ValidStatusName_OkResultReturned()
         {
-            var savedClaimId = _postgresClaimDaoTest.Add(_claim);
+            var savedClaimId = _postgresClaimDao.Add(_claimMapper.CreateEntity(_claimDto));
             _insertedClaims.Add(savedClaimId);
-            var result = _claimControllerTest.GetByStatus("ABIERTO");
+            var result = _claimController.GetByStatus("ABIERTO");
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
         }
 
@@ -73,207 +83,138 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
         [Test]
         public void Post_ClaimWithNoExistingBaggage_BadRequestReturned()
         {
-            _claim.BaggageId = -10;
-            var result = _claimControllerTest.Post(_claim);
+            _claimDto.BaggageId = -10;
+            var result = _claimController.Post(_claimDto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
+            
+        }
+        
+        [Test]
+        public void Post_ValidClaim_201CreatedReturned()
+        {
+            _claimDto.BaggageId = 1;
+            var result = _claimController.Post(_claimDto);
+            var castedResult = (ObjectResult) result.Result;
+            var responseValue =  (ClaimDto) castedResult.Value;
+            _insertedClaims.Add(responseValue.Id);
+            Assert.IsInstanceOf<ObjectResult>(result.Result);
         }
 
         [Test]
         public void Post_ClaimWithNoValidStatus_BadRequestReturned()
         {
-            _claim.Status = "NOTVALIDSTATUS";
-            var result = _claimControllerTest.Post(_claim);
+            _claimDto.Status = "NOTVALIDSTATUS";
+            var result = _claimController.Post(_claimDto);
             Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
 
-        /*
-        [SetUp]
-        public void setup()
-        {
-            controller = new ClaimController();
-            cs = new ClaimSecundary();
-            conec = new ClaimRepository();
-        }
-
-        [TearDown]
-        public void tearDown()
-        {
-            controller = null;
-            cs = null;
-            conec = null;
-        }
-
-        private ActionResult<IEnumerable<Claim>> claim;
-        private ClaimController controller;
-        private ClaimSecundary cs;
-        private ClaimRepository conec;
-        private int response;
-
         [Test]
-        [Order(8)]
-        public void DeleteClaimTest()
+        public void Post_ClaimWithVeryLongTitle_BadRequestReturned()
         {
-            //se pone un id que exista en la bd por lo menos el 7 
-            var enumerable = controller.Get(0);
-            var claimList = enumerable.Value.ToList().Find(x =>
-                x.Title.Equals("Despues del put") && x.Description.Equals("descripcion despues"));
-            var rows = controller.Get();
-            controller.Delete(Convert.ToInt32(claimList.Id));
-            var rowsresponse = controller.Get();
-            Assert.AreEqual(rows - 1, rowsresponse);
+            _claimDto.Title = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz";
+            var result = _claimController.Post(_claimDto);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
 
         [Test]
-        [Order(3)]
-        public void GetClaimEspecificTest()
+        public void Post_ClaimWithBaggageIdEqualsToZero_BadRequestReturned()
         {
-            var enumerable = controller.Get(0);
-            var claimList = enumerable.Value.ToList().Find(x =>
-                x.Title.Equals("Probando") && x.Description.Equals("Esta es mi descripcion") &&
-                x.Status.Equals("ABIERTO"));
-
-            //response = claimList.Value.Count();
-            Assert.AreEqual("Probando", claimList.Title);
-            Assert.AreEqual("Esta es mi descripcion", claimList.Description);
-            Assert.AreEqual("ABIERTO", claimList.Status);
+            _claimDto.BaggageId = 0;
+            var result = _claimController.Post(_claimDto);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
 
         [Test]
-        [Order(7)]
-        public void GetClaimGetDocumentTest()
+        public void Post_ClaimWithNullTitle_BadRequestReturned()
         {
-            claim = controller.GetDocument("20766589");
-
-            response = claim.Value.Count();
-            Assert.AreEqual(response, 1);
+            _claimDto.Title = null;
+            var result = _claimController.Post(_claimDto);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
 
         [Test]
-        [Order(6)]
-        public void GetClaimStatusTest()
+        public void Post_ClaimWithNullDescription_BadRequestReturned()
         {
-            claim = controller.GetStatus("CERRADO");
-            response = claim.Value.Count();
-            Assert.True(response >= 0);
-        }
-
-        [Test]
-        [Order(1)]
-        public void GetClaimsTest()
-        {
-            var rows = controller.Get();
-            Assert.True(0 <= rows);
-        }
-
-        [Test]
-        [Order(9)]
-        public void NullClaimExceptionDeleteTest()
-        {
-            Assert.Throws<ClaimNotFoundException>(() => conec.DeleteClaim(-1));
-        }
-
-        [Test]
-        [Order(13)]
-        public void NullClaimExceptionGetClaimDocumentTest()
-        {
-            Assert.Throws<ClaimNotFoundException>(() => conec.GetClaimDocument("0"));
-        }
-
-        [Test]
-        [Order(12)]
-        public void NullClaimExceptionGetClaimTest()
-        {
-            Assert.Throws<ClaimNotFoundException>(() => conec.GetClaim(-1));
-        }
-
-        [Test]
-        [Order(11)]
-        public void NullClaimExceptionModifyStatusTest()
-        {
-            var p = new Claim("PROBANDO", "UNITARIA", "CERRADO");
-
-            Assert.Throws<ClaimNotFoundException>(() => conec.ModifyClaimStatus(-1, p));
-        }
-
-        [Test]
-        [Order(10)]
-        public void NullClaimExceptionModifyTitleTest()
-        {
-            var p = new Claim("PROBANDO", "UNITARIA", "CERRADO");
-
-            Assert.Throws<ClaimNotFoundException>(() => conec.ModifyClaimTitle(-1, p));
+            _claimDto.Description = null;
+            var result = _claimController.Post(_claimDto);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
 
 
         [Test]
-        [Order(2)]
-        public void PostClaimTest()
+        public void Put_UpdatedTitleAndDescription_OkResultReturned()
         {
-            cs.title = "Probando";
-            cs.description = "Esta es mi descripcion";
-            cs.status = "ABIERTO";
-
-            var rows = controller.Get();
-            controller.Post(2, cs);
-            Assert.AreEqual(rows + 1, controller.Get());
+            var savedClaimId = _postgresClaimDao.Add(_claimMapper.CreateEntity(_claimDto));
+            _insertedClaims.Add(savedClaimId);
+            var fieldsToUpdate = new ClaimDto()
+            {
+                Title = "New title",
+                Description = "New description"
+            };
+            var result = _claimController.Put(savedClaimId,fieldsToUpdate);
+            Assert.IsInstanceOf<OkResult>(result.Result);
         }
 
         [Test]
-        [Order(5)]
-        public void PutClaimStatusTest()
+        public void Put_UpdatedTitleAndDescription_FieldsActuallyUpdated()
         {
-            cs.status = "CERRADO";
-            var enumerable = controller.Get(0);
-            var claimList = enumerable.Value.ToList().Find(x =>
-                x.Title.Equals("Despues del put") && x.Description.Equals("descripcion despues"));
-
-            controller.Put(Convert.ToInt32(claimList.Id), cs);
-            enumerable = controller.Get(Convert.ToInt32(claimList.Id));
-            var claim = enumerable.Value.ToArray();
-            Assert.AreEqual(claim[0].Status, "CERRADO");
+            var savedClaimId = _postgresClaimDao.Add(_claimMapper.CreateEntity(_claimDto));
+            _insertedClaims.Add(savedClaimId);
+            var fieldsToUpdate = new ClaimDto()
+            {
+                Title = "New title",
+                Description = "New description"
+            };
+            _claimController.Put(savedClaimId,fieldsToUpdate);
+            var claimInDb = _postgresClaimDao.GetById(savedClaimId);
+            Assert.AreEqual(fieldsToUpdate.Title, claimInDb.Title);
+            Assert.AreEqual(fieldsToUpdate.Description, claimInDb.Description);
         }
-
+        
         [Test]
-        [Order(4)]
-        public void PutClaimTitleTest()
+        public void Put_InvalidClaim_BadRequestReturned()
         {
-            cs.title = "Despues del put";
-            cs.description = "descripcion despues";
-            var enumerable = controller.Get(0);
-            var claimList = enumerable.Value.ToList().Find(x =>
-                x.Title.Equals("Probando") && x.Description.Equals("Esta es mi descripcion"));
-
-            controller.Put(Convert.ToInt32(claimList.Id), cs);
-            enumerable = controller.Get(Convert.ToInt32(claimList.Id));
-            var claim = enumerable.Value.ToArray();
-            Assert.AreEqual(claim[0].Title, "Despues del put");
-            Assert.AreEqual(claim[0].Description, "descripcion despues");
-            Assert.AreEqual(claim[0].Status, "ABIERTO");
+            var fieldsToUpdate = new ClaimDto()
+            {
+                Title = "New title",
+                Description = "New description"
+            };
+            var result = _claimController.Put(-1, fieldsToUpdate);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
-
+        
         [Test]
-        [Order(15)]
-        public void ValidateLengTitleClaimTest()
+        public void Put_InvalidClaimTitle_BadRequestReturned()
         {
-            var c = new Claim("validaaxedededdededededdedendod3dd3dd3d33", "mi test", "ABIERTO");
-            Assert.Throws<AttributeSizeException>(() => c.Validate());
+            var savedClaimId = _postgresClaimDao.Add(_claimMapper.CreateEntity(_claimDto));
+            _insertedClaims.Add(savedClaimId);
+            var fieldsToUpdate = new ClaimDto()
+            {
+                Title = "SUPER LONG TITLE ............................................................................",
+                Description = "New description"
+            };
+            var result = _claimController.Put(savedClaimId, fieldsToUpdate);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
-
+        
         [Test]
-        [Order(16)]
-        public void ValidatePutClaimTest()
+        public void Put_InvalidClaimStatus_BadRequestReturned()
         {
-            var c = new Claim("valida", "mi test", "ABIERTO");
-            Assert.Throws<AttributeValueException>(() => c.ValidatePut());
+            var fieldsToUpdate = new ClaimDto()
+            {
+                Status = "NOTVALIDSTATUS"
+            };
+            var result = _claimController.Put(-1, fieldsToUpdate);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
-
+        
         [Test]
-        [Order(14)]
-        public void ValidateStatusClaimTest()
+        public void Delete_ExistingClaim_ClaimIsDeleted()
         {
-            var c = new Claim("validando", "mi test", "mal");
-            Assert.Throws<AttributeValueException>(() => c.Validate());
+            var savedClaimId = _postgresClaimDao.Add(_claimMapper.CreateEntity(_claimDto));
+            _insertedClaims.Add(savedClaimId);
+            _claimController.Delete(savedClaimId);
+            Assert.Throws<ClaimNotFoundException>(() => { _postgresClaimDao.GetById(savedClaimId); });
         }
-    */
     }
 }

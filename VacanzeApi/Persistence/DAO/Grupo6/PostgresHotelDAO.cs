@@ -4,6 +4,8 @@ using Npgsql;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6; 
+using vacanze_back.VacanzeApi.LogicLayer.Command; 
 using System.Data;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo6
@@ -32,7 +34,8 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo6
     /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
     public int AddHotel(Hotel hotel)
     {
-        HotelValidator.Validate(hotel);
+        HotelValidatorCommand command =  CommandFactory.HotelValidatorCommand(hotel);
+        command.Execute();
         var table = PgConnection.Instance.ExecuteFunction(
             SP_ADD_HOTEL,
             hotel.Name,
@@ -104,7 +107,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo6
         var hotelList = new List<Hotel>();
 
         DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-        ReservationRoomDAO reservationRoomDao = factory.GetReservationRoomDAO();
+        IReservationRoomDAO reservationRoomDao = factory.GetReservationRoomDAO();
 
         for (var i = 0; i < table.Rows.Count; i++)
         {
@@ -148,8 +151,9 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo6
     ///     datos
     /// </exception>
     public Hotel UpdateHotel(int id, Hotel newData)
-    {
-        HotelValidator.Validate(newData);
+    {        
+        HotelValidatorCommand command =  CommandFactory.HotelValidatorCommand(newData);
+        command.Execute();
         PgConnection.Instance.ExecuteFunction(
             SP_UPDATE,
             id,

@@ -17,12 +17,12 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo3
 
         /// <summary>Busca aviones en la DB</summary>
         /// <returns> List<Entity> con el resultado de la query </returns>
-        public List<Entity> Get()
+        public List<Airplane> Get()
         {
             try
             {
                 var table = PgConnection.Instance.ExecuteFunction(GET_ALL_PLANES);
-                List<Entity> airplanes = new List<Entity>();
+                List<Airplane> airplanes = new List<Airplane>();
 
                 for (var i = 0; i < table.Rows.Count; i++)
                 {
