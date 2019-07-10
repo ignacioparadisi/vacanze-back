@@ -23,18 +23,19 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         // GET api/reservationautomobiles/?id={user_id}]
         /* https://localhost:5001/api/reservationrooms/?user=1 */
         [HttpGet]
-        public ActionResult<IEnumerable<ReservationRoomDAO>> GetAllByUserID([FromQuery] int user = -1)
+        public ActionResult<IEnumerable<IReservationRoomDAO>> GetAllByUserID([FromQuery] int user = -1)
         {
             try
             {
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-                ReservationRoomDAO reservationRoomDao = factory.GetReservationRoomDAO();
-                
+                IReservationRoomDAO reservationRoomDao = factory.GetReservationRoomDAO();
+
                 // ReservationRoomRepository connection = new ReservationRoomRepository();
                 return user == -1
                     ? Ok(reservationRoomDao.GetRoomReservations())
                     : Ok(reservationRoomDao.GetAllByUserId(user));
             }
+            // TODO: Manejar los errores
             catch (SystemException)
             {
                 throw;
@@ -46,10 +47,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         {
             try
             {
-                ReservationRoomRepository reservationRoomConnection = new ReservationRoomRepository();
-                Entity result = reservationRoomConnection.Find(id);
+                DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
+                IReservationRoomDAO reservationRoomDao = factory.GetReservationRoomDAO();
+                ReservationRoom result = reservationRoomDao.Find(id);
                 return Ok(result);
             }
+            // TODO: Manejar las excepciones
             catch (System.Exception)
             {
 
@@ -65,8 +68,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         {
             try
             {
-                ReservationRoomRepository repository = new ReservationRoomRepository();
-                 repository.Add(reservation);
+                DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
+                IReservationRoomDAO reservationRoomDao = factory.GetReservationRoomDAO();
+                reservationRoomDao.Add(reservation);
                 return Ok(new { Message = "Reservacion Agregada" });
             }
             catch (Exception e)
@@ -120,9 +124,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
                 return null;
             }
         }
-
-
-
     }
 }
 
