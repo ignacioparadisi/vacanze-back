@@ -22,7 +22,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
     [EnableCors("MyPolicy")]
     public class FlightsController : ControllerBase
     {
-        /// <summary>GET api/flight</summary>
+        /// <summary>GET api/flights</summary>
         /// <returns>Action result con resultado de la query</returns>
         [HttpGet]
         public ActionResult<IEnumerable<Entity>> Get()
