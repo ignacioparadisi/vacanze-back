@@ -33,7 +33,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
             LocationMapper locationMapper = MapperFactory.createLocationMapper();
             GetLocationsCommand commandGetLocations =  CommandFactory.GetLocationsCommand();
             commandGetLocations.Execute ();
-            return(locationMapper.CreateDTOList( commandGetLocations.GetResult()));  
+            var result = commandGetLocations.GetResult();
+            _logger?.LogInformation($"Obtenida las Location  por pais exitosamente");
+            return(locationMapper.CreateDTOList( result));  
         }
         /// <summary>
         ///     Metodo para obtener los paises
@@ -45,7 +47,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
             LocationMapper locationMapper = MapperFactory.createLocationMapper();
             GetCountriesCommand commandGetCountries =  CommandFactory.GetCountriesCommand();
             commandGetCountries.Execute ();
-            return (locationMapper.CreateDTOList(commandGetCountries.GetResult()));               
+            var result = commandGetCountries.GetResult();
+            _logger?.LogInformation($"Obtenido los paises exitosamente");
+            return (locationMapper.CreateDTOList(result));               
         }
         /// <summary>
         ///     Metodo para buscar los ciudades por pais
@@ -64,11 +68,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
 				LocationMapper locationMapper = MapperFactory.createLocationMapper();
                 GetCitiesByCountryCommand commandIByCountry =  CommandFactory.GetCitiesByCountryCommand(countryId);
                 commandIByCountry.Execute ();
-                return( locationMapper.CreateDTOList(commandIByCountry.GetResult()));      
+                var result = commandIByCountry.GetResult();
+                _logger?.LogInformation($"Obtenida las ciudades por pais id {countryId} exitosamente");
+                return( locationMapper.CreateDTOList(result));      
             }
             catch (LocationNotFoundException ex)
             {
-				_logger?.LogError(ex, "LocationNotFoundException when trying to get a location by country Id");
+				_logger?.LogWarning( $"Location con id {countryId} no encontrada");
 				return NotFound($"Location with id {countryId} not found");
             }
         }
