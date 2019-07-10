@@ -19,7 +19,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
     [ApiController]
     public class RolesController : ControllerBase
     {
-        private readonly ILogger _logger;
+        //private readonly ILogger _logger;
 
         // GET api/values
         /// <summary>
@@ -33,17 +33,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo2
             var rolesDTO = new List<RoleDTO>();
             try
             {
-                _logger.LogInformation("Ejecutando el Comando GetRolesCommand()");
+              //  _logger.LogInformation("Ejecutando el Comando GetRolesCommand()");
                 GetRolesCommand command = CommandFactory.CreateGetRolesCommand();
                 command.Execute();
-                _logger.LogInformation("Ejecutado el Comando GetRolesCommand()");
+              //  _logger.LogInformation("Ejecutado el Comando GetRolesCommand()");
                 roles = command.GetResult();
                 RoleMapper mapper = new RoleMapper();
                 rolesDTO = mapper.CreateDTOList(roles);
             }
             catch (DatabaseException e)
             {
-                _logger.LogError("BadRequest: ", e);
+               // _logger.LogError("BadRequest: ", e);
                 return BadRequest("Error al Obtener Roles");
             }
 

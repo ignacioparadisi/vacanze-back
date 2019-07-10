@@ -18,7 +18,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
         private const string SP_DELETEUSER = "DeleteUserById(@user_id)";
         private const string SP_DELETEUSER_ROLE = "DeleteUser_Role(@user_id)";
         private const string SP_UPDATE = "ModifyUser(@id, @doc_id, @name, @lastname, @email)";
-        private readonly ILogger _logger;
+       // private readonly ILogger _logger;
 
 
         // GETS
@@ -30,7 +30,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           {
                try
                {
-                _logger.LogInformation("Entrando en GetEmployees");
+               // _logger.LogInformation("Entrando en GetEmployees");
                     var users = new List<User>();
                     var table = PgConnection.Instance.ExecuteFunction(SP_GETEMPLOYEES);
                     DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
@@ -49,11 +49,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
                          user.Roles = roles.GetRolesForUser(id);
                          users.Add(user);
                     }
-                _logger.LogDebug("Users:", users);
+            //    _logger.LogDebug("Users:", users);
                 return users;
                }
                catch(Exception e){
-                _logger.LogError("Error", e);
+              //  _logger.LogError("Error", e);
                     e.ToString();
                     throw;
                }
@@ -70,12 +70,12 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           /// porque no pueden haber correos repetidos</exception>
           public void VerifyEmail(string email, int id = 0)
           {
-            _logger.LogInformation("Entrando en VerifyEmail(email,id)",email,id);
+        //    _logger.LogInformation("Entrando en VerifyEmail(email,id)",email,id);
             var table = PgConnection.Instance.ExecuteFunction(SP_GETUSERBYEMAIL,
                    email, id);
                if (table.Rows.Count > 0)
                     throw new RepeatedEmailException("El Email Ingresado ya Existe");
-            _logger.LogInformation("Saliendo de GetEmployees");
+          //  _logger.LogInformation("Saliendo de GetEmployees");
         }
 
           /// <summary>
@@ -89,7 +89,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           {
                try
                {
-                _logger.LogInformation("Entrando en GetUserById(id)",id);
+            //    _logger.LogInformation("Entrando en GetUserById(id)",id);
                 User user;
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
                 RoleDAO roles = factory.GetRoleDAO();
@@ -105,11 +105,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
                     user = new User(user_id, documentId, name, lastname, email);
 
                     user.Roles = roles.GetRolesForUser(id);
-                _logger.LogDebug("User:", user);
+            //    _logger.LogDebug("User:", user);
                 return user;
                }
                catch(Exception e){
-                _logger.LogError("Error", e);
+             //   _logger.LogError("Error", e);
                 e.ToString();
                     throw;
                }
@@ -125,7 +125,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           {
                try
                {
-                _logger.LogInformation("Entrando en AddUser");
+           //     _logger.LogInformation("Entrando en AddUser");
                 User user = (User)entity;
                     user.Validate();
                     VerifyEmail(user.Email);
@@ -138,11 +138,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
                     user.Id = id;
                     user.Password = null;
 
-                _logger.LogDebug("User:", user);
+             //   _logger.LogDebug("User:", user);
                 return user;
                }
                catch(Exception e){
-                _logger.LogError("Error", e);
+            //    _logger.LogError("Error", e);
                 e.ToString();
                     throw;
                }
@@ -158,7 +158,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           {
                try
                {
-                _logger.LogInformation("Entrando en AddUser_Role(userid,roleid)",userid,roleid);
+             //   _logger.LogInformation("Entrando en AddUser_Role(userid,roleid)",userid,roleid);
                 var table = PgConnection.Instance.ExecuteFunction(SP_ADDUSER_ROLE,
                     userid, roleid);
                }
@@ -166,7 +166,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
                     Console.WriteLine(e.ToString());
                     throw new Exception();
                }
-            _logger.LogInformation("Saliendo de AddUser_Role(userid,roleid)", userid, roleid);
+          //  _logger.LogInformation("Saliendo de AddUser_Role(userid,roleid)", userid, roleid);
         }
 
           /// <summary>
@@ -178,14 +178,14 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           /// diciendo que el usuario no existe</exception>
           public int DeleteUserById(int id)
           {
-            _logger.LogInformation("Entrando en DeleteUserById(int id)",id);
+        //    _logger.LogInformation("Entrando en DeleteUserById(int id)",id);
             var table = PgConnection.Instance.ExecuteFunction(SP_DELETEUSER, id);
                var userId = table.Rows[0][0];
                if (userId == DBNull.Value)
                {
                     throw new UserNotFoundException("El usuario no se encuentra registrado.");
                }
-            _logger.LogDebug("ID : ", id);
+          //  _logger.LogDebug("ID : ", id);
                return Convert.ToInt32(userId);
           }
 
@@ -195,9 +195,9 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           /// <param name="id">Id del usuario al que se le quieren eliminar los roles</param>
           public void DeleteUser_Role(int id)
           {
-            _logger.LogInformation("Entrando en DeleteUserById(int id)", id);
+       //     _logger.LogInformation("Entrando en DeleteUserById(int id)", id);
             var table = PgConnection.Instance.ExecuteFunction(SP_DELETEUSER_ROLE, id);
-            _logger.LogInformation("Saliendo de DeleteUserById(int id)", id);
+        //    _logger.LogInformation("Saliendo de DeleteUserById(int id)", id);
         }
 
           // - MARK: UPDATE
@@ -212,7 +212,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
           // TODO: Devolver el usuario y no el id nada más
           public int UpdateUser(User entity, int id)
           {
-            _logger.LogInformation("Entrando en UpdateUser(User entity, int id)",entity,id);
+       //     _logger.LogInformation("Entrando en UpdateUser(User entity, int id)",entity,id);
             User user = (User)entity;
                user.Validate();
                VerifyEmail(user.Email, id); //Hay que cambiar ese Id por user.Id en controller tambien
@@ -225,7 +225,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo2
                {
                     throw new UserNotFoundException("El usuario no se encuentra registrado.");
                }
-            _logger.LogDebug("UserID: ", userId);
+        //    _logger.LogDebug("UserID: ", userId);
             return Convert.ToInt32(userId);
           }
 
