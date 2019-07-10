@@ -15,6 +15,9 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo10
        
         public int addcomment(Comment comment)
         {int id = 0;
+       /*  Console.WriteLine(comment.idforanea);
+        Console.WriteLine(comment.description);
+        Console.WriteLine(comment.datetime);*/
             try{
                  if( string.IsNullOrEmpty(comment.description) ||
                     comment.datetime == DateTime.MinValue ||
