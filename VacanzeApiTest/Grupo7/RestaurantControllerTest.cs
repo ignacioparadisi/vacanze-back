@@ -17,7 +17,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo7
         [SetUp]
         public void Setup()
         {
-            _restaurantsController = new RestaurantsController();
+            _restaurantsController = new RestaurantsController(null);
             _restaurantDto = new RestaurantDto();
             _restaurantDto.Name = "Yosemite";
             _restaurantDto.Capacity = 200;

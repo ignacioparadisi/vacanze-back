@@ -1,7 +1,9 @@
+
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
@@ -20,18 +22,31 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
     [ApiController]
     public class RestaurantsController : Controller
     {
+        private readonly ILogger<RestaurantsController> _logger;
         /// <summary>
         ///     Get api/Restaurants
         ///     Metodo para obtener todos los restaurantes
         /// </summary>
         /// <returns>Objeto tipo JSON con los restaurantes obtenidos</returns>
+        public RestaurantsController(ILogger<RestaurantsController> logger)
+        {
+            _logger = logger;
+        }
         [HttpGet]
         public ActionResult<IEnumerable<RestaurantDto>> Get()
         {
-            GetRestaurantsCommand getRestaurantsCommand = CommandFactory.CreateGetRestaurantsCommand();
+            try
+            {
+                GetRestaurantsCommand getRestaurantsCommand = CommandFactory.CreateGetRestaurantsCommand();
                 getRestaurantsCommand.Execute();
                 List<RestaurantDto> restaurantsDtoList = getRestaurantsCommand.GetResult();
                 return restaurantsDtoList; 
+            }
+            catch (DatabaseException ex)
+            {
+                _logger?.LogError(ex, "Database exception when trying to get a restaurant by id");
+                return StatusCode(500, ex.Message);
+            }
         }
 
         /// <summary>
@@ -43,10 +58,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         [HttpGet("location/{id}")]
         public ActionResult<IEnumerable<RestaurantDto>> GetRestaurantByLocation(int id)
         {
-            GetRestaurantsByCityCommand getRestaurantsByCityCommand = CommandFactory.CreateGetRestaurantsByCityCommand(id);
+            try
+            {
+                GetRestaurantsByCityCommand getRestaurantsByCityCommand = CommandFactory.CreateGetRestaurantsByCityCommand(id);
                 getRestaurantsByCityCommand.Execute();
                 List<RestaurantDto> restaurantsDtoList = getRestaurantsByCityCommand.GetResult();
                 return restaurantsDtoList;
+            }
+            catch (DatabaseException ex)
+            {
+                _logger?.LogError(ex, "Database exception when trying to get a restaurant by location id");
+                return StatusCode(500, ex.Message);
+            }
         }
 
         /// <summary>
@@ -69,7 +92,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
             }
             catch (RestaurantNotFoundExeption e)
             {
+                _logger.LogWarning($"Restaurant con ID {id} no conseguido");
                 return BadRequest(new ErrorMessage(e.Message));
+            } catch (DatabaseException ex)
+            {
+                _logger?.LogError(ex, "Database exception when trying to get a restaurant by id");
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -94,7 +122,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
             }
             catch (InvalidAttributeException e)
             {
+                _logger?.LogError(e, "Error en campos de la entidad restaurante");
                 return BadRequest(new ErrorMessage(e.Message));
+            }catch (DatabaseException ex)
+            {
+                _logger?.LogError(ex, "Database exception when trying to add a restaurant");
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -118,11 +151,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
              }
              catch(RestaurantNotFoundExeption e)
              {
+                 _logger.LogWarning($"Restaurant con ID {restaurant.Id} no conseguido");
                  return BadRequest(new ErrorMessage(e.Message));
              }
              catch (InvalidAttributeException e)
              {
+                 _logger?.LogError(e, "Error en campos de la entidad restaurante");
                  return BadRequest(new ErrorMessage(e.Message));
+             }catch (DatabaseException ex)
+             {
+                 _logger?.LogError(ex, "Database exception when trying to update a restaurant");
+                 return StatusCode(500, ex.Message);
              }
          }
         
@@ -135,9 +174,18 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo7
         [HttpDelete("{id}")]
         public IActionResult DeleteRestaurant(int id)
         {
-            DeleteRestaurantCommand deleteRestaurantCommand = CommandFactory.CreateDeleteRestaurantCommand(id);
+            try
+            {
+                DeleteRestaurantCommand deleteRestaurantCommand = CommandFactory.CreateDeleteRestaurantCommand(id);
                 deleteRestaurantCommand.Execute();
                 return Ok("Eliminado satisfactoriamente");
+            }
+            catch (DatabaseException ex) 
+            {
+                _logger?.LogError(ex, "Database exception when trying to update a restaurant");
+                return StatusCode(500, ex.Message);
+            }
+            
         }
     }
 }
