@@ -1584,6 +1584,45 @@ BEGIN
 	WHERE vm_id = modelId;
 END;
 $$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION GetVehicleById(vehicleId integer)
+RETURNS TABLE
+  (
+	Id INTEGER,
+	modelId INTEGER,
+	locationId INTEGER,
+	license VARCHAR,
+	price DECIMAL,
+	status BOOLEAN
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT *
+	FROM VEHICLE
+	WHERE veh_id = vehicleId;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION GetAvailableVehiclesByLocation(locId integer)
+RETURNS TABLE
+  (
+	Id INTEGER,
+	modelId INTEGER,
+	locationId INTEGER,
+	license VARCHAR,
+	price DECIMAL,
+	status BOOLEAN
+  )
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT *
+	FROM VEHICLE
+	WHERE veh_location = locId AND veh_status = true;
+END;
+$$ LANGUAGE plpgsql;
 -----------------------------------Fin Grupo 5 ------------------------------------------------
 
 ------ Consulta de los lugares ------
