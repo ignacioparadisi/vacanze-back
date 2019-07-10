@@ -5,6 +5,7 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo9;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
 {
@@ -19,7 +20,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
         // consultar los equipajes segun su id
         /// </summary>
         [HttpGet("serial/{id}")]
-        public ActionResult<Baggage> Get(int id)
+        public ActionResult<BaggageDTO> Get(int id)
         {
             var getByIdCommand = CommandFactory.CreateGetBaggageByIdCommand(id);
             try
@@ -43,7 +44,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
         // Get para la tabla equipaje segun su documento de identidad
         /// </summary>
         [HttpGet("documentPasaport/{id}")]
-        public ActionResult<IEnumerable<Baggage>> GetDocument(string id)
+        public ActionResult<IEnumerable<BaggageDTO>> GetDocument(string id)
         {
             var getByPassportCommand = CommandFactory.CreateGetBaggageByPassportCommand(id);
             try
@@ -66,7 +67,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
         //consultar los equipajes segun su estatus
         /// </summary>
         [HttpGet("admin/getStatus/{status}")]
-        public ActionResult<IEnumerable<Baggage>> GetStatus(string status)
+        public ActionResult<IEnumerable<BaggageDTO>> GetStatus(string status)
         {
             var getByStatusCommand = CommandFactory.CreateGetBaggageByStatusCommand(status);
             try
@@ -90,7 +91,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo9
         // modificar el estatus del equipaje
         /// </summary>
         [HttpPut("{id}")]
-        public ActionResult<Baggage> Put(int id, [FromBody] Baggage Baggage)
+        public ActionResult<BaggageDTO> Put(int id, [FromBody] BaggageDTO Baggage)
         {
             var updateBaggageCommand = CommandFactory.CreateUpdateBaggageCommand(id, Baggage);
             try

@@ -169,7 +169,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new GetBaggageByStatusCommand(status);
         }
 
-        public static UpdateBaggageCommand CreateUpdateBaggageCommand(int id, Baggage baggage)
+        public static UpdateBaggageCommand CreateUpdateBaggageCommand(int id, BaggageDTO baggage)
         {
             return new UpdateBaggageCommand(id, baggage);
         }
@@ -177,6 +177,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         public static GetBaggageByIdCommand CreateGetBaggageByIdCommand(int id)
         {
             return new GetBaggageByIdCommand(id);
+        }
+
+        public static ValidateBaggageUpdateCommand CreateValidateBaggageUpdateCommand(Baggage baggage)
+        {
+            return new ValidateBaggageUpdateCommand(baggage);
         }
 
         public static AddHotelCommand createAddHotelCommand(Hotel hotel)

@@ -54,5 +54,10 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper
         {
             return new ClaimMapper();
         }
+        
+        public static BaggageMapper CreateBaggageMapper()
+        {
+            return new BaggageMapper();
+        }
     }
 }
