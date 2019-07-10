@@ -6,7 +6,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13
 {
     public class DeleteReservationVehicleCommand: CommandResult<int>
     {
-        private int _id;
+        private readonly int _id;
         private int _result;
 
         public DeleteReservationVehicleCommand(int id)
