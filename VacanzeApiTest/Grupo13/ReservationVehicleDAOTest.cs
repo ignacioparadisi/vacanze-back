@@ -74,7 +74,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         [Order(5)]
         public void TestDeleteReservation()
         {
-            dao.Delete(_reservationAutomobile);
+            dao.Delete(_reservationAutomobile.Id);
             Assert.AreEqual(0, dao.Find(_reservationAutomobile.Id).Id);
         }
 
