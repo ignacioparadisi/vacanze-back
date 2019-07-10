@@ -16,7 +16,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("MyPolicy")]
-    public class ReservationAutomobilesController : ControllerBase
+    public class ReservationVehiclesController : ControllerBase
     {
         // GET api/values
 

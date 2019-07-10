@@ -17,9 +17,8 @@ using vacanze_back.VacanzeApi.Persistence.Repository.Grupo5;
 namespace vacanze_back.VacanzeApiTest.Grupo13
 {
     [TestFixture]
-    public class ReservationAutomobileDAOTest
+    public class ReservationVehicleDAOTest
     {
-        private Auto _vehicle;
         private User _user;
         private Payment _payment;
         private ReservationVehicle _reservationAutomobile;
