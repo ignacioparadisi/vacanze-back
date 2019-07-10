@@ -123,5 +123,23 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5
             }
             return updated;
         }
+
+        public bool UpdateVehicleStatus(int vehicleId, bool status){
+            bool updated = false;
+            try{
+                GetVehicleById(vehicleId);// Throw VehicleNotFoundException
+                PgConnection pgConnection = PgConnection.Instance;
+                DataTable dataTable = pgConnection.ExecuteFunction("UpdateVehicleStatus(@vehid, @vehstatus)",
+                    vehicleId, status);
+                if(Convert.ToBoolean(dataTable.Rows[0][0])){
+                    updated = true;
+                }
+            }catch(DatabaseException ex){
+                throw new InternalServerErrorException("Error en el servidor : Conexion a base de datos", ex);
+            }catch(InvalidStoredProcedureSignatureException ex){
+                throw new InternalServerErrorException("Error en el servidor", ex);
+            }
+            return updated;
+        }
     }
 }

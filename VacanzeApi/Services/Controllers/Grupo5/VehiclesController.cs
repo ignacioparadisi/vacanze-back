@@ -104,5 +104,25 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
                 return StatusCode(400);
             }
         }
+        
+        [HttpPut("{vehicleId:int}/update/")]
+        public IActionResult UpdateVehicleStatus(int vehicleId, [FromQuery] bool status){
+            try{
+                UpdateVehicleStatusCommand command = 
+                    CommandFactory.CreateUpdateVehicleStatusCommand (vehicleId, status);
+                command.Execute ();
+                if(command.GetResult())
+                    return Ok("La modificación fue realizada exitosamente");
+                else
+                    return StatusCode(400);
+            } catch(VehicleNotFoundException ex){
+                return StatusCode(404, ex.Message + ex.VehicleId);
+            } catch(InternalServerErrorException ex){
+                return StatusCode(500, ex.Message);
+            } catch(Exception){
+                return StatusCode(400);
+            }
+        }
+
     }
 }

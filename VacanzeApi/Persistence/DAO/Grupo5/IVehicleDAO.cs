@@ -9,5 +9,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5
         Vehicle GetVehicleById(int vehicleId);
         List<Vehicle> GetAvailableVehiclesByLocation(int locationId);
         bool UpdateVehicle(Vehicle vehicle);
+        bool UpdateVehicleStatus(int vehicleId, bool status);
     } 
 }
