@@ -43,7 +43,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
                 .GetReservationVehicleDAO();
             DateTime checkOut = new DateTime(2019, 10, 20);
             _reservationAutomobile =
-                EntityFactory.CreateReservationAutomobile(0, DateTime.Now, checkOut, _user.Id, 5);
+                EntityFactory.CreateReservationVehicle(0, DateTime.Now, checkOut, _user.Id, 5);
             _reservationAutomobile = dao.AddReservation(_reservationAutomobile);
             Assert.NotZero(_reservationAutomobile.Id);
         }
