@@ -119,12 +119,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         {
             try
             {
-                ReservationRoomRepository repository = new ReservationRoomRepository();
-                ReservationRoom reservation = (ReservationRoom) repository.Find(id);
-
-                repository.Delete(reservation);
-
-                return Ok(new { Message = "Reservacion eliminada" });
+                CommandResult<int> command = CommandFactory.CreateDeleteReservationRoomCommand(id);
+                command.Execute();
+                return Ok(command.GetResult());
             }
             catch (GeneralException e)
             {
