@@ -320,9 +320,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new GetReservationsByDateIVCommand(departure, arrival, departuredate, arrivaldate, numpas);
         }
-    }
-
-        }
+    
         /*GRUPO14*/
         public static GetResRestaurantByIdCommand GetResRestaurantByIdCommand(int id)
         {
