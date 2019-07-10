@@ -9,6 +9,7 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo12;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo5;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo4;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo10;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo1;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO
 {
@@ -46,7 +47,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         // +++++++++++++++++
         public abstract IReservationRoomDAO GetReservationRoomDAO();
 
-        public abstract IReservationAutomobileDAO GetReservationAutomobileDAO();
+        public abstract IReservationVehicleDAO GetReservationVehicleDAO();
         // +++++++++++++++++
         //     GRUPO 7
         // +++++++++++++++++
@@ -72,6 +73,8 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         public abstract ICheckinBaggageDAO PostCheckBaggage();
          public abstract Traveldao GetTravelDAO();
          public abstract Commentdao GeCommentDAO();
+
+        public abstract LoginDAO GetLoginDAO();
 
     }
 }

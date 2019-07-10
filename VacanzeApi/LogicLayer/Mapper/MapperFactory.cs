@@ -1,8 +1,10 @@
+using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo1;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo2;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo5;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo6;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo7;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo12;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo13;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Mapper
 {
@@ -44,9 +46,24 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper
             return new RoleMapper();
         }
 
-        public static ReservationFlightMapper CreateReservationFlightMapper(){
+        public static ReservationFlightMapper CreateReservationFlightMapper()
+        {
             return new ReservationFlightMapper();
 
+        }
+        
+        public static ReservationRoomMapper CreateReservationRoomMapper()
+        {
+            return new ReservationRoomMapper();
+        }
+
+        public static ReservationVehicleMapper CreateReservationVehicleMapper()
+        {
+            return new ReservationVehicleMapper();
+        }
+
+        public static LoginMapper createLoginMapper(){
+            return new LoginMapper();
         }
     }
 }
