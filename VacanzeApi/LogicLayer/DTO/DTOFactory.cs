@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo2;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo14;
 using  vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo5;
 using  vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo6;
 using  vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo12;
@@ -56,6 +57,16 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO{
             return new FlightResDTO(  id, price, timestamp, seatNum, name_cityI, name_countryI, namecityV,
             namecountryV, numPas, id_user);
 
+        }
+        // +++++++++++++++++
+        //     GRUPO 14
+        // +++++++++++++++++
+        public static ResRestaurantDTO CreateResRestaurantDTO(int id, string locationName, string pais, string restName,
+         string address, string fecha_reservacion, int cant_person)
+        {
+
+            return new ResRestaurantDTO( id,  locationName,  pais,  restName,
+          address,  fecha_reservacion,  cant_person);
         }
     }
 
