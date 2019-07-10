@@ -12,7 +12,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo8
     {
         
         /// <summary>
-        ///     Metodo para obtener todos los cruveros guardados.
+        ///     Metodo para obtener todos los cruceros guardados.
         /// </summary>
         /// <returns>Lista de cruceros</returns>
         /// <exception cref="DatabaseException">
