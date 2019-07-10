@@ -16,7 +16,6 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
     [TestFixture]
     public class ReservationRoomCommandTest
     {
-        private ReservationRoom _reservation;
         private Hotel _hotel;
         private DAOFactory _factorydao;
         private User _user;
@@ -67,8 +66,6 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             
             CreateUser();
             CreateHotel();
-
-            _reservation = EntityFactory.CreateReservationRoom(0, checkin, checkout, _hotel.Id, _user.Id);
         }
 
         [TearDown]
@@ -156,11 +153,5 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             command2.Execute();
             Assert.AreEqual(command.GetResult().Id, command2.GetResult());
         }
-        
-        
-        
-        
     }
-    
-    
 }
