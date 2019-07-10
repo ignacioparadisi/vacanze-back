@@ -350,8 +350,8 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         public static GetResRestaurantNotPayByIdCommand GetResRestaurantNotPayByIdCommand(int id)
         {
             return new GetResRestaurantNotPayByIdCommand(id);
+        }
 
-        
         #region Grupo 13
         public static AddReservationRoomCommand CreateAddReservationRoomCommand(ReservationRoom reservationRoom)
         {
@@ -414,7 +414,6 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         public static RecoveryPasswordCommand RecoveryPasswordCommand(Login loginE){
             return new RecoveryPasswordCommand(loginE);
         }
-
 
         public static AddResRestaurantCommand AddResRestaurantCommand(Restaurant_res restaurantDTO)
         {
