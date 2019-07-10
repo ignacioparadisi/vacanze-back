@@ -4,6 +4,8 @@ using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo7;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo7;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo6;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
@@ -218,6 +220,15 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         public static UpdateHotelCommand UpdateHotelCommand(int id, Hotel hotel)
         {
             return new UpdateHotelCommand(id, hotel);
+        }
+
+		public static HotelValidatorCommand HotelValidatorCommand(Hotel hotel)
+        {
+            return new HotelValidatorCommand(hotel);
+        }
+        public static HotelDTOValidatorCommand HotelDTOValidatorCommand(HotelDTO hotel)
+        {
+            return new HotelDTOValidatorCommand(hotel);
         }
 
         public static AddLocationCommand createAddLocationCommand(Location location)
