@@ -338,8 +338,6 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new GetReservationRoomCommand(reservationId);
         }
-        
->>>>>>> dfbf87948518279274da29321e04f8b89c1aba85
     }
 
 }
