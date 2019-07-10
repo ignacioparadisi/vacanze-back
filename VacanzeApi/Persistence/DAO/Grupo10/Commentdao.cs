@@ -16,6 +16,9 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo10
        
         public int addcomment(Comment comment)
         {int id = 0;
+       /*  Console.WriteLine(comment.idforanea);
+        Console.WriteLine(comment.description);
+        Console.WriteLine(comment.datetime);*/
             try{
                  if( string.IsNullOrEmpty(comment.description) ||
                     comment.datetime == DateTime.MinValue ||
@@ -44,10 +47,14 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo10
         {
             try 
             {
-                var table = PgConnection.Instance.ExecuteFunction("DeleteComment(@com_ID)", com_id);
-                var deleteid = Convert.ToInt32(table.Rows[0][0]);
-                Console.WriteLine(deletedid);
-                return deletedid;
+                int i=0;
+
+             PgConnection pgConnection = PgConnection.Instance;
+            
+             pgConnection.ExecuteFunction("DeleteComment(@com_ID)", id);
+             return i ;
+       
+                
             }
             catch (InvalidCastException)
             {

@@ -71,16 +71,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10{
         }
 
         [Consumes("application/json")]
-        [HttpDelete]
+        [HttpDelete("delete/{id}")]
         public IActionResult Deletecomment ([FromBody] int commentId)
         {
             try
             {
                 Icomment commentdao =new Commentdao();
-                if(commentdao.Deletecomment(commentId))
-                    return Ok("el comentario fue eliminado exitosamente");
-                else
-                    return StatusCode(400);
+                 int  i =  commentdao.Deletecomment(commentId);
+                if (i==0){
+                    return Ok ("no se elminno ");
+                }
+                return Ok("se elimino");
             }
             catch (InvalidCastException)
             {
