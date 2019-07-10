@@ -81,7 +81,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5{
         }
 
         [HttpGet("{modelId:int}")]
-        public ActionResult<Model> GetModelById(int modelId){
+        public ActionResult<ModelDTO> GetModelById(int modelId){
             try {
                 GetModelByIdCommand command = CommandFactory.CreateGetModelByIdCommand(modelId);
                 command.Execute ();

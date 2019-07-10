@@ -5,23 +5,23 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo5;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5 
 {
-    public class GetBrandByIdCommand : CommandResult<Brand> 
+    public class GetVehicleByIdCommand : CommandResult<Vehicle> 
     {
-        private int _brandId;
-        private Brand _brand;
+        private int _vehicleId;
+        private Vehicle _vehicle;
 
-        public GetBrandByIdCommand(int _brandId){
-            this._brandId = _brandId;
+        public GetVehicleByIdCommand(int _vehicleId){
+            this._vehicleId = _vehicleId;
         }
 
         public void Execute(){
             DAOFactory daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-            IBrandDAO brandDAO = daoFactory.GetBrandDAO();
-            _brand = brandDAO.GetBrandById(_brandId);
+            IVehicleDAO vehicleDAO = daoFactory.GetVehicleDAO();
+            _vehicle = vehicleDAO.GetVehicleById(_vehicleId);
         }
 
-        public Brand GetResult(){
-            return _brand;
+        public Vehicle GetResult(){
+            return _vehicle;
         }
     }
 }
