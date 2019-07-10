@@ -72,7 +72,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo14
         public void getReservationNotPayTest(){
 
             //ActionResult<IEnumerable<Restaurant_res>> res = controller.GetReservationNotPay(5);
-            //Assert.NotNull(res);
+            //Assert.NotNull(res) falta implementar;
         }
 
         [Test]
