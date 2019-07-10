@@ -95,6 +95,40 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5
             return vehicles;
         }
 
+        public List<Vehicle> GetVehicles(){
+            List<Vehicle> vehicles = new List<Vehicle>();
+               try{
+                PgConnection pgConnection = PgConnection.Instance;
+                DataTable dataTable = pgConnection.ExecuteFunction("GetVehicles()");
+                if( dataTable.Rows.Count > 0){
+                    foreach (DataRow dataRow in dataTable.Rows){
+                        Vehicle vehicle = new Vehicle(
+                            Convert.ToInt32(dataRow[0]),
+                            Convert.ToInt32(dataRow[1]),
+                            Convert.ToInt32(dataRow[2]),
+                            dataRow[3].ToString(),
+                            Convert.ToDouble(dataRow[4]),
+                            Convert.ToBoolean(dataRow[5])
+                        );
+                        vehicle.VehicleLocation =
+                            new PostgresLocationDAO().GetLocationById(vehicle.VehicleLocationId);
+                        vehicle.VehicleModel =
+                            new PostgresModelDAO().GetModelById(vehicle.VehicleModelId);
+                        vehicles.Add(vehicle);
+                    }
+                }else{
+                    throw new NotVehiclesAvailableException("No hay existencia de vehiculos");
+                }
+
+            }catch(DatabaseException ex){
+                throw new InternalServerErrorException("Error en el servidor : Conexion a base de datos", ex);
+            }catch(InvalidStoredProcedureSignatureException ex){
+                throw new InternalServerErrorException("Error en el servidor", ex);
+            }
+
+            return vehicles;
+        }
+
         public bool UpdateVehicle(Vehicle vehicle){
             bool updated = false;
             try{

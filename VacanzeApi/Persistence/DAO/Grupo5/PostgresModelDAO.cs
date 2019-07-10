@@ -105,6 +105,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5
                         Convert.ToInt32(dataTable.Rows[0][3]),
                         dataTable.Rows[0][4].ToString()
                     );
+                    model.ModelBrand = new PostgresBrandDAO().GetBrandById(model.ModelBrandId);
                 }
             }catch(DatabaseException ex){
                 throw new InternalServerErrorException("Error en el servidor : Conexion a base de datos", ex);

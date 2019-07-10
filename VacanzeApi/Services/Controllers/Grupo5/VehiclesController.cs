@@ -79,6 +79,24 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo5
             }
         }
 
+        [HttpGet]
+        public ActionResult<List<Vehicle>> GetVehicles(){
+             try {
+                 //return Ok("s");
+                GetVehiclesCommand command = 
+                    CommandFactory.CreateGetVehiclesCommand();
+                command.Execute ();
+                VehicleMapper vehicleMapper = MapperFactory.CreateVehicleMapper();
+                return Ok (command.GetResult());
+            }  catch (NotVehiclesAvailableException ex){
+                return StatusCode (404, ex.Message);
+            } catch (InternalServerErrorException ex) {
+                return StatusCode (500, ex.Message);
+            } catch (Exception) {
+                return StatusCode (400);
+            }
+        }
+
         [HttpPut]
         public IActionResult UpdateVehicle([FromBody] VehicleDTO vehicleDTO){
             try{
