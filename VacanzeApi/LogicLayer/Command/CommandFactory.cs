@@ -12,7 +12,9 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
 using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo1;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo1;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Locations;
@@ -22,6 +24,8 @@ using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo4;
 using System;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo4;
 using System.Collections.Generic;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13;
 
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo14;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo14;
@@ -331,6 +335,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         {
             return new GetReservationsByDateIVCommand(departure, arrival, departuredate, arrivaldate, numpas);
         }
+
     
         /*GRUPO14*/
         public static GetResRestaurantByIdCommand GetResRestaurantByIdCommand(int id)
@@ -345,7 +350,71 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         public static GetResRestaurantNotPayByIdCommand GetResRestaurantNotPayByIdCommand(int id)
         {
             return new GetResRestaurantNotPayByIdCommand(id);
+
+        
+        #region Grupo 13
+        public static AddReservationRoomCommand CreateAddReservationRoomCommand(ReservationRoom reservationRoom)
+        {
+            return new AddReservationRoomCommand(reservationRoom);
         }
+
+        public static DeleteReservationRoomCommand CreateDeleteReservationRoomCommand(int reservationId)
+        {
+            return new DeleteReservationRoomCommand(reservationId);
+        }
+
+        public static GetReservationRoomsForUserCommand CreateGetReservationRoomsForUserCommand(int id)
+        {
+            return new GetReservationRoomsForUserCommand(id);
+        }
+
+        public static GetReservationRoomCommand CreateGetReservationRoomCommand(int reservationId)
+        {
+            return new GetReservationRoomCommand(reservationId);
+        }
+
+        public static UpdateReservationRoomCommand CreateUpdateReservationRoomCommand(ReservationRoom reservationRoom)
+        {
+            return new UpdateReservationRoomCommand(reservationRoom);
+        }
+
+        public static AddReservationVehicleCommand CreateAddReservationVehicleCommand(
+            ReservationVehicle reservationVehicle)
+        {
+            return new AddReservationVehicleCommand(reservationVehicle);
+        }
+
+        public static FindReservationVehicleCommand CreateFindReservationVehicleCommand(int reservationId)
+        {
+            return new FindReservationVehicleCommand(reservationId);
+        }
+
+        public static GetReservationVehicleByUserCommand CreateGetReservationVehicleByUserCommand(int userId)
+        {
+            return new GetReservationVehicleByUserCommand(userId);
+        }
+        
+        public static DeleteReservationVehicleCommand CreateDeleteReservationVehicleCommand(int id)
+        {
+            return new DeleteReservationVehicleCommand(id);
+        }
+
+        public static UpdateReservationVehicleCommand CreateUpdateReservationVehicleCommand(
+            ReservationVehicle reservationVehicle)
+        {
+            return new UpdateReservationVehicleCommand(reservationVehicle);
+        }
+        #endregion
+        
+        //Grupo 1
+        public static GetUserCommand loginGetUserCommand(Login loginE){
+            return new GetUserCommand(loginE);
+        } 
+
+        public static RecoveryPasswordCommand RecoveryPasswordCommand(Login loginE){
+            return new RecoveryPasswordCommand(loginE);
+        }
+
 
         public static AddResRestaurantCommand AddResRestaurantCommand(Restaurant_res restaurantDTO)
         {

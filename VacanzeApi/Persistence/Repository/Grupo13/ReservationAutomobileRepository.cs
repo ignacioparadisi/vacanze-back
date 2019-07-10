@@ -25,7 +25,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
         const String SP_ALL_BY_USER_ID = "m13_getresautomobilebyuserid(@_id)";
      //   const String SP_ADD_PAYMENT = "m13_modifyReservationRoomPayment(@_pay,@_id)";
         private Auto _automobile;
-        private ReservationAutomobile _reservation;
+        private ReservationVehicle _reservation;
 
         /** <summary>Trae de la BD, las reservas de automoviles</summary>
          */
@@ -42,8 +42,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                             var returndate = Convert.ToDateTime(table.Rows[i][2]);
                             var user_id = Convert.ToInt64(table.Rows[i][3]);
                             var aut_fk = (int)Convert.ToInt64(table.Rows[i][4]);
-                            ReservationAutomobile reservation = new ReservationAutomobile(id,pickup,returndate);
-                            reservation.Automobile = ConnectAuto.ConsultforId(aut_fk).ElementAt(0);
+                            ReservationVehicle reservation = new ReservationVehicle(id,pickup,returndate);
+                            reservation.VehicleId = aut_fk;
                             reservation.UserId = aut_fk;
                             reservationAutomobileList.Add(reservation);
                             }
@@ -111,19 +111,18 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                     var userid = (int)Convert.ToInt64(table.Rows[i][4]);
                     var aut_fk = (int)Convert.ToInt64(table.Rows[i][5]);
                    // var payfk = Convert.ToInt64(table.Rows[i][5]);
-                    _reservation = new ReservationAutomobile(id,pickup,returndate);
+                    _reservation = new ReservationVehicle(id,pickup,returndate);
                     _reservation.UserId = userid;
-                    _reservation.Automobile = ConnectAuto.ConsultforId(aut_fk).ElementAt(0);
-
+                    _reservation.VehicleId = aut_fk;
                     //  _reservation.User.Id = userid;
                     //  _reservation.Automobile.Id = autfk;
                     //Falta Payment
                 }
                 return _reservation;
             }
-            catch (AutomobileReservationNotFoundException e)
+            catch (VehicleReservationNotFoundException e)
             {
-                throw new AutomobileReservationNotFoundException(id);
+                throw new VehicleReservationNotFoundException(id);
             }
             catch (NpgsqlException e)
             {
@@ -141,16 +140,15 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
         /** <summary>Inserta en la BD, la reservacion de automovil que es suministrada</summary> 
          * <param name="reservation">La reservacion a agregar en la BD</param>
          */
-        public ReservationAutomobile AddReservation(ReservationAutomobile reservation)
+        public ReservationVehicle AddReservation(ReservationVehicle reservation)
         {
             try
             {
-                var table = PgConnection.Instance.
-                    ExecuteFunction(SP_ADD,
-                        reservation.CheckIn,
-                        reservation.CheckOut,
-                        reservation.UserId,
-                        reservation.Automobile.getId());
+                var table = PgConnection.Instance.ExecuteFunction(SP_ADD,
+                    reservation.CheckIn,
+                    reservation.CheckOut,
+                    reservation.UserId,
+                    reservation.VehicleId);
                 for (int i = 0; i < table.Rows.Count; i++)
                 {
                     int id = (int)Convert.ToInt64(table.Rows[i][0]);
@@ -171,7 +169,7 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
         {
             try
             {
-                ReservationAutomobile reservation = (ReservationAutomobile)entity;
+                ReservationVehicle reservation = (ReservationVehicle)entity;
                 var table = PgConnection.Instance.ExecuteFunction(SP_DELETE,
                    (int)reservation.Id);
             }
@@ -202,8 +200,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
                     var autfk = (int)Convert.ToInt64(table.Rows[i][4]);
                     var userid = Convert.ToInt64(table.Rows[i][5]);
                     
-                    ReservationAutomobile reservation = new ReservationAutomobile(id, pickup, returndate);
-                    reservation.Automobile = ConnectAuto.ConsultforId(autfk).ElementAt(0);
+                    ReservationVehicle reservation = new ReservationVehicle(id, pickup, returndate);
+                    reservation.VehicleId = autfk;
                     reservation.UserId = user_id;
                     reservationAutomobileList.Add(reservation);
                 }
@@ -230,14 +228,14 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
         {
             try
             {
-                ReservationAutomobile reservation = (ReservationAutomobile)entity;
+                ReservationVehicle reservation = (ReservationVehicle)entity;
 
                 var table = PgConnection.Instance.
                     ExecuteFunction(SP_UPDATE,
                         reservation.CheckIn,
                         reservation.CheckOut,
                         reservation.UserId,
-                        reservation.Automobile.getId(),
+                        reservation.VehicleId,
                         (int)reservation.Id);
             }
             catch (DatabaseException ex)
