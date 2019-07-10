@@ -21,6 +21,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
             [Consumes("application/json")]
             [HttpPost]
             public IActionResult AddTravel([FromBody] Travel travel){
+                /*esta funcion se encarga de llamar al metodo addtravel de la clase DAO factory*/
             try{
 
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
@@ -41,6 +42,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
         [Consumes("application/json")]
         [HttpPut]
         public IActionResult UpdateTravel([FromBody] Travel travel){
+            /*esta funcion se encarga de llamar al metodo updatetravel de la clase DAO factory */
             try{
                  DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
                 ITravel traveldao = factory.GetTravelDAO();
@@ -57,7 +59,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
         }
 
         [HttpGet("gettravel/{userId}")]
-        public ActionResult<IEnumerable<Travel>> GetTravels(int userId){
+        public ActionResult<IEnumerable<Travel>> GetTravels(int userId)
+        {/*----------------------------------------------------------- */
             Console.WriteLine(userId);
             List<Travel> travels = new List<Travel>();
             DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
@@ -77,7 +80,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
             }
         }
         [HttpDelete("delete/{id}")]
-        public IActionResult DeleteTravel(int id){
+        public IActionResult DeleteTravel(int id)
+        {/*/*esta funcion se encarga de llamar al metodo deletetravel de la clase DAO factory */ 
             Console.WriteLine(id);
              DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
             ITravel traveldao = factory.GetTravelDAO();
@@ -101,7 +105,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
         }
         
         [HttpGet("gettravellocation/{travelId}")]
-        public ActionResult<IEnumerable<Location>> GetLocationsByTravel(int travelId){
+        public ActionResult<IEnumerable<Location>> GetLocationsByTravel(int travelId)
+        {/*esta funcion se encarga de llamar al metodo GetLocationsByTravel de la clase DAO factory */
             List<Location> locationsByTravel = new List<Location>();
              DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
              ITravel traveldao = factory.GetTravelDAO();
@@ -122,7 +127,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
        
         [Consumes("application/json")]
         [HttpPost("locationtravel/{travelId}")]
-        public IActionResult AddLocationsToTravel(int travelId, [FromBody] List<Location> locations){
+        public IActionResult AddLocationsToTravel(int travelId, [FromBody] List<Location> locations)
+        {/*esta funcion se encarga de llamar al metodo AddLocationsToTravel de la clase DAO factory */
             Boolean saved = false;
             try{
                  DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
@@ -140,7 +146,8 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
         }
         
         [HttpPost("addreservationtravel/{travelId}/{type}")]
-        public IActionResult AddReservationToTravel(int travelId,[FromQuery] int res,  string type){
+        public IActionResult AddReservationToTravel(int travelId,[FromQuery] int res,  string type)
+        {/*esta funcion se encarga de llamar al metodo AddReservationToTravel de la clase DAO factory */
             try{
                 DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
                 ITravel traveldao = factory.GetTravelDAO();

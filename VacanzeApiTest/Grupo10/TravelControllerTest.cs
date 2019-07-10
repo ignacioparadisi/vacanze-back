@@ -26,8 +26,6 @@ namespace vacanze_back.VacanzeApiTest.Grupo10
     [TestFixture]
     public class TravelControllerTest
     {
-        private int addId;
-        private int modifyId;
-        private int deleteId;
+        
     }
 }

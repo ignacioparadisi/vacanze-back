@@ -16,9 +16,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo10
        
         public int addcomment(Comment comment)
         {int id = 0;
-       /*  Console.WriteLine(comment.idforanea);
-        Console.WriteLine(comment.description);
-        Console.WriteLine(comment.datetime);*/
             try{
                  if( string.IsNullOrEmpty(comment.description) ||
                     comment.datetime == DateTime.MinValue ||
@@ -44,7 +41,8 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo10
         }
 
         public int Deletecomment(int id)
-        {
+        {/*Esta funcion es la que se conecta directamente a la BD para borrar un comentario
+        mediante su atributo identificador */
             try 
             {
                 int i=0;
@@ -67,7 +65,8 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo10
         }
 
         public List<Comment> Getcomment(int id)
-        {
+        {/*esta funcion se encarga de traer desde la BD toda la informacion de un comentario
+        hasta el front, mediante el id especificado */
             List<Comment> Listcomment = new List<Comment>();
             try{
                
@@ -101,7 +100,8 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo10
         }
 
         public bool Updatecomment(Comment comment)
-        {
+        {/*esta funcion se encarga de sobreescribir el contenido de un comentario
+          seleccionado anteriormente en el front */
              Boolean result=false;
             try{
                 Console.WriteLine(comment.idcoment+comment.description+comment.datetime.ToString("yyyy-MM-dd")+comment.idforanea);

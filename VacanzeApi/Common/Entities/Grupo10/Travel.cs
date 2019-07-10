@@ -6,7 +6,8 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo14;
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10   
-{
+{/*esta es la clase del tipo viajes, que enlazara los automoviles, restaurantes
+    hoteles y vuelos que reserven los usuarios */
     public class Travel{
 
         private List<Location> locations = new List<Location>();

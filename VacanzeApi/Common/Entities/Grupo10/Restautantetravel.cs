@@ -4,8 +4,9 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10
 {
     public class Restautantetravel
     {
+        /*clase axuiliar que permite obtener las reservaciones de restaurantes */
            private List<Restautantetravel> _restaurantReservations = new List<Restautantetravel>();
-    private int _id;
+        private int _id;
         public int id{ get{ return _id; } set{ _id = value; } }
          private int _numpers;
         public int numpers{ get{ return _numpers; } set{ _numpers = value; } }

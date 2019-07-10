@@ -4,6 +4,8 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10
 {
     public class Comment
     {
+        /*esta clase generara objetos de tipo "comentario", que son los que contienen las
+        opiniones de los usuarios hacerca de los servicios que usaron. */
         private int _idcoment;
         public int idcoment{ get{ return _idcoment; } set{ _idcoment = value; } }
 

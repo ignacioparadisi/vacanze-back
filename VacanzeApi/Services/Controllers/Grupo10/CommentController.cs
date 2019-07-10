@@ -19,6 +19,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10{
         [HttpPost]    
         public IActionResult AddTravel([FromBody] Comment _comment)
         { // esto es add comment, pero se uso con el nombre addtravel
+          // este metodo añade comentarios del usuario a la BD
             try{
                 Icomment comment= new Commentdao(); 
                 int id = comment.addcomment(_comment);
@@ -36,7 +37,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10{
 
         [HttpGet("{userId}")]
         public ActionResult<IEnumerable<Comment>> GetComment(int userId)
-        {    
+        {   // esta funcion te trae todo el contenido de un comentario, dependiendo del id del usuario
             List<Comment> comments= new List<Comment>();
             Icomment commentdao =new Commentdao();
             try{
@@ -56,7 +57,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10{
         [Consumes("application/json")]
         [HttpPut]
         public IActionResult UpdateComment([FromBody] Comment comment)
-        {
+        {   // este metodo actualiza un comentario especificado
             try{
                 Icomment commentdao =new Commentdao();
                 if(commentdao.Updatecomment(comment))
@@ -73,7 +74,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10{
         [Consumes("application/json")]
         [HttpDelete("delete/{id}")]
         public IActionResult Deletecomment ([FromBody] int commentId)
-        {
+        {  // borra el comentario especificado mediante su id
             try
             {
                 Icomment commentdao =new Commentdao();
