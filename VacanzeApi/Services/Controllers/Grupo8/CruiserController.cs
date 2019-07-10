@@ -25,10 +25,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         /// </summary>
         /// <returns>OKResult en caso de exito con un JsonObject de la lista de cruceros guardada en la base de datos</returns>
         /// <returns>BadRequest en caso de error con JsonObject del error arrojado por alguna de las excepciones </returns>
-        /// <exception cref="DatabaseException">
-        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la base de
-        ///     datos
-        /// </exception>
+
         [HttpGet]
         public ActionResult<IEnumerable<CruiserDTO>> Get()
         {
@@ -188,7 +185,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 LayoverDTO savedLayover = addLayoverCommand.GetResult();
                 return savedLayover;
             }
-            catch (InvalidAttributeException e)
+            catch (CruiserNotFoundException e)
             {
                 return BadRequest(new ErrorMessage(e.Message));
             }
@@ -211,36 +208,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             DeleteLayoverCommand deleteLayoverCommand = CommandFactory.CreateDeleteLayoverCommand(layoverId);
             deleteLayoverCommand.Execute();
             return Ok("Eliminado satisfactoriamente");
-        }
-        
-        /// <summary>
-        ///     Endpoint para obtener todos los layovers (escalas) de un crucero.
-        /// </summary>
-        /// <param name="departure">Id del la locacion de salida del crucero</param>
-        /// <param name="arrival">Id de la locacion de llegada del crucero</param>
-        /// <returns>OkResult en caso de exito con un JsonObject de la lista de layovers (escalas) disponibles para las locaciones ingresadas</returns>
-        /// <returns>BadRequest en caso de error con un JsonObject del error arrojado por alguna de las excepciones </returns>
-        /// <exception cref="DatabaseException">
-        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la base de
-        ///     datos
-        /// </exception>
-        /// <exception cref="LayoverNotFoundException">Si no se encontraron rutas para las locaciones ingresadass</exception>
-        [HttpGet("{departure}/{arrival}/Layover")]
-        public ActionResult<IEnumerable<Layover>> GetLayoverByLoc(int departure, int arrival)
-        {
-            try
-            {
-                var layovers = CruiserRepository.GetLayoversForRes(departure,arrival);
-                return Ok(layovers);
-            }
-            catch (LayoverNotFoundException e)
-            {
-                return NotFound(new ErrorMessage(e.Message));
-            }
-            catch (DatabaseException e)
-            {
-                return BadRequest(new ErrorMessage(e.Message));
-            }
         }
     }
 }
