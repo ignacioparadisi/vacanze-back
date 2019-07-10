@@ -8,10 +8,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo5
     public class GetModelByIdCommand : CommandResult<Model> 
     {
         private int _modelId;
-
         private Model _model;
-        public Model Model { get{ return _model; } set{ _model = value; } }
-
 
         public GetModelByIdCommand(int _modelId){
             this._modelId = _modelId;
