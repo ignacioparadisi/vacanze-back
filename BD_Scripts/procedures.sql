@@ -1949,7 +1949,62 @@ END; $$
 LANGUAGE plpgsql;
 
 -- DROP FUNCTION GetReservationsOfFlightsByTravelAndLocation(INTEGER, INTEGER);
--- por hacer
+CREATE OR REPLACE FUNCTION GetReservationsOfFlightslByTravelAndLocation(
+	travelId INTEGER, 
+	locationId INTEGER
+) RETURNS TABLE (
+	rf_ID INTEGER,
+	rf_seatnum VARCHAR(100),
+	rf_timestamp TIMESTAMP,
+	rf_num_ps INTEGER,
+	rf_use_fk INTEGER,
+	rf_fli_fk INTEGER
+)AS $$
+BEGIN
+	RETURN QUERY
+	SELECT rf.rf_ID, rf.rf_seatnum, rf.rf_timestamp, rf.rf_num_ps, rf.rf_use_fk, rf.rf_fli_fk 
+	FROM TRA_RES tr
+		  INNER JOIN 
+		  TRA_LOC tl
+			  ON tr.tr_travel_fk = tl.tl_tra_fk
+		    INNER JOIN
+		    RES_FLI rf
+			    ON tr.tr_res_fli_fk = rf.rf_ID
+			    INNER JOIN 
+          FLIGHT f
+			      ON rf.rf_fli_fk = f.fli_id
+	WHERE tr.tr_travel_fk = travelId AND tl.tl_loc_fk = locationId AND f.fli_loc_departure = locationId;
+END; $$
+LANGUAGE plpgsql;
+
+-- DROP FUNCTION GetReservationsOfCarsByTravelAndLocation(INTEGER, INTEGER);
+CREATE OR REPLACE FUNCTION GetReservationsOfCarsByTravelAndLocation(
+	travelId INTEGER, 
+	locationId INTEGER
+) RETURNS TABLE (
+	ra_ID INTEGER,
+	ra_PickUpDate TIMESTAMP,
+	ra_RetrunDate TIMESTAMP,
+	ra_Timestamp TIMESTAMP,
+	ra_use_fk INTEGER,
+	ra_aut_fk INTEGER
+)AS $$
+BEGIN
+	RETURN QUERY
+	SELECT ra.ra_ID, ra.ra_PickUpDate, ra.ra_RetrunDate, ra.ra_Timestamp, ra.ra_use_fk, ra.ra_aut_fk 
+	FROM TRA_RES tr
+		  INNER JOIN 
+		  TRA_LOC tl
+			  ON tr.tr_travel_fk = tl.tl_tra_fk
+		    INNER JOIN
+		    RES_AUT ra
+			    ON tr.tr_res_aut_fk = ra.ra_ID
+			    INNER JOIN 
+          AUTOMOBILE a
+			      ON ra.ra_aut_fk = a.aut_id
+	WHERE tr.tr_travel_fk = travelId AND tl.tl_loc_fk = locationId AND a.aut_loc_fk = locationId;
+END; $$
+LANGUAGE plpgsql;
 
 -- DROP FUNCTION updatetravel(integer,character varying,character varying,character varying,character varying);
 CREATE OR REPLACE FUNCTION UpdateTravel(
