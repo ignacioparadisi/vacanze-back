@@ -69,8 +69,8 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         public void TestDeleteReservation()
         {
             var dao = DAOFactory.GetFactory(DAOFactory.Type.Postgres).GetReservationVehicleDAO();
-            dao.Delete(_reservationAutomobile);
-            Assert.AreEqual(0, dao.Find(_reservationAutomobile.Id).Id);
+            dao.Delete(_reservationAutomobile.Id);
+            Assert.AreEqual(0, dao.Find(_reservationAomobile.Id).Id);
         }
 
         [OneTimeTearDown]
