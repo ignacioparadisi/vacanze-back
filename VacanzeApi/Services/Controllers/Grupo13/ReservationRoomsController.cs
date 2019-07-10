@@ -9,10 +9,14 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo13;
 using Npgsql;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo13;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.DAO;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper;
 using Command = vacanze_back.VacanzeApi.Common.Command;
+using Microsoft.Extensions.Logging;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 {
@@ -22,7 +26,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
     [EnableCors("MyPolicy")]
     public class ReservationRoomsController : ControllerBase
     {
-
+        private readonly ILogger<ReservationRoomsController> _logger;
+        public ReservationRoomsController(ILogger<ReservationRoomsController> logger)
+        {
+            _logger = logger;
+        }
         // GET api/reservationautomobiles/?id={user_id}]
         /* https://localhost:5001/api/reservationrooms/?user=1 */
         [HttpGet]
@@ -64,16 +72,23 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             }
         }
 
-        // POST api/values //CREAR UN RECURSO
+        /// <summary>
+        /// POST api/reservationrooms
+        /// </summary>
+        /// <param name="reservation"></param>
+        /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<ReservationRoom> Post([FromBody] ReservationRoom reservation)
+        public ActionResult<ReservationRoom> Post([FromBody] ReservationRoomDTO reservationDto)
         {
             try
             {
+                var resroomMapper = MapperFactory.CreateReservationRoomMapper();
+                var reservation = resroomMapper.CreateEntity(reservationDto);
                 CommandResult<ReservationRoom> command = CommandFactory.CreateAddReservationRoomCommand(reservation);
                 command.Execute();
+                _logger.LogInformation("Se Creó la Reserva de Habitación");
                 return Ok(command.GetResult());
             }
             catch (GeneralException e)

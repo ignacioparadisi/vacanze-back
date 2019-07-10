@@ -8,6 +8,7 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Persistence.DAO;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper;
 
 namespace vacanze_back.VacanzeApiTest.Grupo13
 {
@@ -61,7 +62,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             DateTime checkout = new DateTime(2019,7,12);
             
             _factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-            _controller = new ReservationRoomsController();
+            _controller = new ReservationRoomsController(null);
             
             CreateUser();
             CreateHotel();
@@ -83,7 +84,8 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         [Test]
         public void AddSuccess()
         {
-            var result = _controller.Post(_reservation);
+            var resroomMapper = MapperFactory.CreateReservationRoomMapper();
+            var result = _controller.Post(resroomMapper.CreateDTO(_reservation));
             var okObject = (OkObjectResult) result.Result;
             var idToDelete = ((ReservationRoom) okObject.Value).Id;
             _insertedReservations.Add(idToDelete);
