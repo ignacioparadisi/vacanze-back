@@ -19,12 +19,11 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
     [ApiController]
     public class CruiserController : Controller
     {
-        // GET/Cruisers
+
         /// <summary>
-        ///     Endpint para obtener todos los cruceros guardados.
+        ///     Endpoint para obtener todos los cruceros guardados.
         /// </summary>
         /// <returns>OKResult en caso de exito con un JsonObject de la lista de cruceros guardada en la base de datos</returns>
-        /// <returns>BadRequest en caso de error con JsonObject del error arrojado por alguna de las excepciones </returns>
 
         [HttpGet]
         public ActionResult<IEnumerable<CruiserDTO>> Get()
@@ -35,7 +34,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 return cruisersDtoList; 
         }
 
-        // GET/Cruiser/{id}
         /// <summary>
         ///     Endpoint para obtener objeto Crucero correspondiente a los datos guardados para el ID recibido.
         /// </summary>
@@ -43,10 +41,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         /// <returns>OkResult en caso de exito con un JsonObject del crucero obtenido</returns>
         /// <returns>BadRequest en caso de error con un JsonObject del error arrojado por alguna de las excepciones </returns>
         /// <exception cref="CruiserNotFoundException">Lanzada si no existe un Crucero para el ID recibido</exception>
-        /// <exception cref="DatabaseException">
-        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la bse de
-        ///     datos
-        /// </exception>
         [HttpGet("{id}")]
         public ActionResult<CruiserDTO> GetCruiser(int id)
         {
@@ -62,7 +56,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 return BadRequest(new ErrorMessage(e.Message));
             }
         }
-        // POST/Cruiser/{id}
+
         /// <summary>
         ///     Endpoint para añadir un Crucero.
         /// </summary>
@@ -70,10 +64,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         /// <returns>OkResult en caso exito con un JsonObject del crucero agregado</returns>
         ///<returns>BadRequest en caso de error con un JsonObject del error arrojado por alguna de las excepciones </returns>
         /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido retorna</exception>
-        /// <exception cref="DatabaseException">
-        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la bse de
-        ///     datos
-        /// </exception>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -99,12 +89,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         /// <returns>OkResult en caso de exito con un JsonObject con los datos actualizados del crucero</returns>
         /// <returns>BadRequest en caso de error con un JsonObject del error arrojado por alguna de las excepciones </returns>
         /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
-        /// <exception cref="NullCruiserException">El metodo recibio null como parametro</exception>
         /// <exception cref="CruiserNotFoundException">No se encontro el crucero con el Id sumunistrado en los parametros</exception>
-        /// <exception cref="DatabaseException">
-        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la bse de
-        ///     datos
-        /// </exception>
         [HttpPut]
          public ActionResult<CruiserDTO> PutCruiser([FromBody] CruiserDTO cruiser)
          {
@@ -130,12 +115,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         /// </summary>
         /// <param name="id">Id del crucero a ser eliminado</param>
         /// <returns>OkResult en caso de exito con un JsonObject del id del crrucero eliminado</returns>
-        /// <returns>BadRequest en caso de error con un Json del error arrojado por alguna de las excepciones </returns>
-        /// <exception cref="CruiserNotFoundException">Retornado si el id ingresado no corresponde con ningun crucero</exception>
-        /// <exception cref="DatabaseException">
-        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la base de
-        ///     datos
-        /// </exception>
         [HttpDelete("{id}")]
         public IActionResult DeleteCruiser(int id)
         {
@@ -149,11 +128,6 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         /// </summary>
         /// <param name="cruiserId">Id del crucero del cual se desea obtener los escalas</param>
         /// <returns>OkResult en caso de exito con un JsonObject de la lista de layovers (escalas) de un crucero</returns>
-        /// <returns>BadRequest en caso de error con un JsonObject del error arrojado por alguna de las excepciones </returns>
-        /// <exception cref="DatabaseException">
-        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la base de
-        ///     datos
-        /// </exception>
         [HttpGet("{cruiserId}/Layover")]
         public ActionResult<IEnumerable<LayoverDTO>> GetLayovers(int cruiserId)
         {
@@ -162,19 +136,14 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 List<LayoverDTO> layoverDtoList = getLayoversCommand.GetResult();
                 return layoverDtoList; 
         }
+
         /// <summary>
         ///     Endpoint para agregar un layover a un crucero.
         /// </summary>
         /// <param name="layover">Id del crucero al que se le agregara la escala</param>
         /// <returns>Okresult en caso de exito con un JsonObject de la lista de layovers (escalas) de un crucero</returns>
         /// <returns>BadRequest en caso de error con un JsonObject del error arrojado por alguna de las excepciones </returns>
-        /// <exception cref="DatabaseException">
-        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la base de
-        ///     datos
-        /// </exception>
-        /// <exception cref="CruiserNotFoundException">Lanzada si el id del crucero en el layover no corresponde con ningun crucero guardado</exception>
-        /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
-        
+        /// <exception cref="CruiserNotFoundException">Lanzada si el id del crucero en el layover no corresponde con ningun crucero guardado</exception>   
         [HttpPost("{cruiserId}/Layover")]
         public ActionResult<LayoverDTO> PostLayover([FromBody] LayoverDTO layover)
         {
@@ -194,13 +163,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         ///     Endpoint para eliminar una escala.
         /// </summary>
         /// <param name="layoverId">Id del layover a ser eliminado</param>
-        /// <returns>OkResult en caso de exito con un JsonObeject del id de la escala eliminada</returns>
-        /// <returns>BadRequest en caso de error con un JsonObject del error arrojado por alguna de las excepciones </returns>
-        /// <exception cref="LayoverNotFoundException">Retornado si el id ingresado no corresponde con ningun layover</exception>
-        /// <exception cref="DatabaseException">
-        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la base de
-        ///     datos
-        /// </exception>
+        /// <returns>OkResult con un mensaje de exito o no, segun el resultado</returns>
         
         [HttpDelete("Layover/{layoverId}")]
         public IActionResult DeleteLayover(int layoverId)
