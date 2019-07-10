@@ -6,6 +6,7 @@ using vacanze_back.VacanzeApi.LogicLayer.Command;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Locations;
 using vacanze_back.VacanzeApi.LogicLayer.DTO;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper;
+using Microsoft.Extensions.Logging;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers
 {
@@ -15,18 +16,26 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
     [ApiController]
     public class LocationsController : ControllerBase
     {
-        /// <summary>
-        ///     Metodo para obtener las ubicacions
-        /// </summary>
-        /// <returns>Objeto tipo json de los locations</returns>
-        // GET api/location/[?countries={}]
-        [HttpGet]
+		private readonly ILogger<LocationsController> _logger;
+
+		public	LocationsController(ILogger<LocationsController> logger)
+		{
+			_logger = logger;
+		}
+		/// <summary>
+		///     Metodo para obtener las ubicacions
+		/// </summary>
+		/// <returns>Objeto tipo json de los locations</returns>
+		// GET api/location/[?countries={}]
+		[HttpGet]
         public ActionResult<IEnumerable<LocationDTO>> Get()
         {
             LocationMapper locationMapper = MapperFactory.createLocationMapper();
             GetLocationsCommand commandGetLocations =  CommandFactory.GetLocationsCommand();
             commandGetLocations.Execute ();
-            return(locationMapper.CreateDTOList( commandGetLocations.GetResult()));  
+            var result = commandGetLocations.GetResult();
+            _logger?.LogInformation($"Obtenida las Location  por pais exitosamente");
+            return(locationMapper.CreateDTOList( result));  
         }
         /// <summary>
         ///     Metodo para obtener los paises
@@ -38,7 +47,9 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
             LocationMapper locationMapper = MapperFactory.createLocationMapper();
             GetCountriesCommand commandGetCountries =  CommandFactory.GetCountriesCommand();
             commandGetCountries.Execute ();
-            return (locationMapper.CreateDTOList(commandGetCountries.GetResult()));               
+            var result = commandGetCountries.GetResult();
+            _logger?.LogInformation($"Obtenido los paises exitosamente");
+            return (locationMapper.CreateDTOList(result));               
         }
         /// <summary>
         ///     Metodo para buscar los ciudades por pais
@@ -57,11 +68,14 @@ namespace vacanze_back.VacanzeApi.Services.Controllers
 				LocationMapper locationMapper = MapperFactory.createLocationMapper();
                 GetCitiesByCountryCommand commandIByCountry =  CommandFactory.GetCitiesByCountryCommand(countryId);
                 commandIByCountry.Execute ();
-                return( locationMapper.CreateDTOList(commandIByCountry.GetResult()));      
+                var result = commandIByCountry.GetResult();
+                _logger?.LogInformation($"Obtenida las ciudades por pais id {countryId} exitosamente");
+                return( locationMapper.CreateDTOList(result));      
             }
-            catch (LocationNotFoundException)
+            catch (LocationNotFoundException ex)
             {
-                return NotFound($"Location with id {countryId} not found");
+				_logger?.LogWarning( $"Location con id {countryId} no encontrada");
+				return NotFound($"Location with id {countryId} not found");
             }
         }
     }
