@@ -13,7 +13,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
         private BaggageDTO _baggageDto;
         private List<BaggageDTO> _baggageDtos;
 
-        [Test]
+        [SetUp]
         public void SetUp()
         {
             _baggageMapper = MapperFactory.CreateBaggageMapper();
