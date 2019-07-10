@@ -21,7 +21,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
     {
         // GET/Cruisers
         /// <summary>
-        ///     Endpint para obtener todos los cruveros guardados.
+        ///     Endpint para obtener todos los cruceros guardados.
         /// </summary>
         /// <returns>OKResult en caso de exito con un JsonObject de la lista de cruceros guardada en la base de datos</returns>
         /// <returns>BadRequest en caso de error con JsonObject del error arrojado por alguna de las excepciones </returns>

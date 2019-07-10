@@ -5,6 +5,10 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo8
 {
     public class CruiserValidator
     {
+        /// <summary>
+        ///     Metodo para validar todos los campos de un crucero
+        /// </summary>
+        /// <param name="layover">Objeto que contiene toda la informacion del crucero a validar</param>
         public static void Validate(Cruiser cruiser)
         {
             if (string.IsNullOrEmpty(cruiser.Name))
