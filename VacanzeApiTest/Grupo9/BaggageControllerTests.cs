@@ -103,7 +103,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo9
             var baggageToUpdate = BaggageBuilder.Create().Build();
             var toUpdatedBaggageDTO = _baggageMapper.CreateDTO(baggageToUpdate);
             var result = _baggageController.Put(_baggagedto.Id, toUpdatedBaggageDTO);
-            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
+            Assert.IsInstanceOf<ObjectResult>(result.Result);
         }
         
         [TearDown]
