@@ -11,17 +11,14 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo9
         {
             if (method == HttpMethod.Put)
             {
-                if (claim.Status != null)
-                {
+                if (claim.Status != null) {
                     if (claim.Title != null || claim.Description != null)
+                    {
                         throw new AttributeValueException("Solo puede cambiar el status a la vez");
-                }
+                    }
+                } 
                 else
                 {
-                    if (claim.Title != null && claim.Description != null && claim.Status != null)
-                        throw new AttributeValueException(
-                            "Solo puede cambiar titulo y descripcion a la vez, no puede mandar status");
-
                     if (claim.Title == null || claim.Description == null)
                         throw new AttributeValueException("Falta titulo o descripcion");
                 }
