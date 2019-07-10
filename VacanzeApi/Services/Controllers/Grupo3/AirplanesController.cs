@@ -7,8 +7,6 @@ using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo3;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo3;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo3;
-using vacanze_back.VacanzeApi.LogicLayer.Mapper;
-using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo3;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo3;
 
