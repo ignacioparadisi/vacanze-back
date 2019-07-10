@@ -22,11 +22,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo14
             this._resRestaurant = _resRestaurant;
         }
 
-        public void Execute()
+        public void Execute() //Metodo Execute() que se hereda de la interface Command y se sobreescribe.
         {
-            DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-            IReservationRestaurantDAO ResRestDAO = factory.GetReservationRestaurantDAO();
-            ResRestDAO.addReservation(_resRestaurant);            
+            DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);           //Instancia de la fabrica abstracta DAO con el Manejador de BD especifico.
+            IReservationRestaurantDAO ResRestDAO = factory.GetReservationRestaurantDAO();   //Se hace instancia al metodo contenido en el DAOFactory.
+            ResRestDAO.addReservation(_resRestaurant);                                      //Se hace llamado al metodo que se desea realizar consultar en la base de datos. 
         }
         public int GetResult()
         {

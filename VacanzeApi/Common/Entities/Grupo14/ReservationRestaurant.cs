@@ -29,11 +29,11 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo14 {
         public Restaurant_res(string fecha_reservacion, int cant_persona, string fecha,
             int user_ID, int rest_ID) : base(0)
         {
-            fecha_res = fecha_reservacion; //rr_date
-            cant_people = cant_persona; //rr_num_ppl
-            date = fecha; //rr_timestamp
-            user_id = user_ID; //rr_use_id
-            rest_id = rest_ID; //rr_res_fk
+            fecha_res = fecha_reservacion;  //rr_date
+            cant_people = cant_persona;     //rr_num_ppl
+            date = fecha;                   //rr_timestamp
+            user_id = user_ID;              //rr_use_id
+            rest_id = rest_ID;              //rr_res_fk
         }
 
         //Contructor para el PUT

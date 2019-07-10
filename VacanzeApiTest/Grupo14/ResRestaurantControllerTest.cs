@@ -29,7 +29,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo14
 
         [SetUp]
         public void setUp(){
-            controller = new ResRestaurantController();
+            controller = new ResRestaurantController(null);
             rr = new reservationRestaurant();
 			restaurant = new Restaurant( "Yosemite", 
                             200, 

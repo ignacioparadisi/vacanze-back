@@ -22,7 +22,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo14
             return _result;
         }
         
-        public void Execute()
+        public void Execute() //Metodo Execute() que se hereda de la interface Command y se sobreescribe.
         {
             var daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
             _result = daoFactory.GetReservationRestaurantDAO().getResRestaurant(_id);

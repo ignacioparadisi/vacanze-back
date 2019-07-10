@@ -16,9 +16,14 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo14
 
 
         /// <summary>
-        ///     Metodo para agregar una reserva de restaurant
+        ///     Metodo para agregar reservaciones en restaurantes asociado a un usuario.
         /// </summary>
-        /// <param name="reserva"></param>
+        /// <param name="reserva">Lista con los datos que se introdujeron para la reserva</param>
+        /// <returns>
+        ///     Devuelve un mensaje confirmando si la reservacion pudo ser realizada o no.   
+        /// </returns>
+        /// <exception cref="DatabaseException">Lanzada si ocurre un fallo al ejecutar la funcion en la base de datos </exception>
+        /// <exception cref="InvalidOperationException">Lanzada si ocurre un fallo al ejecutar la funcion en la base de datos </exception>
         public int addReservation(Restaurant_res reserva)
         {
 
@@ -64,12 +69,17 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo14
             }
         }
 
-
+        /// <summary>
+        ///     Metodo para buscar reservaciones en restaurantes asociado a un usuario.
+        /// </summary>
+        /// <param name="reserva">Lista con los datos que se introdujeron para la reserva</param>
+        /// <returns>
+        ///     Devuelve una lista con las reservaciones hechas por un usuario.
+        /// </returns>
         public List<Restaurant_res> getResRestaurant(int user) //operative with design patterns
         {
-
             var ReservationList = new List<Restaurant_res>();
-            var table = PgConnection.Instance.ExecuteFunction("getResRestaurant(@usuario)", user);
+            var table = PgConnection.Instance.ExecuteFunction("getResRestaurant(@usuario)", user); //realiza la conexion a la base de datos e implementa la busqueda con un Stored Procedure
             for (var i = 0; i < table.Rows.Count; i++)
             {
                 //Orden del SP id, ciudad, pais, restaurant, direccion, fecha_res, cant_persona
@@ -87,11 +97,19 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo14
             return ReservationList;
         }
 
+        /// <summary>
+        ///     Metodo para buscar reservaciones no pagadas en restaurantes asociado a un usuario.
+        /// </summary>
+        /// <param name="user">Id con el que el usuario se encuentra registrado en el sistema</param>
+        /// <returns>
+        ///     Devuelve una lista con las reservaciones no pagadas por los usuarios.
+        /// </returns>
+        
         public List<Restaurant_res> getReservationNotPay(int user)
         {
 
             var ReservationList = new List<Restaurant_res>();
-            var table = PgConnection.Instance.ExecuteFunction("getReservationNotPay(@usuario)", user);
+            var table = PgConnection.Instance.ExecuteFunction("getReservationNotPay(@usuario)", user); //realiza la conexion a la base de datos e implementa la busqueda con un Stored Procedure
             for (var i = 0; i < table.Rows.Count; i++)
             {
                 //Orden del SP id, ciudad, pais, restaurant, direccion, fecha_res, cant_persona
@@ -105,11 +123,20 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo14
             return ReservationList;
         }
 
+        /// <summary>
+        ///     Metodo para eliminar reservaciones en restaurantes asociado a un usuario.
+        /// </summary>
+        /// <param name="resRestId">Id de la reserva que se realizao</param>
+        /// <returns>
+        ///     Devuelve un mensaje confirmando si la eliminacion de la reservacion pudo ser realizada con exito o no.   
+        /// </returns>
+        /// <exception cref="DatabaseException">Lanzada si ocurre un fallo al ejecutar la funcion en la base de datos </exception>
+        /// <exception cref="InvalidOperationException">Lanzada si es que el valor no existe </exception>
         public int deleteResRestaurant(int resRestId)
         {
             try
             {
-                var table = PgConnection.Instance.ExecuteFunction("deleteReservation(@reservationID)", resRestId);
+                var table = PgConnection.Instance.ExecuteFunction("deleteReservation(@reservationID)", resRestId); //realiza la conexion a la base de datos e implementa la busqueda con un Stored Procedure
                 var deletedid = Convert.ToInt32(table.Rows[0][0]);
                 Console.WriteLine(deletedid);
                 return deletedid;
@@ -129,7 +156,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo14
             try
             {
                 Console.WriteLine(payID); Console.WriteLine(resRestID);
-                var table = PgConnection.Instance.ExecuteFunction("modifyReservationPayment(@pay, @reservation)", payID, resRestID);
+                var table = PgConnection.Instance.ExecuteFunction("modifyReservationPayment(@pay, @reservation)", payID, resRestID); //realiza la conexion a la base de datos e implementa la busqueda con un Stored Procedure
                 var modifyId = Convert.ToInt32(table.Rows[0][0]);
                 Console.WriteLine(modifyId);
                 return modifyId.ToString();
