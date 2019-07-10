@@ -55,13 +55,13 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             Assert.IsNotEmpty(dao.GetAllByUserId(_user.Id));
         }
 
-//        [Test]
-//        [Order(4)]
-//        public void TestUpdateReservationVehicleOk()
-//        {
-//            _reservationAutomobile.CheckIn = new DateTime(2019, 10, 20);
-//            Assert.AreEqual(_reservationAutomobile.CheckIn, dao.Update(_reservationAutomobile).CheckIn);
-//        }
+        [Test]
+        [Order(4)]
+        public void TestUpdateReservationVehicleOk()
+        {
+            _reservationAutomobile.CheckIn = new DateTime(2019, 10, 20);
+            Assert.AreEqual(_reservationAutomobile.CheckIn, dao.Update(_reservationAutomobile).CheckIn);
+        }
 
         [Test]
         [Order(5)]
