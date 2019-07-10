@@ -34,13 +34,14 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
         // GET api/reservationautomobiles/?id={user_id}]
         /* https://localhost:5001/api/reservationrooms/?user=1 */
         [HttpGet]
-        public ActionResult<IEnumerable<IReservationRoomDAO>> GetAllByUserID([FromQuery] int user)
+        public ActionResult<IEnumerable<ReservationRoom>> GetReservationRoomsForUser([FromQuery] int user)
         {
             try
             {
-                DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-                IReservationRoomDAO reservationRoomDao = factory.GetReservationRoomDAO();
-                return Ok(reservationRoomDao.GetAllByUserId(user));
+                CommandResult<List<ReservationRoom>> command =
+                    CommandFactory.CreateGetReservationRoomsForUserCommand(user);
+                command.Execute();
+                return Ok(command.GetResult());
             }
             catch (GeneralException e)
             {

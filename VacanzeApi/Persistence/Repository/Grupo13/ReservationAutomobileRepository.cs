@@ -101,40 +101,40 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo13
          */
         public Entity Find(int id)
         {
-            try
-            {
-                var table = PgConnection.Instance.ExecuteFunction(SP_FIND, id);
-                for (int i = 0; i < table.Rows.Count; i++)
-                {
-                    var pickup = Convert.ToDateTime(table.Rows[i][1]);
-                    var returndate = Convert.ToDateTime(table.Rows[i][2]);
-                    var userid = (int)Convert.ToInt64(table.Rows[i][4]);
-                    var aut_fk = (int)Convert.ToInt64(table.Rows[i][5]);
-                   // var payfk = Convert.ToInt64(table.Rows[i][5]);
-                    _reservation = new ReservationVehicle(id,pickup,returndate);
-                    _reservation.UserId = userid;
-                    _reservation.VehicleId = aut_fk;
-                    //  _reservation.User.Id = userid;
-                    //  _reservation.Automobile.Id = autfk;
-                    //Falta Payment
-                }
+//            try
+//            {
+//                var table = PgConnection.Instance.ExecuteFunction(SP_FIND, id);
+//                for (int i = 0; i < table.Rows.Count; i++)
+//                {
+//                    var pickup = Convert.ToDateTime(table.Rows[i][1]);
+//                    var returndate = Convert.ToDateTime(table.Rows[i][2]);
+//                    var userid = (int)Convert.ToInt64(table.Rows[i][4]);
+//                    var aut_fk = (int)Convert.ToInt64(table.Rows[i][5]);
+//                   // var payfk = Convert.ToInt64(table.Rows[i][5]);
+//                    _reservation = new ReservationVehicle(id,pickup,returndate);
+//                    _reservation.UserId = userid;
+//                    _reservation.VehicleId = aut_fk;
+//                    //  _reservation.User.Id = userid;
+//                    //  _reservation.Automobile.Id = autfk;
+//                    //Falta Payment
+//                }
                 return _reservation;
-            }
-            catch (AutomobileReservationNotFoundException e)
-            {
-                throw new AutomobileReservationNotFoundException(id);
-            }
-            catch (NpgsqlException e)
-            {
-                e.ToString();
-                throw;
-            }
-            catch (Exception e)
-            {
-                e.ToString();
-                throw;
-            }
-            return _reservation;
+//            }
+//            catch (AutomobileReservationNotFoundException e)
+//            {
+//                throw new AutomobileReservationNotFoundException(id);
+//            }
+//            catch (NpgsqlException e)
+//            {
+//                e.ToString();
+//                throw;
+//            }
+//            catch (Exception e)
+//            {
+//                e.ToString();
+//                throw;
+//            }
+//            return _reservation;
         }
 
         /** <summary>Inserta en la BD, la reservacion de automovil que es suministrada</summary> 
