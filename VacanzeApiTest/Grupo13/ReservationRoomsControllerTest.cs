@@ -26,7 +26,6 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
 
         private void CreateUser()
         {
-            // TODO: Cambiar por el Factory de usuario
             var roles = new List<Role>();
             roles.Add(EntityFactory.CreateRole(1, "Cliente"));
             _user = EntityFactory.CreateUser(0, 23456789, "Pedro", "Perez",
@@ -107,6 +106,18 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         {
             _reservation = _factory.GetReservationRoomDAO().Add(_reservation);
             var result = _controller.Delete(_reservation.Id);
+            Assert.IsInstanceOf<OkObjectResult>(result.Result);
+        }
+
+        [Test]
+        public void UpdateSuccess()
+        {
+            _reservation = _factory.GetReservationRoomDAO().Add(_reservation);
+            _insertedReservations.Add(_reservation.Id);
+            var date = DateTime.Now;
+            _reservation.CheckIn = date;
+            var mapper = MapperFactory.CreateReservationRoomMapper();
+            var result = _controller.Put(mapper.CreateDTO(_reservation));
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
         }
 
