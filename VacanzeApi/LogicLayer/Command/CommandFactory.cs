@@ -12,7 +12,9 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
 using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo1;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo1;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Locations;
@@ -326,6 +328,15 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         public static GetReservationsByDateIVCommand CreateGetReservationsByDateIVCommand(int departure, int arrival, string departuredate, string arrivaldate, int numpas)
         {
             return new GetReservationsByDateIVCommand(departure, arrival, departuredate, arrivaldate, numpas);
+        }
+
+        //Grupo 1
+        public static GetUserCommand loginGetUserCommand(Login loginE){
+            return new GetUserCommand(loginE);
+        } 
+
+        public static RecoveryPasswordCommand RecoveryPasswordCommand(Login loginE){
+            return new RecoveryPasswordCommand(loginE);
         }
     }
 

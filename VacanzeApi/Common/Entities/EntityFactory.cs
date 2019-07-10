@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo1;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
@@ -92,5 +93,18 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
         public static ReservationRoom CreateReservationRoom() =>
             new ReservationRoom();
         #endregion
+
+        //Grupo 1
+        public static Login createLogin(int id, List<Role> roles, string email, string password){
+            return new Login(id, roles, email, password);
+        }
+
+        public static Login createLogin(int id, string email, string password){
+            return new Login(id,email, password);
+        }
+
+        public static Login createLogin(string password){
+            return new Login(password);
+        }
     }
 }

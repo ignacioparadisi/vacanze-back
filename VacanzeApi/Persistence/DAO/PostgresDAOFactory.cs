@@ -7,6 +7,7 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo6;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo4;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo12;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo5;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo1;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO
 {
@@ -63,7 +64,6 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         {
             return new PostgresLocationDAO();
         }
-
         public override IReservationAutomobileDAO GetReservationAutomobileDAO()
         {
             return new PostgresReservationAutomobileDAO();
@@ -84,6 +84,10 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         public override ICheckinBaggageDAO PostCheckBaggage()
         {
             return new PostgresCheckBaggagetDAO();
+        }
+        
+        public override LoginDAO GetLoginDAO(){
+            return new PostgresLoginDAO();
         }
     }
 }
