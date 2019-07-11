@@ -71,27 +71,11 @@ namespace vacanze_back.VacanzeApiTest.Grupo14
         [Test]
         public void getReservationNotPayTest(){
 
-            //ActionResult<IEnumerable<Restaurant_res>> res = controller.GetReservationNotPay(5);
-            //Assert.NotNull(res) falta implementar;
-        }
-
-        [Test]
-        public void putResRestaurantTest(){
-            rr.pay_id = 1;
-            restaurantId = RestaurantRepository.AddRestaurant(restaurant);
-            reservation = new Restaurant_res(
-				"2019-07-28 00:00",
-				1,
-				"2019-05-30 00:17",
-				5,
-				restaurantId);
-            rr.rest_id = 15;
-
-
-            addId = ResRestaurantRepository.addReservation(reservation);
-            ActionResult<string> res = controller.Put(rr.pay_id, rr);
+            ActionResult<IEnumerable<ResRestaurantDTO>> res = controller.GetReservationNotPay(5);
             Assert.NotNull(res);
         }
+
+       
 
         [Test]
         public void deleteResRestaurantTest(){
