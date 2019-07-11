@@ -33,6 +33,15 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
         }
 
         [HttpPost]
+
+        /// <summary>
+        ///     Controller para que el usuario inicie sesion
+        /// </summary>
+        /// <param name="loginDTO">Objeto login a ingresar a la aplicaicon</param>
+        /// <returns>Objeto tipo Entity con los datos del usuario que se a logeado </returns>
+        /// <exception cref="LoginUserNotFoundException">El objeto a retornar es nulo</exception>
+        /// <exception cref="DatabaseException">Algun error con la base de datos</exception>
+       
         //POST : /api/Login
         public  ActionResult<LoginDTO> Login([FromBody] LoginDTO loginDTO)
         {
@@ -43,8 +52,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
                 command.Execute();
 
                 Login answer = command.GetResult();
-                DTO lDTO = LoginMapper.CreateDTO(answer);
-                return Ok(lDTO);
+                if(answer == null){
+                    throw new LoginUserNotFoundException("Correo o clave invalido");
+                }
+                else{
+                    DTO lDTO = LoginMapper.CreateDTO(answer);
+                    return Ok(lDTO);
+                }
             }
             catch(DatabaseException ex){
                 _logger?.LogError(ex, "Database exception cuando se intento iniciar sesion.");
