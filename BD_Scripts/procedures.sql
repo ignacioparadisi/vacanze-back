@@ -2515,7 +2515,7 @@ $BODY$;
 --- Delete comment
 
 CREATE OR REPLACE FUNCTION DeleteComment(id integer)
-    RETURN INTEGER AS
+    RETURNS INTEGER AS
 $$
 DECLARE
     FOUND_ID INTEGER;
