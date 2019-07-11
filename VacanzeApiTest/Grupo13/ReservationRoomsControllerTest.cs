@@ -144,6 +144,16 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             var result = _controller.Put(mapper.CreateDTO(_reservation));
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
         }
+        
+        [Test]
+        public void UpdateBadRequest()
+        {
+            _reservation.CheckIn = DateTime.Now;
+            _reservation.CheckOut = new DateTime();
+            var mapper = MapperFactory.CreateReservationRoomMapper();
+            var result = _controller.Put(mapper.CreateDTO(_reservation));
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
+        }
 
         [Test]
         public void GetReservationRoomsForUser()

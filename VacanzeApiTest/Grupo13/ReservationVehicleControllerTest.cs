@@ -119,6 +119,15 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         }
 
         [Test]
+        public void UpdateBadRequest()
+        {
+            _reservation.CheckIn = new DateTime();
+            var mapper = MapperFactory.CreateReservationVehicleMapper();
+            var result = _controller.Put(mapper.CreateDTO(_reservation));
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
+        }
+
+        [Test]
         public void GetReservationVehiclesForUser()
         {
             _reservation = _factory.GetReservationVehicleDAO().AddReservation(_reservation);
