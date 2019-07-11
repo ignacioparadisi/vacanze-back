@@ -4,7 +4,7 @@ using System.Data;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
-using vacanze_back.VacanzeApi.Persistence.Repository.Grupo13;
+// using vacanze_back.VacanzeApi.Persistence.Repository.Grupo13;
 
 namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
 {
@@ -93,8 +93,8 @@ namespace vacanze_back.VacanzeApi.Persistence.Repository.Grupo6
             for (var i = 0; i < table.Rows.Count; i++)
             {
                 var hotel = ExtractHotelFromRow(table.Rows[i]);
-                hotel.AvailableRooms =
-                    ReservationRoomRepository.GetAvailableRoomReservations(hotel.Id);
+                // hotel.AvailableRooms =
+                 //    ReservationRoomRepository.GetAvailableRoomReservations(hotel.Id);
                 hotelList.Add(hotel);
             }
 

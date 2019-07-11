@@ -6,6 +6,9 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13
 {
     public class UpdateReservationRoomCommand : CommandResult<ReservationRoom>
     {
+        /// <summary>
+        /// Reservacion de habitación actualizada
+        /// </summary>
         private ReservationRoom _reservationRoom;
         
         public UpdateReservationRoomCommand(ReservationRoom resRoom)
@@ -13,6 +16,9 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13
             _reservationRoom = resRoom;
         }
 
+        /// <summary>
+        /// Actualiza la información de una reservación de habitación medienate el DAO de reservación de habitación
+        /// </summary>
         public void Execute()
         {
             DAOFactory daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
@@ -20,6 +26,10 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13
             _reservationRoom = reservationRoomDao.Update(_reservationRoom);
         }
 
+        /// <summary>
+        /// Retorna la reservación actualizada
+        /// </summary>
+        /// <returns>Reservación actualizada</returns>
         public ReservationRoom GetResult()
         {
             return _reservationRoom;

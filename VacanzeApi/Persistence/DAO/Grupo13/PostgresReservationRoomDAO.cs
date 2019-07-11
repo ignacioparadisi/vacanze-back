@@ -19,11 +19,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         private const string SP_DELETE_RESERVATION = "m13_deleteRoomReservation(@_rooid)";
         private const string SP_ALL_BY_USER_ID = "m13_getresroobyuserandroomid(@_id)";
 
-        /** <summary>
-         * Busca en la BD, la reserva que posee el identificador suministrado
-         * </summary>
-         * <param name="id">El identificador de la entidad reserva de habitacion a buscar</param>
-         */
+        /// <summary>
+        /// Busca una reservación de habitación por su ID
+        /// </summary>
+        /// <param name="id">ID de la reservación de habitación</param>
+        /// <returns>Reservación de habitación buscada</returns>
         public ReservationRoom Find(int id)
         {
             var reservationRoom = EntityFactory.CreateReservationRoom();
@@ -49,10 +49,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
             }
         }
 
-        /** Method GetAvailableRoomReservations()
-         * Returns all room reservations from the system which are available within the range of dates that were passed.
-         */
-
+        /// <summary>
+        /// Busca la cantidad de habitaciones disponibles en un hotel
+        /// </summary>
+        /// <param name="id">ID del hotel</param>
+        /// <returns>Cantidad en número de habitaciones disponibles</returns>
         public int GetAvailableRoomReservations(int id)
         {
             int available = 0;
@@ -74,12 +75,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         }
 
 
-        /** <summary>
-         * Inserta en la BD, la reservacion de habitacion que es suministrada
-         * </summary> 
-         * <param name="reservation">La reservacion a agregar en la BD</param>
-         */
-
+        /// <summary>
+        /// Agrega una reservación de habitación en la base de datos
+        /// </summary>
+        /// <param name="reservation">Reservación que se desea agregar</param>
+        /// <returns>La reservación agregada con su respectido ID</returns>
         public ReservationRoom Add(ReservationRoom reservation)
         {
             try
@@ -108,9 +108,10 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         }
 
         /// <summary>
-        /// Borra de la BD, la reservacion que es suministrada
+        /// Elimina una reservación de habitación de la base de datos
         /// </summary>
-        /// <param name="reservation">La entidad reservacion a borrar de la BD</param>
+        /// <param name="id">ID de la reservación que se desea eliminar</param>
+        /// <returns>ID de la reservación que fue eliminada</returns>
         public int Delete(int id)
         {
             var table = PgConnection.Instance.ExecuteFunction(SP_DELETE_RESERVATION, id);
@@ -118,10 +119,10 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         }
 
         /// <summary>
-        /// Trae de la BD, las reservas de habitación del id del usuario suministrado
+        /// Obtiene todas las reservaciones que le pertenecen a un usuario
         /// </summary>
-        /// <param name="user_id">El id del usuario que posee las reservas de habitación</param>
-        /// <returns> Una lista de reservas de habitaciones </returns>
+        /// <param name="userId">ID del usuario de quien se desea buscar las reservaciones</param>
+        /// <returns>Lista de reservaciones de habitación del usuario</returns>
         public List<ReservationRoom> GetAllByUserId(int userId)
         {
             List<ReservationRoom> reservationAutomobileList = new List<ReservationRoom>();
@@ -150,10 +151,10 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         }
 
         /// <summary>
-        /// Actualiza en la BD, la reservacion de habitacion
+        /// Actualización de la información de una reservación de habitación
         /// </summary>
-        /// <param name="entity">La reserva a actualizar</param>
-        /// <returns> La Reserva de Hotel Actualizada </returns>
+        /// <param name="reservation">Reservación de la habitación con la información que se desea actualizar</param>
+        /// <returns>Reservación de la habitación con la información actualizada</returns>
         public ReservationRoom Update(ReservationRoom reservation)
         {
             try

@@ -1,24 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
-using vacanze_back.VacanzeApi.Persistence.Repository.Grupo13;
-using Npgsql;
 using vacanze_back.VacanzeApi.Common.Exceptions;
-using vacanze_back.VacanzeApi.Common.Exceptions.Grupo13;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo13;
-using vacanze_back.VacanzeApi.Persistence.DAO;
-using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper;
-using Command = vacanze_back.VacanzeApi.Common.Command;
 using Microsoft.Extensions.Logging;
-using Org.BouncyCastle.Utilities;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
 {

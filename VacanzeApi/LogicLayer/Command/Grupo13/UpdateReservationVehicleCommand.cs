@@ -8,6 +8,9 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13
 {
     public class UpdateReservationVehicleCommand : CommandResult<ReservationVehicle>
     {
+        /// <summary>
+        ///  Reservación de vehículo actualizada
+        /// </summary>
         private ReservationVehicle _reservationVehicle;
         
         public UpdateReservationVehicleCommand(ReservationVehicle resVehic)
@@ -15,6 +18,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13
             _reservationVehicle = resVehic;
         }
 
+        /// <summary>
+        /// Actualiza la información de la reservación del vehículo
+        /// </summary>
+        /// <exception cref="ReservationHasNoCheckInException">Se retorna cuando la reservación no tiene fecha de checkin</exception>
+        /// <exception cref="ReservationHasNoCheckOutException">Se retorna cuando la reservación no tiene fecha de checkout</exception>
         public void Execute()
         {
             if (_reservationVehicle.CheckIn.Equals(DateTime.MinValue))
@@ -27,6 +35,10 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13
             _reservationVehicle = reservationVehicleDao.Update(_reservationVehicle);
         }
 
+        /// <summary>
+        ///  Retorna la reservación actualizada
+        /// </summary>
+        /// <returns>Reservación actualizada</returns>
         public ReservationVehicle GetResult()
         {
             return _reservationVehicle;
