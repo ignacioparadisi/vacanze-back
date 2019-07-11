@@ -6,6 +6,7 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo3;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo14;
@@ -55,6 +56,16 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
                 .WithStatus(isActive)
                 .WithAddressDescription(addressSpecs)
                 .BuildSinVaidar();
+        }
+
+        public static Cruiser CreateCruiser(int id , string name , bool status , int capacity , int loadingShipCap , string model , string line,string picture)
+        {
+            return new Cruiser(id,name,status,capacity,loadingShipCap,model,line,picture);
+        }
+
+        public static Layover CreateLayover(int id, int cruiserId, string departureDate,string arrivalDate, decimal price, int locDeparture, int locArrival)
+        {
+            return new Layover(id,cruiserId,departureDate,arrivalDate,price,locDeparture,locArrival);
         }
 
         public static Location CreateLocation(int id, string country, string city)
