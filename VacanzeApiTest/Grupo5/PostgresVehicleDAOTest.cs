@@ -68,19 +68,6 @@ namespace vacanze_back.VacanzeApiTest.Grupo5
         }
 
         [Test]
-        public void TestAddVehicle_Successfully(){
-            Vehicle vehicle = new Vehicle(
-                1,
-                30, 
-                "AC34793",
-                1230.2,
-                true
-            );
-
-            Assert.NotZero(vehicleDAO.AddVehicle(vehicle));
-        }
-
-        [Test]
         public void TestGetVehicleById_VehicleNotFoundException(){
             Assert.Throws<VehicleNotFoundException>(
                 () => vehicleDAO.GetVehicleById(100000)
