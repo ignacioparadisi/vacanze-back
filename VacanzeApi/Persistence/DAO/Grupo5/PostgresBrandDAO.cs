@@ -36,6 +36,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5{
             return id;
         }
 
+        ///<sumary>Obtener todos las marcas</sumary>
+        ///<returns>Lista de marcas</returns>
+        ///<exception cref="WithoutExistenceOfBrandsException"> 
+        /// Si no hay existencia de marcas se lanza esta exepción
+        ///</exception>
         public List<Brand> GetBrands(){
             List<Brand> brands = new List<Brand>();
              try{
@@ -60,6 +65,10 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5{
             return brands;
         }
 
+        ///<sumary>Obtener marcas por Id</sumary>
+        ///<param name="brandId">Id de la marca</param>
+        ///<returns>Instancia de la marca</returns>
+        ///<exception cref="BrandNotFoundException"> Si la marca no existe </exception>
         public Brand GetBrandById(int brandId){
             Brand brand = null;
              try{
@@ -82,6 +91,13 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5{
             return brand;
         }
 
+        ///<sumary>Modificar una marca</sumary>
+        ///<param name="marca">Instancia de una marca</param>
+        ///<returns>True si actualizo correctamente</returns>
+        ///<exception cref="BrandNotFoundException"> Si la marca no existe </exception>
+        ///<exception cref="UniqueAttributeException">
+        ///Si ya existe una marca con el mismo nombre
+        ///</exception>
         public bool UpdateBrand(Brand brand){
             bool updated = false;
             try{

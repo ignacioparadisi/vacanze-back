@@ -39,6 +39,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5
             return id;
         }
 
+        ///<sumary>Obtener todos los modelos</sumary>
+        ///<returns>Lista de modelos</returns>
+        ///<exception cref="WithoutExistenceOfModelsException"> 
+        /// Si no hay existencia de modelos esta exepción es lanzada
+        ///</exception>
         public List<Model> GetModels(){
             List<Model> models = new List<Model>();
             try{
@@ -66,6 +71,13 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5
             return models;
         }
 
+        ///<sumary>Obtener modelos por marca</sumary>
+        ///<param name="brandId">Id de la marca</param>
+        ///<returns>Lista de modelos por marca</returns>
+        ///<exception cref="Throw BrandNotFoundException"> Si la marca no existe </exception>
+        ///<exception cref=" WithoutExistenceOfModelsException"> 
+        /// Si no existen modelos para dicha marca
+        ///</exception>
         public List<Model> GetModelsByBrand(int brandId){
             List<Model> models = new List<Model>();
             try{
@@ -95,6 +107,10 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5
             return models;
         }
 
+        ///<sumary>Obtener modelos por Id</sumary>
+        ///<param name="modelId">Id del modelo</param>
+        ///<returns>Instancia del Modelo</returns>
+        ///<exception cref="ModelNotFoundException"> Si no existe el modelo </exception>
         public Model GetModelById(int modelId){
             Model model = null;
             try{
@@ -121,6 +137,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5
             return model;
         }
 
+        ///<sumary>Modificar un modelo</sumary>
+        ///<param name="modelo">Instancia de Modelo</param>
+        ///<returns>True si actualizo correctamente</returns>
+        ///<exception cref="ModelNotFoundException"> Si el modelo en sí no existe </exception>
+        ///<exception cref="BrandNotFoundException"> Si la marca no existe </exception>
         public bool UpdateModel(Model model){
             bool updated = false;
             try{
