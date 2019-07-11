@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo8;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo8;
+using Microsoft.Extensions.Logging;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
 {
@@ -19,6 +20,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
     [ApiController]
     public class CruiserController : Controller
     {
+        private readonly ILogger<CruiserController> _logger;
+
+        public CruiserController(ILogger<CruiserController> logger)
+        {
+            _logger = logger;
+        }
 
         /// <summary>
         ///     Endpoint para obtener todos los cruceros guardados.
@@ -31,6 +38,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
             GetCruisersCommand getCruisersCommand = CommandFactory.CreateGetCruisersCommand();
                 getCruisersCommand.Execute();
                 List<CruiserDTO> cruisersDtoList = getCruisersCommand.GetResult();
+                _logger?.LogError("Get method for acquiring cruisers executed");
                 return cruisersDtoList; 
         }
 
@@ -49,10 +57,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 GetCruiserCommand getCruiserCommand = CommandFactory.CreateGetCruiserCommand(id);
                 getCruiserCommand.Execute();
                 CruiserDTO cruiser = getCruiserCommand.GetResult();
+                _logger?.LogError("Get method for acquiring a single cruiser using it's ID executed");
                 return cruiser;
             }
             catch (CruiserNotFoundException e)
             {
+                _logger?.LogError(e, "Database exception when trying to get a cruiser by ID, cruiser doesn't existe");
                 return BadRequest(new ErrorMessage(e.Message));
             }
         }
@@ -74,10 +84,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 AddCruiserCommand addCruiserCommand = CommandFactory.CreateAddCruiserCommand(cruiser);
                 addCruiserCommand.Execute();
                 CruiserDTO savedCruiser = addCruiserCommand.GetResult();
+                _logger?.LogError("Post method for cruiser executed succesfully");
                 return savedCruiser;
             }
             catch (InvalidAttributeException e)
             {
+                _logger?.LogError(e, "Database exception when trying to get create a new cruiser, invalid attribute");
                 return BadRequest(new ErrorMessage(e.Message));
             }
         }
@@ -98,14 +110,17 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                  UpdateCruiserCommand updateCruiserCommand = CommandFactory.CreateUpdateCruiserCommand(cruiser);
                  updateCruiserCommand.Execute();
                  CruiserDTO updatedCruiser = updateCruiserCommand.GetResult();
+                 _logger?.LogError("Put method for a given cruiser executed succesfully");
                  return updatedCruiser;
              }
              catch(CruiserNotFoundException e)
              {
+                 _logger?.LogError(e, "Database exception when trying to update a cruiser, cruiser not found");
                  return BadRequest(new ErrorMessage(e.Message));
              }
              catch (InvalidAttributeException e)
              {
+                 _logger?.LogError(e, "Database exception when trying to update a cruiser, invalid attribute");
                  return BadRequest(new ErrorMessage(e.Message));
              }
          }
@@ -120,6 +135,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         {
             DeleteCruiserCommand deleteCruiserCommand = CommandFactory.CreateDeleteCruiserCommand(id);
                 deleteCruiserCommand.Execute();
+                _logger?.LogError("Cruiser deletion by ID executed succesfully");
                 return Ok("Eliminado satisfactoriamente");
         }
         
@@ -134,6 +150,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 GetLayoversCommand getLayoversCommand = CommandFactory.CreateGetLayoversCommand(cruiserId);
                 getLayoversCommand.Execute();
                 List<LayoverDTO> layoverDtoList = getLayoversCommand.GetResult();
+                _logger?.LogError("Get method for all layovers belonging to a single cruiser returned succesfull");
                 return layoverDtoList; 
         }
 
@@ -152,10 +169,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
                 AddLayoverCommand addLayoverCommand = CommandFactory.CreateAddLayoverCommand(layover);
                 addLayoverCommand.Execute();
                 LayoverDTO savedLayover = addLayoverCommand.GetResult();
+                _logger?.LogError("Post method for layover executed succesfully");
                 return savedLayover;
             }
             catch (CruiserNotFoundException e)
             {
+                _logger?.LogError(e, "Database exception when trying to create a new layover for a given cruiser");
                 return BadRequest(new ErrorMessage(e.Message));
             }
         }
@@ -170,6 +189,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         {
             DeleteLayoverCommand deleteLayoverCommand = CommandFactory.CreateDeleteLayoverCommand(layoverId);
             deleteLayoverCommand.Execute();
+            _logger?.LogError("Delete method for a given layover returned succesfully");
             return Ok("Eliminado satisfactoriamente");
         }
     }

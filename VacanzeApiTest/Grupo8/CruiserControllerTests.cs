@@ -20,7 +20,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo8
         [SetUp]
         public void Setup()
         {
-            _cruiserController = new CruiserController();
+            _cruiserController = new CruiserController(null);
             _cruiserDTO = new CruiserDTO();
             _cruiserDTO.Name = "Corneria";
             _cruiserDTO.Status = true;
