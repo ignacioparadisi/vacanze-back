@@ -1,19 +1,21 @@
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper;
 using vacanze_back.VacanzeApi.Persistence.DAO;
 
 namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9
 {
-    public class GetBaggageByIdCommand : CommandResult<Baggage>
+    public class GetBaggageByIdCommand : CommandResult<BaggageDTO>
     {
         private readonly int _id;
-        private Baggage _result;
+        private BaggageDTO _result;
 
         public GetBaggageByIdCommand(int id)
         {
             _id = id;
         }
 
-        public Baggage GetResult()
+        public BaggageDTO GetResult()
         {
             return _result;
         }
@@ -21,7 +23,9 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9
         public void Execute()
         {
             var daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
-            _result = daoFactory.GetBaggageDao().GetById(_id);
+            var mapper = MapperFactory.CreateBaggageMapper();
+            var entity = daoFactory.GetBaggageDao().GetById(_id);
+            _result = mapper.CreateDTO(entity);
         }
     }
 }

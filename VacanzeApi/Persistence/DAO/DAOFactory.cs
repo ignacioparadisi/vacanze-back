@@ -1,4 +1,5 @@
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo3;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo7;
@@ -8,6 +9,7 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo6;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo12;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo5;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo4;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo10;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo14;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo1;
 
@@ -30,6 +32,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
                     throw new NotValidFactoryTypeException("El tipo de fábrica de DAO no es válido");
             }
         }
+
         // +++++++++++++++++
         //     GRUPO 5
         // +++++++++++++++++
@@ -58,6 +61,12 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         public abstract RoleDAO GetRoleDAO();
 
         public abstract UserDAO GetUserDAO();
+        //----------------------Grupo3--------------------------------//
+        
+        public abstract IAirplaneDAO GetAirplane();
+
+        public abstract IFlightDAO GetFlight();
+        //------------------------Fin---------------------------------//
 
         public abstract IBaggageDao GetBaggageDao();
 
@@ -71,6 +80,8 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         public abstract ISaleFlightDAO PostSaleFlightDAO();
 
         public abstract ICheckinBaggageDAO PostCheckBaggage();
+         public abstract Traveldao GetTravelDAO();
+         public abstract Commentdao GeCommentDAO();
 
         // +++++++++++++++++
         //     GRUPO 14

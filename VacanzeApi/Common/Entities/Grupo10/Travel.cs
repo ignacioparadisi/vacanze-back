@@ -1,19 +1,23 @@
 using System;
 using System.Collections.Generic;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo14;
 
 namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10   
-{
+{/*esta es la clase del tipo viajes, que enlazara los automoviles, restaurantes
+    hoteles y vuelos que reserven los usuarios */
     public class Travel{
 
         private List<Location> locations = new List<Location>();
 
         private List<ReservationRoom> _roomReservations = new List<ReservationRoom>();
-        private List<ReservationVehicle> _carReservations = new List<ReservationVehicle>();
-        private List<Restaurant_res> _restaurantReservations = new List<Restaurant_res>();
-        
+         
+         private List<ReservationVehicle> _carReservations = new List<ReservationVehicle>() ; 
+
+        /*private List<> _flightReservations = new (); */
+
         private int _id;
         public int Id{ get{ return _id; } set{ _id = value; } }
 
@@ -35,6 +39,8 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10
         private string _description;
         public string Description{ get{ return _description; } set{ _description = value; } }
 
+        
+
         public Travel(int _id, string _name, DateTime _init, DateTime _end, string _description, int _userId){
             this.Id = _id;
             this.Name = _name;
@@ -52,7 +58,7 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo10
             this.UserId = _userId;
         }
 
-        public Travel(string _name, DateTime _init, DateTime _end, string _descriptio){
+        public Travel(string _name, DateTime _init, DateTime _end, string _description){
             this.Name = _name;
             this.Init = _init;
             this.End = _end;
