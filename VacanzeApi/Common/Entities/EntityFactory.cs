@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo1;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo3;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
@@ -116,5 +117,12 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
         public static Login createLogin(string password){
             return new Login(password);
         }
+
+         //-----------------------------------------Grupo 3---------------------------------------------------//  
+        public static Flight CreateFlight(Airplane plane, double price, string departure, string arrival,
+         Location loc_departure, Location loc_arrival){
+            return new Flight(plane,price,departure,arrival,loc_departure,loc_arrival);
+        }
+        //-----------------------------------------Fin-------------------------------------------------------//
     }
 }

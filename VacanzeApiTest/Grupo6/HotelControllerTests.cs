@@ -72,7 +72,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         public void Delete_InvalidHotelId_OkResultReturned()
         {
             var result = _hotelsController.Delete(0);
-            Assert.IsInstanceOf<OkResult>(result);
+            Assert.IsInstanceOf<NotFoundObjectResult>(result);
         }
 
         [Test]
