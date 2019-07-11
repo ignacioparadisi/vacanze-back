@@ -6,6 +6,7 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.DAO;
 
 namespace vacanze_back.VacanzeApiTest.Grupo13
@@ -150,6 +151,15 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             _insertedReservations.Add(_reservation.Id);
             ReservationRoom reservation = _factory.GetReservationRoomDAO().Find(_reservation.Id);
             Assert.AreEqual(reservation.Id, _reservation.Id);
+        }
+
+        [Test]
+        public void ReservationRoomNotFoundException()
+        {
+            Assert.Throws<GeneralException>(() =>
+            {
+                _factory.GetReservationRoomDAO().Find(0);
+            });
         }
 
         [Test]

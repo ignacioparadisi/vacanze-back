@@ -123,6 +123,20 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         }
 
         [Test]
+        public void CreateReservationNotValidCheckInDate()
+        {
+            DateTime checkout = new DateTime(2020,7,12);
+
+            ReservationRoom reservationRoom =
+                EntityFactory.CreateReservationRoom(0, new DateTime(), checkout, _hotel.Id, _user.Id);
+            CommandResult<ReservationRoom> command = CommandFactory.CreateAddReservationRoomCommand(reservationRoom);
+            Assert.Throws<ReservationHasNoCheckInException>(() =>
+            {
+                command.Execute();
+            });
+        }
+
+        [Test]
         public void GetReservationSuccessTest()
         {
             DateTime checkin = new DateTime(2019,7,10);
