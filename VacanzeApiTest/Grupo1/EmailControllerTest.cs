@@ -29,7 +29,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo1{
             //Creo un usuario para realizar las pruebas
             _userDto = new UserDTO();
             _userController = new UsersController();
-            _userDto.Email = "krlsanoja@gmail.com";
+            _userDto.Email = "krlsanojaEmail@gmail.com";
             _userDto.DocumentId = 19986048;
             _userDto.Name = "Carlos";
             _userDto.Lastname = "Sanoja";

@@ -3,35 +3,34 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo1;
+using System;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo1;
+using vacanze_back.VacanzeApi.Persistence.DAO;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo1;
-using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo1;
-using vacanze_back.VacanzeApi.Services.Controllers.Grupo1;
+using vacanze_back.VacanzeApi.Persistence.Repository.Grupo8;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo2;
 using vacanze_back.VacanzeApi.Services.Controllers.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 
-namespace vacanze_back.VacanzeApiTest.Grupo1{
-    [TestFixture]
+namespace vacanze_back.VacanzeApiTest.Grupo1
+{
+	[TestFixture]
+	public class PostgresLoginDaoTest{
 
-    public class LoginControllerTest{
-        private LoginController _loginController;
-        LoginDTO _loginDto;
-        Login _login;
-
+        private PostgresLoginDAO _loginDao;
+        private Login _login;
 
 
         UserDTO _userDto;
         private UsersController _userController;
 
+
         [SetUp]
         public void SetUp(){
-            _loginController = new LoginController(null);
-            _loginDto = new LoginDTO();
-
             //Creo un usuario para realizar las pruebas
             _userDto = new UserDTO();
             _userController = new UsersController();
-            _userDto.Email = "krlsanoja@gmail.com";
+            _userDto.Email = "krlsanojaDAO@gmail.com";
             _userDto.DocumentId = 19986048;
             _userDto.Name = "Carlos";
             _userDto.Lastname = "Sanoja";
@@ -42,32 +41,40 @@ namespace vacanze_back.VacanzeApiTest.Grupo1{
             var userResult = _userController.Post(_userDto).Value;
 
             _login = new Login(_userDto.Id,_userDto.Email,_userDto.Password);
+            _loginDao = (PostgresLoginDAO) DAOFactory.GetFactory(DAOFactory.Type.Postgres).GetLoginDAO();
         }
 
         [Test]
-        public void InvalidPostLoginTest(){
-            _loginDto.email=" ";
-            _loginDto.password = " ";
-            var result = _loginController.Login(_loginDto).Value;
-            Assert.IsInstanceOf<BadRequestObjectResult>(_loginController.Login(_loginDto).Result);
+        public void SessionLoginDAOTest(){
+            _login = _loginDao.SessionLogin(_login.email, _login.password);
+            Assert.AreEqual(_login.email, _userDto.Email);
         }
 
         [Test]
-        public void ValidPostLoginTets(){
-            _loginDto.email = _userDto.Email;
-            _loginDto.password = _userDto.Password;
-            var loginResult = _loginController.Login(_loginDto);
-            Assert.NotNull(loginResult);
+        public void RecoveryDAOTest(){
+            _login = _loginDao.Recovery(_login.email);
+            Assert.AreEqual(_login.email, _userDto.Email);
+        }
+
+        [Test]
+        public void InvalidSessionLoginDAOTest(){
+
+            Assert.Throws<LoginUserNotFoundException>(() => _loginDao.SessionLogin("",""));
+        }
+
+        [Test]
+        public void InvalidRecoveryDAOTest(){
+
+            Assert.Throws<PasswordRecoveryException>(() => _loginDao.Recovery(""));
         }
 
         [TearDown]
         public void TearDown(){
             var result = _userController.Delete(_login.Id);
-            _loginController = null;
-            _loginDto = null;
             _userDto = null;
             _userController = null;
             _login = null;
+            _loginDao = null;
         }
     }
 }
