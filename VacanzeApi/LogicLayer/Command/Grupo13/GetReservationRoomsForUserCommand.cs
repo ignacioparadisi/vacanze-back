@@ -7,13 +7,23 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13
 {
     public class GetReservationRoomsForUserCommand: CommandResult<List<ReservationRoom>>
     {
+        /// <summary>
+        /// ID del usuario al que le pertencen las reservaciones de las habitaciones que se quieren buscar
+        /// </summary>
         private int _id;
+        /// <summary>
+        /// Reservaciones de las habitaciones del usuario especificado
+        /// </summary>
         private List<ReservationRoom> _result;
 
         public GetReservationRoomsForUserCommand(int id)
         {
             _id = id;
         }
+        
+        /// <summary>
+        /// Busca las reservaciones de habitaciones de un usuario mediando el DAO de reservaciones de habitaciones
+        /// </summary>
         public void Execute()
         {
             DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
@@ -21,6 +31,10 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13
             _result = reservationRoomDao.GetAllByUserId(_id);
         }
 
+        /// <summary>
+        ///  Retorna las reservacioens de habitaciones del usuario especificado
+        /// </summary>
+        /// <returns>Reservaciones de habitaciones del usuario especificado</returns>
         public List<ReservationRoom> GetResult()
         {
             return _result;

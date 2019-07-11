@@ -6,6 +6,11 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo8;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo8;
+using Microsoft.AspNetCore.Http;
+using vacanze_back.VacanzeApi.LogicLayer.Command;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo8;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo8;
+using Microsoft.Extensions.Logging;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
 {
@@ -15,31 +20,28 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
     [ApiController]
     public class CruiserController : Controller
     {
-        // GET/Cruisers
-        /// <summary>
-        ///     Endpint para obtener todos los cruveros guardados.
-        /// </summary>
-        /// <returns>OKResult en caso de exito con un JsonObject de la lista de cruceros guardada en la base de datos</returns>
-        /// <returns>BadRequest en caso de error con JsonObject del error arrojado por alguna de las excepciones </returns>
-        /// <exception cref="DatabaseException">
-        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la base de
-        ///     datos
-        /// </exception>
-        [HttpGet]
-        public ActionResult<IEnumerable<Cruiser>> GetCruisers()
+        private readonly ILogger<CruiserController> _logger;
+
+        public CruiserController(ILogger<CruiserController> logger)
         {
-            try
-            {
-                var cruiserList = CruiserRepository.GetCruisers();
-                return Ok(cruiserList);
-            }
-            catch (DatabaseException e)
-            {
-                return BadRequest(new ErrorMessage(e.Message));
-            }
+            _logger = logger;
         }
 
-        // GET/Cruiser/{id}
+        /// <summary>
+        ///     Endpoint para obtener todos los cruceros guardados.
+        /// </summary>
+        /// <returns>OKResult en caso de exito con un JsonObject de la lista de cruceros guardada en la base de datos</returns>
+
+        [HttpGet]
+        public ActionResult<IEnumerable<CruiserDTO>> Get()
+        {
+            GetCruisersCommand getCruisersCommand = CommandFactory.CreateGetCruisersCommand();
+                getCruisersCommand.Execute();
+                List<CruiserDTO> cruisersDtoList = getCruisersCommand.GetResult();
+                _logger?.LogError("Get method for acquiring cruisers executed");
+                return cruisersDtoList; 
+        }
+
         /// <summary>
         ///     Endpoint para obtener objeto Crucero correspondiente a los datos guardados para el ID recibido.
         /// </summary>
@@ -47,28 +49,24 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         /// <returns>OkResult en caso de exito con un JsonObject del crucero obtenido</returns>
         /// <returns>BadRequest en caso de error con un JsonObject del error arrojado por alguna de las excepciones </returns>
         /// <exception cref="CruiserNotFoundException">Lanzada si no existe un Crucero para el ID recibido</exception>
-        /// <exception cref="DatabaseException">
-        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la bse de
-        ///     datos
-        /// </exception>
         [HttpGet("{id}")]
-        public ActionResult<Cruiser> GetCruiser(int id)
+        public ActionResult<CruiserDTO> GetCruiser(int id)
         {
             try
             {
-                var cruiser = CruiserRepository.GetCruiser(id);
-                return Ok(cruiser);
+                GetCruiserCommand getCruiserCommand = CommandFactory.CreateGetCruiserCommand(id);
+                getCruiserCommand.Execute();
+                CruiserDTO cruiser = getCruiserCommand.GetResult();
+                _logger?.LogError("Get method for acquiring a single cruiser using it's ID executed");
+                return cruiser;
             }
             catch (CruiserNotFoundException e)
             {
-                return NotFound(new ErrorMessage(e.Message));
-            }
-            catch (DatabaseException e)
-            {
+                _logger?.LogError(e, "Database exception when trying to get a cruiser by ID, cruiser doesn't existe");
                 return BadRequest(new ErrorMessage(e.Message));
             }
         }
-        // POST/Cruiser/{id}
+
         /// <summary>
         ///     Endpoint para añadir un Crucero.
         /// </summary>
@@ -76,27 +74,22 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         /// <returns>OkResult en caso exito con un JsonObject del crucero agregado</returns>
         ///<returns>BadRequest en caso de error con un JsonObject del error arrojado por alguna de las excepciones </returns>
         /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido retorna</exception>
-        /// <exception cref="DatabaseException">
-        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la bse de
-        ///     datos
-        /// </exception>
         [HttpPost]
-        public ActionResult<Cruiser> PostCruiser([FromBody] Cruiser cruiser)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<CruiserDTO> PostCruiser([FromBody] CruiserDTO cruiser)
         {
             try
             {
-                cruiser.Validate();
-                var id = CruiserRepository.AddCruiser(cruiser);
-                var savedCruiser = new Cruiser(id, cruiser.Name, cruiser.Status, cruiser.Capacity,
-                    cruiser.LoadingShipCap, cruiser.Model, cruiser.Line, cruiser.Picture);
-                return Ok(savedCruiser);
+                AddCruiserCommand addCruiserCommand = CommandFactory.CreateAddCruiserCommand(cruiser);
+                addCruiserCommand.Execute();
+                CruiserDTO savedCruiser = addCruiserCommand.GetResult();
+                _logger?.LogError("Post method for cruiser executed succesfully");
+                return savedCruiser;
             }
             catch (InvalidAttributeException e)
             {
-                return BadRequest(new ErrorMessage(e.Message));
-            }
-            catch (DatabaseException e)
-            {
+                _logger?.LogError(e, "Database exception when trying to get create a new cruiser, invalid attribute");
                 return BadRequest(new ErrorMessage(e.Message));
             }
         }
@@ -108,66 +101,42 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         /// <returns>OkResult en caso de exito con un JsonObject con los datos actualizados del crucero</returns>
         /// <returns>BadRequest en caso de error con un JsonObject del error arrojado por alguna de las excepciones </returns>
         /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
-        /// <exception cref="NullCruiserException">El metodo recibio null como parametro</exception>
         /// <exception cref="CruiserNotFoundException">No se encontro el crucero con el Id sumunistrado en los parametros</exception>
-        /// <exception cref="DatabaseException">
-        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la bse de
-        ///     datos
-        /// </exception>
         [HttpPut]
-        public ActionResult<Cruiser> PutCruiser([FromBody] Cruiser cruiser)
-        {
-            try
-            {
-                cruiser.Validate();
-                var updatedCruiser = CruiserRepository.UpdateCruiser(cruiser);
-                return Ok(updatedCruiser);
-            }
-            catch (InvalidAttributeException e)
-            {
-                return BadRequest(new ErrorMessage(e.Message));
-            }
-            catch (CruiserNotFoundException e)
-            {
-                return NotFound(new ErrorMessage(e.Message));
-            }
-            catch (NullCruiserException e)
-            {
-                return BadRequest(new ErrorMessage(e.Message));
-            }
-            catch (DatabaseException e)
-            {
-                return BadRequest(new ErrorMessage(e.Message));
-            }
-        }
+         public ActionResult<CruiserDTO> PutCruiser([FromBody] CruiserDTO cruiser)
+         {
+             try
+             {
+                 UpdateCruiserCommand updateCruiserCommand = CommandFactory.CreateUpdateCruiserCommand(cruiser);
+                 updateCruiserCommand.Execute();
+                 CruiserDTO updatedCruiser = updateCruiserCommand.GetResult();
+                 _logger?.LogError("Put method for a given cruiser executed succesfully");
+                 return updatedCruiser;
+             }
+             catch(CruiserNotFoundException e)
+             {
+                 _logger?.LogError(e, "Database exception when trying to update a cruiser, cruiser not found");
+                 return BadRequest(new ErrorMessage(e.Message));
+             }
+             catch (InvalidAttributeException e)
+             {
+                 _logger?.LogError(e, "Database exception when trying to update a cruiser, invalid attribute");
+                 return BadRequest(new ErrorMessage(e.Message));
+             }
+         }
         
         /// <summary>
         ///     Endpoint para eliminar un Crucero.
         /// </summary>
         /// <param name="id">Id del crucero a ser eliminado</param>
         /// <returns>OkResult en caso de exito con un JsonObject del id del crrucero eliminado</returns>
-        /// <returns>BadRequest en caso de error con un Json del error arrojado por alguna de las excepciones </returns>
-        /// <exception cref="CruiserNotFoundException">Retornado si el id ingresado no corresponde con ningun crucero</exception>
-        /// <exception cref="DatabaseException">
-        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la base de
-        ///     datos
-        /// </exception>
         [HttpDelete("{id}")]
-        public ActionResult<int> DeleteCruiser(int id)
+        public IActionResult DeleteCruiser(int id)
         {
-            try
-            {
-                var deletedId = CruiserRepository.DeleteCruiser(id);
-                return Ok(new {id = deletedId});
-            }
-            catch (CruiserNotFoundException e)
-            {
-                return NotFound(new ErrorMessage(e.Message));
-            }
-            catch (DatabaseException e)
-            {
-                return BadRequest(new ErrorMessage(e.Message));
-            }
+            DeleteCruiserCommand deleteCruiserCommand = CommandFactory.CreateDeleteCruiserCommand(id);
+                deleteCruiserCommand.Execute();
+                _logger?.LogError("Cruiser deletion by ID executed succesfully");
+                return Ok("Eliminado satisfactoriamente");
         }
         
         /// <summary>
@@ -175,56 +144,37 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         /// </summary>
         /// <param name="cruiserId">Id del crucero del cual se desea obtener los escalas</param>
         /// <returns>OkResult en caso de exito con un JsonObject de la lista de layovers (escalas) de un crucero</returns>
-        /// <returns>BadRequest en caso de error con un JsonObject del error arrojado por alguna de las excepciones </returns>
-        /// <exception cref="DatabaseException">
-        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la base de
-        ///     datos
-        /// </exception>
         [HttpGet("{cruiserId}/Layover")]
-        public ActionResult<IEnumerable<Layover>> GetLayovers(int cruiserId)
+        public ActionResult<IEnumerable<LayoverDTO>> GetLayovers(int cruiserId)
         {
-            try
-            {
-                var layovers = CruiserRepository.GetLayovers(cruiserId);
-                return Ok(layovers);
-            }
-            catch (DatabaseException e)
-            {
-                return BadRequest(new ErrorMessage(e.Message));
-            }
+                GetLayoversCommand getLayoversCommand = CommandFactory.CreateGetLayoversCommand(cruiserId);
+                getLayoversCommand.Execute();
+                List<LayoverDTO> layoverDtoList = getLayoversCommand.GetResult();
+                _logger?.LogError("Get method for all layovers belonging to a single cruiser returned succesfull");
+                return layoverDtoList; 
         }
+
         /// <summary>
         ///     Endpoint para agregar un layover a un crucero.
         /// </summary>
         /// <param name="layover">Id del crucero al que se le agregara la escala</param>
         /// <returns>Okresult en caso de exito con un JsonObject de la lista de layovers (escalas) de un crucero</returns>
         /// <returns>BadRequest en caso de error con un JsonObject del error arrojado por alguna de las excepciones </returns>
-        /// <exception cref="DatabaseException">
-        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la base de
-        ///     datos
-        /// </exception>
-        /// <exception cref="CruiserNotFoundException">Lanzada si el id del crucero en el layover no corresponde con ningun crucero guardado</exception>
-        /// <exception cref="InvalidAttributeException">Algun atributo tenia un valor invalido</exception>
-        
+        /// <exception cref="CruiserNotFoundException">Lanzada si el id del crucero en el layover no corresponde con ningun crucero guardado</exception>   
         [HttpPost("{cruiserId}/Layover")]
-        public ActionResult<Layover> PostLayover([FromBody] Layover layover)
+        public ActionResult<LayoverDTO> PostLayover([FromBody] LayoverDTO layover)
         {
             try
             {
-                layover.Validate();
-                var addedLayover= CruiserRepository.AddLayover(layover);
-                return Ok(addedLayover);
-            }
-            catch (InvalidAttributeException e)
-            {
-                return BadRequest(new ErrorMessage(e.Message));
+                AddLayoverCommand addLayoverCommand = CommandFactory.CreateAddLayoverCommand(layover);
+                addLayoverCommand.Execute();
+                LayoverDTO savedLayover = addLayoverCommand.GetResult();
+                _logger?.LogError("Post method for layover executed succesfully");
+                return savedLayover;
             }
             catch (CruiserNotFoundException e)
             {
-                return NotFound(new ErrorMessage(e.Message));
-            }
-            catch (DatabaseException e)
-            {
+                _logger?.LogError(e, "Database exception when trying to create a new layover for a given cruiser");
                 return BadRequest(new ErrorMessage(e.Message));
             }
         }
@@ -232,60 +182,15 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo8
         ///     Endpoint para eliminar una escala.
         /// </summary>
         /// <param name="layoverId">Id del layover a ser eliminado</param>
-        /// <returns>OkResult en caso de exito con un JsonObeject del id de la escala eliminada</returns>
-        /// <returns>BadRequest en caso de error con un JsonObject del error arrojado por alguna de las excepciones </returns>
-        /// <exception cref="LayoverNotFoundException">Retornado si el id ingresado no corresponde con ningun layover</exception>
-        /// <exception cref="DatabaseException">
-        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la base de
-        ///     datos
-        /// </exception>
+        /// <returns>OkResult con un mensaje de exito o no, segun el resultado</returns>
         
         [HttpDelete("Layover/{layoverId}")]
-        public ActionResult<int> DeleteLayover(int layoverId)
+        public IActionResult DeleteLayover(int layoverId)
         {
-            try
-            {
-                var deletedId = CruiserRepository.DeleteLayover(layoverId);
-                return Ok(new {id = deletedId});
-            }
-            catch (LayoverNotFoundException e)
-            {
-                return NotFound(new ErrorMessage(e.Message));
-            }
-            catch (DatabaseException e)
-            {
-                return BadRequest(new ErrorMessage(e.Message));
-            }
-        }
-        
-        /// <summary>
-        ///     Endpoint para obtener todos los layovers (escalas) de un crucero.
-        /// </summary>
-        /// <param name="departure">Id del la locacion de salida del crucero</param>
-        /// <param name="arrival">Id de la locacion de llegada del crucero</param>
-        /// <returns>OkResult en caso de exito con un JsonObject de la lista de layovers (escalas) disponibles para las locaciones ingresadas</returns>
-        /// <returns>BadRequest en caso de error con un JsonObject del error arrojado por alguna de las excepciones </returns>
-        /// <exception cref="DatabaseException">
-        ///     Lanzada si ocurre un fallo al ejecutar la funcion en la base de
-        ///     datos
-        /// </exception>
-        /// <exception cref="LayoverNotFoundException">Si no se encontraron rutas para las locaciones ingresadass</exception>
-        [HttpGet("{departure}/{arrival}/Layover")]
-        public ActionResult<IEnumerable<Layover>> GetLayoverByLoc(int departure, int arrival)
-        {
-            try
-            {
-                var layovers = CruiserRepository.GetLayoversForRes(departure,arrival);
-                return Ok(layovers);
-            }
-            catch (LayoverNotFoundException e)
-            {
-                return NotFound(new ErrorMessage(e.Message));
-            }
-            catch (DatabaseException e)
-            {
-                return BadRequest(new ErrorMessage(e.Message));
-            }
+            DeleteLayoverCommand deleteLayoverCommand = CommandFactory.CreateDeleteLayoverCommand(layoverId);
+            deleteLayoverCommand.Execute();
+            _logger?.LogError("Delete method for a given layover returned succesfully");
+            return Ok("Eliminado satisfactoriamente");
         }
     }
 }

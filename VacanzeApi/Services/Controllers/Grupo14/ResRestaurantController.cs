@@ -23,8 +23,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 	[ApiController]
 	public class ResRestaurantController : ControllerBase
 	{
-		//POST api/ResRestaurant
-		[HttpPost]
+        /// <summary>
+        ///     Metodo para agregar reserva de restaurante
+        /// </summary>
+        /// <param name="resAux"></param>
+        
+        //POST api/ResRestaurant
+        [HttpPost]
 		public ActionResult<int> Post([FromBody] reservationRestaurant resAux)
 		{            
 			try{
@@ -53,9 +58,13 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 
 		}
 
-		//GET /ResRestaurant/{id}
-		[HttpGet("{id}")]
-		public ActionResult<IEnumerable<ResRestaurantDTO>> Get(int id){ //PATRONES LISTO
+        /// <summary>
+        ///     Metodo para obtener lista de restaurantes
+        /// </summary>
+        /// <param name="id"></param>
+        //GET /ResRestaurant/{id}
+        [HttpGet("{id}")]
+		public ActionResult<IEnumerable<ResRestaurantDTO>> Get(int id){ 
             var getByIdCommand = CommandFactory.GetResRestaurantByIdCommand(id);
             try {
 				Console.WriteLine(id);
@@ -72,9 +81,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 				return StatusCode(500);
 			}
 		}
-
-		//GET /ResRestaurant/Payment/{id} el ID es el del usuario
-		[HttpGet("Payment/{userId}")]
+        /// <summary>
+        ///     Metodo para obtener lista de restaurante no pagados
+        /// </summary>
+        /// <param name="userId"></param>
+        //GET /ResRestaurant/Payment/{id} el ID es el del usuario
+        [HttpGet("Payment/{userId}")]
 		public ActionResult<IEnumerable<ResRestaurantDTO>> GetReservationNotPay(int userId){ //this method is not used to this preview
 
             var getResNotPayByIdCommand = CommandFactory.GetResRestaurantNotPayByIdCommand(userId);
@@ -94,8 +106,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
 			}
 		}
 
-		//DELETE api/ResRestaurant/id el ID es el de la reserva
-		[HttpDelete("{id}")]
+        /// <summary>
+        ///     Metodo para eliminar restaurantes
+        /// </summary>
+        /// <param name="id"></param>
+        //DELETE api/ResRestaurant/id el ID es el de la reserva
+        [HttpDelete("{id}")]
 		public ActionResult<string> Delete(int id){ //PATRONES LISTO
 
 			
@@ -104,9 +120,12 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo14
             return Ok();
 
         }
-
-		//PUT api/ResRestaurant/id es el id de la reserva
-		[HttpPut("{id}")]
+        /// <summary>
+        ///     Metodo para modificar status de restaurante de no pagado a pagado
+        /// </summary>
+        /// <param name="resAux"></param>
+        //PUT api/ResRestaurant/id es el id de la reserva
+        [HttpPut("{id}")]
 		public ActionResult<string> Put(int id, reservationRestaurant resAux)
 		{
             var updateResRestaurantCommand = CommandFactory.UpdateResRestaurantCommand(id, resAux);

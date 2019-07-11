@@ -59,14 +59,6 @@ namespace vacanze_back.VacanzeApiTest.Grupo7
         }
         
         [Test]
-        public void EmptyPictureTest()
-        {
-            var restaurant = EntityFactory.CreateRestaurant(-1, "Restaurant", 5, false, 5, "rewrw", 3, "frf",
-                "", "trhrthtr", "021221546352", 1, "yrty rtyrtks yrtyr");
-            Assert.Throws<InvalidAttributeException>(() => RestaurantValidator.Validate(restaurant));
-        }
-        
-        [Test]
         public void EmptyDescriptionTest()
         {
             var restaurant = EntityFactory.CreateRestaurant(-1, "Restaurant", 5, false, 5, "rewrw", 3, "frf",

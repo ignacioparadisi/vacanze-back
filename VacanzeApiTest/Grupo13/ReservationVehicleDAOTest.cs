@@ -24,7 +24,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             UserDAO daoUser = DAOFactory.GetFactory(DAOFactory.Type.Postgres).GetUserDAO();
             List<Role> roles = new List<Role>();
             roles.Add(new Role(1, "Client"));
-            _user = EntityFactory.CreateUser(0, 25964266, "Fernando", "Consalvo", "fercon@gmail.com", "123456789",
+            _user = EntityFactory.CreateUser(0, 25964266, "Fernando", "Consalvo", "fercon910@gmail.com", "123456789",
                 roles);
             _user = daoUser.AddUser(_user);
             dao = DAOFactory.GetFactory(DAOFactory.Type.Postgres).GetReservationVehicleDAO();
@@ -34,7 +34,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         [Order(1)]
         public void TestAddVehicleReservationOk()
         {
-            DateTime checkOut = new DateTime(2019, 11, 20);
+            DateTime checkOut = DateTime.Now.AddDays(7);
             _reservationAutomobile =
                 EntityFactory.CreateReservationVehicle(0, DateTime.Now, checkOut, 5, _user.Id);
             _reservationAutomobile = dao.AddReservation(_reservationAutomobile);
@@ -55,13 +55,13 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             Assert.IsNotEmpty(dao.GetAllByUserId(_user.Id));
         }
 
-//        [Test]
-//        [Order(4)]
-//        public void TestUpdateReservationVehicleOk()
-//        {
-//            _reservationAutomobile.CheckIn = new DateTime(2019, 10, 20);
-//            Assert.AreEqual(_reservationAutomobile.CheckIn, dao.Update(_reservationAutomobile).CheckIn);
-//        }
+        [Test]
+        [Order(4)]
+        public void TestUpdateReservationVehicleOk()
+        {
+            _reservationAutomobile.CheckOut = DateTime.Now.AddDays(20);
+            Assert.AreEqual(_reservationAutomobile.CheckOut.Date, dao.Update(_reservationAutomobile).CheckOut.Date);
+        }
 
         [Test]
         [Order(5)]

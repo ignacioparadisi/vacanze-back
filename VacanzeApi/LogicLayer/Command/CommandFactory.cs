@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo1;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo3;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo3;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo3;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo14;
@@ -10,7 +13,15 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo4;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo10;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
+using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo8;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo8;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo1;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13;
@@ -97,6 +108,7 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new GetModelsCommand();
         }
 
+     
         public static GetModelsByBrandCommand CreateGetModelsByBrandCommand(int brandId)
         {
             return new GetModelsByBrandCommand(brandId);
@@ -242,6 +254,42 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new UpdateHotelCommand(id, hotel);
         }
 
+        public static AddFlightCommand AddFlightCommand(FlightDTO _flight)
+        {
+            return new AddFlightCommand(_flight);
+        }
+
+        public static GetFindFlightCommand GetFlightIdCommand(int _id)
+        {
+            return new GetFindFlightCommand(_id);
+        }
+
+        public static GetFindFlightIdCommand GetFindFlightIdEntityCommand(int _id)
+        {
+            return new GetFindFlightIdCommand(_id);
+        }
+        public static GetAirplaneByIdCommand GetFindPlaneIdCommand(int _id)
+        {
+            return new GetAirplaneByIdCommand(_id);
+        }
+
+
+        public static UpdateFlightCommand UpdateFlightCommand(Flight _flight)
+        {
+            return new UpdateFlightCommand(_flight);
+        }
+
+         public static DeleteFlightCommand DeleteFlightCommand(int _idflight)
+        {
+            return new DeleteFlightCommand(_idflight);
+        }
+        
+        public static GetFlightListCommand getListFlightCommand(){
+            return new GetFlightListCommand();
+        }
+        public static GetByDateCommand getByDateFlightCommand(string a, string b){
+            return new GetByDateCommand(a,b);
+        }
 		public static HotelValidatorCommand HotelValidatorCommand(Hotel hotel)
         {
             return new HotelValidatorCommand(hotel);
@@ -274,8 +322,12 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
         public static GetCountriesCommand GetCountriesCommand()
         {
             return new GetCountriesCommand();
-        }
+        }  
 
+        public static GetAirplaneCommand GetAirplaneCommand()
+        {
+            return new GetAirplaneCommand();
+        } 
         public static GetCitiesByCountryCommand GetCitiesByCountryCommand(int id)
         {
             return new GetCitiesByCountryCommand(id);
@@ -352,6 +404,50 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new GetReservationsByDateIVCommand(departure, arrival, departuredate, arrivaldate, numpas);
         }
 
+        public static AddCruiserCommand CreateAddCruiserCommand(CruiserDTO cruiserDto)
+        {
+            return new AddCruiserCommand(cruiserDto);
+        }
+
+         public static GetCruiserCommand CreateGetCruiserCommand(int id)
+        {
+            return new GetCruiserCommand(id);
+        }
+
+        public static AddLayoverCommand CreateAddLayoverCommand(LayoverDTO layoverDto)
+        {
+            return new AddLayoverCommand(layoverDto);
+        }
+
+        public static DeleteLayoverCommand CreateDeleteLayoverCommand(int id)
+        {
+            return new DeleteLayoverCommand(id);
+        }
+
+        public static DeleteCruiserCommand CreateDeleteCruiserCommand(int id)
+        {
+            return new DeleteCruiserCommand(id);
+        }
+
+        public static CruiserValidatorCommand CreateGetCruiserValidatorCommand(Cruiser cruiser)
+        {
+            return new CruiserValidatorCommand(cruiser);
+        }
+
+        public static UpdateCruiserCommand CreateUpdateCruiserCommand(CruiserDTO cruiserDto)
+        {
+            return new UpdateCruiserCommand(cruiserDto);
+        }
+
+        public static GetCruisersCommand CreateGetCruisersCommand()
+        {
+            return new GetCruisersCommand();
+        }
+
+        public static GetLayoversCommand CreateGetLayoversCommand(int id)
+        {
+            return new GetLayoversCommand(id);
+        }
     
         /*GRUPO14*/
         public static GetResRestaurantByIdCommand GetResRestaurantByIdCommand(int id)

@@ -31,10 +31,10 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         private ReservationVehicle _reservation;
 
         /// <summary>
-        /// 
+        /// Busca una reservación de vehículo por su ID
         /// </summary>
-        /// <param name="id">El id del auto que se va a buscar</param>
-        /// <returns name = "_reservation">La reserva para el vehiculo con el id introducido</returns>
+        /// <param name="id">ID de la reservación de vehículo</param>
+        /// <returns>Reservación de vehículo buscada</returns>
         public ReservationVehicle Find(int id)
         {
             ReservationVehicle reservation = new ReservationVehicle();
@@ -58,6 +58,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
             return reservation;
         }
         
+        /// <summary>
+        /// Agrega una reservación de vehiculo en la base de datos
+        /// </summary>
+        /// <param name="reservation">Reservación que se desea agregar</param>
+        /// <returns>La reservación agregada con su respectido ID</returns>
         public ReservationVehicle AddReservation(ReservationVehicle reservation)
         {
             var table = PgConnection.Instance.ExecuteFunction(SP_ADD,
@@ -74,18 +79,22 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
             return reservation;
         }
 
-        /** <summary>Borra de la BD, la reservacion que es suministrada</summary>
-         * <param name="entity">La entidad reservacion a borrar de la BD</param>
-         */
+        /// <summary>
+        /// Elimina una reservación de vehículo de la base de datos
+        /// </summary>
+        /// <param name="id">ID de la reservación que se desea eliminar</param>
+        /// <returns>ID de la reservación que fue eliminada</returns>
         public int Delete(int id)
         {
             var table = PgConnection.Instance.ExecuteFunction(SP_DELETE, id);
             return Convert.ToInt32(table.Rows[0][0]);
         }
 
-        /** <summary>Trae de la BD, las reservas de automoviles de un usuario</summary>
-         * <param name="user_id">El id del usuario que posee las reservas</param>
-         */
+        /// <summary>
+        /// Obtiene todas las reservaciones que le pertenecen a un usuario
+        /// </summary>
+        /// <param name="userId">ID del usuario de quien se desea buscar las reservaciones</param>
+        /// <returns>Lista de reservaciones de vehículo del usuario</returns>
         public List<ReservationVehicle> GetAllByUserId(int userId)
         {
             List<ReservationVehicle> reservationAutomobileList = new List<ReservationVehicle>();
@@ -111,9 +120,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
             return reservationAutomobileList;
         }
 
-        /** <summary>Actualiza en la BD, la reservacion de automovil</summary>
-         * <param name="entity">La reserva a actualizar</param>
-         */
+        /// <summary>
+        /// Actualización de la información de una reservación de vehículo
+        /// </summary>
+        /// <param name="reservation">Reservación de la vehículo con la información que se desea actualizar</param>
+        /// <returns>Reservación de la vehiculo con la información actualizada</returns>
         public ReservationVehicle Update(ReservationVehicle reservation)
         {
             var table = PgConnection.Instance.ExecuteFunction(SP_UPDATE,
