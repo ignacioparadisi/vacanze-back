@@ -16,7 +16,7 @@ namespace vacanze_back.VacanzeApi.Common.Exceptions.Grupo13
         /// Permite el envio de mensajes con el id de la reservacion de habitacion que fue ingresado y no encontrado.
         /// </summary>
         /// <param name="id"></param>
-        public RoomReservationNotFoundException(int id) : base($"Id no encontrado: {id}")
+        public RoomReservationNotFoundException(string message) : base(message)
         {
         }
     }

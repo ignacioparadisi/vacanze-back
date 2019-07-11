@@ -16,7 +16,6 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
     [TestFixture]
     public class ReservationRoomCommandTest
     {
-        private ReservationRoom _reservation;
         private Hotel _hotel;
         private DAOFactory _factorydao;
         private User _user;
@@ -67,8 +66,6 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             
             CreateUser();
             CreateHotel();
-
-            _reservation = EntityFactory.CreateReservationRoom(0, checkin, checkout, _hotel.Id, _user.Id);
         }
 
         [TearDown]
@@ -126,6 +123,20 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         }
 
         [Test]
+        public void CreateReservationNotValidCheckInDate()
+        {
+            DateTime checkout = new DateTime(2020,7,12);
+
+            ReservationRoom reservationRoom =
+                EntityFactory.CreateReservationRoom(0, new DateTime(), checkout, _hotel.Id, _user.Id);
+            CommandResult<ReservationRoom> command = CommandFactory.CreateAddReservationRoomCommand(reservationRoom);
+            Assert.Throws<ReservationHasNoCheckInException>(() =>
+            {
+                command.Execute();
+            });
+        }
+
+        [Test]
         public void GetReservationSuccessTest()
         {
             DateTime checkin = new DateTime(2019,7,10);
@@ -156,11 +167,5 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             command2.Execute();
             Assert.AreEqual(command.GetResult().Id, command2.GetResult());
         }
-        
-        
-        
-        
     }
-    
-    
 }

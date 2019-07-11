@@ -1,3 +1,4 @@
+using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo3;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo12;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo14;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo1;
@@ -34,6 +35,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper
         public static HotelMapper createHotelMapper(){
             return new HotelMapper();
         }
+
+        public static FlightMapper createFlightMapper(){
+            return new FlightMapper();
+        }
+
 
         public static LocationMapper createLocationMapper(){
             return new LocationMapper();
