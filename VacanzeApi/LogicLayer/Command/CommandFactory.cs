@@ -15,6 +15,13 @@ using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo10;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo9;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
+using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo9;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo8;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo8;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo1;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo12;
 using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13;
@@ -397,6 +404,50 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command
             return new GetReservationsByDateIVCommand(departure, arrival, departuredate, arrivaldate, numpas);
         }
 
+        public static AddCruiserCommand CreateAddCruiserCommand(CruiserDTO cruiserDto)
+        {
+            return new AddCruiserCommand(cruiserDto);
+        }
+
+         public static GetCruiserCommand CreateGetCruiserCommand(int id)
+        {
+            return new GetCruiserCommand(id);
+        }
+
+        public static AddLayoverCommand CreateAddLayoverCommand(LayoverDTO layoverDto)
+        {
+            return new AddLayoverCommand(layoverDto);
+        }
+
+        public static DeleteLayoverCommand CreateDeleteLayoverCommand(int id)
+        {
+            return new DeleteLayoverCommand(id);
+        }
+
+        public static DeleteCruiserCommand CreateDeleteCruiserCommand(int id)
+        {
+            return new DeleteCruiserCommand(id);
+        }
+
+        public static CruiserValidatorCommand CreateGetCruiserValidatorCommand(Cruiser cruiser)
+        {
+            return new CruiserValidatorCommand(cruiser);
+        }
+
+        public static UpdateCruiserCommand CreateUpdateCruiserCommand(CruiserDTO cruiserDto)
+        {
+            return new UpdateCruiserCommand(cruiserDto);
+        }
+
+        public static GetCruisersCommand CreateGetCruisersCommand()
+        {
+            return new GetCruisersCommand();
+        }
+
+        public static GetLayoversCommand CreateGetLayoversCommand(int id)
+        {
+            return new GetLayoversCommand(id);
+        }
     
         /*GRUPO14*/
         public static GetResRestaurantByIdCommand GetResRestaurantByIdCommand(int id)
