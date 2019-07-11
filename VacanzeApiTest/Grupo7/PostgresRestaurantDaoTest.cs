@@ -103,6 +103,15 @@ namespace vacanze_back.VacanzeApiTest.Grupo7
 			Assert.Throws<RestaurantNotFoundExeption>(() => _restaurantDao.UpdateRestaurant(_restaurant));
 		}
 		
+		[Test]
+
+		public void DeleteRestaurantTest()
+		{
+			var id = _restaurantDao.AddRestaurant(_restaurant);
+			_restaurantDao.DeleteRestaurant(id);
+			Assert.Throws<RestaurantNotFoundExeption>(() => _restaurantDao.GetRestaurant(id));
+		}
+
 		[TearDown]
 
 		public void TearDown()

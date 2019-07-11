@@ -4,9 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Exceptions;
-using vacanze_back.VacanzeApi.Persistence.Repository;
-using vacanze_back.VacanzeApi.Persistence.Repository.Grupo6;
 using vacanze_back.VacanzeApi.Services.Controllers.Grupo6;
+using vacanze_back.VacanzeApi.LogicLayer.Command;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo6;
+using vacanze_back.VacanzeApi.LogicLayer.DTO;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo6;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo6;
 
 namespace vacanze_back.VacanzeApiTest.Grupo6
 {
@@ -16,9 +20,9 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         [SetUp]
         public void Setup()
         {
-            _hotelsController = new HotelsController();
+            _hotelsController = new HotelsController(null);
             _insertedHotels = new List<int>();
-            _hotel = HotelBuilder.Create()
+            _hotelentity = HotelBuilder.Create()
                 .WithName("Hotel Cagua")
                 .WithAmountOfRooms(2000)
                 .WithCapacityPerRoom(2)
@@ -31,119 +35,65 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
                 .WithAddressDescription("Calle Los Almendrones")
                 .WithPictureUrl("alguncodigoenbase64")
                 .Build();
+            HotelMapper _HotelMapper = MapperFactory.createHotelMapper();
+            _hotel= _HotelMapper.CreateDTO(_hotelentity);
         }
 
         [TearDown]
         public void TearDown()
         {
-            foreach (var hotelId in _insertedHotels) HotelRepository.DeleteHotel(hotelId);
+            foreach (var hotelId in _insertedHotels)             
+            {
+                DeleteHotelCommand DeleteHotel =  CommandFactory.DeleteHotelCommand(hotelId);
+                DeleteHotel.Execute ();   
+            }
             _insertedHotels.Clear();
         }
 
         private HotelsController _hotelsController;
-        private Hotel _hotel;
+        private HotelDTO _hotel;
+        private Hotel _hotelentity;
         private List<int> _insertedHotels;
-        /* tuve que comentar estas pruebas porque en el add cambie el hotel por hoteldto 
-       [Test]
-        public void Create_HotelWithHigherBoundStarAmount_BadRequestReturned()
-        {
-            _hotel.Stars = 7;
-            var result = _hotelsController.Create(_hotel);
-            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
-        }
-
-        [Test]
-        public void Create_HotelWithInvalidLocation_BadRequestReturned()
-        {
-            _hotel.Location.Id = 0;
-            var result = _hotelsController.Create(_hotel);
-            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
-        }
-
-        [Test]
-        public void Create_HotelWithLowerBoundStarAmount_BadRequestReturned()
-        {
-            _hotel.Stars = 0;
-            var result = _hotelsController.Create(_hotel);
-            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
-        }
-
-        [Test]
-        public void Create_HotelWithNegativeAmountOfRooms_BadRequestReturned()
-        {
-            _hotel.AmountOfRooms = -10;
-            var result = _hotelsController.Create(_hotel);
-            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
-        }
-
-        [Test]
-        public void Create_HotelWithNegativePricePerRoom_BadRequestReturned()
-        {
-            _hotel.PricePerRoom = -10;
-            var result = _hotelsController.Create(_hotel);
-            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
-        }
-
-        [Test]
-        public void Create_HotelWithNegativeRoomCapacity_BadRequestReturned()
-        {
-            _hotel.RoomCapacity = -10;
-            var result = _hotelsController.Create(_hotel);
-            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
-        }
-
-        [Test]
-        public void Create_HotelWithoutAddressSpecs_BadRequestReturned()
-        {
-            _hotel.AddressSpecification = null;
-            var result = _hotelsController.Create(_hotel);
-            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
-        }
-
-        [Test]
-        public void Create_HotelWithoutLocation_BadRequestReturned()
-        {
-            _hotel.Location = null;
-            var result = _hotelsController.Create(_hotel);
-            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
-        }
-
-        [Test]
-        public void Create_HotelWithoutName_BadRequestReturned()
-        {
-            _hotel.Name = null;
-            var result = _hotelsController.Create(_hotel);
-            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
-        }
-
-        [Test]
+        
+        [Test] //esta prueba no a entiendo herick
+        [Order(0)]
         public void Create_ValidHotelData_CreatedAtActionReturned()
         {
             var result = _hotelsController.Create(_hotel);
             Assert.IsInstanceOf<CreatedAtActionResult>(result.Result);
             // Get ID of the Hotel that was saved to delete it from the database at teardown
             var createdAction = (CreatedAtActionResult) result.Result;
-            var idToDelete = ((Hotel) createdAction.Value).Id;
+            var idToDelete = ((HotelDTO) createdAction.Value).Id;
             _insertedHotels.Add(idToDelete);
-        }*/
+        }
 
         [Test]
+        [Order(1)]
         public void Delete_InvalidHotelId_OkResultReturned()
         {
             var result = _hotelsController.Delete(0);
-            Assert.IsInstanceOf<OkResult>(result);
+            Assert.IsInstanceOf<NotFoundObjectResult>(result);
         }
 
         [Test]
+        [Order(2)]
         public void Delete_ValidHotelId_OkResultReturned()
         {
-            var savedHotelId = HotelRepository.AddHotel(_hotel);
+         
+            AddHotelCommand AddHotel =  CommandFactory.createAddHotelCommand(_hotelentity);
+            AddHotel.Execute ();
+            var savedHotelId = AddHotel.GetResult(); 
+            
             var deleteResult = _hotelsController.Delete(savedHotelId);
             Assert.IsInstanceOf<OkResult>(deleteResult);
-            Assert.Throws<HotelNotFoundException>(() => HotelRepository.GetHotelById(savedHotelId));
+
+            GetHotelByIdCommand GetHotelById =  CommandFactory.GetHotelByIdCommand(savedHotelId);
+
+            Assert.Throws<HotelNotFoundException>(() => GetHotelById.Execute ());
         }
 
         [Test]
+        [Order(3)]
         public void Get_InvalidLocationId_EmptyListReturned()
         {
             var result = _hotelsController.Get(0);
@@ -151,6 +101,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         }
 
         [Test]
+        [Order(4)]
         public void Get_NoLocationSpecified_HotelsReturned()
         {
             var result = _hotelsController.Get();
@@ -158,15 +109,19 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         }
 
         [Test]
+        [Order(5)]
         public void Get_ValidLocationId_HotelsInLocationReturned()
-        {
-            var savedHotelId = HotelRepository.AddHotel(_hotel);
+        {            
+            AddHotelCommand AddHotel =  CommandFactory.createAddHotelCommand(_hotelentity);
+            AddHotel.Execute ();
+            var savedHotelId = AddHotel.GetResult(); 
             _insertedHotels.Add(savedHotelId);
             var result = _hotelsController.Get(HotelTestSetup.LOCATION_ID);
             Assert.AreEqual(1, result.Value.Count());
         }
 
         [Test]
+        [Order(6)]
         public void GetById_InvalidHotelId_NotFoundResultReturned()
         {
             var result = _hotelsController.GetById(0);
@@ -174,19 +129,26 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         }
 
         [Test]
+        [Order(7)]
         public void GetById_ValidHotelId_OkResultReturned()
-        {
-            var savedHotelId = HotelRepository.AddHotel(_hotel);
+        {            
+            AddHotelCommand AddHotel =  CommandFactory.createAddHotelCommand(_hotelentity);
+            AddHotel.Execute ();
+            var savedHotelId = AddHotel.GetResult(); 
+
             _insertedHotels.Add(savedHotelId);
             var result = _hotelsController.GetById(savedHotelId);
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
         }
 
-		/*
         [Test]
+        [Order(8)]
         public void Update_HotelWithHigherBoundStarAmount_BadRequestReturned()
         {
-            var insertedHotelId = HotelRepository.AddHotel(_hotel);
+            AddHotelCommand AddHotel =  CommandFactory.createAddHotelCommand(_hotelentity);
+            AddHotel.Execute ();
+            var insertedHotelId = AddHotel.GetResult(); 
+            
             _insertedHotels.Add(insertedHotelId);
             _hotel.Stars = 7;
             var result = _hotelsController.Update(insertedHotelId, _hotel);
@@ -194,9 +156,13 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         }
 
         [Test]
+        [Order(9)]
         public void Update_HotelWithInvalidLocation_BadRequestReturned()
         {
-            var insertedHotelId = HotelRepository.AddHotel(_hotel);
+            AddHotelCommand AddHotel =  CommandFactory.createAddHotelCommand(_hotelentity);
+            AddHotel.Execute ();
+            var insertedHotelId = AddHotel.GetResult(); 
+
             _insertedHotels.Add(insertedHotelId);
             _hotel.Location.Id = 0;
             var result = _hotelsController.Update(insertedHotelId, _hotel);
@@ -204,9 +170,14 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         }
 
         [Test]
+        [Order(10)]
         public void Update_HotelWithLowerBoundStarAmount_BadRequestReturned()
         {
-            var insertedHotelId = HotelRepository.AddHotel(_hotel);
+            
+            AddHotelCommand AddHotel =  CommandFactory.createAddHotelCommand(_hotelentity);
+            AddHotel.Execute ();
+            var insertedHotelId = AddHotel.GetResult(); 
+
             _insertedHotels.Add(insertedHotelId);
             _hotel.Stars = 0;
             var result = _hotelsController.Update(insertedHotelId, _hotel);
@@ -214,9 +185,14 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         }
 
         [Test]
+        [Order(11)]
         public void Update_HotelWithNegativeAmountOfRooms_BadRequestReturned()
         {
-            var insertedHotelId = HotelRepository.AddHotel(_hotel);
+            
+            AddHotelCommand AddHotel =  CommandFactory.createAddHotelCommand(_hotelentity);
+            AddHotel.Execute ();
+            var insertedHotelId = AddHotel.GetResult(); 
+
             _insertedHotels.Add(insertedHotelId);
             _hotel.AmountOfRooms = -10;
             var result = _hotelsController.Update(insertedHotelId, _hotel);
@@ -224,9 +200,14 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         }
 
         [Test]
+        [Order(12)]
         public void Update_HotelWithNegativePricePerRoom_BadRequestReturned()
         {
-            var insertedHotelId = HotelRepository.AddHotel(_hotel);
+            
+            AddHotelCommand AddHotel =  CommandFactory.createAddHotelCommand(_hotelentity);
+            AddHotel.Execute ();
+            var insertedHotelId = AddHotel.GetResult(); 
+
             _insertedHotels.Add(insertedHotelId);
             _hotel.PricePerRoom = -10;
             var result = _hotelsController.Update(insertedHotelId, _hotel);
@@ -234,9 +215,14 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         }
 
         [Test]
+        [Order(13)]
         public void Update_HotelWithNegativeRoomCapacity_BadRequestReturned()
         {
-            var insertedHotelId = HotelRepository.AddHotel(_hotel);
+            
+            AddHotelCommand AddHotel =  CommandFactory.createAddHotelCommand(_hotelentity);
+            AddHotel.Execute ();
+            var insertedHotelId = AddHotel.GetResult(); 
+
             _insertedHotels.Add(insertedHotelId);
             _hotel.RoomCapacity = -10;
             var result = _hotelsController.Update(insertedHotelId, _hotel);
@@ -244,9 +230,13 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         }
 
         [Test]
+        [Order(14)]
         public void Update_HotelWithoutAddressSpecs_BadRequestReturned()
         {
-            var insertedHotelId = HotelRepository.AddHotel(_hotel);
+            AddHotelCommand AddHotel =  CommandFactory.createAddHotelCommand(_hotelentity);
+            AddHotel.Execute ();
+            var insertedHotelId = AddHotel.GetResult(); 
+
             _insertedHotels.Add(insertedHotelId);
             _hotel.AddressSpecification = null;
             var result = _hotelsController.Update(insertedHotelId, _hotel);
@@ -254,9 +244,14 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         }
 
         [Test]
+        [Order(15)]
         public void Update_HotelWithoutLocation_BadRequestReturned()
         {
-            var insertedHotelId = HotelRepository.AddHotel(_hotel);
+            
+            AddHotelCommand AddHotel =  CommandFactory.createAddHotelCommand(_hotelentity);
+            AddHotel.Execute ();
+            var insertedHotelId = AddHotel.GetResult(); 
+
             _insertedHotels.Add(insertedHotelId);
             _hotel.Location = null;
             var result = _hotelsController.Update(insertedHotelId, _hotel);
@@ -264,9 +259,14 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         }
 
         [Test]
+        [Order(16)]
         public void Update_HotelWithoutName_BadRequestReturned()
         {
-            var insertedHotelId = HotelRepository.AddHotel(_hotel);
+            
+            AddHotelCommand AddHotel =  CommandFactory.createAddHotelCommand(_hotelentity);
+            AddHotel.Execute ();
+            var insertedHotelId = AddHotel.GetResult(); 
+
             _insertedHotels.Add(insertedHotelId);
             _hotel.Name = null;
             var result = _hotelsController.Update(insertedHotelId, _hotel);
@@ -274,6 +274,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         }
 
         [Test]
+        [Order(17)]
         public void Update_InvalidHotelId_NotFoundResultReturned()
         {
             var result = _hotelsController.Update(0, _hotel);
@@ -281,9 +282,13 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         }
 
         [Test]
+        [Order(18)]
         public void Update_ValidHotel_OkResultReturned()
         {
-            var insertedHotelId = HotelRepository.AddHotel(_hotel);
+            AddHotelCommand AddHotel =  CommandFactory.createAddHotelCommand(_hotelentity);
+            AddHotel.Execute ();
+            var insertedHotelId = AddHotel.GetResult(); 
+
             _insertedHotels.Add(insertedHotelId);
             _hotel.Name = "Upated Name";
             _hotel.PricePerRoom = 999;
@@ -296,9 +301,14 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
         }
 
         [Test]
+        [Order(19)]
         public void Update_ValidHotel_UpdatedDataReturned()
         {
-            var insertedHotelId = HotelRepository.AddHotel(_hotel);
+            
+            AddHotelCommand AddHotel =  CommandFactory.createAddHotelCommand(_hotelentity);
+            AddHotel.Execute ();
+            var insertedHotelId = AddHotel.GetResult(); 
+
             _insertedHotels.Add(insertedHotelId);
             _hotel.Name = "Upated Name";
             _hotel.PricePerRoom = 999;
@@ -308,7 +318,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
             _hotel.AddressSpecification = "New Address specification";
             var result = _hotelsController.Update(insertedHotelId, _hotel);
             var casted = (OkObjectResult) result.Result;
-            var updatedHotel = (Hotel) casted.Value;
+            var updatedHotel = (HotelDTO) casted.Value;
             Assert.AreEqual(_hotel.Name, updatedHotel.Name);
             Assert.AreEqual(_hotel.PricePerRoom, updatedHotel.PricePerRoom);
             Assert.AreEqual(_hotel.Phone, updatedHotel.Phone);
@@ -316,14 +326,98 @@ namespace vacanze_back.VacanzeApiTest.Grupo6
             Assert.AreEqual(_hotel.AmountOfRooms, updatedHotel.AmountOfRooms);
             Assert.AreEqual(_hotel.AddressSpecification, updatedHotel.AddressSpecification);
         }
-		*/
         [Test]
+        [Order(20)]
         public void GetHotelImageTest()
         {
-            var insertedHotelId = HotelRepository.AddHotel(_hotel);
+            
+            AddHotelCommand AddHotel =  CommandFactory.createAddHotelCommand(_hotelentity);
+            AddHotel.Execute ();
+            var insertedHotelId = AddHotel.GetResult(); 
+
             _insertedHotels.Add(insertedHotelId);
             var base64ImageCode = _hotelsController.GetHotelImage(insertedHotelId);
             Assert.IsNotNull(base64ImageCode);
+        }
+        [Test]
+        [Order(21)]
+        public void Create_HotelWithHigherBoundStarAmount_BadRequestReturned()
+        {
+            _hotel.Stars = 7;
+            var result = _hotelsController.Create(_hotel);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
+        }
+
+        [Test]
+        [Order(22)]
+        public void Create_HotelWithInvalidLocation_BadRequestReturned()
+        {
+            _hotel.Location.Id = 0;
+            var result = _hotelsController.Create(_hotel);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
+        }
+
+        [Test]
+        [Order(23)]
+        public void Create_HotelWithLowerBoundStarAmount_BadRequestReturned()
+        {
+            _hotel.Stars = 0;
+            var result = _hotelsController.Create(_hotel);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
+        }
+
+        [Test]
+        [Order(24)]
+        public void Create_HotelWithNegativeAmountOfRooms_BadRequestReturned()
+        {
+            _hotel.AmountOfRooms = -10;
+            var result = _hotelsController.Create(_hotel);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
+        }
+
+        [Test]
+        [Order(25)]
+        public void Create_HotelWithNegativePricePerRoom_BadRequestReturned()
+        {
+            _hotel.PricePerRoom = -10;
+            var result = _hotelsController.Create(_hotel);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
+        }
+
+        [Test]
+        [Order(26)]
+        public void Create_HotelWithNegativeRoomCapacity_BadRequestReturned()
+        {
+            _hotel.RoomCapacity = -10;
+            var result = _hotelsController.Create(_hotel);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
+        }
+
+        [Test]
+        [Order(27)]
+        public void Create_HotelWithoutAddressSpecs_BadRequestReturned()
+        {
+            _hotel.AddressSpecification = null;
+            var result = _hotelsController.Create(_hotel);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
+        }
+
+        [Test]
+        [Order(28)]
+        public void Create_HotelWithoutLocation_BadRequestReturned()
+        {
+            _hotel.Location = null;
+            var result = _hotelsController.Create(_hotel);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
+        }
+
+        [Test]
+        [Order(29)]
+        public void Create_HotelWithoutName_BadRequestReturned()
+        {
+            _hotel.Name = null;
+            var result = _hotelsController.Create(_hotel);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
     }
 }

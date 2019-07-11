@@ -299,29 +299,6 @@ INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status
 INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (9, 37, '8A87ADS', 450, TRUE);
 INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (9, 29, '9ASDNAS', 350, TRUE);
 
-------------------------------------NO SIRVEN ESTOS DE ABAJO----------------------------------------------------------------------
-
-INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
-VALUES('Toyota','Corolla',3,true,55,'aa11ab1','auto1.jpg',1);
-INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
-VALUES('VolksWagen','Golf',3,false,70.5,'aa11ab2','auto2.jpg',1);
-INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
-VALUES('Honda','Civic',3,true,40,'aa12ab1','auto3.jpg',2);
-INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
-VALUES('Ford','Fusion',3,false,60,'aa12ab2','auto4.jpg',2);
-INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
-VALUES('Ford','F-150',4,true,80,'aa13ab1','auto5.jpg',3);
-INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
-VALUES('Honda','Civic',3,false,50.2,'aa13ab2','auto6.jpg',3);
-INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
-VALUES('Toyota','Camry',3,true,60,'aa14ab1','auto7.jpg',4);
-INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
-VALUES('Honda','Accord',3,false,54,'aa14ab2','auto8.jpg',4);
-INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
-VALUES('Honda','CR-V',3,true,55,'aa15ab1','auto9.jpg',5);
-INSERT INTO AUTOMOBILE(AUT_MAKE,AUT_MODEL,AUT_CAPACITY,AUT_ISACTIVE,AUT_PRICE,AUT_LICENSE,AUT_PICTURE,AUT_LOC_FK)
-VALUES('Chevrolet','Silverado',5,false,69.8,'aa15ab2','auto10.jpg',5);
-
 ------- grupo 6 ----------
 
 INSERT INTO hotel (hot_name, hot_room_qty, hot_room_capacity, hot_is_active,
@@ -478,50 +455,39 @@ INSERT INTO TRA_LOC (tl_tra_fk, tl_loc_fk) VALUES (3,29); -- Caracas
 
 INSERT INTO flight(fli_id, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, 
         	fli_loc_arrival, fli_pla_fk)
-VALUES (1,300,'2019-01-01','2019-06-13',1,2,1);
+VALUES (1,300,'2019-08-08','2019-09-09',1,2,1);
 
 INSERT INTO flight(fli_id, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, 
         	fli_loc_arrival, fli_pla_fk)
-VALUES (2,450,'2019-02-01','2019-03-01',2,3,2);
+VALUES (2,450,'2019-08-08','2019-09-09',2,3,2);
 
 INSERT INTO flight(fli_id, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, 
         	fli_loc_arrival, fli_pla_fk)
-VALUES (3,650,'2019-03-01','2019-04-01',5,6,3);
+VALUES (3,650,'2019-08-08','2019-10-10',5,6,3);
 
 INSERT INTO flight(fli_id, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, 
         	fli_loc_arrival, fli_pla_fk)
-VALUES (4,650,'2019-03-01','2019-03-12',7,10,1);
+VALUES (4,650,'2019-08-08','2019-09-09',7,10,1);
 
 INSERT INTO flight(fli_id, fli_price, fli_departuredate, fli_arrivaldate, fli_loc_departure, 
         	fli_loc_arrival, fli_pla_fk)
-VALUES (5,650,'2019-03-01','2019-03-12',7,10,2);
+VALUES (5,650,'2019-08-08','2019-09-10',7,10,2);
 
 
 INSERT INTO res_fli(rf_id, rf_seatnum, rf_timestamp, rf_num_ps, rf_use_fk, rf_pay_fk,rf_fli_fk)
-    VALUES (1,3,'2019-01-01',4,1,null,1);
+    VALUES (1,3,'2019-08-08',4,1,null,1);
 
 INSERT INTO res_fli(rf_id, rf_seatnum, rf_timestamp, rf_num_ps, rf_use_fk, rf_pay_fk,rf_fli_fk)
-    VALUES (2,2,'2019-01-15',4,1,null,2);
+    VALUES (2,2,'2019-08-08',4,1,null,2);
 
 ------- grupo 13 ----------
 
-INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
-VALUES('FIAT','UNO',5,true,25.99,'TAT77E','fiatuno.jgp',1);
-
-INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
-VALUES('FIAT','FIRE',5,true,24.99,'MEB19G','fiatfire.jgp',1);
-
-INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
-VALUES('BMW','Z3',4,true,35.99,'DDB43S','bmwz3.jpg',2);
-
-INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
-VALUES('Audi','Q7',6,true,40.99,'AA1239G','audiq7.jpg',3);
-
-INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
-VALUES('Sin','Reserva',4,true,34.99,'Bueno','',2);
-
-INSERT into Automobile(aut_make,aut_model,aut_capacity,aut_isactive,aut_price,aut_license,aut_picture,aut_loc_fk)
-VALUES('Sin2','Reserva2',3,true,36.99,'Bueno2','',2);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (1, 37, 'TAT77E', 550, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (1, 37, 'MEB19G', 550, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (1, 37, 'MEB19H', 550, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (1, 37, 'MEB18G', 550, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (1, 37, 'MFB19G', 550, TRUE);
+INSERT INTO vehicle (veh_model, veh_location, veh_license, veh_price, veh_status) VALUES (1, 37, 'MEB29G', 550, TRUE);
 
 INSERT INTO public.res_roo(rr_checkinDate,rr_checkoutDate,rr_timestamp,rr_use_fk,rr_hot_fk)
 values('10/12/2018', '02/01/2019','10/12/2018', 1, 1 );

@@ -1,3 +1,5 @@
+
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo3;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo9;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
@@ -8,6 +10,10 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo4;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo12;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo5;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo8;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo10;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo14;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo1;
+
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO
 {
@@ -34,6 +40,16 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         {
             return new PostgresRestaurantDAO();
         }
+           public override Traveldao GetTravelDAO()
+        {
+            return new Traveldao();
+        }
+
+        public override Commentdao  GeCommentDAO ()
+        {
+            return new Commentdao();
+        }
+
 
         public override RoleDAO GetRoleDAO()
         {
@@ -64,14 +80,23 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         {
             return new PostgresCruiserDAO();
         }
+         public override IAirplaneDAO GetAirplane()
+        {
+            return new AirplanesRepositoryDAO();
+        }
+
+         public override IFlightDAO GetFlight()
+        {
+            return new FlightRepositoryDAO();
+        }
         public override LocationDAO GetLocationDAO()
         {
             return new PostgresLocationDAO();
         }
 
-        public override IReservationAutomobileDAO GetReservationAutomobileDAO()
+        public override IReservationVehicleDAO GetReservationVehicleDAO()
         {
-            return new PostgresReservationAutomobileDAO();
+            return new PostgresReservationVehicleDAO();
         }
 
         public override ReservationFlightDAO GetReservationFlightDAO()
@@ -89,6 +114,16 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         public override ICheckinBaggageDAO PostCheckBaggage()
         {
             return new PostgresCheckBaggagetDAO();
+        }
+
+        public override IReservationRestaurantDAO GetReservationRestaurantDAO()
+        {
+            return new PostgresReservationRestaurantDAO();
+        }
+        
+        public override LoginDAO GetLoginDAO(){
+            return new PostgresLoginDAO();
+
         }
     }
 }

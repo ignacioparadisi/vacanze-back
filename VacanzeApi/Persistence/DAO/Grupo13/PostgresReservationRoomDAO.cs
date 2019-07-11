@@ -6,7 +6,6 @@ using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo13;
-using vacanze_back.VacanzeApi.Persistence.DAO.Grupo6;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
 {
@@ -16,35 +15,9 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         private const string SP_FIND = "m13_findbyroomreservationid(@_id)";
         private const string SP_AVAILABLE = "getAvailableRoomsBasedOnReservationByHotelId(@_id)";
         private const string SP_ADD_RESERVATION = "m13_addRoomReservation(@_checkin, @_checkout,@_use_fk,@_hot_fk)";
-        private const string SP_UPDATE = "m13_updatehotelreservation(@_checkin,@_checkout,@_use_fk,@_hot_fk,@_id)";
+        private const string SP_UPDATE = "m13_updatehotelreservation(@_checkin,@_checkout,@_id)";
         private const string SP_DELETE_RESERVATION = "m13_deleteRoomReservation(@_rooid)";
         private const string SP_ALL_BY_USER_ID = "m13_getresroobyuserandroomid(@_id)";
-
-        /** <summary>
-         * Trae de la BD, las reservas de habitacion
-         * </summary>
-         */
-        // TODO: Puede que este método sea borrado
-        public List<ReservationRoom> GetRoomReservations()
-        {
-            try
-            {
-                var table = PgConnection.Instance.ExecuteFunction(SP_SELECT);
-                List<ReservationRoom> roomReservationList = new List<ReservationRoom>();
-
-                for (int i = 0; i < table.Rows.Count; i++)
-                {
-                    ReservationRoom roomRes = GetReservationRoomFromTable(table, i);
-                    roomReservationList.Add(roomRes);
-                }
-
-                return roomReservationList;
-            }
-            catch (Exception)
-            {
-                throw new GeneralException("Error Obteniendo las Reservas de Habitación");
-            }
-        }
 
         /** <summary>
          * Busca en la BD, la reserva que posee el identificador suministrado
@@ -60,12 +33,12 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
                 for (int i = 0; i < table.Rows.Count; i++)
                 {
                     reservationRoom = GetReservationRoomFromTable(table, i);
-                    //Falta Payment
+                    // Falta Payment
                 }
 
                 if (table.Rows.Count == 0)
                 {
-                    throw new RoomReservationNotFoundException();
+                    throw new RoomReservationNotFoundException("No se ha encontrado la reservación de la habitación.");
                 }
 
                 return reservationRoom;
@@ -140,20 +113,8 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         /// <param name="reservation">La entidad reservacion a borrar de la BD</param>
         public int Delete(int id)
         {
-            try
-            {
-                var table = PgConnection.Instance.ExecuteFunction(SP_DELETE_RESERVATION, id);
-                if (table.Rows.Count > 0)
-                {
-                    return Convert.ToInt32(table.Rows[0][0]);
-                }
-
-                return 0;
-            }
-            catch (Exception e)
-            {
-                throw new GeneralException("Error Eliminando la Reserva de Habitación");
-            }
+            var table = PgConnection.Instance.ExecuteFunction(SP_DELETE_RESERVATION, id);
+            return Convert.ToInt32(table.Rows[0][0]);
         }
 
         /// <summary>
@@ -188,27 +149,37 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
             }
         }
 
-        /** <summary>
-         * Actualiza en la BD, la reservacion de habitacion
-         * </summary>
-         * <param name="entity">La reserva a actualizar</param>
-         */
-        public void Update(ReservationRoom reservation)
+        /// <summary>
+        /// Actualiza en la BD, la reservacion de habitacion
+        /// </summary>
+        /// <param name="entity">La reserva a actualizar</param>
+        /// <returns> La Reserva de Hotel Actualizada </returns>
+        public ReservationRoom Update(ReservationRoom reservation)
         {
             try
             {
-                PgConnection.Instance.ExecuteFunction(
+                var updatedReservation = EntityFactory.CreateReservationRoom();
+                var table = PgConnection.Instance.ExecuteFunction(
                     SP_UPDATE,
                     reservation.CheckIn,
                     reservation.CheckOut,
-                    reservation.UserId,
-                    reservation.HotelId,
                     reservation.Id
                 );
+                for (var i = 0; i < table.Rows.Count; i++)
+                {
+                    var id = Convert.ToInt32(table.Rows[i][0]);
+                    var checkInDate = Convert.ToDateTime(table.Rows[i][1]);
+                    var checkOutDate = Convert.ToDateTime(table.Rows[i][2]);
+                    var hotelId = Convert.ToInt32(table.Rows[i][4]);
+                    var userId = Convert.ToInt32(table.Rows[i][3]);
+                    updatedReservation = EntityFactory.CreateReservationRoom(id, checkInDate, checkOutDate, hotelId, userId);
+                }
+                return updatedReservation;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw new GeneralException("Error Actulizando la Reserva de Habitación");
+                throw new GeneralException(e.Message);
+                // throw new GeneralException("Error Actualizando la Reserva de Habitación");
             }
         }
         

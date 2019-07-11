@@ -5,9 +5,9 @@ using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
+using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.DAO;
-using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
-using vacanze_back.VacanzeApi.Persistence.DAO.Grupo6;
 
 namespace vacanze_back.VacanzeApiTest.Grupo13
 {
@@ -15,9 +15,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
     public class ReservationRoomDAOTest
     {
         private ReservationRoom _reservation;
-        private IReservationRoomDAO _restRoomDAO;
         private Hotel _hotel;
-        private HotelDAO _hotelDAO;
         private DAOFactory _factory;
         private User _user;
         private List<int> _insertedReservations;
@@ -60,8 +58,8 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         {
             _insertedReservations = new List<int>();
             
-            DateTime checkin = new DateTime(2019,7,10);
-            DateTime checkout = new DateTime(2019,7,12);
+            DateTime checkin = new DateTime(2019,8,10);
+            DateTime checkout = new DateTime(2019,11,12);
             
             _factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
             
@@ -85,6 +83,60 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         }
 
         [Test]
+        public void CreateValidReservation()
+        {
+            DateTime checkin = new DateTime(2019,7,10);
+            DateTime checkout = new DateTime(2019,7,12);
+            ReservationRoom reservationRoom =
+                EntityFactory.CreateReservationRoom(0, checkin, checkout, _hotel.Id, _user.Id);
+            Assert.AreEqual(0, reservationRoom.Id);
+        }
+
+        [Test]
+        public void CreateReservationNotValidId()
+        {
+            DateTime checkin = new DateTime(2019,7,10);
+            DateTime checkout = new DateTime(2019,7,12);
+            Assert.Throws<NotValidIdException>(() =>
+            {
+                EntityFactory.CreateReservationRoom(-1, checkin, checkout, _hotel.Id, _user.Id);
+            });
+        }
+        
+        [Test]
+        public void CreateReservationNotValidHotelId()
+        {
+            DateTime checkin = new DateTime(2019,7,10);
+            DateTime checkout = new DateTime(2019,7,12);
+            Assert.Throws<NotValidIdException>(() =>
+            {
+                EntityFactory.CreateReservationRoom(0, checkin, checkout, -1, _user.Id);
+            });
+        }
+        
+        [Test]
+        public void CreateReservationNotValidUserId()
+        {
+            DateTime checkin = new DateTime(2019,7,10);
+            DateTime checkout = new DateTime(2019,7,12);
+            Assert.Throws<NotValidIdException>(() =>
+            {
+                EntityFactory.CreateReservationRoom(0, checkin, checkout, _hotel.Id, -1);
+            });
+        }
+        
+        [Test]
+        public void CreateReservationNotValidDatesId()
+        {
+            DateTime checkin = new DateTime(2019,7,12);
+            DateTime checkout = new DateTime(2019,7,10);
+            Assert.Throws<GeneralException>(() =>
+            {
+                EntityFactory.CreateReservationRoom(0, checkin, checkout, _hotel.Id, _user.Id);
+            });
+        }
+
+        [Test]
         public void AddSuccess()
         {
             ReservationRoom reservationRoom = _factory.GetReservationRoomDAO().Add(_reservation);
@@ -99,6 +151,15 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             _insertedReservations.Add(_reservation.Id);
             ReservationRoom reservation = _factory.GetReservationRoomDAO().Find(_reservation.Id);
             Assert.AreEqual(reservation.Id, _reservation.Id);
+        }
+
+        [Test]
+        public void ReservationRoomNotFoundException()
+        {
+            Assert.Throws<GeneralException>(() =>
+            {
+                _factory.GetReservationRoomDAO().Find(0);
+            });
         }
 
         [Test]
@@ -117,6 +178,23 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             _reservation = _factory.GetReservationRoomDAO().Add(_reservation);
             var id = _factory.GetReservationRoomDAO().Delete(_reservation.Id);
             Assert.AreEqual(_reservation.Id, id);
+        }
+
+        [Test]
+        public void UpdateSuccess()
+        {
+            DateTime checkin = new DateTime(2019,9,10);
+            _reservation = _factory.GetReservationRoomDAO().Add(_reservation);
+            _reservation.CheckIn = checkin;
+            var updatedReservation = _factory.GetReservationRoomDAO().Update(_reservation);
+            Assert.AreEqual(checkin, updatedReservation.CheckIn);
+        }
+
+        [Test]
+        public void GetAvailableRoomReservationsSuccess()
+        {
+            var availableRooms = _factory.GetReservationRoomDAO().GetAvailableRoomReservations(_hotel.Id);
+            Assert.True(availableRooms > 0);
         }
     }
 }

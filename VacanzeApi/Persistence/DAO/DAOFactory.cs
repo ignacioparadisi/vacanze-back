@@ -1,4 +1,5 @@
 using vacanze_back.VacanzeApi.Common.Exceptions;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo3;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo2;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo7;
@@ -9,6 +10,9 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo12;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo5;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo4;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo8;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo10;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo14;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo1;
 
 namespace vacanze_back.VacanzeApi.Persistence.DAO
 {
@@ -29,6 +33,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
                     throw new NotValidFactoryTypeException("El tipo de fábrica de DAO no es válido");
             }
         }
+
         // +++++++++++++++++
         //     GRUPO 5
         // +++++++++++++++++
@@ -46,7 +51,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         // +++++++++++++++++
         public abstract IReservationRoomDAO GetReservationRoomDAO();
 
-        public abstract IReservationAutomobileDAO GetReservationAutomobileDAO();
+        public abstract IReservationVehicleDAO GetReservationVehicleDAO();
         // +++++++++++++++++
         //     GRUPO 7
         // +++++++++++++++++
@@ -61,6 +66,12 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         //     GRUPO 8
         // +++++++++++++++++
         public abstract ICruiserDAO GetCruiserDAO();
+        //----------------------Grupo3--------------------------------//
+        
+        public abstract IAirplaneDAO GetAirplane();
+
+        public abstract IFlightDAO GetFlight();
+        //------------------------Fin---------------------------------//
 
         public abstract IBaggageDao GetBaggageDao();
 
@@ -74,6 +85,15 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         public abstract ISaleFlightDAO PostSaleFlightDAO();
 
         public abstract ICheckinBaggageDAO PostCheckBaggage();
+         public abstract Traveldao GetTravelDAO();
+         public abstract Commentdao GeCommentDAO();
+
+        // +++++++++++++++++
+        //     GRUPO 14
+        // +++++++++++++++++
+        public abstract IReservationRestaurantDAO GetReservationRestaurantDAO();
+
+        public abstract LoginDAO GetLoginDAO();
 
     }
 }

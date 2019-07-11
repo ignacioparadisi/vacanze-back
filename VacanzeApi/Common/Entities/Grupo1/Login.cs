@@ -8,16 +8,30 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo1
 {
     public class Login:Entity
     {
-        public List<Role> Roles;
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public List<Role> roles;
+        public string email { get; set; }
+        public string password { get; set; }
 
-        public Login(int Id,List<Role> Roles, string Email, String Password):base(Id)
+        public Login(int id,List<Role> roles, string email, String password):base(id)
         {
-            this.Id = Id;
-            this.Roles = Roles;
-            this.Email = Email;
-            this.Password = Password;
+            this.roles = roles;
+            this.email = email;
+            this.password = password;
+        }
+
+        public Login(int id, string email, String password):base(id)
+        {
+            this.email = email;
+            this.password = password;
+        }
+
+        public Login(String password):base(0)
+        {
+            this.password = password;
+        }
+
+        public Login():base(0){
+
         }
     }
 }

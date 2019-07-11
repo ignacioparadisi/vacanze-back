@@ -1,6 +1,10 @@
+using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo3;
+using  vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo3;
 using System.Collections.Generic;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo2;
+using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo14;
 using  vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo5;
 using  vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo6;
 using  vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo12;
@@ -8,6 +12,12 @@ using  vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo12;
 namespace vacanze_back.VacanzeApi.LogicLayer.DTO{
 
     public class DTOFactory{
+
+
+        public static FlightDTO CreateFlightDTO(Airplane plane, double price, string departure, string arrival,
+         Location loc_departure, Location loc_arrival){
+            return new FlightDTO(plane,price,departure,arrival,loc_departure,loc_arrival);
+        }
 
         public static VehicleDTO CreateVehicleDTO(int Id, int _vehicleModelId, int _vehicleLocationId, 
             string _license, double _price, bool _status)
@@ -56,6 +66,16 @@ namespace vacanze_back.VacanzeApi.LogicLayer.DTO{
             return new FlightResDTO(  id, price, timestamp, seatNum, name_cityI, name_countryI, namecityV,
             namecountryV, numPas, id_user);
 
+        }
+        // +++++++++++++++++
+        //     GRUPO 14
+        // +++++++++++++++++
+        public static ResRestaurantDTO CreateResRestaurantDTO(int id, string locationName, string pais, string restName,
+         string address, string fecha_reservacion, int cant_person)
+        {
+
+            return new ResRestaurantDTO( id,  locationName,  pais,  restName,
+          address,  fecha_reservacion,  cant_person);
         }
     }
 
