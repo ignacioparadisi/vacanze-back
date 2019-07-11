@@ -6,6 +6,7 @@ using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo2;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo5;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo6;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo7;
+using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo8;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo9;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo12;
 using vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo13;
@@ -36,6 +37,16 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper
             return new HotelMapper();
         }
 
+        public static CruiserMapper CreateCruiserMapper()
+        {
+            return new CruiserMapper();
+        }
+
+        public static LayoverMapper CreateLayoverMapper()
+        {
+            return new LayoverMapper();
+        }
+        
         public static FlightMapper createFlightMapper(){
             return new FlightMapper();
         }

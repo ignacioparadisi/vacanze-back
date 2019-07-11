@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using NUnit.Framework;
@@ -47,9 +48,11 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         [Test]
         public void PostUserTest()
         {
-            var result = _usersController.Post(_dto);
+            UserDTO dto = new UserDTO(0, 23456789, "Pedro", "Perez",
+                "cliente1@vacanze.com", "12345678", _user.Roles);
+            var result = _usersController.Post(dto);
             var okObject = (OkObjectResult) result.Result;
-            var idToDelete = ((User) okObject.Value).Id;
+            var idToDelete = ((UserDTO) okObject.Value).Id;
             _insertedUsers.Add(idToDelete);
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
         }
@@ -383,6 +386,7 @@ namespace vacanze_back.VacanzeApiTest.Grupo2
         [Test]
         public void DeleteUserByIdRequestTest()
         {
+
             var user = UserRepository.AddUser(_user);
             var result = _usersController.Delete(user.Id);
             Assert.IsInstanceOf<OkResult>(result.Result);

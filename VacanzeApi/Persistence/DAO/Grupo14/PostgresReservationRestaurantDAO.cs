@@ -63,7 +63,10 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo14
                 }
             }
         }
-
+        /// <summary>
+        ///     Metodo para listar Restaurantes reservados por id usuario
+        /// </summary>
+        /// <param name="user"></param>
 
         public List<Restaurant_res> getResRestaurant(int user) //operative with design patterns
         {
@@ -86,7 +89,10 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo14
             };
             return ReservationList;
         }
-
+        /// <summary>
+        ///     Metodo para listar Restaurantes reservas no pagadas
+        /// </summary>
+        /// <param name="user"></param>
         public List<Restaurant_res> getReservationNotPay(int user)
         {
 
@@ -104,7 +110,10 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo14
             };
             return ReservationList;
         }
-
+        /// <summary>
+        ///     Metodo para eliminar los restaurantes reservados
+        /// </summary>
+        /// <param name="resRestId"></param>
         public int deleteResRestaurant(int resRestId)
         {
             try
@@ -123,7 +132,11 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo14
                 throw new DeleteReservationException("Error con la base de datos.");
             }
         }
-
+        /// <summary>
+        ///     Metodo para ecambiar las reservas de no pagadas a pagadas
+        /// </summary>
+        /// <param name="payID"></param>
+        /// /// <param name="resRestID"></param>
         public string updateResRestaurant(int payID, int resRestID)
         {
             try

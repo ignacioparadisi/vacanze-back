@@ -31,8 +31,15 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
         }
 
         [HttpPost]
-
-        //POST : /api/ApplicationUser/Email
+        /// <summary>
+        ///     Controller para cambiar la clave del usuario
+        /// </summary>
+        /// <param name="loginDTO">Objeto login a cambiar su clave</param>
+        /// <returns>Objeto tipo Entity con los datos del usuario luego de cambiar su clave</returns>
+        /// <exception cref="PasswordRecoveryException">El objeto a retornar es nulo</exception>
+        /// <exception cref="DatabaseException">Algun error con la base de datos</exception>
+       
+        //POST : /api/Email
         public ActionResult<LoginDTO> Recovery([FromBody] LoginDTO loginDTO)
         {
             try{
@@ -62,6 +69,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
                     Text = "Su contraseña nueva: " + objUser.password
                     };
 
+
                     using (var client = new MailKit.Net.Smtp.SmtpClient()){
                         client.CheckCertificateRevocation = false;
                         client.Connect("smtp.gmail.com", 587);
@@ -75,6 +83,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
                 }
                 else{ 
                     return BadRequest(new { message = "Correo invalido." });
+
                 }
             }
             catch(DatabaseException ex){
