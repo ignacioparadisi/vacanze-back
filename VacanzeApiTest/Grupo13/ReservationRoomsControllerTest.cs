@@ -139,5 +139,12 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             var result = _controller.GetReservationRoomsForUser(_user.Id);
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
         }
+
+        [Test]
+        public void GetReservationRoomsForUserBadRequest()
+        {
+            var result = _controller.GetReservationRoomsForUser(-1);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
+        }
     }
 }

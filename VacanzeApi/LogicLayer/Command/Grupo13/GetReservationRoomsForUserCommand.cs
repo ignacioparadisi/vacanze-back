@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.Internal;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
+using vacanze_back.VacanzeApi.Common.Exceptions.Grupo13;
 using vacanze_back.VacanzeApi.Persistence.DAO;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo13;
 
@@ -29,6 +31,10 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13
             DAOFactory factory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
             IReservationRoomDAO reservationRoomDao = factory.GetReservationRoomDAO();
             _result = reservationRoomDao.GetAllByUserId(_id);
+            if (!_result.Any())
+            {
+                throw new UserDoesntHaveReservationsException();
+            }
         }
 
         /// <summary>
