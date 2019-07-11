@@ -35,23 +35,23 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             {
                 CommandResult<List<ReservationVehicle>> command =
                     CommandFactory.CreateGetReservationVehicleByUserCommand(user);
-                _logger.LogInformation("Se ejecuta el Comando para Obtener las Reservaciones de Vehículo del" +
+                _logger?.LogInformation("Se ejecuta el Comando para Obtener las Reservaciones de Vehículo del" +
                                        "Usuario " + Convert.ToString(user));
                 command.Execute();
-                _logger.LogInformation("Se Obtienen las Reservaciones de Vehículo del" +
+                _logger?.LogInformation("Se Obtienen las Reservaciones de Vehículo del" +
                                        "Usuario " + Convert.ToString(user));
                 var resvehicMapper = MapperFactory.CreateReservationVehicleMapper();
                 return Ok(resvehicMapper.CreateDTOList(command.GetResult()));
             }
             catch (GeneralException e)
             {
-                _logger.LogWarning(e, e.Message + " al Obtener las Reservas de Vehículo de el Usuario " + 
+                _logger?.LogWarning(e, e.Message + " al Obtener las Reservas de Vehículo de el Usuario " + 
                                       Convert.ToString(user));
                 return BadRequest(e.Message);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error al Obtener las Reservas de Vehículo de el Usuario " + 
+                _logger?.LogError(e, "Error al Obtener las Reservas de Vehículo de el Usuario " + 
                                     Convert.ToString(user));
                 return StatusCode(500, "Error en el Servidor");
             }
@@ -153,22 +153,22 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo13
             try
             {
                 CommandResult<int> command = CommandFactory.CreateDeleteReservationVehicleCommand(id);
-                _logger.LogInformation("Se Ejecuta el Comando para Eliminar la Reservación de Vehículo " +
+                _logger?.LogInformation("Se Ejecuta el Comando para Eliminar la Reservación de Vehículo " +
                                        Convert.ToString(id));
                 command.Execute();
-                _logger.LogInformation("Se Elimina la Reservación de Vehículo " +
+                _logger?.LogInformation("Se Elimina la Reservación de Vehículo " +
                                        Convert.ToString(id));
                 return Ok(command.GetResult());
             }
             catch (GeneralException e)
             {
-                _logger.LogWarning(e, e.Message + " al Eliminar la Reservación de Vehículo " + 
+                _logger?.LogWarning(e, e.Message + " al Eliminar la Reservación de Vehículo " + 
                                       Convert.ToString(id));
                 return BadRequest(e.Message);
             }
             catch (Exception e)
             {
-                _logger.LogError(e,  "Error en el Servidor al Eliminar la Reservación de Vehículo " + 
+                _logger?.LogError(e,  "Error en el Servidor al Eliminar la Reservación de Vehículo " + 
                                      Convert.ToString(id));
                 return StatusCode(500, "Error en el Servidor");
             }
