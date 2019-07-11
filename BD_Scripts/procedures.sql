@@ -2719,58 +2719,6 @@ $$ LANGUAGE plpgsql;
 
 ----------------------------------Grupo 13 Automobile Reservations-----------------------------------------
 
---Get all Reservations Automobiles
-CREATE OR REPLACE FUNCTION public.m13_getresautos(
-)
-    RETURNS TABLE
-            (
-                ra_id         integer,
-                ra_pickupdate timestamp without time zone,
-                ra_returndate timestamp without time zone,
-                ra_use_fk     integer,
-                ra_aut_fk     integer,
-                ra_pay_fk     integer,
-                aut_id        integer,
-                aut_make      character varying,
-                aut_model     character varying,
-                aut_capacity  integer,
-                aut_price     numeric,
-                aut_license   character varying,
-                aut_picture   character varying,
-                aut_loc_fk    integer
-            )
-    LANGUAGE 'plpgsql'
-
-    COST 100
-    VOLATILE
-    ROWS 1000
-AS
-$BODY$
-BEGIN
-    RETURN QUERY
-        select rr.ra_id,
-               rr.ra_pickupdate,
-               rr.ra_returndate,
-               rr.ra_use_fk,
-               rr.ra_aut_fk,
-               rr.ra_pay_fk,
-               r.aut_id,
-               r.aut_make,
-               r.aut_model,
-               r.aut_capacity,
-               r.aut_price,
-               r.aut_license,
-               r.aut_picture,
-               r.aut_loc_fk
-        from public.res_aut as rr,
-             public.Automobile as r
-        where rr.ra_aut_fk = r.aut_id;
-END;
-$BODY$;
-
-ALTER FUNCTION public.m13_getresautos()
-    OWNER TO vacanza;
-
 --Find by id de la reservation
 CREATE OR REPLACE FUNCTION public.m13_findbyresautid(
     _resautid integer)
@@ -2899,12 +2847,7 @@ CREATE OR REPLACE FUNCTION public.m13_getresautomobilebyuserid(
                 ra_timestamp  timestamp without time zone,
                 ra_aut_fk     integer,
                 ra_use_fk     integer,
-                ra_pay_fk     integer,
-                aut_id        integer,
-                aut_make      character varying,
-                aut_model     character varying,
-                aut_capacity  integer,
-                aut_price     numeric
+                ra_pay_fk     integer
             )
     LANGUAGE 'plpgsql'
 
@@ -2922,16 +2865,9 @@ BEGIN
                ra.ra_timestamp,
                ra.ra_aut_fk,
                ra.ra_use_fk,
-               ra.ra_pay_fk,
-               au.aut_id,
-               au.aut_make,
-               au.aut_model,
-               au.aut_capacity,
-               au.aut_price
-        from public.Res_Aut as ra,
-             public.Automobile as au
-        where ra.ra_aut_fk = au.aut_id
-          and _user_id = ra.ra_use_fk;
+               ra.ra_pay_fk
+        from public.Res_Aut as ra
+        where _user_id = ra.ra_use_fk;
 END;
 
 $BODY$;
