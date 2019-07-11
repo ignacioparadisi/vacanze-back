@@ -112,11 +112,25 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         }
 
         [Test]
+        public void FindBadRequest()
+        {
+            var result = _controller.Find(0);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
+        }
+
+        [Test]
         public void DeleteSuccess()
         {
             _reservation = _factory.GetReservationRoomDAO().Add(_reservation);
             var result = _controller.Delete(_reservation.Id);
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
+        }
+
+        [Test]
+        public void DeleteBadRequest()
+        {
+            var result = _controller.Delete(0);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result); 
         }
 
         [Test]
@@ -138,6 +152,13 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             _insertedReservations.Add(_reservation.Id);
             var result = _controller.GetReservationRoomsForUser(_user.Id);
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
+        }
+
+        [Test]
+        public void GetReservationRoomsForUserBadRequest()
+        {
+            var result = _controller.GetReservationRoomsForUser(-1);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
         }
     }
 }
