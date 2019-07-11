@@ -91,6 +91,16 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
             _insertedReservations.Add(idToDelete);
             Assert.IsInstanceOf<OkObjectResult>(okObject);
         }
+
+        [Test]
+        public void AddBadRequest()
+        {
+            var resroomMapper = MapperFactory.CreateReservationRoomMapper();
+            _reservation.CheckOut = DateTime.Now;
+            _reservation.CheckIn = DateTime.Now;
+            var result = _controller.Post(resroomMapper.CreateDTO(_reservation));
+            Assert.IsInstanceOf<BadRequestObjectResult>(result.Result);
+        }
         
         [Test]
         public void FindSuccess()

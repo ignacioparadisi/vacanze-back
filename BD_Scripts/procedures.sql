@@ -2442,7 +2442,7 @@ END;
 $BODY$;
 
 ALTER FUNCTION public.deletetravel(integer)
-    OWNER TO postgres;
+    OWNER TO vacanza;
 
 -- COMENTARIOS ----------------------------------------------------------
 -- agregar comentario

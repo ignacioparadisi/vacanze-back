@@ -38,7 +38,7 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
 
                 if (table.Rows.Count == 0)
                 {
-                    throw new RoomReservationNotFoundException();
+                    throw new RoomReservationNotFoundException("No se ha encontrado la reservación de la habitación.");
                 }
 
                 return reservationRoom;
@@ -113,19 +113,8 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo13
         /// <param name="reservation">La entidad reservacion a borrar de la BD</param>
         public int Delete(int id)
         {
-            try
-            {
-                var table = PgConnection.Instance.ExecuteFunction(SP_DELETE_RESERVATION, id);
-                if (table.Rows.Count > 0)
-                {
-                    return Convert.ToInt32(table.Rows[0][0]);
-                }
-                throw new NotValidIdException("El ID de la reservación no es válida.");
-            }
-            catch (Exception)
-            {
-                throw new GeneralException("Error Eliminando la Reserva de Habitación");
-            }
+            var table = PgConnection.Instance.ExecuteFunction(SP_DELETE_RESERVATION, id);
+            return Convert.ToInt32(table.Rows[0][0]);
         }
 
         /// <summary>

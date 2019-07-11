@@ -14,7 +14,6 @@ namespace vacanze_back.VacanzeApi.Persistence
         {
              _connectionParameters =
                 $"Server={host};User Id={user};Password={password};Database={databaseName}";
-             
         }
 
         // TODO: Obtener datos para conectar con la BD de algun archivo de configuracion

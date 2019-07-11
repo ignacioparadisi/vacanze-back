@@ -29,5 +29,9 @@ namespace vacanze_back.VacanzeApi.Common.Entities.Grupo1
         {
             this.password = password;
         }
+
+        public Login():base(0){
+
+        }
     }
 }

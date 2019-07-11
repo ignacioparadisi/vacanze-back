@@ -4,7 +4,10 @@ using System.Linq;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo3;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo3;
+using vacanze_back.VacanzeApi.LogicLayer.Command;
+using vacanze_back.VacanzeApi.LogicLayer.Command.Grupo3;
 using vacanze_back.VacanzeApi.Persistence.Repository.Grupo3;
 
 namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
@@ -21,8 +24,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
         {
             try
             {
-                var result = AirplanesRepository.Get();
-                return Ok(result.ToList());
+                GetAirplaneCommand f=CommandFactory.GetAirplaneCommand();
+                f.Execute();
+                return Ok( f.GetResult().ToList());
+                
             }
             catch (DbErrorException ex)
             {
@@ -42,8 +47,10 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo3
         {
             try
             {
-                var result = AirplanesRepository.Find(id);
-                return Ok(result);
+                GetAirplaneByIdCommand command = CommandFactory.GetFindPlaneIdCommand(id);
+                command.Execute();
+               // var result = AirplanesRepository.Find(id);
+                return Ok(command.GetResult());
             }
             catch (DbErrorException ex)
             {
