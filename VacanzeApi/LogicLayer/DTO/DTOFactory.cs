@@ -1,3 +1,6 @@
+using vacanze_back.VacanzeApi.Common.Entities;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo3;
+using  vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo3;
 using System.Collections.Generic;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
 using vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo2;
@@ -9,6 +12,12 @@ using  vacanze_back.VacanzeApi.LogicLayer.DTO.Grupo12;
 namespace vacanze_back.VacanzeApi.LogicLayer.DTO{
 
     public class DTOFactory{
+
+
+        public static FlightDTO CreateFlightDTO(Airplane plane, double price, string departure, string arrival,
+         Location loc_departure, Location loc_arrival){
+            return new FlightDTO(plane,price,departure,arrival,loc_departure,loc_arrival);
+        }
 
         public static VehicleDTO CreateVehicleDTO(int Id, int _vehicleModelId, int _vehicleLocationId, 
             string _license, double _price, bool _status)
