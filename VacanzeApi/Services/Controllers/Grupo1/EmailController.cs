@@ -62,6 +62,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
                     Text = "Su contraseña nueva: " + objUser.password
                     };
 
+
                     using (var client = new MailKit.Net.Smtp.SmtpClient()){
                         client.CheckCertificateRevocation = false;
                         client.Connect("smtp.gmail.com", 587);
@@ -75,6 +76,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
                 }
                 else{ 
                     return BadRequest(new { message = "Correo invalido." });
+
                 }
             }
             catch(DatabaseException ex){
