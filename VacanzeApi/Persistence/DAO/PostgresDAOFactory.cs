@@ -9,6 +9,7 @@ using vacanze_back.VacanzeApi.Persistence.DAO.Grupo6;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo4;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo12;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo5;
+using vacanze_back.VacanzeApi.Persistence.DAO.Grupo10;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo14;
 using vacanze_back.VacanzeApi.Persistence.DAO.Grupo1;
 
@@ -38,6 +39,16 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO
         {
             return new PostgresRestaurantDAO();
         }
+           public override Traveldao GetTravelDAO()
+        {
+            return new Traveldao();
+        }
+
+        public override Commentdao  GeCommentDAO ()
+        {
+            return new Commentdao();
+        }
+
 
         public override RoleDAO GetRoleDAO()
         {

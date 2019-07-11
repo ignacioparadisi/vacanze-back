@@ -2182,6 +2182,138 @@ $$
     LANGUAGE 'plpgsql';
 
 -- DROP FUNCTION AddLocationToTravel(BIGINT, INTEGER);
+CREATE OR REPLACE FUNCTION AddLocationToTravel(
+	travelId INTEGER, 
+	locationId INTEGER	
+)
+RETURNS BOOLEAN AS $$
+BEGIN	
+	INSERT INTO tra_loc (tl_tra_fk, tl_loc_fk)
+	VALUES (travelId, locationId);
+	IF FOUND THEN
+		RETURN TRUE;
+	ELSE
+		RETURN FALSE;
+	END IF;
+END; $$
+LANGUAGE 'plpgsql';
+
+-- DROP FUNCTION GetReservationsOfHotelByTravelAndLocation(INTEGER, INTEGER);
+CREATE OR REPLACE FUNCTION GetReservationsOfHotelByTravelAndLocation(
+	travelId INTEGER, 
+	locationId INTEGER
+) RETURNS TABLE (
+	reservationId INTEGER,
+	checkin TIMESTAMP,
+	checkout TIMESTAMP,
+	timest TIMESTAMP,
+	userId INTEGER,
+	hotelId INTEGER
+)AS $$
+BEGIN
+	RETURN QUERY
+	SELECT rh.rr_id, rh.rr_checkindate, rh.rr_checkoutdate, rh.rr_timestamp, rh.rr_use_fk, rh.rr_hot_fk 
+	FROM TRA_RES tr
+		  INNER JOIN 
+		  TRA_LOC tl
+			  ON tr.tr_travel_fk = tl.tl_tra_fk
+		    INNER JOIN
+		    RES_ROO rh
+			    ON tr.tr_res_roo_fk = rh.rr_id
+			    INNER JOIN 
+          HOTEL h
+			      ON rh.rr_hot_fk = h.hot_id
+	WHERE tr.tr_travel_fk = travelId AND tl.tl_loc_fk = locationId AND h.hot_loc_fk = locationId;
+END; $$
+LANGUAGE plpgsql;
+
+-- DROP FUNCTION GetReservationsOfRestaurantByTravelAndLocation(INTEGER, INTEGER);
+CREATE OR REPLACE FUNCTION GetReservationsOfRestaurantByTravelAndLocation(
+  travelId INTEGER, 
+	locationId INTEGER
+) RETURNS TABLE (
+  reservationId INTEGER,
+  rRestDate TIMESTAMP,
+  rRestNumPpl INTEGER,
+  rRestTimestamp TIMESTAMP,
+  rRestUserId INTEGER,
+  rRestaurantId INTEGER
+)AS $$
+BEGIN
+  RETURN QUERY
+  SELECT rre.rr_id, rre.rr_date, rre.rr_num_ppl, rre.rr_timestamp, rre.rr_use_fk, rre.rr_res_fk
+  FROM TRA_RES tr
+      INNER JOIN
+      TRA_LOC tl
+			  ON tr.tr_travel_fk = tl.tl_tra_fk
+		    INNER JOIN
+        RES_REST rre 
+          ON tr.tr_res_rest_fk = rre.rr_id
+          INNER JOIN 
+          RESTAURANT r 
+            ON rre.rr_res_fk = r.res_id 
+  WHERE tr.tr_travel_fk = travelId AND tl.tl_loc_fk = locationId AND  r.res_loc_fk = locationId;
+END; $$
+LANGUAGE plpgsql;
+
+-- DROP FUNCTION GetReservationsOfFlightsByTravelAndLocation(INTEGER, INTEGER);
+CREATE OR REPLACE FUNCTION GetReservationsOfFlightslByTravelAndLocation(
+	travelId INTEGER, 
+	locationId INTEGER
+) RETURNS TABLE (
+	rf_ID INTEGER,
+	rf_seatnum VARCHAR(100),
+	rf_timestamp TIMESTAMP,
+	rf_num_ps INTEGER,
+	rf_use_fk INTEGER,
+	rf_fli_fk INTEGER
+)AS $$
+BEGIN
+	RETURN QUERY
+	SELECT rf.rf_ID, rf.rf_seatnum, rf.rf_timestamp, rf.rf_num_ps, rf.rf_use_fk, rf.rf_fli_fk 
+	FROM TRA_RES tr
+		  INNER JOIN 
+		  TRA_LOC tl
+			  ON tr.tr_travel_fk = tl.tl_tra_fk
+		    INNER JOIN
+		    RES_FLI rf
+			    ON tr.tr_res_fli_fk = rf.rf_ID
+			    INNER JOIN 
+          FLIGHT f
+			      ON rf.rf_fli_fk = f.fli_id
+	WHERE tr.tr_travel_fk = travelId AND tl.tl_loc_fk = locationId AND f.fli_loc_departure = locationId;
+END; $$
+LANGUAGE plpgsql;
+
+-- DROP FUNCTION GetReservationsOfCarsByTravelAndLocation(INTEGER, INTEGER);
+CREATE OR REPLACE FUNCTION GetReservationsOfCarssByTravelAndLocation(
+	travelId INTEGER, 
+	locationId INTEGER
+) RETURNS TABLE (
+	ra_ID INTEGER,
+	ra_PickUpDate TIMESTAMP,
+	ra_RetrunDate TIMESTAMP,
+	ra_use_fk INTEGER,
+	ra_aut_fk INTEGER
+)AS $$
+BEGIN
+	RETURN QUERY
+	SELECT ra.ra_ID, ra.ra_PickUpDate, ra.ra_RetrunDate, ra.ra_use_fk, ra.ra_aut_fk 
+	FROM TRA_RES tr
+		  INNER JOIN 
+		  TRA_LOC tl
+			  ON tr.tr_travel_fk = tl.tl_tra_fk
+		    INNER JOIN
+		    RES_AUT ra
+			    ON tr.tr_res_aut_fk = ra.ra_ID
+			    INNER JOIN 
+          AUTOMOBILE a
+			      ON ra.ra_aut_fk = a.aut_id
+	WHERE tr.tr_travel_fk = travelId AND tl.tl_loc_fk = locationId AND a.aut_loc_fk = locationId;
+END; $$
+LANGUAGE plpgsql;
+-- ---------------------------------------
+
 CREATE OR REPLACE FUNCTION AddLocationToTravel(travelId INTEGER,
                                                locationId INTEGER)
     RETURNS BOOLEAN AS
@@ -2287,7 +2419,122 @@ END;
 $$
     LANGUAGE plpgsql;
 
+-- eliminar viaje
 
+-- FUNCTION: public.deletetravel(integer)
+
+-- DROP FUNCTION public.deletetravel(integer);
+
+CREATE OR REPLACE FUNCTION public.deletetravel(
+	_id integer)
+    RETURNS void
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+AS $BODY$
+BEGIN
+
+    DELETE FROM travel
+    WHERE (tra_id = _id);
+
+END;
+$BODY$;
+
+ALTER FUNCTION public.deletetravel(integer)
+    OWNER TO postgres;
+
+-- COMENTARIOS ----------------------------------------------------------
+-- agregar comentario
+
+CREATE OR REPLACE FUNCTION public.addcomment(
+	commentdescription varchar ,
+	commentdatetime varchar,
+	commentidforanea integer 
+)
+    RETURNS integer
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+AS $BODY$
+DECLARE
+	travelId INTEGER;
+BEGIN
+	INSERT INTO public.comment(com_descr, com_timestamp, com_tra_res_fk)
+	VALUES(commentdescription, to_date(commentdatetime,'YYYY-MM-DD'),commentidforanea);
+	RETURN 1;
+END;
+$BODY$;
+
+
+---obtener comentario 
+
+
+
+CREATE OR REPLACE FUNCTION public.getcommentid(
+	codigo integer)
+    RETURNS TABLE(com_id integer ,com_descr varchar, com_timestamp timestamp, _com_tra_res_fk integer) 
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+BEGIN
+    RETURN QUERY  select * 
+    FROM comment WHERE com_tra_res_fk = codigo;
+END;
+$BODY$;
+-- updatecomment
+
+
+CREATE OR REPLACE FUNCTION public.updatecomment(
+	commentid integer,
+	commentdescription character varying,
+	commentdatetime character varying,
+	commentidforanea integer)
+    RETURNS boolean
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+AS $BODY$
+BEGIN
+	UPDATE comment
+	SET com_id = commentid, com_descr = commentdescription,
+	com_timestamp = to_date(commentdatetime,'YYYY-MM-DD')
+	WHERE com_id = commentid and com_tra_res_fk=commentidforanea;
+	IF FOUND THEN
+		RETURN TRUE;
+	ELSE
+		RETURN FALSE;
+	END IF;
+END;
+$BODY$;
+--- Delete comment
+
+CREATE OR REPLACE FUNCTION DeleteComment(id integer)
+    RETURN INTEGER AS
+$$
+DECLARE
+    FOUND_ID INTEGER;
+BEGIN
+    SELECT Count(com_id)
+    into FOUND_ID
+    FROM COMMENT
+    WHERE (com_id = id);
+    IF (FOUND_ID = 0) THEN
+        RETURN null;
+    END IF;
+
+    DELETE
+    FROM COMMENT 
+    WHERE (com_id = id);
+    RETURN id;
+
+END;
+$$ LANGUAGE plpgsql;
 
 ------------------------------------fin de grupo 10---------------------------------
 ------------------------------------Grupo12-----------------------------------------

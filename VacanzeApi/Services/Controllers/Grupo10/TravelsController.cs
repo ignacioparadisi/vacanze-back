@@ -35,7 +35,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
             }
         }
 
-        [HttpGet("{travelId}")]
+       /*  [HttpGet("{travelId}")]
         public ActionResult<IEnumerable<object>> GetReservationsByTravelAndLocation(
             int travelId, [FromQuery] int locationId, [FromQuery] string type){
             try{
@@ -67,7 +67,7 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo10
             }catch(Exception){
                 return StatusCode(400);
             }
-        }
+        }*/
 
         [Consumes("application/json")]
         [HttpPost]
