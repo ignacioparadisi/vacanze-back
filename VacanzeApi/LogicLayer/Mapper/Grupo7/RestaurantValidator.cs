@@ -33,10 +33,6 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo7
                 throw  new InvalidAttributeException("El nombre de negocios es requerido");
             }
             
-            if (string.IsNullOrEmpty(restaurant.Picture))
-            {
-                throw  new InvalidAttributeException("El nombre de negocios es requerido");
-            }
             if (string.IsNullOrEmpty(restaurant.Description))
             {
                 throw  new InvalidAttributeException("La descripcion es requerida");

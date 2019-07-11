@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo1;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo2;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo3;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo5;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo6;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo7;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo12;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo13;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo14;
@@ -54,6 +56,16 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
                 .WithStatus(isActive)
                 .WithAddressDescription(addressSpecs)
                 .BuildSinVaidar();
+        }
+
+        public static Cruiser CreateCruiser(int id , string name , bool status , int capacity , int loadingShipCap , string model , string line,string picture)
+        {
+            return new Cruiser(id,name,status,capacity,loadingShipCap,model,line,picture);
+        }
+
+        public static Layover CreateLayover(int id, int cruiserId, string departureDate,string arrivalDate, decimal price, int locDeparture, int locArrival)
+        {
+            return new Layover(id,cruiserId,departureDate,arrivalDate,price,locDeparture,locArrival);
         }
 
         public static Location CreateLocation(int id, string country, string city)
@@ -116,5 +128,12 @@ namespace vacanze_back.VacanzeApi.Common.Entities{
         public static Login createLogin(string password){
             return new Login(password);
         }
+
+         //-----------------------------------------Grupo 3---------------------------------------------------//  
+        public static Flight CreateFlight(Airplane plane, double price, string departure, string arrival,
+         Location loc_departure, Location loc_arrival){
+            return new Flight(plane,price,departure,arrival,loc_departure,loc_arrival);
+        }
+        //-----------------------------------------Fin-------------------------------------------------------//
     }
 }

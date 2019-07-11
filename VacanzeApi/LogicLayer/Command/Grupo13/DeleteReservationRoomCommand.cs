@@ -17,6 +17,8 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Command.Grupo13
 
         public void Execute()
         {
+            var getReservationCommand = CommandFactory.CreateGetReservationRoomCommand(_id);
+            getReservationCommand.Execute();
             DAOFactory daoFactory = DAOFactory.GetFactory(DAOFactory.Type.Postgres);
             var resRoomDao = (PostgresReservationRoomDAO) daoFactory.GetReservationRoomDAO();
             _result = resRoomDao.Delete(_id);
