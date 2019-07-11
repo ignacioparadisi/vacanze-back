@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+
 using vacanze_back.VacanzeApi.Common.Entities;
 using vacanze_back.VacanzeApi.Common.Entities.Grupo1;
+using vacanze_back.VacanzeApi.Common.Entities.Grupo8;
 using vacanze_back.VacanzeApi.Common.Exceptions;
 using vacanze_back.VacanzeApi.Common.Exceptions.Grupo1;
 using vacanze_back.VacanzeApi.LogicLayer.Command;
@@ -22,21 +25,34 @@ namespace vacanze_back.VacanzeApi.Services.Controllers.Grupo1
     [ApiController]
     public class LoginController:ControllerBase
     {
+        private readonly ILogger<LoginController> _logger;
+
+        public LoginController(ILogger<LoginController> logger)
+        {
+            _logger = logger;
+        }
+
         [HttpPost]
         //POST : /api/Login
         public  ActionResult<LoginDTO> Login([FromBody] LoginDTO loginDTO)
         {
-            Console.WriteLine("Antes del TRY, en LoginController");
-            LoginMapper LoginMapper = MapperFactory.createLoginMapper();
-            Entity entity = LoginMapper.CreateEntity(loginDTO);
-            GetUserCommand command = CommandFactory.loginGetUserCommand((Login)entity);
-            command.Execute();
+            try{
+                LoginMapper LoginMapper = MapperFactory.createLoginMapper();
+                Entity entity = LoginMapper.CreateEntity(loginDTO);
+                GetUserCommand command = CommandFactory.loginGetUserCommand((Login)entity);
+                command.Execute();
 
-            Login answer = command.GetResult();
-            DTO lDTO = LoginMapper.CreateDTO(answer);
-            Console.WriteLine("En el POST, el lDTO: ");
-            Console.WriteLine(lDTO);
-            return Ok(lDTO);
+                Login answer = command.GetResult();
+                DTO lDTO = LoginMapper.CreateDTO(answer);
+                return Ok(lDTO);
+            }
+            catch(DatabaseException ex){
+                _logger?.LogError(ex, "Database exception cuando se intento iniciar sesion.");
+                return StatusCode(500, ex.Message);
+            }
+            catch(LoginUserNotFoundException){
+                return BadRequest(new { message = "Correo o clave invalida." });            
+            }
         }
 
     }

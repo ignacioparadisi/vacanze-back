@@ -9,6 +9,12 @@ namespace vacanze_back.VacanzeApi.Persistence.DAO.Grupo5
 {
     public class PostgresModelDAO : IModelDAO 
     {
+        ///<sumary>Creación de un modelo</sumary>
+        ///<param name="model">Instancia de Model</param>
+        ///<returns>Id del modelo</returns>
+        ///<exception cref="UniqueAttributeException">
+        /// Es excepción es lanzada cuando el nombre del modelo ya existe
+        ///</exception>
         public int AddModel(Model model){
              int id = 0;
             try {

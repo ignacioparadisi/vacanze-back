@@ -167,6 +167,20 @@ namespace vacanze_back.VacanzeApiTest.Grupo5
         }
 
         [Test]
+        public void TestUpdateVehicle_Success(){
+            Vehicle vehicle = new Vehicle(
+                2,
+                1,
+                29,
+                "AC34793",
+                1230.2,
+                true
+            );
+
+            Assert.True(vehicleDAO.UpdateVehicle(vehicle));
+        }
+
+        [Test]
         public void TestUpdateVehicleStatus_VehicleNotFoundException(){
             Assert.Throws<VehicleNotFoundException>(
                 () => vehicleDAO.UpdateVehicleStatus(100000,false)

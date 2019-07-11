@@ -154,6 +154,15 @@ namespace vacanze_back.VacanzeApiTest.Grupo13
         }
 
         [Test]
+        public void ReservationRoomNotFoundException()
+        {
+            Assert.Throws<GeneralException>(() =>
+            {
+                _factory.GetReservationRoomDAO().Find(0);
+            });
+        }
+
+        [Test]
         public void GetAllByUserSuccess()
         {
             _reservation = _factory.GetReservationRoomDAO().Add(_reservation);
