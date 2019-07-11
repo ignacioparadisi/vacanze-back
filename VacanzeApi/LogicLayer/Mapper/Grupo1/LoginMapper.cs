@@ -14,6 +14,12 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo1
         /// poder acceder al Mapper de roles y transformar
         RoleMapper roleObject = new RoleMapper();
 
+
+        /// <summary>
+        ///     Metodo para crear un DTO a partir de un entity
+        /// </summary>
+        /// <param name="login">Entity de tipo LOGIN a ser convertida</param>
+        /// <returns>Login de tipo DTO</returns>
         public LoginDTO CreateDTO(Login login)
         {            
             if (login.roles == null){
@@ -35,6 +41,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo1
             }
         }
 
+        /// <summary>
+        ///     Metodo para crear una lista de DTO a partir de una lista de login Entity
+        /// </summary>
+        /// <param name="logins">Lista Entities de tipo login a ser convertida</param>
+        /// <returns>Lista de login de tipo DTO</returns>
         public List<LoginDTO> CreateDTOList(List<Login> logins)
         {
             List<LoginDTO> dtoList = new List<LoginDTO>();
@@ -49,6 +60,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo1
             return dtoList;
         }
 
+        /// <summary>
+        ///     Metodo para crear un Entity a partir de una DTO
+        /// </summary>
+        /// <param name="loginDTO">DTO de tipo LOGIN a ser convertida</param>
+        /// <returns>Login de tipo Entity</returns>
         public Login CreateEntity(LoginDTO loginDTO)
         {
             if (loginDTO.roles == null){
@@ -60,6 +76,11 @@ namespace vacanze_back.VacanzeApi.LogicLayer.Mapper.Grupo1
             }
         }
 
+        /// <summary>
+        ///     Metodo para crear una lista Entity  a partir de una lista DTO
+        /// </summary>
+        /// <param name="dtoList">lista DTOs de tipo login a ser convertida</param>
+        /// <returns>Lista de login de tipo Entity</returns>
         public List<Login> CreateEntityList(List<LoginDTO> dtoList)
         {
             List<Login> loginEntity = new List<Login>();
